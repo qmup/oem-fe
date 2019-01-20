@@ -1,3 +1,36 @@
-<p>
-  place works!
-</p>
+<div class="row">
+  <div class="col-md-4 mb-4" *ngFor="let i of [1,2,3,4,5,6]; let i of index">
+
+    <!--Card-->
+    <mdb-card cascade="true" narrower="true">
+
+      <!--Card image-->
+      <div class="view view-cascade overlay waves-light" mdbWavesEffect>
+        <mdb-card-img src="https://static.independent.co.uk/s3fs-public/thumbnails/image/2018/08/06/16/black.jpg?w968h681"></mdb-card-img>
+        <a>
+          <div class="mask rgba-white-slight"></div>
+        </a>
+      </div>
+      <!--/Card image-->
+
+      <mdb-card-body cascade="true" class="text-center">
+        <!--Card content-->
+
+        <!--Title-->
+        <h4 class="card-title">Toilet {{i}}</h4>
+        <!--Text-->
+
+        <mdb-card-text>
+            This toilet is on {{i+3}}th floor, belong to building #{{i+5}}
+        </mdb-card-text>
+
+        <a class="btn btn-primary waves-light" mdbWavesEffect>Update</a>
+
+      </mdb-card-body>
+      <!--/.Card content-->
+
+    </mdb-card>
+    <!--/.Card-->
+  </div>
+  <!--/.Card-->
+</div>

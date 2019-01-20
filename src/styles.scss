@@ -6,3 +6,34 @@ nav.navbar.fixed-top.navbar-toggleable-md.navbar-expand-lg.scrolling-navbar.doub
 html {
   height: 100vh;
 }
+#task-md-3 {
+  .col-md-3 {
+    overflow: scroll;
+    max-height: calc(100vh - 170px);
+  }
+  .flex-column a {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125) !important;
+    border: none;
+    background: none;
+    color: black !important;
+  }
+  .flex-column .active a {
+    border-bottom: none;
+    border: 1px solid #3f5c80 !important;
+    background: none;
+    border-radius: 3px;
+  }
+  .col-4 .md-form {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+  }
+  input.form-control.mydp-date {
+    margin-top: 18px !important;
+  }
+  .mydp.picker .md-form label {
+    top: -.1rem !important;
+  }
+}
+.table > tbody > tr > td, .table > tbody > tr > th {
+  vertical-align: middle;
+}

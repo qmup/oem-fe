@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PlaceRoutingModule } from './place-routing.module';
 import { PlacePagesComponent } from './pages/place-pages/place-pages.component';
 import { PlaceComponent } from './components/place/place.component';
+import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { PlaceComponent } from './components/place/place.component';
   ],
   imports: [
     CommonModule,
-    PlaceRoutingModule
+    PlaceRoutingModule,
+    MDBBootstrapModulesPro,
   ]
 })
 export class PlaceModule { }

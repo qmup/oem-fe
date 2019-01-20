@@ -5,7 +5,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 })
 export class GlobalService {
 
-  isLogin = false;
+  isLogin = true;
   userName: string;
   requestEvent: EventEmitter<number> = new EventEmitter<number>();
 

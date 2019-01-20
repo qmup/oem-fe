@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ManagerRoutingModule } from './manager-routing.module';
 import { ManagerPagesComponent } from './pages/manager-pages/manager-pages.component';
 import { ManagerComponent } from './components/manager/manager.component';
+import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { ManagerComponent } from './components/manager/manager.component';
   ],
   imports: [
     CommonModule,
+    MDBBootstrapModulesPro.forRoot(),
     ManagerRoutingModule
   ]
 })

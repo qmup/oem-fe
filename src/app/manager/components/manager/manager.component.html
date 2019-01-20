@@ -1,3 +1,17 @@
-<p>
-  manager works!
-</p>
+<div class="row">
+    <div class="col-8 mx-auto">
+      <div style="display: block">
+        <canvas mdbChart
+            [chartType]="chartType"
+            [datasets]="chartDatasets"
+            [labels]="chartLabels"
+            [colors]="chartColors"
+            [options]="chartOptions"
+            [legend]="true"
+            (chartHover)="chartHovered()"
+            (chartClick)="chartClicked()">
+        </canvas>
+      </div>
+    </div>
+  
+  </div>
