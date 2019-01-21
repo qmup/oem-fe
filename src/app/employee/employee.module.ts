@@ -8,13 +8,15 @@ import { LaborerPagesComponent } from './pages/laborer-pages/laborer-pages.compo
 import { SalerPagesComponent } from './pages/saler-pages/saler-pages.component';
 import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
 import { FormsModule } from '@angular/forms';
+import { EmployeeDetailComponent } from './components/employee-detail/employee-detail.component';
 
 @NgModule({
   declarations: [
     LaborerComponent,
     SalerComponent,
     LaborerPagesComponent,
-    SalerPagesComponent
+    SalerPagesComponent,
+    EmployeeDetailComponent
   ],
   imports: [
     CommonModule,

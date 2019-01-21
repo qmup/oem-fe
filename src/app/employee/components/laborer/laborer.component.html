@@ -54,7 +54,7 @@
                 <td>{{data.address}}</td>
                 <td>{{data.email}}</td>
                 <td>
-                  <button mdbBtn type="button" rounded="true" color="warning" class="waves-light" size="sm" mdbWavesEffect>View Detail</button>
+                  <button mdbBtn type="button" rounded="true" color="warning" class="waves-light" size="sm" mdbWavesEffect [routerLink]="['/employee-detail', data.id]">View Detail</button>
                   <button mdbBtn type="button" rounded="true" color="primary" class="waves-light" size="sm" mdbWavesEffect>Update</button>
                   <button mdbBtn type="button" rounded="true" color="danger" class="waves-light" size="sm" mdbWavesEffect (click)="delete.show()">Delete</button>
                 </td>
