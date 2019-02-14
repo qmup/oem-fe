@@ -9,6 +9,9 @@ import { SalerPagesComponent } from './pages/saler-pages/saler-pages.component';
 import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
 import { FormsModule } from '@angular/forms';
 import { EmployeeDetailComponent } from './components/employee-detail/employee-detail.component';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ModalModule } from 'ngx-bootstrap';
+import { EmployeeUpdateComponent } from './components/employee-update/employee-update.component';
 
 @NgModule({
   declarations: [
@@ -16,13 +19,19 @@ import { EmployeeDetailComponent } from './components/employee-detail/employee-d
     SalerComponent,
     LaborerPagesComponent,
     SalerPagesComponent,
-    EmployeeDetailComponent
+    EmployeeDetailComponent,
+    EmployeeUpdateComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
     EmployeeRoutingModule,
+    ModalModule.forRoot(),
+    BsDatepickerModule.forRoot(),
     MDBBootstrapModulesPro.forRoot(),
+  ],
+  entryComponents: [
+    EmployeeUpdateComponent,
   ]
 })
 export class EmployeeModule { }

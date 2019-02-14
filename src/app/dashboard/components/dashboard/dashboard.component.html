@@ -1,0 +1,63 @@
+<div class="row d-flex my-4">
+  <div class="col-md-3">
+    <!--Card Success-->
+    <div class="card info-color text-center z-depth-2">
+      <div class="card-body white-text">
+        <p class="mb-0 h6">TỔNG SỐ CÔNG VIỆC</p>
+        <span>5</span>
+      </div>
+    </div>
+    <!--/.Card Success-->
+  </div>
+
+  <div class="col-md-3">
+    <!--Card Info-->
+    <div class="card success-color text-center z-depth-2">
+      <div class="card-body white-text">
+        <p class="mb-0 h6">HOÀN THÀNH</p>
+        <span>5</span>
+      </div>
+    </div>
+    <!--/.Card Info-->
+  </div>
+
+  <div class="col-md-3">
+    <!--Card Primary-->
+    <div class="card warning-color text-center z-depth-2">
+      <div class="card-body white-text">
+        <p class="mb-0 h6">CHƯA HOÀN THÀNH</p>
+        <span>5</span>
+      </div>
+    </div>
+    <!--/.Card Primary-->
+  </div>
+
+  <div class="col-md-3">
+    <!--Card Warning-->
+    <div class="card red lighten-1 text-center z-depth-2">
+      <div class="card-body white-text">
+        <p class="mb-0 h6">HOÀN THÀNH QUÁ HẠN</p>
+        <span>5</span>
+      </div>
+    </div>
+    <!--/.Card Warning-->
+  </div>
+
+</div>
+<div class="row">
+    <div class="col-xs-12 col-12 col-md-4 form-group">
+      <input type="text"
+        placeholder="Thời gian"
+        class="form-control"
+        bsDaterangepicker>
+    </div>
+
+  <div class="col-12">
+    <div style="display: block">
+      <canvas mdbChart [chartType]="chartType" [datasets]="chartDatasets" [labels]="chartLabels" [colors]="chartColors"
+        [options]="chartOptions" [legend]="true" (chartHover)="chartHovered()" (chartClick)="chartClicked()">
+      </canvas>
+    </div>
+  </div>
+
+</div>

@@ -5,6 +5,7 @@ import { ManagerRoutingModule } from './manager-routing.module';
 import { ManagerPagesComponent } from './pages/manager-pages/manager-pages.component';
 import { ManagerComponent } from './components/manager/manager.component';
 import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     MDBBootstrapModulesPro.forRoot(),
     ManagerRoutingModule
   ]

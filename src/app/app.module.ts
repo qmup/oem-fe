@@ -15,8 +15,8 @@ import { PlaceModule } from './place/place.module';
 import { BeaconModule } from './beacon/beacon.module';
 import { CoreModule } from './core/core.module';
 import { AuthorizeModule } from './authorize/authorize.module';
-import { LayoutComponent } from './core/pages/layout/layout.component';
 import { TaskModule } from './task/task.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @NgModule({
   declarations: [
@@ -39,6 +39,7 @@ import { TaskModule } from './task/task.module';
     TaskModule,
     BeaconModule,
     AuthorizeModule,
+    DashboardModule,
     ToastModule.forRoot(),
     MDBBootstrapModulesPro.forRoot(),
 

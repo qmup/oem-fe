@@ -6,7 +6,39 @@ nav.navbar.fixed-top.navbar-toggleable-md.navbar-expand-lg.scrolling-navbar.doub
 html {
   height: 100vh;
 }
-#task-md-3 {
+.sn-bg-1 {
+  background-image: 'src/assets/sidenav.jpg' !important;
+}
+mdb-select > div > div.single > div.placeholder {
+  color: #757575 !important;
+  font-weight: 300 !important;
+}
+.table > tbody > tr > td, .table > tbody > tr > th {
+  vertical-align: middle;
+}
+.fa.fa-trash {
+  font-size: 1.5rem;
+  color: #1976d2 !important;
+}
+#task {
+  h6 {
+    color: rgb(137, 147, 164);    
+  }
+  th {
+    cursor: pointer;
+  }
+  .table th, .table td {
+    border-top: none;
+  }
+  .table td {
+    padding-top: .7rem !important;
+    padding-bottom: .7rem !important;
+  }
+  .table tbody td:first-child {
+    cursor: pointer;
+  }
+}
+#task-detail {
   .col-md-3 {
     overflow: scroll;
     max-height: calc(100vh - 170px);
@@ -34,6 +66,32 @@ html {
     top: -.1rem !important;
   }
 }
-.table > tbody > tr > td, .table > tbody > tr > th {
-  vertical-align: middle;
+#employee-detail {
+  .list-group-item.list-group-item-action.waves-light {
+    border: none;
+  }
+  small {
+    color: rgb(137, 147, 164);
+  }
+  .card-text {
+    padding-left: 40px;
+  }
+}
+#laborer {
+  .addNewButton {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  img.avatar {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 70px;
+    width: auto;
+    border-radius: 50%;
+    border: 1px solid white;
+  }
 }

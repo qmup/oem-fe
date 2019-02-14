@@ -1,0 +1,71 @@
+    <div class="modal-header text-center">
+      <h4 class="modal-title w-100 font-weight-bold">Tạo mới lao công</h4>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body mx-3 row">
+      <div class="md-form my-0 mb-3 col-md-6">
+        <input type="text" id="userName" class="form-control" mdbInput [(ngModel)]="employee.fullName">
+        <label for="userName">Tên account</label>
+      </div>
+
+      <div class="md-form my-0 mb-3 col-md-6">
+        <input type="password" id="password" class="form-control" mdbInput [(ngModel)]="employee.password">
+        <label for="password">Mật khẩu</label>
+      </div>
+
+      <div class="md-form my-0 mb-3 col-md-6">
+        <input type="text" id="firstName" class="form-control" mdbInput [(ngModel)]="employee.firstName">
+        <label for="firstName">Họ</label>
+      </div>
+
+      <div class="md-form my-0 mb-3 col-md-6">
+        <input type="text" id="lastName" class="form-control" mdbInput [(ngModel)]="employee.lastName">
+        <label for="lastName">Tên</label>
+      </div>
+
+      <div class="md-form my-0 mb-3 col-md-6 pl-0">
+        <mdb-select [options]="optionsSex" id="gender" placeholder="Giới tính" [(ngModel)]="gender"></mdb-select>
+      </div>
+
+      <div class="md-form my-0 mb-3 col-md-6">
+        <input type="text" id="phoneNumber" class="form-control" mdbInput [(ngModel)]="employee.phoneNumber">
+        <label for="phoneNumber">Số điện thoại</label>
+      </div>
+
+      <div class="md-form my-0 mb-3 col-md-6">
+        <input type="text" id="address" class="form-control" mdbInput [(ngModel)]="employee.address">
+        <label for="address">Địa chỉ</label>
+      </div>
+
+      <div class="md-form my-0 mb-3 col-md-6">
+        <input type="text" id="email" class="form-control" mdbInput [(ngModel)]="employee.email">
+        <label for="email">Email</label>
+      </div>
+
+      <div class="md-form my-0 mb-3 col-md-6">
+        <div class="form-group">
+          <input type="text"
+                  class="form-control"
+                  bsDatepicker
+                  mdbInput [(ngModel)]="employee.birthDate">
+        <label for="email">Ngày sinh</label>
+        </div>
+      </div>
+
+      <div class="md-form my-0 mb-3 col-md-6">
+        <input type="text" id="macAddress" class="form-control" mdbInput [(ngModel)]="employee.phoneMacAddress">
+        <label for="macAddress">Địa chỉ MAC</label>
+      </div>
+      
+      <div class="md-form my-0 mb-3 col-md-12 pl-0">
+        <mdb-select [options]="optionsSelect" placeholder="Người quản lý" [(ngModel)]="employee.managerId"></mdb-select>
+      </div>
+      
+    </div>
+    <div class="modal-footer d-flex justify-content-center">
+      <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="updateEmployee()">Xác nhận
+        <i class="fa fa-check ml-1"></i>
+      </button>
+    </div>
