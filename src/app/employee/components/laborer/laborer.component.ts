@@ -61,6 +61,8 @@ export class LaborerComponent implements OnInit {
 
   openUpdateModal(employee: Employee) {
     this.modalRef = this.modalService.show(EmployeeUpdateComponent, { initialState: { employee } });
+    this.modalRef.content.refresh.subscribe(() => this.getEmployee());
+
   }
 
   filterIt(arr: any, searchKey: any) {

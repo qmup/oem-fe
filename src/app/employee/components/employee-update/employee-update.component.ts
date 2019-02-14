@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Employee, EmployeeUpdateModel } from '../../models/employee';
 import { BsModalRef } from 'ngx-bootstrap';
+import { EmployeeService } from '../../services/employee.service';
 
 @Component({
   selector: 'app-employee-update',
@@ -10,12 +11,16 @@ import { BsModalRef } from 'ngx-bootstrap';
 export class EmployeeUpdateComponent implements OnInit {
 
   gender: number;
-  employee: any;
+  employee: Employee;
   employeeUM: EmployeeUpdateModel = new EmployeeUpdateModel();
   optionsSelect: { value: number; label: string; }[];
   optionsSex: { value: number; label: string; }[];
+  refresh: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(public modalRef: BsModalRef) { }
+  constructor(
+    public modalRef: BsModalRef,
+    private employeeService: EmployeeService
+  ) { }
 
   ngOnInit() {
     this.optionsSelect = [
@@ -31,6 +36,13 @@ export class EmployeeUpdateComponent implements OnInit {
   }
 
   updateEmployee() {
+    this.employeeService.update(this.employeeUM)
+      .then(
+        () => {
+          this.modalRef.hide();
+          this.refresh.emit();
+        },
+      );
   }
 
 }
