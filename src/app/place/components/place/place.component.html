@@ -1,5 +1,11 @@
 <div class="row">
-  <div class="col-md-4 mb-4" *ngFor="let i of [1,2,3,4,5,6]; let i of index">
+  <h4 class="text-left my-4 pl-3">Quản lý nơi làm việc</h4>
+  <div class="col-12 mb-4">
+    <button title="Tạo mới nơi làm việc" mdbBtn type="button" color="success" rounded="true" size="md" style="width: 10%" mdbWavesEffect (click)="openCreateModal()">
+      <i class="fa fa-plus"></i>
+    </button>
+  </div>
+  <div class="col-md-4 mb-4" *ngFor="let p of placeList; let i of index">
 
     <!--Card-->
     <mdb-card cascade="true" narrower="true">
@@ -17,14 +23,29 @@
         <!--Card content-->
 
         <!--Title-->
-        <h4 class="card-title">Toilet {{i}}</h4>
+        <h4 class="card-title">{{p.name}}</h4>
         <!--Text-->
 
         <mdb-card-text>
-            This toilet is on {{i+3}}th floor, belong to building #{{i+5}}
+            Địa điểm: {{p.address}}
+        </mdb-card-text>
+        
+        <mdb-card-text>
+            Miêu tả: {{p.description}}
+        </mdb-card-text>
+        
+        <mdb-card-text>
+            Beacon: {{p.beaconId}}
         </mdb-card-text>
 
-        <a class="btn btn-primary waves-light" mdbWavesEffect>Update</a>
+        <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light"
+          mdbWavesEffect (click)="openUpdateModal(p)">
+          <i class="fa fa-pencil"></i>
+        </button>
+        <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light"
+          mdbWavesEffect (click)="openDeleteModal(p.id)">
+          <i class="fa fa-ban"></i>
+        </button>
 
       </mdb-card-body>
       <!--/.Card content-->
@@ -34,3 +55,67 @@
   </div>
   <!--/.Card-->
 </div>
+
+<div mdbModal #create="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="add" aria-hidden="true">
+    <div class="modal-dialog modal-notify modal-success" role="document">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-center">
+          <p class="heading">Tạo mới nơi làm việc</p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body mx-3 row">
+          <div class="md-form my-0 mb-3 col-md-6">
+            <input type="text" id="name" class="form-control" mdbInput [(ngModel)]="placeCM.name">
+            <label for="name">Tên</label>
+          </div>
+
+          <div class="md-form my-0 mb-3 col-md-6">
+            <mdb-select [options]="optionsSelect" placeholder="Beacon" [(ngModel)]="placeCM.beaconId"></mdb-select>
+          </div>
+  
+          <div class="md-form my-0 mb-3 col-md-12">
+            <input type="text" id="firstName" class="form-control" mdbInput [(ngModel)]="placeCM.address">
+            <label for="firstName">Địa điểm</label>
+          </div>
+  
+          <div class="md-form my-0 mb-3 col-md-12">
+            <textarea type="text" id="description" class="form-control md-textarea" mdbInput [(ngModel)]="placeCM.description"></textarea>
+            <label for="description">Miêu tả</label>
+          </div>
+          
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createPlace()">Xác nhận
+            <i class="fa fa-check ml-1"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+      <!--Content-->
+      <div class="modal-content text-center">
+        <!--Header-->
+        <div class="modal-header d-flex justify-content-center">
+          <p class="heading">Xóa địa điểm này?</p>
+        </div>
+  
+        <!--Body-->
+        <div class="modal-body">
+          <i class="fa fa-times fa-4x animated rotateIn"></i>
+        </div>
+  
+        <!--Footer-->
+        <div class="modal-footer flex-center">
+          <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removePlace()">Đồng ý</a>
+          <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">Hủy</a>
+        </div>
+      </div>
+      <!--/.Content-->
+    </div>
+  </div>
