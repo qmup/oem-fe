@@ -12,6 +12,8 @@ html {
 mdb-select > div > div.single > div.placeholder {
   color: #757575 !important;
   font-weight: 300 !important;
+  position: absolute;
+  left: -15px;
 }
 .table > tbody > tr > td, .table > tbody > tr > th {
   vertical-align: middle;

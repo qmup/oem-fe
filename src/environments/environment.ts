@@ -1,7 +1,7 @@
 // The file contents for the current environment will overwrite these during build.
-// The build system defaults to the dev environment which uses `environment.ts`, but if you do
-// `ng build --env=prod` then `environment.prod.ts` will be used instead.
-// The list of which env maps to which file can be found in `.angular-cli.json`.
+// The build system defaults to the dev environment which uses 'environment.ts', but if you do
+// 'ng build --env=prod' then 'environment.prod.ts' will be used instead.
+// The list of which env maps to which file can be found in '.angular-cli.json'.
 
 export const environment = {
   production: false,
@@ -10,20 +10,20 @@ export const environment = {
     admin: {
       beacon: {
         create: 'admin/beacon/create',
-        getAll: 'admin/beacon/getAll',
+        getAll: 'admin/beacon/get-all',
         remove: 'admin/beacon/remove/',
         update: 'admin/beacon/update/',
       },
       employee: {
         create: 'admin/employee/create',
         get: 'admin/employee/get-by-manager',
-        getAll: 'admin/employee/getAll',
-        remove: `admin/employee/remove/{id}?id=`,
+        getAll: 'admin/employee/get-all',
+        remove: 'admin/employee/remove/',
         update: 'admin/employee/update/',
       },
       workplace: {
         create: 'admin/workplace/create',
-        getAll: 'admin/workplace/getAll',
+        getAll: 'admin/workplace/get-all',
         remove: 'admin/workplace/remove/',
         update: 'admin/workplace/update/',
       }
@@ -33,7 +33,7 @@ export const environment = {
 
 /*
  * In development mode, to ignore zone related error stack frames such as
- * `zone.run`, `zoneDelegate.invokeTask` for easier debugging, you can
+ * 'zone.run', 'zoneDelegate.invokeTask' for easier debugging, you can
  * import the following file, but please comment it out in production mode
  * because it will have performance impact when throw error
  */

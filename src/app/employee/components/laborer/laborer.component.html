@@ -58,16 +58,16 @@
                 <td>{{data.sex ? 'Nam' : 'Nữ'}}</td>
                 <td>{{data.phoneNumber}}</td>
                 <td>{{data.address}}</td>
-                <td>
-                  <button title="Chi tiết" mdbBtn type="button" rounded="true" color="warning" class="waves-light" size="md"
+                <td class="d-flex justify-content-center">
+                  <button title="Chi tiết" mdbBtn type="button" rounded="true" color="warning" class="waves-light col-3" size="sm"
                     mdbWavesEffect [routerLink]="['/employee-detail', data.id]">
                     <i class="fa fa-eye"></i>
                   </button>
-                  <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light" size="md"
+                  <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light col-3" size="sm"
                     mdbWavesEffect (click)="openUpdateModal(data)">
                     <i class="fa fa-pencil"></i>
                   </button>
-                  <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light " size="md"
+                  <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light col-3" size="sm"
                     mdbWavesEffect (click)="openDeleteModal(data.id)">
                     <i class="fa fa-ban"></i>
                   </button>
@@ -86,10 +86,10 @@
 </div>
 
 <div mdbModal #create="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="add" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-notify" role="document">
+  <div class="modal-dialog modal-lg modal-notify modal-success" role="document">
     <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Tạo mới lao công</h4>
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Tạo mới lao công</p>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -115,7 +115,7 @@
           <label for="lastName">Tên</label>
         </div>
 
-        <div class="md-form my-0 mb-3 col-md-6 pl-0">
+        <div class="md-form my-0 mb-3 col-md-6 ">
           <mdb-select [options]="optionsSex" id="gender" placeholder="Giới tính" [(ngModel)]="gender"></mdb-select>
         </div>
 
@@ -149,7 +149,7 @@
           <label for="macAddress">Địa chỉ MAC</label>
         </div>
         
-        <div class="md-form my-0 mb-3 col-md-12 pl-0">
+        <div class="md-form my-0 mb-3 col-md-12 ">
           <mdb-select [options]="optionsSelect" placeholder="Người quản lý" [(ngModel)]="employeeCM.managerId"></mdb-select>
         </div>
         

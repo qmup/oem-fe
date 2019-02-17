@@ -73,13 +73,14 @@ export class EmployeeUpdateModel {
   birthDate: string;
   email: string;
   firstName: string;
-  fullNamnumber: string;
-  id: 0;
+  fullName: string;
+  id: number;
   lastName: string;
   managerId: number;
   phoneMacAddress: string;
   phoneNumber: string;
   picture: string;
+  password: string;
   resetPasswordToken: string;
   roleId: number;
   sex: boolean;
@@ -89,7 +90,7 @@ export class EmployeeUpdateModel {
     this.birthDate = '';
     this.email = '';
     this.firstName = '';
-    this.fullNamnumber = '';
+    this.fullName = '';
     this.id = 0;
     this.lastName = '';
     this.managerId = 0;
@@ -99,5 +100,6 @@ export class EmployeeUpdateModel {
     this.resetPasswordToken = '';
     this.roleId = 0;
     this.sex = false;
+    this.password = '';
   }
 }

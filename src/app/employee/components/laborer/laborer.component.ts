@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { EmployeeService } from '../../services/employee.service';
 import { Employee, EmployeeCreateModel } from '../../models/employee';
 import { ModalDirective } from 'ng-uikit-pro-standard';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap';
 import { EmployeeUpdateComponent } from '../employee-update/employee-update.component';
 
 @Component({
@@ -60,7 +60,12 @@ export class LaborerComponent implements OnInit {
   }
 
   openUpdateModal(employee: Employee) {
-    this.modalRef = this.modalService.show(EmployeeUpdateComponent, { initialState: { employee } });
+    const modalOptions: ModalOptions = {
+      animated: true,
+      class: 'modal-lg modal-notify modal-primary',
+      initialState: { employee }
+    };
+    this.modalRef = this.modalService.show(EmployeeUpdateComponent, modalOptions);
     this.modalRef.content.refresh.subscribe(() => this.getEmployee());
 
   }
@@ -94,10 +99,15 @@ export class LaborerComponent implements OnInit {
       this.employeeCM.sex = false;
     }
     this.employeeCM.roleId = 1;
+    const birthdate = new Date(this.employeeCM.birthDate);
+    const date = ('0' + birthdate.getDate()).slice(-2);
+    const month = ('0' + birthdate.getMonth() + 1).slice(-2);
+    const year = birthdate.getFullYear();
+    this.employeeCM.birthDate = `${year}-${month}-${date}`;
+    console.log(this.employeeCM);
     this.employeeService.create(this.employeeCM)
       .then(
-        (response: number) => {
-          console.log(response);
+        () => {
           this.createModal.hide();
           this.employeeList = [];
           this.getEmployee();

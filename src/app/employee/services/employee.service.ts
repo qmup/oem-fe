@@ -41,7 +41,7 @@ export class EmployeeService {
 
   update(employeeUM: EmployeeUpdateModel): Promise<EmployeeUpdateModel> {
     return this.httpClient.put<EmployeeUpdateModel>(
-      `${environment.endPoint}${environment.apiPaths.admin.employee.update}`, employeeUM
+      `${environment.endPoint}${environment.apiPaths.admin.employee.update + employeeUM.id}`, employeeUM
     ).toPromise();
   }
 }
