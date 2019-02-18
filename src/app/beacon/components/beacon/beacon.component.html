@@ -1,8 +1,8 @@
 <div class="container">
   <!-- Basic example -->
   <div class="row">
-    <div class="col-md-12 mx-auto text-center my-5">
-      <h4 class="text-center">Beacon Management</h4>
+    <div class="col-md-12 mx-auto text-center my-4">
+      <h4 class="text-left mb-4">Quản lý beacon</h4>
       <div class="card">
         <div class="card-body">
 
@@ -10,11 +10,18 @@
           <div class="row">
 
             <!-- Grid column -->
-            <div class="col-md-12">
+            <div class="col-md-2">
+              <!-- Add button -->
+              <button title="Tạo mới nhân viên" mdbBtn type="button" color="success" rounded="true" size="sm" class="addNewButton w-75" mdbWavesEffect (click)="openCreateModal()">
+                <i class="fa fa-plus"></i>
+              </button>
 
+            </div>
+            <div class="col-md-10">
+              <!-- Search -->
               <div class="md-form">
-                <input type="search" [(ngModel)]="searchText" id="search" class="form-control" mdbInputDirective [mdbValidate]="false">
-                <label for="search">Search data</label>
+                <input type="search" [(ngModel)]="searchText" id="search" class="form-control" mdbInput>
+                <label for="search">Tìm kiếm</label>
               </div>
 
             </div>
@@ -30,12 +37,13 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Floor Name</th>
-                <th>Location</th>
-                <th>Time</th>
-                <th>UUID</th>
+                <th>Tên</th>
+                <th>Địa điểm</th>
+                <th>Miêu tả</th>
+                <!-- <th>UUID</th>
                 <th>Minor</th>
-                <th>Major</th>
+                <th>Major</th> -->
+                <th>Thao tác</th>
               </tr>
             </thead>
             <!--Table head-->
@@ -44,12 +52,22 @@
             <tbody>
               <tr *ngFor="let data of search()">
                 <th scope="row">{{data.id}}</th>
-                <td>{{data.floorName}}</td>
-                <td>{{data.location}}</td>
-                <td>{{data.time}}</td>
-                <td>{{data.uuid}}</td>
+                <td>{{data.name}}</td>
+                <td>{{data.workplaceId}}</td>
+                <td>{{data.description}}</td>
+                <!-- <td>{{data.uuid}}</td>
                 <td>{{data.minor}}</td>
-                <td>{{data.major}}</td>
+                <td>{{data.major}}</td> -->
+                <td class="d-flex justify-content-center">
+                  <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light col-3" size="sm"
+                    mdbWavesEffect (click)="openUpdateModal(data)">
+                    <i class="fa fa-pencil"></i>
+                  </button>
+                  <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light col-3" size="sm"
+                    mdbWavesEffect (click)="openDeleteModal(data.id)">
+                    <i class="fa fa-ban"></i>
+                  </button>
+                </td>
               </tr>
             </tbody>
             <!--Table body-->
@@ -61,4 +79,70 @@
     </div>
   </div>
   <!-- Basic example -->
+</div>
+
+<div mdbModal #create="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="add"
+  aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-success" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Tạo mới beacon</p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3 row">
+        <div class="md-form my-0 mb-3 col-md-12">
+          <input type="text" id="name" class="form-control" mdbInput [(ngModel)]="beaconCM.name">
+          <label for="name">Tên</label>
+        </div>
+
+        <div class="md-form my-0 mb-3 col-md-12">
+          <textarea type="text" id="description" class="form-control md-textarea" mdbInput [(ngModel)]="beaconCM.description"></textarea>
+          <label for="description">Miêu tả</label>
+        </div>
+
+        <div class="col-md-6 px-0">
+          <div class="">
+            <mdb-checkbox [(ngModel)]="haveWorkplace">Thêm địa điểm</mdb-checkbox>
+          </div>
+        </div>
+
+        <div class="md-form my-0 mb-3 col-md-6" *ngIf="haveWorkplace">
+          <mdb-select [options]="optionsSelect" placeholder="Địa điểm" [(ngModel)]="beaconCM.workplaceId"></mdb-select>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createBeacon()">Tạo mới
+          <i class="fa fa-check ml-1"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Xóa beacon này?</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-times fa-4x animated rotateIn"></i>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeBeacon()">Đồng ý</a>
+        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">Hủy</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
 </div>

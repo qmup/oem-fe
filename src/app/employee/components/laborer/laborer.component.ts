@@ -34,10 +34,6 @@ export class LaborerComponent implements OnInit {
       { value: 2, label: 'Cung 2' },
       { value: 3, label: 'Cung 3' },
     ];
-    this.optionsSex = [
-      { value: 0, label: 'Nam'},
-      { value: 1, label: 'Nữ'},
-    ];
     this.getEmployee();
   }
 

@@ -30,7 +30,7 @@ export class PlaceService {
 
   update(place: Place): Promise<Place> {
     return this.httpClient.put<Place>(
-      `${environment.endPoint}${environment.apiPaths.admin.workplace.update + place.id}`, place
+      `${environment.endPoint}${environment.apiPaths.admin.workplace.update}`, place
     ).toPromise();
   }
 }

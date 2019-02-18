@@ -72,7 +72,7 @@
           </div>
 
           <div class="md-form my-0 mb-3 col-md-6">
-            <mdb-select [options]="optionsSelect" placeholder="Beacon" [(ngModel)]="placeCM.beaconId"></mdb-select>
+            <mdb-select [options]="optionsSelect" placeholder="Beacon" [(ngModel)]="placeCM.beaconId" (changed)="changeBeacon(placeCM.beaconId)"></mdb-select>
           </div>
   
           <div class="md-form my-0 mb-3 col-md-12">
@@ -87,7 +87,7 @@
           
         </div>
         <div class="modal-footer d-flex justify-content-center">
-          <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createPlace()">Xác nhận
+          <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createPlace()">Tạo mới
             <i class="fa fa-check ml-1"></i>
           </button>
         </div>

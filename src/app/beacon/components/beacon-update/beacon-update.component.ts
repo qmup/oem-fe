@@ -1,0 +1,55 @@
+import { Component, OnInit, EventEmitter } from '@angular/core';
+import { BeaconService } from '../../services/beacon.service';
+import { BsModalRef } from 'ngx-bootstrap';
+import { Beacon } from '../../models/beacon';
+import { PlaceService } from 'src/app/place/services/place.service';
+import { Place } from 'src/app/place/models/place';
+
+@Component({
+  selector: 'app-beacon-update',
+  templateUrl: './beacon-update.component.html',
+  styleUrls: ['./beacon-update.component.scss']
+})
+export class BeaconUpdateComponent implements OnInit {
+
+  beacon: Beacon;
+  beaconUM: Beacon = new Beacon();
+  optionsSelect: { value: number; label: string; }[];
+  refresh: EventEmitter<any> = new EventEmitter<any>();
+  placeList: Place[];
+
+
+  constructor(
+    public modalRef: BsModalRef,
+    private beaconService: BeaconService,
+    private placeService: PlaceService,
+  ) { }
+
+  ngOnInit() {
+    this.getPlace();
+  }
+
+  updateBeacon() {
+    this.beaconService.update(this.beacon)
+      .then(
+        () => {
+          this.modalRef.hide();
+          this.refresh.emit();
+        },
+      );
+  }
+
+  getPlace() {
+    this.placeService.getAll()
+      .then(
+        (response: Place[]) => {
+          this.optionsSelect = response.map((place) => {
+            return {
+              value: place.id,
+              label: place.name
+            };
+          });
+        }
+      );
+  }
+}

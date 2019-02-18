@@ -1,0 +1,27 @@
+<div class="modal-header d-flex justify-content-center">
+  <p class="heading">Cập nhật beacon</p>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body mx-3 row">
+  <div class="md-form my-0 mb-3 col-md-6">
+    <input type="text" id="name" class="form-control" mdbInput [(ngModel)]="beacon.name">
+    <label for="name">Tên</label>
+  </div>
+
+  <div class="md-form my-0 mb-3 col-md-6">
+    <mdb-select [options]="optionsSelect" placeholder="Beacon" [(ngModel)]="beacon.workplaceId"></mdb-select>
+  </div>
+
+  <div class="md-form my-0 mb-3 col-md-12">
+    <textarea type="text" id="description" class="form-control md-textarea" mdbInput [(ngModel)]="beacon.description"></textarea>
+    <label for="description">Miêu tả</label>
+  </div>
+
+</div>
+<div class="modal-footer d-flex justify-content-center">
+  <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="updateBeacon()">Cập nhật
+    <i class="fa fa-check ml-1"></i>
+  </button>
+</div>

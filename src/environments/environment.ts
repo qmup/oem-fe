@@ -12,20 +12,20 @@ export const environment = {
         create: 'admin/beacon/create',
         getAll: 'admin/beacon/get-all',
         remove: 'admin/beacon/remove/',
-        update: 'admin/beacon/update/',
+        update: 'admin/beacon/update-dto/',
       },
       employee: {
         create: 'admin/employee/create',
         get: 'admin/employee/get-by-manager',
         getAll: 'admin/employee/get-all',
         remove: 'admin/employee/remove/',
-        update: 'admin/employee/update/',
+        update: 'admin/employee/update-dto/',
       },
       workplace: {
         create: 'admin/workplace/create',
         getAll: 'admin/workplace/get-all',
         remove: 'admin/workplace/remove/',
-        update: 'admin/workplace/update/',
+        update: 'admin/workplace/update-dto/',
       }
     }
   }

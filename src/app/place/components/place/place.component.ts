@@ -3,6 +3,8 @@ import { PlaceService } from '../../services/place.service';
 import { Place } from '../../models/place';
 import { BsModalService, ModalDirective, ModalOptions, BsModalRef } from 'ngx-bootstrap';
 import { PlaceUpdateComponent } from '../place-update/place-update.component';
+import { Beacon } from 'src/app/beacon/models/beacon';
+import { BeaconService } from 'src/app/beacon/services/beacon.service';
 
 @Component({
   selector: 'app-place',
@@ -20,16 +22,13 @@ export class PlaceComponent implements OnInit {
 
   constructor(
     private placeService: PlaceService,
+    private beaconService: BeaconService,
     private modalService: BsModalService,
   ) { }
 
   ngOnInit() {
     this.getPlace();
-    this.optionsSelect = [
-      { value: 1, label: 'Beacon 1' },
-      { value: 2, label: 'Beacon 2' },
-      { value: 3, label: 'Beacon 3' },
-    ];
+    this.getBeacon();
   }
 
   getPlace() {
@@ -37,7 +36,20 @@ export class PlaceComponent implements OnInit {
       .then(
         (response: Place[]) => {
           this.placeList = response;
-          console.log(this.placeList);
+        }
+      );
+  }
+
+  getBeacon() {
+    this.beaconService.getAll()
+      .then(
+        (response: Beacon[]) => {
+          this.optionsSelect = response.map((beacon) => {
+            return {
+              value: beacon.workplaceId,
+              label: beacon.name,
+            };
+          });
         }
       );
   }
@@ -65,6 +77,10 @@ export class PlaceComponent implements OnInit {
           this.getPlace();
         }
       );
+  }
+
+  changeBeacon(beaconId: number) {
+    this.placeCM.address = this.optionsSelect[beaconId].label;
   }
 
   openCreateModal() {

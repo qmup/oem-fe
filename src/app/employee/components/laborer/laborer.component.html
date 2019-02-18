@@ -2,7 +2,7 @@
   <!-- Basic example -->
   <div class="row">
     <div class="col-md-12 mx-auto text-center my-4">
-      <h4 class="text-left mb-4">Quản lý lao công</h4>
+      <h4 class="text-left mb-4">Quản lý nhân viên</h4>
       <div class="card">
         <div class="card-body">
 
@@ -12,7 +12,7 @@
             <!-- Grid column -->
             <div class="col-md-2">
               <!-- Add button -->
-              <button title="Tạo mới lao công" mdbBtn type="button" color="success" rounded="true" size="sm" class="addNewButton w-75" mdbWavesEffect (click)="openCreateModal()">
+              <button title="Tạo mới nhân viên" mdbBtn type="button" color="success" rounded="true" size="sm" class="addNewButton w-75" mdbWavesEffect (click)="openCreateModal()">
                 <i class="fa fa-plus"></i>
               </button>
 
@@ -89,7 +89,7 @@
   <div class="modal-dialog modal-lg modal-notify modal-success" role="document">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
-        <p class="heading">Tạo mới lao công</p>
+        <p class="heading">Tạo mới nhân viên</p>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -155,7 +155,7 @@
         
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createEmployee()">Xác nhận
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createEmployee()">Tạo mới
           <i class="fa fa-check ml-1"></i>
         </button>
       </div>
@@ -170,7 +170,7 @@
     <div class="modal-content text-center">
       <!--Header-->
       <div class="modal-header d-flex justify-content-center">
-        <p class="heading">Xóa lao công này?</p>
+        <p class="heading">Xóa nhân viên này?</p>
       </div>
 
       <!--Body-->
