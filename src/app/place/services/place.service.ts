@@ -12,25 +12,25 @@ export class PlaceService {
 
   create(place: Place): Promise<any> {
     return this.httpClient.post(
-      `${environment.endPoint}${environment.apiPaths.admin.workplace.create}`, place
+      `${environment.endPoint}${environment.apiPaths.workplace.create}`, place
     ).toPromise();
   }
 
   getAll(): Promise<Place[]> {
     return this.httpClient.get<Place[]>(
-      `${environment.endPoint}${environment.apiPaths.admin.workplace.getAll}`,
+      `${environment.endPoint}${environment.apiPaths.workplace.getAll}`,
     ).toPromise();
   }
 
   remove(id: number): Promise<any> {
     return this.httpClient.delete(
-      `${environment.endPoint}${environment.apiPaths.admin.workplace.remove + id}`
+      `${environment.endPoint}${environment.apiPaths.workplace.remove + id}`
     ).toPromise();
   }
 
   update(place: Place): Promise<Place> {
     return this.httpClient.put<Place>(
-      `${environment.endPoint}${environment.apiPaths.admin.workplace.update}`, place
+      `${environment.endPoint}${environment.apiPaths.workplace.update}`, place
     ).toPromise();
   }
 }

@@ -7,48 +7,44 @@ export const environment = {
   production: false,
   endPoint: 'http://localhost:8080/',
   apiPaths: {
-    admin: {
-      beacon: {
-        create: 'admin/beacon/create',
-        getAll: 'admin/beacon/get-all',
-        remove: 'admin/beacon/remove/',
-        update: 'admin/beacon/update-dto/',
-        getByWorkplace: 'admin/beacon/get-beacon-by-workplace?workplaceId=',
-      },
-      employee: {
-        create: 'admin/employee/create',
-        get: 'admin/employee/get-by-manager',
-        getAll: 'admin/employee/get-all',
-        remove: 'admin/employee/remove/',
-        update: 'admin/employee/update-dto/',
-        getById: 'admin/employee/get-info?id='
-      },
-      manager: {
-        create: 'admin/employee/create',
-        getAll: 'admin/employee/get-list-manager',
-        remove: 'admin/employee/remove/',
-        update: 'admin/employee/update-dto/',
-      },
-      workplace: {
-        create: 'admin/workplace/create',
-        getAll: 'admin/workplace/get-all',
-        remove: 'admin/workplace/remove/',
-        update: 'admin/workplace/update-dto/',
-      },
+    beacon: {
+      create: 'beacon/create',
+      getAll: 'beacon/get-all',
+      remove: 'beacon/remove/',
+      update: 'beacon/update-dto/',
+      getByWorkplace: 'beacon/get-beacon-by-workplace?workplaceId=',
+    },
+    employee: {
+      create: 'employee/create',
+      get: 'employee/get-by-manager',
+      getAll: 'employee/get-all',
+      remove: 'employee/remove/',
+      update: 'employee/update-dto/',
+      getById: 'employee/get-info?id='
     },
     manager: {
-      task: {
-        create: 'manager/create',
-        getTaskByStatus: 'manager/get-task-by-status',
-        getTaskDetail: 'manager/get-task-detail',
-        getTaskByDate: 'manager/get-task-from-date-to-date',
-        getTodayTask: 'manager/get-today-task',
-        summaryTask: 'manager/summary-task-all-employee-by-manager',
-      },
-      schedule: {
-        create: 'schedule/create',
-        getAll: 'schedule/get-all',
-      }
+      create: 'employee/create',
+      getAll: 'employee/get-list-manager',
+      remove: 'employee/remove/',
+      update: 'employee/update-dto/',
+    },
+    workplace: {
+      create: 'workplace/create',
+      getAll: 'workplace/get-all',
+      remove: 'workplace/remove/',
+      update: 'workplace/update-dto/',
+    },
+    task: {
+      create: 'task/create',
+      getTaskByStatus: 'task/get-task-by-status',
+      getTaskDetail: 'task/get-task-detail',
+      getTaskByDate: 'task/get-task-from-date-to-date',
+      getTodayTask: 'task/get-today-task',
+      summaryTask: 'task/summary-task-all-employee-by-manager',
+    },
+    schedule: {
+      create: 'schedule/create',
+      getAll: 'schedule/get-all',
     }
   }
 };

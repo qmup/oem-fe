@@ -11,34 +11,14 @@ export class ScheduleService {
 
   constructor(private httpClient: HttpClient) { }
 
-  create(scheduleCM: Schedule): Promise<any> {
-    return this.httpClient.post<any>(
-      `${environment.endPoint}${environment.apiPaths.manager.schedule.create}`, scheduleCM
+  create(scheduleCM: Schedule): Promise<Schedule> {
+    return this.httpClient.post<Schedule>(
+      `${environment.endPoint}${environment.apiPaths.schedule.create}`, scheduleCM
     ).toPromise();
   }
-  getTaskByStatus(): Promise<Task> {
-    return this.httpClient.get<Task>(
-      `${environment.endPoint}${environment.apiPaths.manager.schedule.getTaskByStatus}`
-    ).toPromise();
-  }
-  getTaskDetail(): Promise<Task> {
-    return this.httpClient.get<Task>(
-      `${environment.endPoint}${environment.apiPaths.manager.schedule.getTaskDetail}`
-    ).toPromise();
-  }
-  getTaskByDate(): Promise<Task> {
-    return this.httpClient.get<Task>(
-      `${environment.endPoint}${environment.apiPaths.manager.schedule.getTaskByDate}`
-    ).toPromise();
-  }
-  getTodayTask(): Promise<Task> {
-    return this.httpClient.get<Task>(
-      `${environment.endPoint}${environment.apiPaths.manager.schedule.getTodayTask}`
-    ).toPromise();
-  }
-  summaryTask(): Promise<Task> {
-    return this.httpClient.get<Task>(
-      `${environment.endPoint}${environment.apiPaths.manager.schedule.summaryTask}`
+  getAll(): Promise<Schedule[]> {
+    return this.httpClient.get<Schedule[]>(
+      `${environment.endPoint}${environment.apiPaths.schedule.getAll}`
     ).toPromise();
   }
 }

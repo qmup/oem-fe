@@ -12,13 +12,13 @@ export class EmployeeService {
 
   create(employeeCM: EmployeeCreateModel): Promise<any> {
     return this.httpClient.post<any>(
-      `${environment.endPoint}${environment.apiPaths.admin.employee.create}`, employeeCM
+      `${environment.endPoint}${environment.apiPaths.employee.create}`, employeeCM
     ).toPromise();
   }
 
   getByManager(managerId?): Promise<Employee[]> {
     return this.httpClient.get<Employee[]>(
-      `${environment.endPoint}${environment.apiPaths.admin.employee.get}`,
+      `${environment.endPoint}${environment.apiPaths.employee.get}`,
       {
         params: {
           managerId: managerId,
@@ -29,25 +29,25 @@ export class EmployeeService {
 
   getById(employeeId: number): Promise<Employee> {
     return this.httpClient.get<Employee>(
-      `${environment.endPoint}${environment.apiPaths.admin.employee.getById + employeeId}`
+      `${environment.endPoint}${environment.apiPaths.employee.getById + employeeId}`
     ).toPromise();
   }
 
   getAll(): Promise<Employee[]> {
     return this.httpClient.get<Employee[]>(
-      `${environment.endPoint}${environment.apiPaths.admin.employee.getAll}`,
+      `${environment.endPoint}${environment.apiPaths.employee.getAll}`,
     ).toPromise();
   }
 
   remove(id: number): Promise<any> {
     return this.httpClient.delete(
-      `${environment.endPoint}${environment.apiPaths.admin.employee.remove + id}`
+      `${environment.endPoint}${environment.apiPaths.employee.remove + id}`
     ).toPromise();
   }
 
   update(employeeUM: EmployeeUpdateModel): Promise<EmployeeUpdateModel> {
     return this.httpClient.put<EmployeeUpdateModel>(
-      `${environment.endPoint}${environment.apiPaths.admin.employee.update}`, employeeUM
+      `${environment.endPoint}${environment.apiPaths.employee.update}`, employeeUM
     ).toPromise();
   }
 }

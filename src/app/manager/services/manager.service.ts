@@ -12,25 +12,25 @@ export class ManagerService {
 
   create(managerCM: Manager): Promise<any> {
     return this.httpClient.post(
-      `${environment.endPoint}${environment.apiPaths.admin.manager.create}`, managerCM
+      `${environment.endPoint}${environment.apiPaths.manager.create}`, managerCM
     ).toPromise();
   }
 
   getAll(): Promise<Manager[]> {
     return this.httpClient.get<Manager[]>(
-      `${environment.endPoint}${environment.apiPaths.admin.manager.getAll}`,
+      `${environment.endPoint}${environment.apiPaths.manager.getAll}`,
     ).toPromise();
   }
 
   remove(id: number): Promise<any> {
     return this.httpClient.delete(
-      `${environment.endPoint}${environment.apiPaths.admin.manager.remove + id}`
+      `${environment.endPoint}${environment.apiPaths.manager.remove + id}`
     ).toPromise();
   }
 
   update(managerUM: Manager): Promise<Manager> {
     return this.httpClient.put<Manager>(
-      `${environment.endPoint}${environment.apiPaths.admin.manager.update}`, managerUM
+      `${environment.endPoint}${environment.apiPaths.manager.update}`, managerUM
     ).toPromise();
   }
 }
