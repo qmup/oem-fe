@@ -11,7 +11,7 @@ export class EmployeeService {
   constructor(private httpClient: HttpClient) { }
 
   create(employeeCM: EmployeeCreateModel): Promise<any> {
-    return this.httpClient.post(
+    return this.httpClient.post<any>(
       `${environment.endPoint}${environment.apiPaths.admin.employee.create}`, employeeCM
     ).toPromise();
   }

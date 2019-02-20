@@ -3,8 +3,9 @@ nav.navbar.fixed-top.navbar-toggleable-md.navbar-expand-lg.scrolling-navbar.doub
   color: white;
   background: linear-gradient(40deg, #303f9f, #45CAFA, #303f9f) !important;
 }
-html {
-  height: 100vh;
+html, body, main {
+  min-height: 100vh;
+  height: auto;
 }
 .sn-bg-1 {
   background-image: 'src/assets/sidenav.jpg' !important;
@@ -24,7 +25,7 @@ mdb-select > div > div.single > div.placeholder {
 }
 main#main {
   background-color: #eee;
-  height: 100vh;
+  height: 100%;
 }
 #task {
   h6 {

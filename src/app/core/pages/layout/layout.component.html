@@ -26,7 +26,7 @@
   
               <!-- Sidebar item -->
               <mdb-accordion-item>
-                <mdb-accordion-item-head mdbWavesEffect>
+                <mdb-accordion-item-head mdbWavesEffect routerLink="/laborer">
                   <i class="fa fa-users"></i> 
                   <span>Employee</span>
                 </mdb-accordion-item-head>
@@ -58,12 +58,27 @@
               </mdb-accordion-item>
   
               <!-- Sidebar item -->
-              <mdb-accordion-item class="no-collase">
-                <mdb-accordion-item-head mdbWavesEffect routerLink="/task">
+              <mdb-accordion-item>
+                <mdb-accordion-item-head mdbWavesEffect rounterLink="/task">
                   <i class="fa fa-list"></i> 
                   <span>Task</span>
                 </mdb-accordion-item-head>
-                <mdb-accordion-item-body></mdb-accordion-item-body>
+                <mdb-accordion-item-body>
+                  <ul>
+                    <li>
+                      <a routerLink="/task" class="waves-effect" mdbWavesEffect>
+                        <i class="fa fa-tasks"></i> 
+                        Quick task
+                      </a>
+                    </li>
+                    <li>
+                      <a routerLink="/schedule" class="waves-effect" mdbWavesEffect>
+                        <i class="fa fa-tasks"></i> 
+                        Schedule task
+                      </a>
+                    </li>
+                  </ul>
+                </mdb-accordion-item-body>
               </mdb-accordion-item>
               
               <mdb-accordion-item class="no-collase">

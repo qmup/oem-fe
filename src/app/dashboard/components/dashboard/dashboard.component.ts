@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TaskService } from 'src/app/task/service/task.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,6 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
+
+  constructor(
+    private taskService: TaskService
+  ) { }
+
   public chartType = 'line';
 
   public chartDatasets: Array<any> = [
@@ -53,6 +59,5 @@ export class DashboardComponent {
   public chartClicked(): void { }
   public chartHovered(): void { }
 
-  constructor() { }
 
 }

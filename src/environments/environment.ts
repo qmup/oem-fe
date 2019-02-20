@@ -34,6 +34,20 @@ export const environment = {
         getAll: 'admin/workplace/get-all',
         remove: 'admin/workplace/remove/',
         update: 'admin/workplace/update-dto/',
+      },
+    },
+    manager: {
+      task: {
+        create: 'manager/create',
+        getTaskByStatus: 'manager/get-task-by-status',
+        getTaskDetail: 'manager/get-task-detail',
+        getTaskByDate: 'manager/get-task-from-date-to-date',
+        getTodayTask: 'manager/get-today-task',
+        summaryTask: 'manager/summary-task-all-employee-by-manager',
+      },
+      schedule: {
+        create: 'schedule/create',
+        getAll: 'schedule/get-all',
       }
     }
   }
