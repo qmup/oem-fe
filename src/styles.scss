@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 nav.navbar.fixed-top.navbar-toggleable-md.navbar-expand-lg.scrolling-navbar.double-nav {
   color: white;
-  background-color: #3f5c80;
+  background: linear-gradient(40deg, #303f9f, #45CAFA, #303f9f) !important;
 }
 html {
   height: 100vh;
@@ -21,6 +21,10 @@ mdb-select > div > div.single > div.placeholder {
 .fa.fa-trash {
   font-size: 1.5rem;
   color: #1976d2 !important;
+}
+main#main {
+  background-color: #eee;
+  height: 100vh;
 }
 #task {
   h6 {
@@ -75,9 +79,6 @@ mdb-select > div > div.single > div.placeholder {
   small {
     color: rgb(137, 147, 164);
   }
-  .card-text {
-    padding-left: 40px;
-  }
 }
 #laborer {
   .addNewButton {
@@ -96,4 +97,7 @@ mdb-select > div > div.single > div.placeholder {
     border-radius: 50%;
     border: 1px solid white;
   }
+}
+.toast {
+  opacity: 1 !important;
 }

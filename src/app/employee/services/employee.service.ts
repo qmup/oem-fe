@@ -27,6 +27,12 @@ export class EmployeeService {
     ).toPromise();
   }
 
+  getById(employeeId: number): Promise<Employee> {
+    return this.httpClient.get<Employee>(
+      `${environment.endPoint}${environment.apiPaths.admin.employee.getById + employeeId}`
+    ).toPromise();
+  }
+
   getAll(): Promise<Employee[]> {
     return this.httpClient.get<Employee[]>(
       `${environment.endPoint}${environment.apiPaths.admin.employee.getAll}`,

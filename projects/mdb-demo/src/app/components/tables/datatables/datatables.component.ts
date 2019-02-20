@@ -120,7 +120,11 @@ export class DatatablesComponent implements OnInit {
   filterIt(arr: any, searchKey: any) {
     return arr.filter((obj: any) => {
       return Object.keys(obj).some((key) => {
-        return obj[key].includes(searchKey);
+        if (obj[key] !== null) {
+          const tempKey = obj[key].toString().toLowerCase();
+          const tempSearch = searchKey.toLowerCase();
+          return tempKey.includes(tempSearch);
+        }
       });
     });
   }

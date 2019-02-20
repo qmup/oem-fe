@@ -33,4 +33,10 @@ export class BeaconService {
       `${environment.endPoint}${environment.apiPaths.admin.beacon.update}`, beacon
     ).toPromise();
   }
+
+  getByWorkplace(workplaceId: number): Promise<Beacon> {
+    return this.httpClient.get<Beacon>(
+      `${environment.endPoint}${environment.apiPaths.admin.beacon.getByWorkplace + workplaceId}`,
+    ).toPromise();
+  }
 }

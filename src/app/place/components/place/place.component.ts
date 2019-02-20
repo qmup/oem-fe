@@ -5,6 +5,7 @@ import { BsModalService, ModalDirective, ModalOptions, BsModalRef } from 'ngx-bo
 import { PlaceUpdateComponent } from '../place-update/place-update.component';
 import { Beacon } from 'src/app/beacon/models/beacon';
 import { BeaconService } from 'src/app/beacon/services/beacon.service';
+import { ToastService } from 'ng-uikit-pro-standard';
 
 @Component({
   selector: 'app-place',
@@ -17,6 +18,7 @@ export class PlaceComponent implements OnInit {
   placeList: Place[];
   modalRef: BsModalRef;
   optionsSelect = new Array<any>();
+  beaconName: string;
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
 
@@ -24,6 +26,7 @@ export class PlaceComponent implements OnInit {
     private placeService: PlaceService,
     private beaconService: BeaconService,
     private modalService: BsModalService,
+    private toastService: ToastService,
   ) { }
 
   ngOnInit() {
@@ -36,6 +39,17 @@ export class PlaceComponent implements OnInit {
       .then(
         (response: Place[]) => {
           this.placeList = response;
+          for (let index = 0; index < this.placeList.length; index++) {
+            const element = this.placeList[index];
+            this.beaconService.getByWorkplace(element.id)
+              .then(
+                (response2: Beacon) => {
+                  if (response2) {
+                    element.beaconName = response2.name;
+                  }
+                }
+              );
+          }
         }
       );
   }
@@ -58,12 +72,13 @@ export class PlaceComponent implements OnInit {
     this.placeService.create(this.placeCM)
       .then(
         () => {
+          this.toastService.success('Tạo nơi làm việc thành công', '', { positionClass: 'toast-bottom-right'} );
           this.createModal.hide();
           this.placeList = [];
           this.getPlace();
         },
         (error: any) => {
-          console.log(error);
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
         }
       );
   }
@@ -72,9 +87,13 @@ export class PlaceComponent implements OnInit {
     this.placeService.remove(this.id)
       .then(
         () => {
+          this.toastService.success('Xóa nơi làm việc thành công', '', { positionClass: 'toast-bottom-right'} );
           this.deleteModal.hide();
           this.placeList = [];
           this.getPlace();
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
         }
       );
   }

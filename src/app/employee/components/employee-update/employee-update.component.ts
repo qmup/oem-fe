@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Employee, EmployeeUpdateModel } from '../../models/employee';
 import { BsModalRef } from 'ngx-bootstrap';
 import { EmployeeService } from '../../services/employee.service';
+import { ToastService } from 'ng-uikit-pro-standard';
 
 @Component({
   selector: 'app-employee-update',
@@ -19,7 +20,8 @@ export class EmployeeUpdateComponent implements OnInit {
 
   constructor(
     public modalRef: BsModalRef,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
@@ -58,9 +60,13 @@ export class EmployeeUpdateComponent implements OnInit {
     this.employeeService.update(this.employeeUM)
       .then(
         () => {
+          this.toastService.success('Cập nhật thông tin thành công', '', { positionClass: 'toast-bottom-right'} );
           this.modalRef.hide();
           this.refresh.emit();
         },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
       );
   }
 

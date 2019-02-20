@@ -13,11 +13,19 @@ export const environment = {
         getAll: 'admin/beacon/get-all',
         remove: 'admin/beacon/remove/',
         update: 'admin/beacon/update-dto/',
+        getByWorkplace: 'admin/beacon/get-beacon-by-workplace?workplaceId=',
       },
       employee: {
         create: 'admin/employee/create',
         get: 'admin/employee/get-by-manager',
         getAll: 'admin/employee/get-all',
+        remove: 'admin/employee/remove/',
+        update: 'admin/employee/update-dto/',
+        getById: 'admin/employee/get-info?id='
+      },
+      manager: {
+        create: 'admin/employee/create',
+        getAll: 'admin/employee/get-list-manager',
         remove: 'admin/employee/remove/',
         update: 'admin/employee/update-dto/',
       },

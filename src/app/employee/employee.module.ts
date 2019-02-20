@@ -6,7 +6,7 @@ import { LaborerComponent } from './components/laborer/laborer.component';
 import { SalerComponent } from './components/saler/saler.component';
 import { LaborerPagesComponent } from './pages/laborer-pages/laborer-pages.component';
 import { SalerPagesComponent } from './pages/saler-pages/saler-pages.component';
-import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
+import { MDBBootstrapModulesPro, ToastModule } from 'ng-uikit-pro-standard';
 import { FormsModule } from '@angular/forms';
 import { EmployeeDetailComponent } from './components/employee-detail/employee-detail.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -26,8 +26,6 @@ import { EmployeeUpdateComponent } from './components/employee-update/employee-u
     CommonModule,
     FormsModule,
     EmployeeRoutingModule,
-    ModalModule.forRoot(),
-    BsDatepickerModule.forRoot(),
     MDBBootstrapModulesPro.forRoot(),
   ],
   entryComponents: [

@@ -1,18 +1,22 @@
-<div class="container" id="laborer">
+<div id="laborer">
   <!-- Basic example -->
-  <div class="row">
-    <div class="col-md-12 mx-auto text-center my-4">
-      <h4 class="text-left mb-4">Quản lý nhân viên</h4>
-      <div class="card">
-        <div class="card-body">
-
-          <!-- Grid row -->
-          <div class="row">
+  <div class="card card-cascade narrower">
+    <section>
+      <div class="row">
+        <div class="col-xl-5 col-lg-12 mr-0">
+          <div class="view view-cascade gradient-card-header blue-gradient">
+            <h2 class="h2-responsive mb-0">Quản lý nhân viên</h2>
+          </div>
+        </div>
+        <div class="card-body card-body-cascade pb-0">
+          <div class="row card-body pt-3">
+            <!-- Grid row -->
 
             <!-- Grid column -->
             <div class="col-md-2">
               <!-- Add button -->
-              <button title="Tạo mới nhân viên" mdbBtn type="button" color="success" rounded="true" size="sm" class="addNewButton w-75" mdbWavesEffect (click)="openCreateModal()">
+              <button title="Tạo mới nhân viên" mdbBtn type="button" color="success" rounded="true" size="sm" class="addNewButton w-75"
+                mdbWavesEffect (click)="openCreateModal()">
                 <i class="fa fa-plus"></i>
               </button>
 
@@ -59,15 +63,15 @@
                 <td>{{data.phoneNumber}}</td>
                 <td>{{data.address}}</td>
                 <td class="d-flex justify-content-center">
-                  <button title="Chi tiết" mdbBtn type="button" rounded="true" color="warning" class="waves-light col-3" size="sm"
-                    mdbWavesEffect [routerLink]="['/employee-detail', data.id]">
+                  <button title="Chi tiết" mdbBtn type="button" rounded="true" color="warning" class="waves-light col"
+                    size="sm" mdbWavesEffect [routerLink]="['/employee-detail', data.id]">
                     <i class="fa fa-eye"></i>
                   </button>
-                  <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light col-3" size="sm"
-                    mdbWavesEffect (click)="openUpdateModal(data)">
+                  <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light col"
+                    size="sm" mdbWavesEffect (click)="openUpdateModal(data)">
                     <i class="fa fa-pencil"></i>
                   </button>
-                  <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light col-3" size="sm"
+                  <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light col" size="sm"
                     mdbWavesEffect (click)="openDeleteModal(data.id)">
                     <i class="fa fa-ban"></i>
                   </button>
@@ -80,12 +84,13 @@
 
         </div>
       </div>
-    </div>
+    </section>
   </div>
-  <!-- Basic example -->
 </div>
+<!-- Basic example -->
 
-<div mdbModal #create="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="add" aria-hidden="true">
+<div mdbModal #create="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="add"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg modal-notify modal-success" role="document">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
@@ -136,11 +141,8 @@
 
         <div class="md-form my-0 mb-3 col-md-6">
           <div class="form-group">
-            <input type="text"
-                    class="form-control"
-                    bsDatepicker
-                    mdbInput [(ngModel)]="employeeCM.birthDate">
-          <label for="email">Ngày sinh</label>
+            <input type="text" class="form-control" bsDatepicker mdbInput [(ngModel)]="employeeCM.birthDate">
+            <label for="email">Ngày sinh</label>
           </div>
         </div>
 
@@ -148,11 +150,11 @@
           <input type="text" id="macAddress" class="form-control" mdbInput [(ngModel)]="employeeCM.phoneMacAddress">
           <label for="macAddress">Địa chỉ MAC</label>
         </div>
-        
+
         <div class="md-form my-0 mb-3 col-md-12 ">
           <mdb-select [options]="optionsSelect" placeholder="Người quản lý" [(ngModel)]="employeeCM.managerId"></mdb-select>
         </div>
-        
+
       </div>
       <div class="modal-footer d-flex justify-content-center">
         <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createEmployee()">Tạo mới
@@ -164,7 +166,8 @@
 </div>
 
 
-<div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
+<div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
+  aria-hidden="true">
   <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
     <!--Content-->
     <div class="modal-content text-center">

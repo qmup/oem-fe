@@ -1,63 +1,101 @@
 <div class="row d-flex my-4">
-  <div class="col-md-3">
-    <!--Card Success-->
-    <div class="card info-color text-center z-depth-2">
-      <div class="card-body white-text">
-        <p class="mb-0 h6">TỔNG SỐ CÔNG VIỆC</p>
-        <span>5</span>
+  <div class="col-xl-3 col-md-6 my-5">
+    <div class="card card-cascade cascading-dashboard-card">
+      <div class="dashboard-up"><i class="fa fa-money primary-color"></i>
+        <div class="data">
+          <p>TỔNG SỐ CÔNG VIỆC</p>
+          <h4><strong>5</strong></h4>
+        </div>
+      </div>
+      <div class="card-body card-body-cascade">
+        <div class="progress">
+          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" class="progress-bar bg-primary" role="progressbar"
+            style="width: 25%"></div>
+        </div>
+        <p class="card-text">Better than last week (25%)</p>
       </div>
     </div>
-    <!--/.Card Success-->
   </div>
 
-  <div class="col-md-3">
-    <!--Card Info-->
-    <div class="card success-color text-center z-depth-2">
-      <div class="card-body white-text">
-        <p class="mb-0 h6">HOÀN THÀNH</p>
-        <span>5</span>
+  <div class="col-xl-3 col-md-6 my-5">
+    <div class="card card-cascade cascading-dashboard-card">
+      <div class="dashboard-up"><i class="fa fa-money success-color"></i>
+        <div class="data">
+          <p>ĐÃ HOÀN THÀNH</p>
+          <h4><strong>1</strong></h4>
+        </div>
+      </div>
+      <div class="card-body card-body-cascade">
+        <div class="progress">
+          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" class="progress-bar bg-success" role="progressbar"
+            style="width: 25%"></div>
+        </div>
+        <p class="card-text">Better than last week (25%)</p>
       </div>
     </div>
-    <!--/.Card Info-->
   </div>
 
-  <div class="col-md-3">
-    <!--Card Primary-->
-    <div class="card warning-color text-center z-depth-2">
-      <div class="card-body white-text">
-        <p class="mb-0 h6">CHƯA HOÀN THÀNH</p>
-        <span>5</span>
+  <div class="col-xl-3 col-md-6 my-5">
+    <div class="card card-cascade cascading-dashboard-card">
+      <div class="dashboard-up"><i class="fa fa-money light-blue lighten-1"></i>
+        <div class="data">
+          <p>CHƯA HOÀN THÀNH</p>
+          <h4><strong>2</strong></h4>
+        </div>
+      </div>
+      <div class="card-body card-body-cascade">
+        <div class="progress">
+          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" class="progress-bar light-blue lighten-1" role="progressbar"
+            style="width: 25%"></div>
+        </div>
+        <p class="card-text">Better than last week (25%)</p>
       </div>
     </div>
-    <!--/.Card Primary-->
   </div>
 
-  <div class="col-md-3">
-    <!--Card Warning-->
-    <div class="card red lighten-1 text-center z-depth-2">
-      <div class="card-body white-text">
-        <p class="mb-0 h6">HOÀN THÀNH QUÁ HẠN</p>
-        <span>5</span>
+  <div class="col-xl-3 col-md-6 my-5">
+    <div class="card card-cascade cascading-dashboard-card">
+      <div class="dashboard-up"><i class="fa fa-money red accent-2"></i>
+        <div class="data">
+          <p>QUÁ HẠN</p>
+          <h4><strong>2</strong></h4>
+        </div>
+      </div>
+      <div class="card-body card-body-cascade">
+        <div class="progress">
+          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" class="progress-bar red accent-2" role="progressbar"
+            style="width: 25%"></div>
+        </div>
+        <p class="card-text">Better than last week (25%)</p>
       </div>
     </div>
-    <!--/.Card Warning-->
   </div>
-
 </div>
-<div class="row">
-    <div class="col-xs-12 col-12 col-md-4 form-group">
-      <input type="text"
-        placeholder="Thời gian"
-        class="form-control"
-        bsDaterangepicker>
+<div class="card card-cascade narrower">
+  <section>
+    <div class="row">
+      <div class="col-xl-5 col-lg-12 mr-0">
+        <div class="view view-cascade gradient-card-header blue-gradient">
+          <h2 class="h2-responsive mb-0">Công việc</h2>
+        </div>
+        <div class="card-body card-body-cascade pb-0">
+          <div class="row card-body pt-3">
+            <div class="col-md-12">
+              <input type="text" placeholder="Chọn khoảng thời gian" aria-describedby="time" class="form-control" bsDaterangepicker [bsConfig]="{ containerClass: 'theme-dark-blue' }">
+            </div>
+            <div class="col-md-12 text-center">
+              <button class="btn btn-info" id="time">Tìm kiếm</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-7 col-lg-12 my-5">
+        <div style="display: block">
+          <canvas mdbChart [chartType]="chartType" [datasets]="chartDatasets" [labels]="chartLabels" [colors]="chartColors"
+            [options]="chartOptions" [legend]="true" (chartHover)="chartHovered()" (chartClick)="chartClicked()">
+          </canvas>
+        </div>
+      </div>
     </div>
-
-  <div class="col-12">
-    <div style="display: block">
-      <canvas mdbChart [chartType]="chartType" [datasets]="chartDatasets" [labels]="chartLabels" [colors]="chartColors"
-        [options]="chartOptions" [legend]="true" (chartHover)="chartHovered()" (chartClick)="chartClicked()">
-      </canvas>
-    </div>
-  </div>
-
+  </section>
 </div>

@@ -1,121 +1,124 @@
-<div class="row">
-  <h4 class="text-left my-4 pl-3">Quản lý nơi làm việc</h4>
-  <div class="col-12 mb-4">
-    <button title="Tạo mới nơi làm việc" mdbBtn type="button" color="success" rounded="true" size="md" style="width: 10%" mdbWavesEffect (click)="openCreateModal()">
-      <i class="fa fa-plus"></i>
-    </button>
-  </div>
-  <div class="col-md-4 mb-4" *ngFor="let p of placeList; let i of index">
-
-    <!--Card-->
-    <mdb-card cascade="true" narrower="true">
-
-      <!--Card image-->
-      <div class="view view-cascade overlay waves-light" mdbWavesEffect>
-        <mdb-card-img src="https://static.independent.co.uk/s3fs-public/thumbnails/image/2018/08/06/16/black.jpg?w968h681"></mdb-card-img>
-        <a>
-          <div class="mask rgba-white-slight"></div>
-        </a>
+<div class="card card-cascade narrower">
+  <section>
+    <div class="row">
+      <div class="col-xl-5 col-lg-12 mr-0">
+        <div class="view view-cascade gradient-card-header blue-gradient">
+          <h2 class="h2-responsive mb-0">Quản lý nơi làm việc</h2>
+        </div>
       </div>
-      <!--/Card image-->
+      <div class="card-body card-body-cascade pb-0">
 
-      <mdb-card-body cascade="true" class="text-center">
-        <!--Card content-->
-
-        <!--Title-->
-        <h4 class="card-title">{{p.name}}</h4>
-        <!--Text-->
-
-        <mdb-card-text>
-            Địa điểm: {{p.address}}
-        </mdb-card-text>
+        <div class="col-md-4 mb-4" *ngFor="let p of placeList; let i of index">
         
-        <mdb-card-text>
-            Miêu tả: {{p.description}}
-        </mdb-card-text>
+          <!--Card-->
+          <mdb-card cascade="true" narrower="true">
         
-        <mdb-card-text>
-            Beacon: {{p.beaconId}}
-        </mdb-card-text>
+            <!--Card image-->
+            <div class="view view-cascade overlay waves-light" mdbWavesEffect>
+              <mdb-card-img src="https://static.independent.co.uk/s3fs-public/thumbnails/image/2018/08/06/16/black.jpg?w968h681"></mdb-card-img>
+              <a>
+                <div class="mask rgba-white-slight"></div>
+              </a>
+            </div>
+            <!--/Card image-->
+        
+            <mdb-card-body cascade="true" class="text-center">
+              <!--Card content-->
+        
+              <!--Title-->
+              <h4 class="card-title">{{p.name}}</h4>
+              <!--Text-->
+        
+              <mdb-card-text>
+                Địa điểm: {{p.address}}
+              </mdb-card-text>
+        
+              <mdb-card-text>
+                Chi tiết: {{p.description}}
+              </mdb-card-text>
+        
+              <mdb-card-text>
+                Beacon: {{ p.beaconName ? p.beaconName : 'Chưa có' }}
+              </mdb-card-text>
+        
+              <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light" mdbWavesEffect
+                (click)="openUpdateModal(p)">
+                <i class="fa fa-pencil"></i>
+              </button>
+              <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light" mdbWavesEffect (click)="openDeleteModal(p.id)">
+                <i class="fa fa-ban"></i>
+              </button>
+        
+            </mdb-card-body>
+            <!--/.Card content-->
+        
+          </mdb-card>
+          <!--/.Card-->
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<!--/.Card-->
 
-        <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light"
-          mdbWavesEffect (click)="openUpdateModal(p)">
-          <i class="fa fa-pencil"></i>
+<div mdbModal #create="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="add"
+  aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-success" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Tạo mới nơi làm việc</p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
+          <span aria-hidden="true">&times;</span>
         </button>
-        <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light"
-          mdbWavesEffect (click)="openDeleteModal(p.id)">
-          <i class="fa fa-ban"></i>
+      </div>
+      <div class="modal-body mx-3 row">
+        <div class="md-form my-0 mb-3 col-md-12">
+          <input type="text" id="name" class="form-control" mdbInput [(ngModel)]="placeCM.name">
+          <label for="name">Tên</label>
+        </div>
+
+        <div class="md-form my-0 mb-3 col-md-12">
+          <input type="text" id="firstName" class="form-control" mdbInput [(ngModel)]="placeCM.address">
+          <label for="firstName">Địa điểm</label>
+        </div>
+
+        <div class="md-form my-0 mb-3 col-md-12">
+          <textarea type="text" id="description" class="form-control md-textarea" mdbInput [(ngModel)]="placeCM.description"></textarea>
+          <label for="description">Chi tiết</label>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createPlace()">Tạo mới
+          <i class="fa fa-check ml-1"></i>
         </button>
-
-      </mdb-card-body>
-      <!--/.Card content-->
-
-    </mdb-card>
-    <!--/.Card-->
+      </div>
+    </div>
   </div>
-  <!--/.Card-->
 </div>
 
-<div mdbModal #create="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="add" aria-hidden="true">
-    <div class="modal-dialog modal-notify modal-success" role="document">
-      <div class="modal-content">
-        <div class="modal-header d-flex justify-content-center">
-          <p class="heading">Tạo mới nơi làm việc</p>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body mx-3 row">
-          <div class="md-form my-0 mb-3 col-md-6">
-            <input type="text" id="name" class="form-control" mdbInput [(ngModel)]="placeCM.name">
-            <label for="name">Tên</label>
-          </div>
 
-          <div class="md-form my-0 mb-3 col-md-6">
-            <mdb-select [options]="optionsSelect" placeholder="Beacon" [(ngModel)]="placeCM.beaconId" (changed)="changeBeacon(placeCM.beaconId)"></mdb-select>
-          </div>
-  
-          <div class="md-form my-0 mb-3 col-md-12">
-            <input type="text" id="firstName" class="form-control" mdbInput [(ngModel)]="placeCM.address">
-            <label for="firstName">Địa điểm</label>
-          </div>
-  
-          <div class="md-form my-0 mb-3 col-md-12">
-            <textarea type="text" id="description" class="form-control md-textarea" mdbInput [(ngModel)]="placeCM.description"></textarea>
-            <label for="description">Miêu tả</label>
-          </div>
-          
-        </div>
-        <div class="modal-footer d-flex justify-content-center">
-          <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createPlace()">Tạo mới
-            <i class="fa fa-check ml-1"></i>
-          </button>
-        </div>
+<div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Xóa địa điểm này?</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-times fa-4x animated rotateIn"></i>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removePlace()">Đồng ý</a>
+        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">Hủy</a>
       </div>
     </div>
+    <!--/.Content-->
   </div>
-  
-  
-  <div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-      <!--Content-->
-      <div class="modal-content text-center">
-        <!--Header-->
-        <div class="modal-header d-flex justify-content-center">
-          <p class="heading">Xóa địa điểm này?</p>
-        </div>
-  
-        <!--Body-->
-        <div class="modal-body">
-          <i class="fa fa-times fa-4x animated rotateIn"></i>
-        </div>
-  
-        <!--Footer-->
-        <div class="modal-footer flex-center">
-          <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removePlace()">Đồng ý</a>
-          <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">Hủy</a>
-        </div>
-      </div>
-      <!--/.Content-->
-    </div>
-  </div>
+</div>

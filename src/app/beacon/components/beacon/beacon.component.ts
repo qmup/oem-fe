@@ -5,6 +5,7 @@ import { Beacon } from '../../models/beacon';
 import { BeaconUpdateComponent } from '../beacon-update/beacon-update.component';
 import { PlaceService } from 'src/app/place/services/place.service';
 import { Place } from 'src/app/place/models/place';
+import { ToastService } from 'ng-uikit-pro-standard';
 
 @Component({
   selector: 'app-beacon',
@@ -17,32 +18,19 @@ export class BeaconComponent implements OnInit {
   beaconList: Beacon[];
   modalRef: BsModalRef;
   optionsSelect = new Array<any>();
-  workplaceName: string[];
   haveWorkplace: boolean;
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
+  asd: any;
 
   searchText: string;
   placeList: Place[];
-  // tableData = [
-  //   { id: '1', floorName: 'Floor 1', location: '12.12312312312; -23.2323232323', time: '2015-04-20 12:12',
-  //   uuid: 'f7826da6-4fa2-4e98-8024-bc5b71e0893e', minor: '01a1', major: '0be6'},
-  //   { id: '2', floorName: 'Floor 2', location: '12.12312312312; -23.2323232323', time: '2015-04-20 12:12',
-  //   uuid: 'f7826da6-4fa2-4e98-8024-bc5b71e0893e', minor: '01a2', major: '0be6'},
-  //   { id: '3', floorName: 'Floor 3', location: '12.12312312312; -23.2323232323', time: '2015-04-20 12:12',
-  //   uuid: 'f7826da6-4fa2-4e98-8024-bc5b71e0893e', minor: '01a3', major: '0be6'},
-  //   { id: '4', floorName: 'Floor 4', location: '12.12312312312; -23.2323232323', time: '2015-04-20 12:12',
-  //   uuid: 'f7826da6-4fa2-4e98-8024-bc5b71e0893e', minor: '01a4', major: '0be6'},
-  //   { id: '5', floorName: 'Floor 5', location: '12.12312312312; -23.2323232323', time: '2015-04-20 12:12',
-  //   uuid: 'f7826da6-4fa2-4e98-8024-bc5b71e0893e', minor: '01a5', major: '0be6'},
-  //   { id: '6', floorName: 'Floor 6', location: '12.12312312312; -23.2323232323', time: '2015-04-20 12:12',
-  //   uuid: 'f7826da6-4fa2-4e98-8024-bc5b71e0893e', minor: '01a6', major: '0be6'},
-  // ];
 
   constructor(
     private beaconService: BeaconService,
     private modalService: BsModalService,
     private placeService: PlaceService,
+    private toastService: ToastService,
   ) {}
 
   ngOnInit() {
@@ -55,6 +43,12 @@ export class BeaconComponent implements OnInit {
       .then(
         (response: Beacon[]) => {
           this.beaconList = response;
+          for (let index = 0; index < this.beaconList.length; index++) {
+            const element = this.beaconList[index];
+            if (element.workplace) {
+              element.placeName = `${element.workplace.address}` + ' - ' + `${element.workplace.name}`;
+            }
+          }
         }
       );
   }
@@ -74,37 +68,38 @@ export class BeaconComponent implements OnInit {
       );
   }
 
-  getWorkplaceName() {
-    for (let index = 0; index < this.beaconList.length; index++) {
-      const element = this.beaconList[index];
-      return (this.placeList.find(x => x.id === element.workplaceId).address);
-    }
-  }
-
   createBeacon() {
+    const options = { positionClass: 'toast-bottom-right' };
     if (!this.haveWorkplace) {
-      this.beaconCM.workplaceId = 0;
+      this.beaconCM.workplace = null;
+      this.beaconCM.workplaceId = null;
     }
     this.beaconService.create(this.beaconCM)
       .then(
         () => {
+          this.toastService.success('Tạo mới beacon thành công', '', options);
           this.createModal.hide();
           this.beaconList = [];
           this.getBeacon();
         },
-        (error: any) => {
-          console.log(error);
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', options);
         }
       );
   }
 
   removeBeacon() {
+    const options = { positionClass: 'toast-bottom-right' };
     this.beaconService.remove(this.id)
       .then(
         () => {
+          this.toastService.success('Xóa beacon thành công', '', options);
           this.deleteModal.hide();
           this.beaconList = [];
           this.getBeacon();
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', options);
         }
       );
   }
@@ -132,7 +127,11 @@ export class BeaconComponent implements OnInit {
   filterIt(arr: any, searchKey: any) {
     return arr.filter((obj: any) => {
       return Object.keys(obj).some((key) => {
-        return obj[key].includes(searchKey);
+        if (obj[key] !== null) {
+          const tempKey = obj[key].toString().toLowerCase();
+          const tempSearch = searchKey.toLowerCase();
+          return tempKey.includes(tempSearch);
+        }
       });
     });
   }

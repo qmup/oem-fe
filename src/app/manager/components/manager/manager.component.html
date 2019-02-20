@@ -1,20 +1,31 @@
-<div class="container">
+<div id="laborer">
   <!-- Basic example -->
-  <div class="row">
-    <div class="col-md-12 mx-auto text-center my-5">
-      <h4 class="text-center">Manager Management</h4>
-      <div class="card">
-        <div class="card-body">
-
-          <!-- Grid row -->
-          <div class="row">
+  <div class="card card-cascade narrower">
+    <section>
+      <div class="row">
+        <div class="col-xl-5 col-lg-12 mr-0">
+          <div class="view view-cascade gradient-card-header blue-gradient">
+            <h2 class="h2-responsive mb-0">Quản lý manager</h2>
+          </div>
+        </div>
+        <div class="card-body card-body-cascade pb-0">
+          <div class="row card-body pt-3">
+            <!-- Grid row -->
 
             <!-- Grid column -->
-            <div class="col-md-12">
+            <div class="col-md-2">
+              <!-- Add button -->
+              <button title="Tạo mới nhân viên" mdbBtn type="button" color="success" rounded="true" size="sm" class="addNewButton w-75"
+                mdbWavesEffect (click)="openCreateModal()">
+                <i class="fa fa-plus"></i>
+              </button>
 
+            </div>
+            <div class="col-md-10">
+              <!-- Search -->
               <div class="md-form">
-                <input type="search" [(ngModel)]="searchText" id="search" class="form-control" mdbInputDirective [mdbValidate]="false">
-                <label for="search">Search</label>
+                <input type="search" [(ngModel)]="searchText" id="search" class="form-control" mdbInput>
+                <label for="search">Tìm kiếm</label>
               </div>
 
             </div>
@@ -24,20 +35,18 @@
           <!-- Grid row -->
 
           <!--Table-->
-          <table class="table table-hover table-responsive">
+          <table class="table table-hover">
 
             <!--Table head-->
             <thead>
               <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Age</th>
-                <th>Gender</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Email</th>
-                <th>Action</th>
+                <th>Hình ảnh</th>
+                <th>Họ</th>
+                <th>Tên</th>
+                <th>Giới tính</th>
+                <th>Số điện thoại</th>
+                <th>Địa chỉ</th>
+                <th>Thao tác</th>
               </tr>
             </thead>
             <!--Table head-->
@@ -45,18 +54,27 @@
             <!--Table body-->
             <tbody>
               <tr *ngFor="let data of search()">
-                <th scope="row">{{data.id}}</th>
+                <th scope="row" style="position: relative; width: 120px">
+                  <img src="{{data.picture}}" alt="image" class="avatar">
+                </th>
                 <td>{{data.firstName}}</td>
                 <td>{{data.lastName}}</td>
-                <td>{{data.age}}</td>
-                <td>{{data.gender}}</td>
-                <td>{{data.phone}}</td>
+                <td>{{data.sex ? 'Nam' : 'Nữ'}}</td>
+                <td>{{data.phoneNumber}}</td>
                 <td>{{data.address}}</td>
-                <td>{{data.email}}</td>
-                <td>
-                  <button mdbBtn type="button" rounded="true" color="warning" class="waves-light" size="sm" mdbWavesEffect [routerLink]="['/employee-detail', data.id]">View Detail</button>
-                  <button mdbBtn type="button" rounded="true" color="primary" class="waves-light" size="sm" mdbWavesEffect>Update</button>
-                  <button mdbBtn type="button" rounded="true" color="danger" class="waves-light" size="sm" mdbWavesEffect (click)="delete.show()">Delete</button>
+                <td class="d-flex justify-content-center">
+                  <button title="Chi tiết" mdbBtn type="button" rounded="true" color="warning" class="waves-light col"
+                    size="sm" mdbWavesEffect [routerLink]="['/manager-detail', data.id]">
+                    <i class="fa fa-eye"></i>
+                  </button>
+                  <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light col"
+                    size="sm" mdbWavesEffect (click)="openUpdateModal(data)">
+                    <i class="fa fa-pencil"></i>
+                  </button>
+                  <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light col" size="sm"
+                    mdbWavesEffect (click)="openDeleteModal(data.id)">
+                    <i class="fa fa-ban"></i>
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -66,36 +84,109 @@
 
         </div>
       </div>
+    </section>
+  </div>
+</div>
+<!-- Basic example -->
+
+<div mdbModal #create="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="add"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-notify modal-success" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Tạo mới nhân viên</p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3 row">
+        <div class="md-form my-0 mb-3 col-md-6">
+          <input type="text" id="userName" class="form-control" mdbInput [(ngModel)]="managerCM.fullName">
+          <label for="userName">Tên account</label>
+        </div>
+
+        <div class="md-form my-0 mb-3 col-md-6">
+          <input type="password" id="password" class="form-control" mdbInput [(ngModel)]="managerCM.password">
+          <label for="password">Mật khẩu</label>
+        </div>
+
+        <div class="md-form my-0 mb-3 col-md-6">
+          <input type="text" id="firstName" class="form-control" mdbInput [(ngModel)]="managerCM.firstName">
+          <label for="firstName">Họ</label>
+        </div>
+
+        <div class="md-form my-0 mb-3 col-md-6">
+          <input type="text" id="lastName" class="form-control" mdbInput [(ngModel)]="managerCM.lastName">
+          <label for="lastName">Tên</label>
+        </div>
+
+        <div class="md-form my-0 mb-3 col-md-6 ">
+          <mdb-select [options]="optionsSex" id="gender" placeholder="Giới tính" [(ngModel)]="gender"></mdb-select>
+        </div>
+
+        <div class="md-form my-0 mb-3 col-md-6">
+          <input type="text" id="phoneNumber" class="form-control" mdbInput [(ngModel)]="managerCM.phoneNumber">
+          <label for="phoneNumber">Số điện thoại</label>
+        </div>
+
+        <div class="md-form my-0 mb-3 col-md-6">
+          <input type="text" id="address" class="form-control" mdbInput [(ngModel)]="managerCM.address">
+          <label for="address">Địa chỉ</label>
+        </div>
+
+        <div class="md-form my-0 mb-3 col-md-6">
+          <input type="text" id="email" class="form-control" mdbInput [(ngModel)]="managerCM.email">
+          <label for="email">Email</label>
+        </div>
+
+        <div class="md-form my-0 mb-3 col-md-6">
+          <div class="form-group">
+            <input type="text" class="form-control" bsDatepicker mdbInput [(ngModel)]="managerCM.birthDate">
+            <label for="email">Ngày sinh</label>
+          </div>
+        </div>
+
+        <div class="md-form my-0 mb-3 col-md-6">
+          <input type="text" id="macAddress" class="form-control" mdbInput [(ngModel)]="managerCM.phoneMacAddress">
+          <label for="macAddress">Địa chỉ MAC</label>
+        </div>
+
+        <div class="md-form my-0 mb-3 col-md-12 ">
+          <mdb-select [options]="optionsSelect" placeholder="Người quản lý" [(ngModel)]="managerCM.managerId"></mdb-select>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createManager()">Tạo mới
+          <i class="fa fa-check ml-1"></i>
+        </button>
+      </div>
     </div>
   </div>
-  <!-- Basic example -->
 </div>
-<div class="row">
-    <div class="col-md-6 mx-auto">
-      <div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
-        aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-          <!--Content-->
-          <div class="modal-content text-center">
-            <!--Header-->
-            <div class="modal-header d-flex justify-content-center">
-              <p class="heading">Remove this laborer?</p>
-            </div>
 
-            <!--Body-->
-            <div class="modal-body">
-              <i class="fa fa-times fa-4x animated rotateIn"></i>
-            </div>
 
-            <!--Footer-->
-            <div class="modal-footer flex-center">
-              <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect>Yes</a>
-              <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">No</a>
-            </div>
-          </div>
-          <!--/.Content-->
-        </div>
+<div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Xóa nhân viên này?</p>
       </div>
 
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-times fa-4x animated rotateIn"></i>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeManager()">Đồng ý</a>
+        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">Hủy</a>
+      </div>
     </div>
+    <!--/.Content-->
   </div>
+</div>

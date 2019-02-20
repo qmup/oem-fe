@@ -9,40 +9,40 @@ export class DashboardComponent {
   public chartType = 'line';
 
   public chartDatasets: Array<any> = [
-    { data: [65, 59, 80, 81, 56, 55, 40, 35, 30, 80, 10, 50], label: 'Minh ngáo' },
-    { data: [28, 48, 40, 19, 86, 27, 90, 80, 70, 50, 28, 90], label: 'Hải ngáo' },
-    { data: [40, 35, 30, 65, 59, 80, 19, 86, 87, 40, 35, 30], label: 'An ngáo' }
+    { data: [1, 5, 3, 7, 2, 9, 1, 2, 0, 4, 4, 5], label: 'Đã hoàn thành' },
+    { data: [0, 0, 0, 2, 1, 1, 3, 1, 1, 3, 0, 0], label: 'Chưa hoàn thành' },
+    { data: [0, 0, 1, 1, 2, 0, 3, 1, 1, 3, 2, 1], label: 'Quá hạn' },
   ];
 
   public chartLabels: Array<any> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   public chartColors: Array<any> = [
     {
-      backgroundColor: 'rgba(255, 99, 132,0.2)',
-      borderColor: 'rgba(255, 99, 132, 1)',
+      backgroundColor: 'rgba(0, 200 ,81 ,0.2)',
+      borderColor: 'rgba(0, 200 ,81 , 1)',
       borderWidth: 2,
-      pointBackgroundColor: 'rgba(255, 99, 132,1)',
+      pointBackgroundColor: 'rgba(0, 200 ,81 ,1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(255, 99, 132,1)'
+      pointHoverBorderColor: 'rgba(0, 200 ,81 ,1)'
     },
     {
-      backgroundColor: 'rgba(54, 162, 235,0.2)',
-      borderColor: 'rgba(54, 162, 235, 1)',
+      backgroundColor: 'rgba(41, 182, 246, 0.2)',
+      borderColor: 'rgba(41, 182, 246 , 1)',
       borderWidth: 2,
-      pointBackgroundColor: 'rgba(54, 162, 235,1)',
+      pointBackgroundColor: 'rgba(41, 182, 246, 1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(54, 162, 235,1)'
+      pointHoverBorderColor: 'rgba(41, 182, 246, 1)'
     },
     {
-      backgroundColor: 'rgba(255, 206, 86, 0.2)',
-      borderColor: 'rgba(255, 206, 86, 1)',
+      backgroundColor: 'rgba(255, 82, 82, 0.2)',
+      borderColor: 'rgba(255, 82, 82, 1)',
       borderWidth: 2,
-      pointBackgroundColor: 'rgba(255, 206, 86, 1)',
+      pointBackgroundColor: 'rgba(255, 82, 82, 1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(255, 206, 86, 1)'
+      pointHoverBorderColor: 'rgba(255, 82, 82, 1)'
     }
   ];
 

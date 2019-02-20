@@ -5,9 +5,8 @@ import { BeaconRoutingModule } from './beacon-routing.module';
 import { BeaconPagesComponent } from './pages/beacon-pages/beacon-pages.component';
 import { BeaconComponent } from './components/beacon/beacon.component';
 import { FormsModule } from '@angular/forms';
-import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
+import { MDBBootstrapModulesPro, ToastModule } from 'ng-uikit-pro-standard';
 import { BeaconUpdateComponent } from './components/beacon-update/beacon-update.component';
-import { ModalModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -19,7 +18,6 @@ import { ModalModule } from 'ngx-bootstrap';
     CommonModule,
     FormsModule,
     BeaconRoutingModule,
-    ModalModule.forRoot(),
     MDBBootstrapModulesPro.forRoot(),
   ],
   entryComponents: [

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EmployeeService } from '../../services/employee.service';
 import { Employee, EmployeeCreateModel } from '../../models/employee';
-import { ModalDirective } from 'ng-uikit-pro-standard';
+import { ModalDirective, ToastService } from 'ng-uikit-pro-standard';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap';
 import { EmployeeUpdateComponent } from '../employee-update/employee-update.component';
 
@@ -26,14 +26,10 @@ export class LaborerComponent implements OnInit {
   constructor(
     private employeeService: EmployeeService,
     private modalService: BsModalService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
-    this.optionsSelect = [
-      { value: 1, label: 'Cung 1' },
-      { value: 2, label: 'Cung 2' },
-      { value: 3, label: 'Cung 3' },
-    ];
     this.getEmployee();
   }
 
@@ -67,7 +63,6 @@ export class LaborerComponent implements OnInit {
   }
 
   filterIt(arr: any, searchKey: any) {
-    console.log(arr, searchKey);
     return arr.filter((obj: any) => {
       return Object.keys(obj).some((key) => {
         if (obj[key] !== null) {
@@ -100,16 +95,17 @@ export class LaborerComponent implements OnInit {
     const month = ('0' + birthdate.getMonth() + 1).slice(-2);
     const year = birthdate.getFullYear();
     this.employeeCM.birthDate = `${year}-${month}-${date}`;
-    console.log(this.employeeCM);
     this.employeeService.create(this.employeeCM)
       .then(
         () => {
+          this.toastService.success('Tạo nhân viên thành công', '', { positionClass: 'toast-bottom-right'} );
           this.createModal.hide();
           this.employeeList = [];
           this.getEmployee();
         },
         (error: any) => {
           console.log(error);
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
         }
       );
   }
@@ -118,9 +114,13 @@ export class LaborerComponent implements OnInit {
     this.employeeService.remove(this.id)
       .then(
         () => {
+          this.toastService.success('Xóa nhân viên thành công', '', { positionClass: 'toast-bottom-right'} );
           this.deleteModal.hide();
           this.employeeList = [];
           this.getEmployee();
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
         }
       );
   }

@@ -5,13 +5,9 @@
   </button>
 </div>
 <div class="modal-body mx-3 row">
-  <div class="md-form my-0 mb-3 col-md-6">
+  <div class="md-form my-0 mb-3 col-md-12">
     <input type="text" id="name" class="form-control" mdbInput [(ngModel)]="place.name">
     <label for="name">Tên</label>
-  </div>
-  
-  <div class="md-form my-0 mb-3 col-md-6">
-    <mdb-select [options]="optionsSelect" placeholder="Beacon" [(ngModel)]="place.beaconId"></mdb-select>
   </div>
   
   <div class="md-form my-0 mb-3 col-md-12">
@@ -21,7 +17,7 @@
   
   <div class="md-form my-0 mb-3 col-md-12">
     <textarea type="text" id="description" class="form-control md-textarea" mdbInput [(ngModel)]="place.description"></textarea>
-    <label for="description">Miêu tả</label>
+    <label for="description">Chi tiết</label>
   </div>
 
 </div>

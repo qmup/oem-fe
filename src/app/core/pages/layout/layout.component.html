@@ -65,7 +65,15 @@
                 </mdb-accordion-item-head>
                 <mdb-accordion-item-body></mdb-accordion-item-body>
               </mdb-accordion-item>
-  
+              
+              <mdb-accordion-item class="no-collase">
+                <mdb-accordion-item-head mdbWavesEffect routerLink="/place">
+                  <i class="fa fa-location-arrow"></i> 
+                  <span>Place</span>
+                </mdb-accordion-item-head>
+                <mdb-accordion-item-body></mdb-accordion-item-body>
+              </mdb-accordion-item>
+              
               <!-- Sidebar item -->
               <mdb-accordion-item class="no-collase">
                 <mdb-accordion-item-head mdbWavesEffect routerLink="/beacon">
@@ -75,13 +83,6 @@
                 <mdb-accordion-item-body></mdb-accordion-item-body>
               </mdb-accordion-item>
   
-              <mdb-accordion-item class="no-collase">
-                <mdb-accordion-item-head mdbWavesEffect routerLink="/place">
-                  <i class="fa fa-location-arrow"></i> 
-                  <span>Place</span>
-                </mdb-accordion-item-head>
-                <mdb-accordion-item-body></mdb-accordion-item-body>
-              </mdb-accordion-item>
   
             </mdb-accordion>
           </ul>
@@ -136,7 +137,7 @@
   <!--/.Double navigation-->
     
   <!--Main Layout-->
-  <main>
+  <main id="main">
     <router-outlet></router-outlet>
   </main>
 </ng-template>

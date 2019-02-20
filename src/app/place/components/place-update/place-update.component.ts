@@ -4,6 +4,7 @@ import { BsModalRef } from 'ngx-bootstrap';
 import { PlaceService } from '../../services/place.service';
 import { Beacon } from 'src/app/beacon/models/beacon';
 import { BeaconService } from 'src/app/beacon/services/beacon.service';
+import { ToastService } from 'ng-uikit-pro-standard';
 
 @Component({
   selector: 'app-place-update',
@@ -21,7 +22,8 @@ export class PlaceUpdateComponent implements OnInit {
   constructor(
     public modalRef: BsModalRef,
     private placeService: PlaceService,
-    private beaconService: BeaconService
+    private beaconService: BeaconService,
+    private toastService: ToastService,
   ) { }
 
   ngOnInit() {
@@ -33,9 +35,13 @@ export class PlaceUpdateComponent implements OnInit {
     this.placeService.update(this.place)
       .then(
         response => {
+          this.toastService.success('Cập nhật nơi làm việc thành công', '', { positionClass: 'toast-bottom-right'} );
           this.modalRef.hide();
           this.refresh.emit();
         },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
       );
   }
 

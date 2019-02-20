@@ -1,54 +1,58 @@
 <div class="container" id="employee-detail">
   <div class="row">
     <div class="col-md-4 mb-4">
-      <mdb-card class="testimonial-card">
-        <!--Bacground color-->
-        <div class="card-up blue-gradient lighten-1">
-        </div>
+      <mdb-flipping-card #cards>
+        <!--Front Side-->
+        <div class="face front tp-box_side tp-box_front">
 
-        <!--Avatar-->
-        <div class="avatar mx-auto">
-          <img src="https://scontent.fsgn4-1.fna.fbcdn.net/v/t1.0-9/31485522_1680505475399181_3420546009330089984_n.jpg?_nc_cat=105&_nc_oc=AQnxJNamjoUGy0i3XI3oxAIm2NcakB6aeIM9uwwO3-I00Pky2fkHDaTD2Cx5B-J9sCM&_nc_ht=scontent.fsgn4-1.fna&oh=e9d30d960f94ab1ba7180b3257e2cfac&oe=5CB63D7E" class="rounded-circle">
+          <!-- Image-->
+          <div class="card-up blue-gradient lighten-1">
+            <img src="assets/background-profile.jpg" class="img-fluid">
+          </div>
+          <!--Avatar-->
+          <div class="avatar">
+            <img src="{{ employee.picture }}" class="rounded-circle img-responsive">
+          </div>
+          <!--Content-->
+          <div class="card-body">
+            <h4>{{ employee.fullName }}</h4>
+            <p>Chức vụ: {{ employee.roleId === 1 ? 'Nhân viên' : 'Quản lý' }}</p>
+            <!--Triggering button-->
+            <a class="rotate-btn" data-card="card-1" (click)="cards.toggle()">Chi tiết </a>
+          </div>
         </div>
+        <!--/.Front Side-->
 
-        <mdb-card-body>
-          <!--Name-->
-          <mdb-card-title>
-            <h4>Nguyễn Sinh Cung</h4>
-          </mdb-card-title>
+        <!--Back Side-->
+        <div class="back tp-box_side tp-box_back">
+
+          <!--Content-->
+          <h4>Thông tin chi tiết</h4>
           <hr>
-          <!--Quotation-->
-          <p>
-            <!--Facebook-->
-            <a type="button" class="btn-floating btn-small btn-fb waves-light" mdbWavesEffect>
-              <mdb-icon icon="facebook"></mdb-icon>
-            </a>
-            <!--Twitter-->
-            <a type="button" class="btn-floating btn-small btn-git waves-light" mdbWavesEffect>
-              <i class="fa fa-github"></i>
-            </a>
-            <!--Google +-->
-            <a type="button" class="btn-floating btn-small btn-gplus waves-light" mdbWavesEffect>
-              <i class="fa fa-google-plus"></i>
-            </a>
-          </p>
-          <hr>
-          <!-- About -->
-          <p class="h6">About</p>
-          <mdb-card-text style="text-align: left">
-            <i class="fa fa-building-o mr-2"></i>Tòa nhà số 8
-            <br>
-            <i class="fa fa-phone mr-2"></i>01233456789
-            <br>
-            <i class="fa fa-envelope-open-o mr-2"></i>cungns@dfk-com.vn
-            <br>
-            <i class="fa fa-user mr-2"></i>Quản lý: Thái Hoàng Danh
-            <br>
-            <i class="fa fa-map-marker mr-2"></i>Hồ Chí Minh, Việt Nam, Trái Đất
-          </mdb-card-text>
-        </mdb-card-body>
-        <!-- <button mdbBtn type="button" color="blue" block="true" mdbWavesEffect [routerLink]="['/view-profile', id]">Manage your account</button> -->
-      </mdb-card>
+
+            <mdb-card-text style="text-align: left" class="profile-text">
+              <i class="fa fa-birthday-cake mr-2 mb-3"></i>
+              <span class="mb-3">Sinh nhật: {{ employee.birthDate | date: 'dd-MM-yyyy' }}</span>
+              <br>
+              <i class="fa fa-phone mr-2 mb-3"></i>
+              <span class="mb-3">Số điện thoại: {{ employee.phoneNumber }}</span>
+              <br>
+              <i class="fa fa-envelope-open-o mr-2 mb-3"></i>
+              <span class="mb-3">Email: {{ employee.email }}</span>
+              <br>
+              <i class="fa fa-map-marker mr-2 mb-3"></i>
+              <span class="mb-3">Địa chỉ: {{ employee.address }}</span>
+              <br>
+              <i class="fa fa-user mr-2 mb-3"></i>
+              <span class="mb-3">Người quản lý: {{ employee.managerId }}</span>
+            </mdb-card-text>
+
+          <!--Triggering button-->
+          <a class="rotate-btn" data-card="card-1" (click)="cards.toggle()">Trở lại</a>
+
+        </div>
+        <!--/.Back Side-->
+      </mdb-flipping-card>
     </div>
     <div class="col-md-7 mb-4 mx-auto">
       <div class="view-all-button row">
