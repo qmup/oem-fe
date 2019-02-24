@@ -28,6 +28,10 @@ export class ManagerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.optionsSex = [
+      { value: 1, label: 'Nam' },
+      { value: 2, label: 'Nữ' },
+    ],
     this.getManager();
   }
 

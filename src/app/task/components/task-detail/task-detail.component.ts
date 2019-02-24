@@ -90,15 +90,15 @@ export class TaskDetailComponent implements OnInit {
       icon: 'https://cdn2.iconfinder.com/data/icons/perfect-flat-icons-2/512/Danger_hanger_triangle_traffic_cone.png' },
     ];
     this.iconPrioritySelect = [
-      { value: '1', label: 'Highest',
+      { value: '1', label: 'Rất cao',
       icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/highest.svg' },
-      { value: '2', label: 'High',
+      { value: '2', label: 'Cao',
       icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/high.svg' },
-      { value: '3', label: 'Medium',
+      { value: '3', label: 'Bình thường',
       icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/medium.svg' },
-      { value: '4', label: 'Low',
+      { value: '4', label: 'Thấp',
       icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/low.svg' },
-      { value: '5', label: 'Lowest',
+      { value: '5', label: 'Rất thấp',
       icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/lowest.svg' },
     ];
   }

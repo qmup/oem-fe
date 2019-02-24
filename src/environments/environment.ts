@@ -5,14 +5,15 @@
 
 export const environment = {
   production: false,
-  endPoint: 'http://localhost:8080/',
+  // endPoint: 'http://localhost:8080/',
+  endPoint: 'http://113.161.84.125/',
   apiPaths: {
     beacon: {
       create: 'beacon/create',
       getAll: 'beacon/get-all',
       remove: 'beacon/remove/',
       update: 'beacon/update-dto/',
-      getByWorkplace: 'beacon/get-beacon-by-workplace?workplaceId=',
+      getByWorkplace: 'beacon/get-beacon-by-workplace',
     },
     employee: {
       create: 'employee/create',
@@ -20,7 +21,7 @@ export const environment = {
       getAll: 'employee/get-all',
       remove: 'employee/remove/',
       update: 'employee/update-dto/',
-      getById: 'employee/get-info?id='
+      getById: 'employee/get-info'
     },
     manager: {
       create: 'employee/create',
@@ -36,11 +37,14 @@ export const environment = {
     },
     task: {
       create: 'task/create',
+      remove: 'task/remove-task',
+      update: 'task/update-task',
       getTaskByStatus: 'task/get-task-by-status',
       getTaskDetail: 'task/get-task-detail',
       getTaskByDate: 'task/get-task-from-date-to-date',
       getTodayTask: 'task/get-today-task',
       summaryTask: 'task/summary-task-all-employee-by-manager',
+      getTaskByManager: 'task/get-task-by-manager',
     },
     schedule: {
       create: 'schedule/create',

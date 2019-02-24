@@ -1,28 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TaskService } from 'src/app/task/service/task.service';
+import { Task } from 'src/app/task/models/task';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
 
-  constructor(
-    private taskService: TaskService
-  ) { }
+  dateRange: Date[];
+  charts: string[] = ['pie', 'bar'];
+  taskList: Task[];
 
-  public chartType = 'line';
-
-  public chartDatasets: Array<any> = [
-    { data: [1, 5, 3, 7, 2, 9, 1, 2, 0, 4, 4, 5], label: 'Đã hoàn thành' },
-    { data: [0, 0, 0, 2, 1, 1, 3, 1, 1, 3, 0, 0], label: 'Chưa hoàn thành' },
+  chartDatasets: Array<any> = [
+    { data: [1, 5, 3, 7, 2, 4, 1, 2, 0, 4, 4, 5], label: 'Đã hoàn thành' },
+    { data: [4, 2, 4, 0, 1, 2, 3, 4, 5, 3, 0, 0], label: 'Chưa hoàn thành' },
     { data: [0, 0, 1, 1, 2, 0, 3, 1, 1, 3, 2, 1], label: 'Quá hạn' },
   ];
 
-  public chartLabels: Array<any> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  chartLabels: Array<any> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-  public chartColors: Array<any> = [
+  chartColors: Array<any> = [
     {
       backgroundColor: 'rgba(0, 200 ,81 ,0.2)',
       borderColor: 'rgba(0, 200 ,81 , 1)',
@@ -33,13 +32,13 @@ export class DashboardComponent {
       pointHoverBorderColor: 'rgba(0, 200 ,81 ,1)'
     },
     {
-      backgroundColor: 'rgba(41, 182, 246, 0.2)',
-      borderColor: 'rgba(41, 182, 246 , 1)',
+      backgroundColor: 'rgba(96, 125, 139, 0.2)',
+      borderColor: 'rgba(96, 125, 139, 1)',
       borderWidth: 2,
-      pointBackgroundColor: 'rgba(41, 182, 246, 1)',
+      pointBackgroundColor: 'rgba(96, 125, 139, 1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(41, 182, 246, 1)'
+      pointHoverBorderColor: 'rgba(96, 125, 139, 1)'
     },
     {
       backgroundColor: 'rgba(255, 82, 82, 0.2)',
@@ -52,12 +51,37 @@ export class DashboardComponent {
     }
   ];
 
-  public chartOptions: any = {
+  chartOptions: any = {
     responsive: true
   };
   showFromDate = false;
-  public chartClicked(): void { }
-  public chartHovered(): void { }
+
+  constructor(
+    private taskService: TaskService
+  ) { }
+
+  ngOnInit(): void {
+  }
+
+  search() {
+    const startTime = this.dateRange ? this.dateRange[0].toLocaleDateString('sv') : '';
+    const endTime = this.dateRange ? this.dateRange[1].toLocaleDateString('sv') : '';
+    this.taskService.getTaskByDate(1, startTime, endTime)
+      .then(
+        (response: Task[]) => {
+          this.taskList = response;
+          console.log(this.taskList);
+        }
+      );
+  }
+
+  chartHovered() {
+
+  }
+
+  chartClicked() {
+
+  }
 
 
 }

@@ -10,6 +10,7 @@ html, body, main {
 .sn-bg-1 {
   background-image: 'src/assets/sidenav.jpg' !important;
 }
+
 mdb-select > div > div.single > div.placeholder {
   color: #757575 !important;
   font-weight: 300 !important;
@@ -27,7 +28,7 @@ main#main {
   background-color: #eee;
   height: 100%;
 }
-#task {
+#task, #schedule {
   h6 {
     color: rgb(137, 147, 164);    
   }
@@ -43,6 +44,14 @@ main#main {
   }
   .table tbody td:first-child {
     cursor: pointer;
+  }
+}
+#createTaskModal {
+  input.mydp-date {
+    margin-top: 32.5px !important;
+  }
+  .mydp.picker .md-form label {
+    top: -.1rem !important;
   }
 }
 #task-detail {

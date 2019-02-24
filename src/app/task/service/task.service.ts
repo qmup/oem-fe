@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Task } from '../models/task';
+import { Task, TaskModel } from '../models/task';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -10,13 +10,18 @@ export class TaskService {
 
   constructor(private httpClient: HttpClient) { }
 
-  create(scheduleCM: Task): Promise<any> {
+  create(taskCM: TaskModel): Promise<any> {
     return this.httpClient.post<any>(
-      `${environment.endPoint}${environment.apiPaths.task.create}`, scheduleCM
+      `${environment.endPoint}${environment.apiPaths.task.create}`, taskCM
     ).toPromise();
   }
-  getTaskByStatus(): Promise<Task> {
-    return this.httpClient.get<Task>(
+  getTaskByManager(managerId: number): Promise<Task[]> {
+    return this.httpClient.get<Task[]>(
+      `${environment.endPoint}${environment.apiPaths.task.getTaskByManager}?managerId=${managerId}`
+    ).toPromise();
+  }
+  getTaskByStatus(): Promise<Task[]> {
+    return this.httpClient.get<Task[]>(
       `${environment.endPoint}${environment.apiPaths.task.getTaskByStatus}`
     ).toPromise();
   }
@@ -25,13 +30,20 @@ export class TaskService {
       `${environment.endPoint}${environment.apiPaths.task.getTaskDetail}`
     ).toPromise();
   }
-  getTaskByDate(): Promise<Task> {
-    return this.httpClient.get<Task>(
-      `${environment.endPoint}${environment.apiPaths.task.getTaskByDate}`
+  getTaskByDate(id: number, fromDate: string, toDate: string): Promise<Task[]> {
+    return this.httpClient.get<Task[]>(
+      `${environment.endPoint}${environment.apiPaths.task.getTaskByDate}`,
+      {
+        params: {
+          id: `${id}`,
+          fromDate: `${fromDate}`,
+          toDate: `${toDate}`
+        }
+      }
     ).toPromise();
   }
-  getTodayTask(): Promise<Task> {
-    return this.httpClient.get<Task>(
+  getTodayTask(): Promise<Task[]> {
+    return this.httpClient.get<Task[]>(
       `${environment.endPoint}${environment.apiPaths.task.getTodayTask}`
     ).toPromise();
   }
@@ -40,4 +52,17 @@ export class TaskService {
       `${environment.endPoint}${environment.apiPaths.task.summaryTask}`
     ).toPromise();
   }
+
+  removeTask(id: number): Promise<any> {
+    return this.httpClient.delete(
+      `${environment.endPoint}${environment.apiPaths.task.remove}?taskId=${id}`
+    ).toPromise();
+  }
+
+  updateTask(taskUM: TaskModel): Promise<TaskModel> {
+    return this.httpClient.put<TaskModel>(
+      `${environment.endPoint}${environment.apiPaths.task.update}`, taskUM
+    ).toPromise();
+  }
+
 }

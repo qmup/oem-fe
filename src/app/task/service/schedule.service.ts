@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Task } from '../models/task';
 import { environment } from 'src/environments/environment';
-import { Schedule } from '../models/schedule';
+import { ScheduleModel } from '../models/schedule';
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +10,13 @@ export class ScheduleService {
 
   constructor(private httpClient: HttpClient) { }
 
-  create(scheduleCM: Schedule): Promise<Schedule> {
-    return this.httpClient.post<Schedule>(
+  create(scheduleCM: ScheduleModel): Promise<ScheduleModel> {
+    return this.httpClient.post<ScheduleModel>(
       `${environment.endPoint}${environment.apiPaths.schedule.create}`, scheduleCM
     ).toPromise();
   }
-  getAll(): Promise<Schedule[]> {
-    return this.httpClient.get<Schedule[]>(
+  getAll(): Promise<ScheduleModel[]> {
+    return this.httpClient.get<ScheduleModel[]>(
       `${environment.endPoint}${environment.apiPaths.schedule.getAll}`
     ).toPromise();
   }

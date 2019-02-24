@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { TaskDetailComponent } from './components/task-detail/task-detail.component';
 import { SchedulePagesComponent } from './pages/schedule-pages/schedule-pages.component';
 import { ScheduleComponent } from './components/schedule/schedule.component';
+import { CoreModule } from '../core/core.module';
 
 @NgModule({
   declarations: [TaskPagesComponent, TaskComponent, TaskDetailComponent, ScheduleComponent, SchedulePagesComponent, ScheduleComponent],
@@ -16,6 +17,7 @@ import { ScheduleComponent } from './components/schedule/schedule.component';
     CommonModule,
     FormsModule,
     TaskRoutingModule,
+    CoreModule,
     MDBBootstrapModulesPro.forRoot(),
   ]
 })

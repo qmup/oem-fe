@@ -9,7 +9,7 @@
           </div>
         </div>
         <div class="card-body card-body-cascade pb-0">
-          <div class="row card-body pt-3">
+          <div class="d-flex flex-wrap card-body pt-3">
             <!-- Grid row -->
 
             <!-- Grid column -->
@@ -100,58 +100,58 @@
         </button>
       </div>
       <div class="modal-body mx-3 row">
-        <div class="md-form my-0 mb-3 col-md-6">
+        <div class="md-form mt-0 mb-3 col-md-6">
           <input type="text" id="userName" class="form-control" mdbInput [(ngModel)]="managerCM.fullName">
           <label for="userName">Tên account</label>
         </div>
 
-        <div class="md-form my-0 mb-3 col-md-6">
+        <div class="md-form mt-0 mb-3 col-md-6">
           <input type="password" id="password" class="form-control" mdbInput [(ngModel)]="managerCM.password">
           <label for="password">Mật khẩu</label>
         </div>
 
-        <div class="md-form my-0 mb-3 col-md-6">
+        <div class="md-form mt-0 mb-3 col-md-6">
           <input type="text" id="firstName" class="form-control" mdbInput [(ngModel)]="managerCM.firstName">
           <label for="firstName">Họ</label>
         </div>
 
-        <div class="md-form my-0 mb-3 col-md-6">
+        <div class="md-form mt-0 mb-3 col-md-6">
           <input type="text" id="lastName" class="form-control" mdbInput [(ngModel)]="managerCM.lastName">
           <label for="lastName">Tên</label>
         </div>
 
-        <div class="md-form my-0 mb-3 col-md-6 ">
+        <div class="md-form mt-0 mb-3 col-md-6 ">
           <mdb-select [options]="optionsSex" id="gender" placeholder="Giới tính" [(ngModel)]="gender"></mdb-select>
         </div>
 
-        <div class="md-form my-0 mb-3 col-md-6">
+        <div class="md-form mt-0 mb-3 col-md-6">
           <input type="text" id="phoneNumber" class="form-control" mdbInput [(ngModel)]="managerCM.phoneNumber">
           <label for="phoneNumber">Số điện thoại</label>
         </div>
 
-        <div class="md-form my-0 mb-3 col-md-6">
+        <div class="md-form mt-0 mb-3 col-md-6">
           <input type="text" id="address" class="form-control" mdbInput [(ngModel)]="managerCM.address">
           <label for="address">Địa chỉ</label>
         </div>
 
-        <div class="md-form my-0 mb-3 col-md-6">
+        <div class="md-form mt-0 mb-3 col-md-6">
           <input type="text" id="email" class="form-control" mdbInput [(ngModel)]="managerCM.email">
           <label for="email">Email</label>
         </div>
 
-        <div class="md-form my-0 mb-3 col-md-6">
+        <div class="md-form mt-0 mb-3 col-md-6">
           <div class="form-group">
             <input type="text" class="form-control" bsDatepicker mdbInput [(ngModel)]="managerCM.birthDate">
             <label for="email">Ngày sinh</label>
           </div>
         </div>
 
-        <div class="md-form my-0 mb-3 col-md-6">
+        <div class="md-form mt-0 mb-3 col-md-6">
           <input type="text" id="macAddress" class="form-control" mdbInput [(ngModel)]="managerCM.phoneMacAddress">
           <label for="macAddress">Địa chỉ MAC</label>
         </div>
 
-        <div class="md-form my-0 mb-3 col-md-12 ">
+        <div class="md-form mt-0 mb-3 col-md-12 ">
           <mdb-select [options]="optionsSelect" placeholder="Người quản lý" [(ngModel)]="managerCM.managerId"></mdb-select>
         </div>
 

@@ -22,7 +22,7 @@ import { ModalModule, BsDatepickerModule } from 'ngx-bootstrap';
     MDBBootstrapModulesPro.forRoot(),
   ],
   exports: [
-    LayoutComponent
+    LayoutComponent,
   ]
 })
 export class CoreModule { }

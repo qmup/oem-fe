@@ -1,6 +1,8 @@
+import { Shared } from 'src/app/core/models/shared';
+
 export class Task {
-  assigneeId: number;
-  assignerId: number;
+  assignee: Shared;
+  assigner: Shared;
   daysOfWeek: string;
   description: string;
   endTime: string;
@@ -8,17 +10,53 @@ export class Task {
   startTime: string;
   status: string;
   title: string;
-  workplaceId: number;
+  workplace: Shared;
+  priority: number;
 
   constructor() {
-    this.assigneeId = 0;
-    this.assignerId = 0;
+    this.assignee = new Shared();
+    this.assigner = new Shared();
     this.daysOfWeek = '';
     this.description = '';
     this.endTime = '';
     this.id = 0;
     this.startTime = '';
     this.status = '';
+    this.title = '';
+    this.priority = 0;
+    this.workplace = new Shared();
+  }
+}
+
+export class TaskModel {
+  assigneeId: number;
+  assignerId: number;
+  attendanceStatus: number;
+  checkInTime: string;
+  dateCreate: string;
+  description: string;
+  endTime: string;
+  id: number;
+  priority: number;
+  scheduleId: number;
+  startTime: string;
+  status: number;
+  title: string;
+  workplaceId: number;
+
+  constructor() {
+    this.assigneeId = 0;
+    this.assignerId = 0;
+    this.attendanceStatus = 0;
+    this.checkInTime = '';
+    this.dateCreate = '';
+    this.description = '';
+    this.endTime = '';
+    this.id = 0;
+    this.priority = 0;
+    this.scheduleId = 0;
+    this.startTime = '';
+    this.status = 0;
     this.title = '';
     this.workplaceId = 0;
   }

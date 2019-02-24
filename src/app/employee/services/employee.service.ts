@@ -29,7 +29,7 @@ export class EmployeeService {
 
   getById(employeeId: number): Promise<Employee> {
     return this.httpClient.get<Employee>(
-      `${environment.endPoint}${environment.apiPaths.employee.getById + employeeId}`
+      `${environment.endPoint}${environment.apiPaths.employee.getById}?id=${employeeId}`
     ).toPromise();
   }
 

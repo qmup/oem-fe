@@ -1,12 +1,16 @@
 <div class="card card-cascade narrower">
   <section>
     <div class="row">
-      <div class="col-xl-5 col-lg-12 mr-0">
+      <div class="col-xl-6 col-lg-12 mr-0">
         <div class="view view-cascade gradient-card-header light-blue lighten-1">
           <h2 class="h2-responsive mb-0">Quản lý nơi làm việc</h2>
         </div>
       </div>
-      <div class="card-body card-body-cascade pb-0">
+      <div class="col-xl-6 col-lg-12 mr-0 text-center">
+        <button mdbBtn type="button" color="success" class="waves-light" mdbWavesEffect (click)="openCreateModal()">Tạo nơi làm việc</button>
+      </div>
+      <div class="card-body card-body-cascade pb-0 d-flex flex-wrap">
+
 
         <div class="col-md-4 mb-4" *ngFor="let p of placeList; let i of index">
         
@@ -72,17 +76,17 @@
         </button>
       </div>
       <div class="modal-body mx-3 row">
-        <div class="md-form my-0 mb-3 col-md-12">
+        <div class="md-form mt-0 mb-3 col-md-12">
           <input type="text" id="name" class="form-control" mdbInput [(ngModel)]="placeCM.name">
           <label for="name">Tên</label>
         </div>
 
-        <div class="md-form my-0 mb-3 col-md-12">
+        <div class="md-form mt-0 mb-3 col-md-12">
           <input type="text" id="firstName" class="form-control" mdbInput [(ngModel)]="placeCM.address">
           <label for="firstName">Địa điểm</label>
         </div>
 
-        <div class="md-form my-0 mb-3 col-md-12">
+        <div class="md-form mt-0 mb-3 col-md-12">
           <textarea type="text" id="description" class="form-control md-textarea" mdbInput [(ngModel)]="placeCM.description"></textarea>
           <label for="description">Chi tiết</label>
         </div>
