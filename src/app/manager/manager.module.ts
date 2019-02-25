@@ -8,6 +8,7 @@ import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
 import { FormsModule } from '@angular/forms';
 import { ManagerUpdateComponent } from './components/manager-update/manager-update.component';
 import { ManagerDetailComponent } from './components/manager-detail/manager-detail.component';
+import { BsDatepickerModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ManagerDetailComponent } from './components/manager-detail/manager-deta
     CommonModule,
     FormsModule,
     MDBBootstrapModulesPro.forRoot(),
+    BsDatepickerModule.forRoot(),
     ManagerRoutingModule
   ],
   entryComponents: [

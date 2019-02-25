@@ -2,8 +2,10 @@ export class Manager {
   address: string;
   birthDate: string;
   email: string;
+  deviceToken: string;
   firstName: string;
   fullName: string;
+  employeeId: number;
   id: number;
   lastName: string;
   managerId: number;
@@ -17,6 +19,8 @@ export class Manager {
 
   constructor() {
     this.address = '';
+    this.deviceToken = '';
+    this.managerId = 0;
     this.birthDate = '';
     this.email = '';
     this.firstName = '';

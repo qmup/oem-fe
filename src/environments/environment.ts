@@ -25,7 +25,7 @@ export const environment = {
     },
     manager: {
       create: 'employee/create',
-      getAll: 'employee/get-list-manager',
+      getAll: 'employee/get-list/manager',
       remove: 'employee/remove/',
       update: 'employee/update-dto/',
     },

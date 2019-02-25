@@ -15,7 +15,7 @@
             <!-- Grid column -->
             <div class="col-md-2">
               <!-- Add button -->
-              <button title="Tạo mới nhân viên" mdbBtn type="button" color="success" rounded="true" size="sm" class="addNewButton w-75"
+              <button title="Tạo mới quản lý" mdbBtn type="button" color="success" rounded="true" size="sm" class="addNewButton w-75"
                 mdbWavesEffect (click)="openCreateModal()">
                 <i class="fa fa-plus"></i>
               </button>
@@ -94,7 +94,7 @@
   <div class="modal-dialog modal-lg modal-notify modal-success" role="document">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
-        <p class="heading">Tạo mới nhân viên</p>
+        <p class="heading">Tạo mới quản lý</p>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -141,7 +141,7 @@
 
         <div class="md-form mt-0 mb-3 col-md-6">
           <div class="form-group">
-            <input type="text" class="form-control" bsDatepicker mdbInput [(ngModel)]="managerCM.birthDate">
+            <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD', containerClass: 'theme-dark-blue' }" mdbInput [(ngModel)]="managerCM.birthDate">
             <label for="email">Ngày sinh</label>
           </div>
         </div>
@@ -149,10 +149,6 @@
         <div class="md-form mt-0 mb-3 col-md-6">
           <input type="text" id="macAddress" class="form-control" mdbInput [(ngModel)]="managerCM.phoneMacAddress">
           <label for="macAddress">Địa chỉ MAC</label>
-        </div>
-
-        <div class="md-form mt-0 mb-3 col-md-12 ">
-          <mdb-select [options]="optionsSelect" placeholder="Người quản lý" [(ngModel)]="managerCM.managerId"></mdb-select>
         </div>
 
       </div>
@@ -173,7 +169,7 @@
     <div class="modal-content text-center">
       <!--Header-->
       <div class="modal-header d-flex justify-content-center">
-        <p class="heading">Xóa nhân viên này?</p>
+        <p class="heading">Xóa quản lý này?</p>
       </div>
 
       <!--Body-->

@@ -4,6 +4,6 @@ button.addNewButton {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-i.fa {
+i.fa:not(.fa-4x) {
   font-size: 1rem !important;
 }

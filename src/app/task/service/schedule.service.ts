@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { ScheduleModel } from '../models/schedule';
+import { ScheduleModel, Schedule } from '../models/schedule';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +15,8 @@ export class ScheduleService {
       `${environment.endPoint}${environment.apiPaths.schedule.create}`, scheduleCM
     ).toPromise();
   }
-  getAll(): Promise<ScheduleModel[]> {
-    return this.httpClient.get<ScheduleModel[]>(
+  getAll(): Promise<Schedule[]> {
+    return this.httpClient.get<Schedule[]>(
       `${environment.endPoint}${environment.apiPaths.schedule.getAll}`
     ).toPromise();
   }

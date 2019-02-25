@@ -1,0 +1,90 @@
+<div class="modal-header d-flex justify-content-center">
+  <p class="heading">Chi tiết công việc</p>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body mx-3 row">
+  <div class="md-form mt-0 mb-3 col-6 col-md-12">
+    <input type="text" id="title" class="form-control" mdbInput [(ngModel)]="schedule.title" disabled="!isUpdate">
+    <label for="title">Tên công việc</label>
+  </div>
+
+  <div class="md-form mt-0 mb-3 col-6 col-md-12">
+    <!-- <mdb-select [placeholder]="'Người thực hiện'" [options]="employeeList" [filterEnabled]="true" [(ngModel)]="schedule.assigneeId"></mdb-select> -->
+  </div>
+
+  <div class="md-form mt-0 mb-3 col-6 col-md-12">
+    <!-- <mdb-select [placeholder]="'Địa điểm'" [options]="workplaceList" [filterEnabled]="true" [(ngModel)]="schedule.workplaceId"></mdb-select> -->
+  </div>
+
+  <label class="col-md-2 col-xs-12" style="position: relative">
+    <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px">Từ</span>
+  </label>
+  <div class="col-md-10 col-xs-12">
+    <mdb-time-picker [buttonLabel]="'Chọn'" [twelvehour]="false" [darktheme]="false" [placeholder]="'Chọn'" [label]="'Giờ'"
+      [(ngModel)]="timeFrom" disabled="!isUpdate">
+    </mdb-time-picker>
+  </div>
+  <label class="col-md-2 col-xs-12" style="position: relative">
+    <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px">Đến</span>
+  </label>
+  <div class="col-md-10 col-xs-12">
+    <mdb-time-picker [buttonLabel]="'Chọn'" [twelvehour]="false" [darktheme]="false" [placeholder]="'Chọn'" [label]="'Giờ'"
+      [(ngModel)]="timeTo" disabled="!isUpdate">
+    </mdb-time-picker>
+  </div>
+  <div class="form-check form-check-inline col-5 text-center" *ngFor="let day of week">
+    <input type="checkbox" class="form-check-input" [id]="day.inputId" [(ngModel)]="day.check" disabled="!isUpdate">
+    <label class="form-check-label" [for]="day.inputId">{{day.label }} </label>
+  </div>
+  <!-- <div class="col-12 md-form mt-0 mb-3">
+          <mdb-select
+            class="select-wrapper mdb-select colorful-select dropdown-success"
+            [options]="iconPrioritySelect"
+            [(ngModel)]="schedule.priority"
+            placeholder="Chọn">
+          </mdb-select>
+          <label>Mức độ ưu tiên</label>
+        </div> -->
+  <div class="col-12 md-form mt-0 mb-3">
+    <textarea type="text" id="description" class="md-textarea form-control" mdbInput [(ngModel)]="schedule.description" disabled="!isUpdate"></textarea>
+    <label id="description">Miêu tả công việc</label>
+  </div>
+</div>
+<div class="modal-footer d-flex justify-content-center">
+  <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="isUpdate = true">Sửa
+    <i class="fa fa-pencil ml-1"></i>
+  </button>
+  <button mdbBtn color="danger" class="waves-light" mdbWavesEffect (click)="delete.show(); modalRef.hide()">Xóa
+    <i class="fa fa-trash ml-1"></i>
+  </button>
+  <button mdbBtn color="blue-grey" class="waves-light" mdbWavesEffect (click)="modalRef.hide()" data-dismiss="modal">Đóng
+    <i class="fa fa-times ml-1"></i>
+  </button>
+</div>
+
+<div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Xóa công việc này?</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-times fa-4x animated rotateIn"></i>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeSchedule()">Đồng ý</a>
+        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">Hủy</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>

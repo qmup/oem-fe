@@ -10,15 +10,26 @@ import { TaskDetailComponent } from './components/task-detail/task-detail.compon
 import { SchedulePagesComponent } from './pages/schedule-pages/schedule-pages.component';
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { CoreModule } from '../core/core.module';
+import { ScheduleDetailComponent } from './components/schedule-detail/schedule-detail.component';
 
 @NgModule({
-  declarations: [TaskPagesComponent, TaskComponent, TaskDetailComponent, ScheduleComponent, SchedulePagesComponent, ScheduleComponent],
+  declarations: [
+    TaskPagesComponent,
+    TaskComponent,
+    TaskDetailComponent,
+    ScheduleComponent,
+    SchedulePagesComponent,
+    ScheduleComponent,
+    ScheduleDetailComponent],
   imports: [
     CommonModule,
     FormsModule,
     TaskRoutingModule,
     CoreModule,
     MDBBootstrapModulesPro.forRoot(),
+  ],
+  entryComponents: [
+    ScheduleDetailComponent
   ]
 })
 export class TaskModule { }
