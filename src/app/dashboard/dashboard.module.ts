@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { CoreModule } from '../core/core.module';
 
 @NgModule({
   declarations: [DashboardPageComponent, DashboardComponent],
@@ -14,6 +15,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     CommonModule,
     DashboardRoutingModule,
     FormsModule,
+    CoreModule,
     BsDatepickerModule.forRoot(),
     MDBBootstrapModulesPro.forRoot(),
   ]

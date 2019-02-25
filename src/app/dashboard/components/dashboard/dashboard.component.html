@@ -1,3 +1,4 @@
+{{  message | async | json }}
 <div class="row d-flex my-4">
   <div class="col-xl-3 col-md-6 my-5">
     <div class="card card-cascade cascading-dashboard-card">
@@ -81,7 +82,7 @@
         <div class="card-body card-body-cascade pb-0" class="date-range-form">
           <div class="d-flex flex-wrap card-body pt-3">
             <div class="col-md-12">
-              <input type="text" placeholder="Chọn khoảng thời gian" aria-describedby="time" class="form-control" bsDaterangepicker [bsConfig]="{ containerClass: 'theme-dark-blue' }" [(ngModel)]="dateRange" placement="top">
+              <input type="text" placeholder="Chọn khoảng thời gian" aria-describedby="time" class="form-control" bsDaterangepicker [bsConfig]="{ containerClass: 'theme-dark-blue' }" [(ngModel)]="dateRange" placement="right">
             </div>
             <div class="col-md-12 text-center">
               <button mdbBtn type="button" color="info" class="waves-light" mdbWavesEffect (click)="search()">Tìm kiếm</button>
@@ -90,7 +91,7 @@
         </div>
       </div>
       <div class="col-xl-7 col-lg-12 my-5">
-        <div style="display: block">
+        <!-- <div style="display: block">
           <canvas mdbChart
               [chartType]="'line'"
               [datasets]="chartDatasets"
@@ -101,7 +102,7 @@
               (chartHover)="chartHovered()"
               (chartClick)="chartClicked()">
           </canvas>
-        </div>
+        </div> -->
         <div style="display: block">
           <canvas mdbChart
               [chartType]="'bar'"
@@ -109,9 +110,7 @@
               [labels]="chartLabels"
               [colors]="chartColors"
               [options]="chartOptions"
-              [legend]="true"
-              (chartHover)="chartHovered()"
-              (chartClick)="chartClicked()">
+              [legend]="true">
           </canvas>
         </div>
       </div>

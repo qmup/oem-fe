@@ -47,11 +47,6 @@ export class TaskService {
       `${environment.endPoint}${environment.apiPaths.task.getTodayTask}`
     ).toPromise();
   }
-  summaryTask(): Promise<Task> {
-    return this.httpClient.get<Task>(
-      `${environment.endPoint}${environment.apiPaths.task.summaryTask}`
-    ).toPromise();
-  }
 
   removeTask(id: number): Promise<any> {
     return this.httpClient.delete(

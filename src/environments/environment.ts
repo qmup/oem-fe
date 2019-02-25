@@ -8,6 +8,14 @@ export const environment = {
   // endPoint: 'http://localhost:8080/',
   endPoint: 'http://113.161.84.125/',
   apiPaths: {
+    firebase: {
+      apiKey: 'AIzaSyCv23Kx9Xfh4okq30jtY_QJi2CudhO_7f4',
+      authDomain: 'outdoor-management-servi-8ca4e.firebaseapp.com',
+      databaseURL: 'https://outdoor-management-servi-8ca4e.firebaseio.com',
+      projectId: 'outdoor-management-servi-8ca4e',
+      storageBucket: 'outdoor-management-servi-8ca4e.appspot.com',
+      messagingSenderId: '244083668959'
+    },
     beacon: {
       create: 'beacon/create',
       getAll: 'beacon/get-all',
@@ -43,7 +51,8 @@ export const environment = {
       getTaskDetail: 'task/get-task-detail',
       getTaskByDate: 'task/get-task-from-date-to-date',
       getTodayTask: 'task/get-today-task',
-      summaryTask: 'task/summary-task-all-employee-by-manager',
+      summaryManagerTask: 'task/summary-task-all-employee-by-manager',
+      summaryEmployeeTask: 'task/summary-task-by-employe',
       getTaskByManager: 'task/get-task-by-manager',
     },
     schedule: {

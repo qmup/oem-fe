@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { TaskService } from 'src/app/task/service/task.service';
-import { Task } from 'src/app/task/models/task';
+import { NotificationService } from 'src/app/core/services/notification.service';
+import { SummaryTask } from '../../models/summary-task';
+import { DashboardService } from '../../services/dashboard.service';
+import { GlobalService } from 'src/app/core/services/global.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,7 +13,7 @@ export class DashboardComponent implements OnInit {
 
   dateRange: Date[];
   charts: string[] = ['pie', 'bar'];
-  taskList: Task[];
+  summaryTask: SummaryTask;
 
   chartDatasets: Array<any> = [
     { data: [1, 5, 3, 7, 2, 4, 1, 2, 0, 4, 4, 5], label: 'Đã hoàn thành' },
@@ -56,32 +58,44 @@ export class DashboardComponent implements OnInit {
   };
   showFromDate = false;
 
+  message: any;
+
   constructor(
-    private taskService: TaskService
+    private dashboardService: DashboardService,
+    private notificationService: NotificationService,
+    private globalService: GlobalService
   ) { }
 
   ngOnInit(): void {
+    const userId = 'user001';
+    this.notificationService.requestPermission(userId);
+    this.notificationService.receiveMessage();
+    this.message = this.notificationService.currentMessage;
+
+    const today = new Date();
+    const lastweek = new Date(today.getTime() - (7 * 24 * 60 * 60 * 1000));
+    this.getSummaryTaskLastWeek(2, this.globalService.convertToYearMonthDay(lastweek), this.globalService.convertToYearMonthDay(today));
   }
 
   search() {
-    const startTime = this.dateRange ? this.dateRange[0].toLocaleDateString('sv') : '';
-    const endTime = this.dateRange ? this.dateRange[1].toLocaleDateString('sv') : '';
-    this.taskService.getTaskByDate(1, startTime, endTime)
+    const startTime = this.dateRange ? this.globalService.convertToYearMonthDay(this.dateRange[0]) : '';
+    const endTime = this.dateRange ? this.globalService.convertToYearMonthDay(this.dateRange[1]) : '';
+    console.log(this.dateRange);
+    this.dashboardService.summaryManagerTask(2, startTime, endTime)
       .then(
-        (response: Task[]) => {
-          this.taskList = response;
-          console.log(this.taskList);
+        (response: SummaryTask) => {
+          this.summaryTask = response;
         }
       );
   }
 
-  chartHovered() {
-
+  getSummaryTaskLastWeek(managerId: number, today: string, lastweek: string) {
+    this.dashboardService.summaryManagerTask(2, today, lastweek)
+      .then(
+        (response: SummaryTask) => {
+          this.summaryTask = response;
+        }
+      );
   }
-
-  chartClicked() {
-
-  }
-
 
 }

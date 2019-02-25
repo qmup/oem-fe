@@ -17,6 +17,13 @@ import { CoreModule } from './core/core.module';
 import { AuthorizeModule } from './authorize/authorize.module';
 import { TaskModule } from './task/task.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { environment } from 'src/environments/environment';
+import { AngularFireModule } from '@angular/fire';
+import { NotificationService } from './core/services/notification.service';
+import { AsyncPipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -42,9 +49,13 @@ import { DashboardModule } from './dashboard/dashboard.module';
     DashboardModule,
     ToastModule.forRoot(),
     MDBBootstrapModulesPro.forRoot(),
+    AngularFireAuthModule,
+    AngularFireMessagingModule,
+    AngularFireDatabaseModule,
+    AngularFireModule.initializeApp(environment.apiPaths.firebase),
 
   ],
-  providers: [MDBSpinningPreloader],
+  providers: [MDBSpinningPreloader, NotificationService, AsyncPipe],
   bootstrap: [AppComponent],
   schemas:      [ NO_ERRORS_SCHEMA ]
 })
