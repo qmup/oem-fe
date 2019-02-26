@@ -7,14 +7,15 @@
             <h2 class="h2-responsive mb-0">Quản lý công việc</h2>
           </div>
         </div>
-        <div class="col-xl-6 col-lg-12 mr-0 text-center">
-          <button mdbBtn type="button" color="success" class="waves-light" mdbWavesEffect (click)="openCreateModal()">Tạo
-            mới công việc</button>
-        </div>
         <div class="card-body card-body-cascade pb-0 px-5">
 
           <div class="col-md-12 mx-auto text-left my-3">
-            <h6 class="text-left">Nguyễn Minh Quân / Các công việc đang phụ trách </h6>
+            <div class="d-flex flex-wrap">
+              <h6 class="text-left col-xl-6 col-lg-12">Nguyễn Minh Quân / Các công việc đang phụ trách</h6>
+              <div class="col-xl-6 col-lg-12 mr-0 text-right pr-0">
+                <a class="btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i></a>
+              </div>
+            </div>
             <h4 class="text-left pt-3">Công việc</h4>
             <table class="table table-hover table-responsive-md" cellspacing="0" width="100%">
               <thead>
@@ -52,12 +53,14 @@
                   <td [routerLink]="['/task-detail', task.id]">{{ task.title }}</td>
                   <td [routerLink]="['/task-detail', task.id]">{{ task.description }}</td>
                   <td [routerLink]="['/task-detail', task.id]">{{ task.workplace.name }}</td>
-                  <td [routerLink]="['/employee-detail', task.assignee.id]" style="color: #007bff; cursor: pointer">{{ task.assignee.name }}</td>
+                  <td [routerLink]="['/employee-detail', task.assignee.id]" style="color: #007bff; cursor: pointer">{{
+                    task.assignee.name }}</td>
                   <td [routerLink]="['/task-detail', task.id]">{{ task.status }}</td>
-                  <td [routerLink]="['/task-detail', task.id]">{{ task.startTime | date: 'HH:mm dd-MM-yyyy' }} - {{ task.endTime | date: 'HH:mm dd-MM-yyyy' }}</td>
+                  <td [routerLink]="['/task-detail', task.id]">{{ task.startTime | date: 'HH:mm dd-MM-yyyy' }} - {{
+                    task.endTime | date: 'HH:mm dd-MM-yyyy' }}</td>
                   <td>
-                    <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light col"
-                      size="sm" mdbWavesEffect (click)="openDeleteModal(task.id)">
+                    <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light col" size="sm"
+                      mdbWavesEffect (click)="openDeleteModal(task.id)">
                       <i class="fa fa-ban"></i>
                     </button>
                   </td>
@@ -71,8 +74,8 @@
   </div>
 </div>
 
-<div mdbModal id="createTaskModal" #create="mdbModal" class="modal fade left" tabindex="-1" role="dialog" aria-labelledby="add"
-  aria-hidden="true">
+<div mdbModal id="createTaskModal" #create="mdbModal" class="modal fade left" tabindex="-1" role="dialog"
+  aria-labelledby="add" aria-hidden="true">
   <div class="modal-dialog modal-notify modal-success" role="document">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
@@ -90,16 +93,17 @@
         <div class="md-form mt-0 mb-3 col-6 col-md-12">
           <mdb-select [placeholder]="'Người thực hiện'" [options]="employeeList" [filterEnabled]="true" [(ngModel)]="taskCM.assigneeId"></mdb-select>
         </div>
-        
+
         <div class="md-form mt-0 mb-3 col-6 col-md-12">
           <mdb-select [placeholder]="'Địa điểm'" [options]="workplaceList" [filterEnabled]="true" [(ngModel)]="taskCM.workplaceId"></mdb-select>
         </div>
 
         <label class="col-md-2 col-xs-12" style="position: relative">
           <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px">Từ</span>
-        </label>        
+        </label>
         <div class="col-md-5 col-xs-6">
-          <mdb-date-picker name="dateFr" [options]="myDatePickerOptions" [placeholder]="'Chọn'" [(ngModel)]="dateFrom" [label]="'Ngày'">
+          <mdb-date-picker name="dateFr" [options]="myDatePickerOptions" [placeholder]="'Chọn'" [(ngModel)]="dateFrom"
+            [label]="'Ngày'">
           </mdb-date-picker>
         </div>
         <div class="col-md-5 col-xs-6">
@@ -110,9 +114,10 @@
 
         <label class="col-md-2 col-xs-12" style="position: relative">
           <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px">Đến</span>
-        </label>        
+        </label>
         <div class="col-md-5 col-xs-6">
-          <mdb-date-picker name="dateT" [options]="myDatePickerOptions" [placeholder]="'Chọn'" [(ngModel)]="dateTo" [label]="'Ngày'">
+          <mdb-date-picker name="dateT" [options]="myDatePickerOptions" [placeholder]="'Chọn'" [(ngModel)]="dateTo"
+            [label]="'Ngày'">
           </mdb-date-picker>
         </div>
         <div class="col-md-5 col-xs-6">
@@ -121,11 +126,8 @@
           </mdb-time-picker>
         </div>
         <div class="col-12 md-form mt-0 mb-3">
-          <mdb-select
-            class="select-wrapper mdb-select colorful-select dropdown-success"
-            [options]="iconPrioritySelect"
-            [(ngModel)]="taskCM.priority"
-            placeholder="Chọn">
+          <mdb-select class="select-wrapper mdb-select colorful-select dropdown-success" [options]="iconPrioritySelect"
+            [(ngModel)]="taskCM.priority" placeholder="Chọn">
           </mdb-select>
           <label>Mức độ ưu tiên</label>
         </div>
@@ -135,7 +137,8 @@
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="schedule.show(); create.hide()">Tạo mới
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="schedule.show(); create.hide()">Tạo
+          mới
           <i class="fa fa-check ml-1"></i>
         </button>
       </div>
@@ -157,15 +160,17 @@
       <div class="modal-body">
         <i class="fa fa-question fa-4x animated rotateIn"></i>
         <div class="form-check form-check-inline col" *ngFor="let day of week">
-          <input type="checkbox" class="form-check-input" [id]="day.inputId"  [(ngModel)]="day.check">
+          <input type="checkbox" class="form-check-input" [id]="day.inputId" [(ngModel)]="day.check">
           <label class="form-check-label" [for]="day.inputId">{{ day.label }}</label>
         </div>
       </div>
 
       <!--Footer-->
       <div class="modal-footer d-flex flex-wrap">
-        <a mdbBtn color="info" outline="true" class="waves-effect col-12" mdbWavesEffect (click)="createSchedule()">Tạo schedule</a>
-        <a type="button" mdbBtn color="info" class="waves-effect col-12" mdbWavesEffect (click)="createTask()">Tạo task thông thường</a>
+        <a mdbBtn color="info" outline="true" class="waves-effect col-12" mdbWavesEffect (click)="createSchedule()">Tạo
+          schedule</a>
+        <a type="button" mdbBtn color="info" class="waves-effect col-12" mdbWavesEffect (click)="createTask()">Tạo task
+          thông thường</a>
         <a type="button" mdbBtn color="light" class="waves-effect col-12" mdbWavesEffect data-dismiss="modal" (click)="schedule.hide(); create.show()">Đóng</a>
       </div>
     </div>

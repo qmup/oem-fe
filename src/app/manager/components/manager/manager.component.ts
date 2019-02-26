@@ -3,6 +3,7 @@ import { BsModalRef, ModalDirective, BsModalService, ModalOptions } from 'ngx-bo
 import { Manager } from '../../models/manager';
 import { ManagerService } from '../../services/manager.service';
 import { ManagerUpdateComponent } from '../manager-update/manager-update.component';
+import { IMyOptions } from 'ng-uikit-pro-standard';
 
 @Component({
   selector: 'app-manager',
@@ -19,6 +20,7 @@ export class ManagerComponent implements OnInit {
   gender: number;
   modalRef: BsModalRef;
   managerCM: Manager = new Manager();
+  datePickerOptions: IMyOptions;
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
 
@@ -32,6 +34,15 @@ export class ManagerComponent implements OnInit {
       { value: 1, label: 'Nam' },
       { value: 2, label: 'Nữ' },
     ],
+    this.datePickerOptions = {
+      dateFormat: 'dd-mm-yyyy',
+      disableSince: {
+        year: (new Date().getFullYear()),
+        month: (new Date().getMonth() + 1),
+        day: new Date().getDate()
+      },
+      startDate: '10-10-1980'
+    };
     this.getManager();
   }
 

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EmployeeService } from '../../services/employee.service';
 import { Employee } from '../../models/employee';
+import { ManagerService } from 'src/app/manager/services/manager.service';
+import { Manager } from 'src/app/manager/models/manager';
 
 @Component({
   selector: 'app-employee-detail',
@@ -14,10 +16,12 @@ export class EmployeeDetailComponent implements OnInit {
   isShowMore = false;
   id: number;
   sub: any;
+  managerName: string;
 
   constructor(
     private route: ActivatedRoute,
     private employeeService: EmployeeService,
+    private managerService: ManagerService,
   ) { }
 
   ngOnInit() {
@@ -36,4 +40,12 @@ export class EmployeeDetailComponent implements OnInit {
       );
   }
 
+  getManager() {
+    this.managerService.getAll()
+      .then(
+        (response: Manager[]) => {
+          this.managerName = response.find((manager: Manager) => manager.id === this.employee.managerId).fullName;
+        }
+      );
+  }
 }

@@ -3,6 +3,8 @@ import { Employee, EmployeeUpdateModel } from '../../models/employee';
 import { BsModalRef } from 'ngx-bootstrap';
 import { EmployeeService } from '../../services/employee.service';
 import { ToastService } from 'ng-uikit-pro-standard';
+import { ManagerService } from 'src/app/manager/services/manager.service';
+import { Manager } from 'src/app/manager/models/manager';
 
 @Component({
   selector: 'app-employee-update',
@@ -17,19 +19,17 @@ export class EmployeeUpdateComponent implements OnInit {
   optionsSelect: { value: number; label: string; }[];
   optionsSex: { value: number; label: string; }[];
   refresh: EventEmitter<any> = new EventEmitter<any>();
+  managerList: any[];
 
   constructor(
     public modalRef: BsModalRef,
     private employeeService: EmployeeService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private managerService: ManagerService
   ) { }
 
   ngOnInit() {
-    this.optionsSelect = [
-      { value: 1, label: 'Cung 1' },
-      { value: 2, label: 'Cung 2' },
-      { value: 3, label: 'Cung 3' },
-    ];
+    this.getManager();
     this.optionsSex = [
       { value: 0, label: 'Nam'},
       { value: 1, label: 'Nữ'},
@@ -39,6 +39,26 @@ export class EmployeeUpdateComponent implements OnInit {
     } else {
       this.gender = 1;
     }
+    console.log(this.employee.birthDate);
+    const year = this.employee.birthDate.split('-', 3)[0];
+    const month = this.employee.birthDate.split('-', 3)[1];
+    const day = this.employee.birthDate.split('-', 3)[2];
+    this.employee.birthDate = `${day}-${month}-${year}`;
+  }
+
+  getManager() {
+    this.managerService.getAll()
+      .then(
+        (response: Manager[]) => {
+          this.managerList = response;
+          this.optionsSelect = response.map((manager) => {
+            return {
+              value: manager.id,
+              label: manager.fullName
+            };
+          });
+        }
+      );
   }
 
   updateEmployee() {

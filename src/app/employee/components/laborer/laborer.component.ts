@@ -4,6 +4,8 @@ import { Employee, EmployeeCreateModel } from '../../models/employee';
 import { ModalDirective, ToastService } from 'ng-uikit-pro-standard';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap';
 import { EmployeeUpdateComponent } from '../employee-update/employee-update.component';
+import { Manager } from 'src/app/manager/models/manager';
+import { ManagerService } from 'src/app/manager/services/manager.service';
 
 @Component({
   selector: 'app-laborer',
@@ -22,10 +24,12 @@ export class LaborerComponent implements OnInit {
   employeeCM: EmployeeCreateModel = new EmployeeCreateModel();
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
+  managerList: any;
 
   constructor(
     private employeeService: EmployeeService,
     private modalService: BsModalService,
+    private managerService: ManagerService,
     private toastService: ToastService
   ) {}
 
@@ -34,6 +38,7 @@ export class LaborerComponent implements OnInit {
       { value: 1, label: 'Nam' },
       { value: 2, label: 'Nữ' },
     ],
+    this.getManager();
     this.getEmployee();
   }
 
@@ -42,6 +47,21 @@ export class LaborerComponent implements OnInit {
       .then(
         (response: Employee[]) => {
           this.employeeList = response;
+        }
+      );
+  }
+
+  getManager() {
+    this.managerService.getAll()
+      .then(
+        (response: Manager[]) => {
+          this.managerList = response;
+          this.optionsSelect = response.map((manager) => {
+            return {
+              value: manager.id,
+              label: manager.fullName
+            };
+          });
         }
       );
   }

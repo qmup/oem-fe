@@ -43,10 +43,10 @@
                 <th>Hình ảnh</th>
                 <th>Họ</th>
                 <th>Tên</th>
-                <th>Giới tính</th>
-                <th>Số điện thoại</th>
+                <th style="min-width: 100px">Giới tính</th>
+                <th style="min-width: 150px">Số điện thoại</th>
                 <th>Địa chỉ</th>
-                <th>Thao tác</th>
+                <th style="min-width: 300px">Thao tác</th>
               </tr>
             </thead>
             <!--Table head-->
@@ -141,8 +141,8 @@
 
         <div class="md-form mt-0 mb-3 col-md-6">
           <div class="form-group">
-            <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD', containerClass: 'theme-dark-blue' }" mdbInput [(ngModel)]="managerCM.birthDate">
-            <label for="email">Ngày sinh</label>
+            <mdb-date-picker name="mydate" [options]="datePickerOptions" [placeholder]="'Ngày sinh'" [(ngModel)]="managerCM.birthDate"
+            required></mdb-date-picker>
           </div>
         </div>
 

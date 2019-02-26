@@ -26,6 +26,7 @@ import { EmployeeUpdateComponent } from './components/employee-update/employee-u
     CommonModule,
     FormsModule,
     EmployeeRoutingModule,
+    BsDatepickerModule.forRoot(),
     MDBBootstrapModulesPro.forRoot(),
   ],
   entryComponents: [

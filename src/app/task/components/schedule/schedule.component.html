@@ -7,14 +7,15 @@
             <h2 class="h2-responsive mb-0">Quản lý công việc thường nhật</h2>
           </div>
         </div>
-        <div class="col-xl-6 col-lg-12 mr-0 text-center">
-          <button mdbBtn type="button" color="success" class="waves-light" mdbWavesEffect (click)="openCreateModal()">Tạo
-            mới công việc schedule</button>
-        </div>
         <div class="card-body card-body-cascade pb-0 px-5">
 
           <div class="col-md-12 mx-auto text-left my-3">
-            <h6 class="text-left">Nguyễn Minh QUân / Các công việc đang phụ trách</h6>
+            <div class="d-flex flex-wrap">
+              <h6 class="text-left col-xl-6 col-lg-12">Nguyễn Minh Quân / Các công việc đang phụ trách</h6>
+              <div class="col-xl-6 col-lg-12 mr-0 text-right pr-0">
+                <a class="btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i></a>
+              </div>
+            </div>
             <h4 class="text-left pt-3">Công việc thường nhật</h4>
             <table class="table table-hover table-responsive-md" cellspacing="0" width="100%">
               <thead>
@@ -52,9 +53,11 @@
                   <td (click)="openDetailModal(sch)">{{ sch.title }}</td>
                   <td (click)="openDetailModal(sch)">{{ sch.description }}</td>
                   <td (click)="openDetailModal(sch)">{{ sch.workplace.name }}</td>
-                  <td [routerLink]="['/employee-detail', sch.assignee.id]" style="color: #007bff; cursor: pointer">{{ sch.assignee.name }}</td>
+                  <td [routerLink]="['/employee-detail', sch.assignee.id]" style="color: #007bff; cursor: pointer">{{
+                    sch.assignee.name }}</td>
                   <td (click)="openDetailModal(sch)">{{ sch.status }}</td>
-                  <td (click)="openDetailModal(sch)">{{ sch.startTime | date: 'HH:mm' }} - {{ sch.endTime | date: 'HH:mm' }}</td>
+                  <td (click)="openDetailModal(sch)">{{ sch.startTime | date: 'HH:mm' }} - {{ sch.endTime | date:
+                    'HH:mm' }}</td>
                   <td>
                     <div class="switch primary-switch">
                       <label>
@@ -74,8 +77,8 @@
   </div>
 </div>
 
-<div mdbModal id="createTaskModal" #create="mdbModal" class="modal fade left" tabindex="-1" role="dialog" aria-labelledby="add"
-  aria-hidden="true">
+<div mdbModal id="createTaskModal" #create="mdbModal" class="modal fade left" tabindex="-1" role="dialog"
+  aria-labelledby="add" aria-hidden="true">
   <div class="modal-dialog modal-notify modal-success" role="document">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
@@ -93,7 +96,7 @@
         <div class="md-form mt-0 mb-3 col-6 col-md-12">
           <mdb-select [placeholder]="'Người thực hiện'" [options]="employeeList" [filterEnabled]="true" [(ngModel)]="scheduleCM.assigneeId"></mdb-select>
         </div>
-        
+
         <div class="md-form mt-0 mb-3 col-6 col-md-12">
           <mdb-select [placeholder]="'Địa điểm'" [options]="workplaceList" [filterEnabled]="true" [(ngModel)]="scheduleCM.workplaceId"></mdb-select>
         </div>
@@ -115,8 +118,8 @@
           </mdb-time-picker>
         </div>
         <div class="form-check form-check-inline col-5 text-center" *ngFor="let day of week">
-          <input type="checkbox" class="form-check-input" [id]="day.inputId"  [(ngModel)]="day.check">
-          <label class="form-check-label" [for]="day.inputId">{{ day.label }}  </label>
+          <input type="checkbox" class="form-check-input" [id]="day.inputId" [(ngModel)]="day.check">
+          <label class="form-check-label" [for]="day.inputId">{{ day.label }} </label>
         </div>
         <!-- <div class="col-12 md-form mt-0 mb-3">
           <mdb-select

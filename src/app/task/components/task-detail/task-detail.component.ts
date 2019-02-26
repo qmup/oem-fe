@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { UploadFile, UploadInput, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
+import { TaskService } from '../../service/task.service';
 
 @Component({
   selector: 'app-task-detail',
@@ -26,7 +27,9 @@ export class TaskDetailComponent implements OnInit {
   selectedPriority = '3';
   selectedStatus = '1';
 
-  constructor() {
+  constructor(
+    private taskService: TaskService
+  ) {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
     this.humanizeBytes = humanizeBytes;
@@ -101,6 +104,10 @@ export class TaskDetailComponent implements OnInit {
       { value: '5', label: 'Rất thấp',
       icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/lowest.svg' },
     ];
+  }
+
+  getTaskByEmployee() {
+    // this.taskService.get
   }
 
 }
