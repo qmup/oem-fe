@@ -7,16 +7,17 @@
         </div>
       </div>
       <div class="col-xl-6 col-lg-12 mr-0 text-center">
-        <button mdbBtn type="button" color="success" class="waves-light" mdbWavesEffect (click)="openCreateModal()">Tạo nơi làm việc</button>
+        <button mdbBtn type="button" color="success" class="waves-light" mdbWavesEffect (click)="openCreateModal()">Tạo
+          nơi làm việc</button>
       </div>
       <div class="card-body card-body-cascade pb-0 d-flex flex-wrap">
 
 
         <div class="col-md-4 mb-4" *ngFor="let p of placeList; let i of index">
-        
+
           <!--Card-->
           <mdb-card cascade="true" narrower="true">
-        
+
             <!--Card image-->
             <div class="view view-cascade overlay waves-light" mdbWavesEffect>
               <mdb-card-img src="https://static.independent.co.uk/s3fs-public/thumbnails/image/2018/08/06/16/black.jpg?w968h681"></mdb-card-img>
@@ -25,37 +26,38 @@
               </a>
             </div>
             <!--/Card image-->
-        
+
             <mdb-card-body cascade="true" class="text-center">
               <!--Card content-->
-        
+
               <!--Title-->
               <h4 class="card-title">{{p.name}}</h4>
               <!--Text-->
-        
+
               <mdb-card-text>
                 Địa điểm: {{p.address}}
               </mdb-card-text>
-        
+
               <mdb-card-text>
                 Chi tiết: {{p.description}}
               </mdb-card-text>
-        
+
               <mdb-card-text>
                 Beacon: {{ p.beaconName ? p.beaconName : 'Chưa có' }}
               </mdb-card-text>
-        
-              <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light" mdbWavesEffect
-                (click)="openUpdateModal(p)">
+
+              <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light"
+                mdbWavesEffect (click)="openUpdateModal(p)">
                 <i class="fa fa-pencil"></i>
               </button>
-              <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light" mdbWavesEffect (click)="openDeleteModal(p.id)">
+              <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light" mdbWavesEffect
+                (click)="openDeleteModal(p.id)">
                 <i class="fa fa-ban"></i>
               </button>
-        
+
             </mdb-card-body>
             <!--/.Card content-->
-        
+
           </mdb-card>
           <!--/.Card-->
         </div>
@@ -84,6 +86,20 @@
         <div class="md-form mt-0 mb-3 col-md-12">
           <input type="text" id="firstName" class="form-control" mdbInput [(ngModel)]="placeCM.address">
           <label for="firstName">Địa điểm</label>
+        </div>
+
+        <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
+          <div mdbBtn floating="true" size="md" gradient="aqua" mdbWavesEffect>
+            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+            <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect (uploadOutput)="onUploadOutput($event)"
+              [uploadInput]="uploadInput">
+          </div>
+          <div class="file-path-wrapper mt-3">
+            <input class="file-path" type="text" placeholder="Chọn hình ảnh tải lên" [value]="showFiles()">
+          </div>
+        </div>
+        <div class="col text-center" *ngIf="url">
+          <img [src]="url" height="150">
         </div>
 
         <div class="md-form mt-0 mb-3 col-md-12">

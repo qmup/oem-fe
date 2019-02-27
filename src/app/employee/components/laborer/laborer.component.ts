@@ -1,11 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { EmployeeService } from '../../services/employee.service';
 import { Employee, EmployeeCreateModel } from '../../models/employee';
-import { ModalDirective, ToastService } from 'ng-uikit-pro-standard';
+import { ModalDirective, ToastService, UploadInput, UploadFile, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap';
 import { EmployeeUpdateComponent } from '../employee-update/employee-update.component';
 import { Manager } from 'src/app/manager/models/manager';
 import { ManagerService } from 'src/app/manager/services/manager.service';
+import { GlobalService } from 'src/app/core/services/global.service';
 
 @Component({
   selector: 'app-laborer',
@@ -24,14 +25,26 @@ export class LaborerComponent implements OnInit {
   employeeCM: EmployeeCreateModel = new EmployeeCreateModel();
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
-  managerList: any;
+  formData: FormData;
+  files: UploadFile[];
+  uploadInput: EventEmitter<UploadInput>;
+  humanizeBytes: Function;
+  dragOver: boolean;
+  url: any;
+  filesToUpload: FileList;
+
 
   constructor(
     private employeeService: EmployeeService,
     private modalService: BsModalService,
     private managerService: ManagerService,
-    private toastService: ToastService
-  ) {}
+    private toastService: ToastService,
+    private globalService: GlobalService
+  ) {
+    this.files = [];
+    this.uploadInput = new EventEmitter<UploadInput>();
+    this.humanizeBytes = humanizeBytes;
+  }
 
   ngOnInit() {
     this.optionsSex = [
@@ -55,7 +68,6 @@ export class LaborerComponent implements OnInit {
     this.managerService.getAll()
       .then(
         (response: Manager[]) => {
-          this.managerList = response;
           this.optionsSelect = response.map((manager) => {
             return {
               value: manager.id,
@@ -108,17 +120,47 @@ export class LaborerComponent implements OnInit {
   }
 
   createEmployee() {
-    if (this.gender === 0) {
-      this.employeeCM.sex = true;
-    } else {
-      this.employeeCM.sex = false;
+    this.filesToUpload ? this.createEmployeeWithImage() : this.createEmployeeWithoutImage();
+  }
+
+  createEmployeeWithImage() {
+    const formData: FormData = new FormData();
+    if (!!this.filesToUpload) {
+      for (let index = 0; index < this.filesToUpload.length; index++) {
+        const file: File = this.filesToUpload[index];
+        formData.append('dataFile', file);
+      }
     }
-    this.employeeCM.roleId = 1;
-    const birthdate = new Date(this.employeeCM.birthDate);
-    const date = ('0' + birthdate.getDate()).slice(-2);
-    const month = ('0' + birthdate.getMonth() + 1).slice(-2);
-    const year = birthdate.getFullYear();
-    this.employeeCM.birthDate = `${year}-${month}-${date}`;
+    this.globalService.uploadFile(formData, 'image/employee/')
+      .then(
+        (response) => {
+          this.gender ? this.employeeCM.sex = false : this.employeeCM.sex = true;
+          this.employeeCM.roleId = 2;
+          this.employeeCM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employeeCM.birthDate));
+          this.employeeCM.picture = response;
+          this.employeeService.create(this.employeeCM)
+            .then(
+              () => {
+                this.toastService.success('Cập nhật thông tin thành công', '', { positionClass: 'toast-bottom-right'} );
+                this.createModal.hide();
+                this.employeeList = [];
+                this.getEmployee();
+              },
+              () => {
+                this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+              }
+            );
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+  }
+
+  createEmployeeWithoutImage() {
+    this.gender ? this.employeeCM.sex = false : this.employeeCM.sex = true;
+    this.employeeCM.roleId = 2;
+    this.employeeCM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employeeCM.birthDate));
     this.employeeService.create(this.employeeCM)
       .then(
         () => {
@@ -128,7 +170,6 @@ export class LaborerComponent implements OnInit {
           this.getEmployee();
         },
         (error: any) => {
-          console.log(error);
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
         }
       );
@@ -147,5 +188,66 @@ export class LaborerComponent implements OnInit {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
         }
       );
+  }
+
+  showFiles() {
+    let files = '';
+    for (let i = 0; i < this.files.length; i ++) {
+      files += this.files[i].name;
+       if (!(this.files.length - 1 === i)) {
+         files += ',';
+      }
+    }
+    return files;
+ }
+
+  startUpload(): void {
+    const event: UploadInput = {
+    type: 'uploadAll',
+    url: 'your-path-to-backend-endpoint',
+    method: 'POST',
+    data: { foo: 'bar' },
+    };
+    this.files = [];
+    this.uploadInput.emit(event);
+  }
+
+  cancelUpload(id: string): void {
+    this.uploadInput.emit({ type: 'cancel', id: id });
+  }
+
+  onUploadOutput(output: UploadOutput | any): void {
+
+    if (output.type === 'allAddedToQueue') {
+    } else if (output.type === 'addedToQueue') {
+      this.files.push(output.file); // add file to array when added
+    } else if (output.type === 'uploading') {
+      // update current data in files array for uploading file
+      const index = this.files.findIndex(file => file.id === output.file.id);
+      this.files[index] = output.file;
+    } else if (output.type === 'removed') {
+      // remove file from array when removed
+      this.files = this.files.filter((file: UploadFile) => file !== output.file);
+    } else if (output.type === 'dragOver') {
+      this.dragOver = true;
+    } else if (output.type === 'dragOut') {
+    } else if (output.type === 'drop') {
+      this.dragOver = false;
+    }
+    this.showFiles();
+  }
+
+  onSelectFile(event: any) { // called each time file input changes
+    if (event.target.files && event.target.files[0]) {
+      const reader = new FileReader();
+
+      reader.readAsDataURL(event.target.files[0]); // read file as data url
+
+      reader.onload = (event1: any) => { // called once readAsDataURL is completed
+
+        // this.employee.picture ? this.employee.picture = event1.target.result : this.url = event1.target.result;
+
+      };
+    }
   }
 }

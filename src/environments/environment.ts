@@ -58,6 +58,9 @@ export const environment = {
     schedule: {
       create: 'schedule/create',
       getAll: 'schedule/get-all',
+    },
+    upload: {
+      handlerUpload: 'upload/handler-upload',
     }
   }
 };

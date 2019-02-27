@@ -10,6 +10,9 @@ html, body, main {
 .sn-bg-1 {
   background-image: 'src/assets/sidenav.jpg' !important;
 }
+.modal-dialog.modal-notify.modal-primary .fa, .modal-dialog.modal-notify.modal-success .fa  {
+  color: white !important;
+}
 
 mdb-select > div > div.single > div.placeholder {
   color: #757575 !important;
@@ -128,7 +131,7 @@ main#main {
     left: 50%;
     transform: translate(-50%, -50%);
     height: 70px;
-    width: auto;
+    width: 70px;
     border-radius: 50%;
     border: 1px solid white;
   }

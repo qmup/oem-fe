@@ -8,7 +8,7 @@
         <div class="row" style="height: calc(100vh - 150px) !important;">
             <div class="card card-cascade narrower col-8 waves-light" mdbWavesEffect>
               <div class="p-5">
-              <div class="mx-auto col-6">
+              <div class="mx-auto col-8">
                 <div class="view view-cascade gradient-card-header light-blue" style="margin-top: -5.25rem">
                   <h2 class="h2-responsive mb-0">Chi tiết công việc</h2>
                 </div>
@@ -63,7 +63,7 @@
               <span>{{employee}}</span>
               <p class="h6 mt-3 mb-4">Time tracking</p>
               <div class="row">
-                <div class="col-6">
+                <div class="col-6 pt-2">
                   <mdb-date-picker name="dateFr" [placeholder]="'Selected date'" [(ngModel)]="dateFrom" [label]="'From Date'">
                   </mdb-date-picker>
                 </div>
@@ -72,7 +72,7 @@
                     [label]="'Time'" [ngModel]="timeFrom">
                   </mdb-time-picker>
                 </div>
-                <div class="col-6">
+                <div class="col-6 pt-2">
                   <mdb-date-picker name="dateT" [label]="'To Date'" [placeholder]="'Selected date'" [(ngModel)]="dateTo">
                   </mdb-date-picker>
                 </div>

@@ -43,10 +43,10 @@
                 <th>Hình ảnh</th>
                 <th>Họ</th>
                 <th>Tên</th>
-                <th style="min-width: 100px">Giới tính</th>
-                <th style="min-width: 150px">Số điện thoại</th>
+                <th style="width: 100px; max-width: 100px">Giới tính</th>
+                <th style="width: 150px; max-width: 150px">Số điện thoại</th>
                 <th>Địa chỉ</th>
-                <th style="min-width: 300px">Thao tác</th>
+                <th style="width: 300px; max-width: 300px">Thao tác</th>
               </tr>
             </thead>
             <!--Table head-->
@@ -141,7 +141,8 @@
 
         <div class="md-form mt-0 mb-3 col-md-6">
           <div class="form-group">
-            <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }" [(ngModel)]="employeeCM.birthDate" [placeholder]="'Ngày sinh'">
+            <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
+              [(ngModel)]="employeeCM.birthDate" [placeholder]="'Ngày sinh'">
           </div>
         </div>
 
@@ -152,6 +153,20 @@
 
         <div class="md-form mt-0 mb-3 col-md-12 ">
           <mdb-select [options]="optionsSelect" placeholder="Người quản lý" [(ngModel)]="employeeCM.managerId"></mdb-select>
+        </div>
+
+        <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
+          <div mdbBtn floating="true" size="md" gradient="aqua" mdbWavesEffect>
+            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+            <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect (uploadOutput)="onUploadOutput($event)"
+              [uploadInput]="uploadInput">
+          </div>
+          <div class="file-path-wrapper mt-3">
+            <input class="file-path" type="text" placeholder="Chọn ảnh đại diện" [value]="showFiles()">
+          </div>
+          <div class="col text-center w-100" *ngIf="url">
+            <img [src]="url" height="150">
+          </div>
         </div>
 
       </div>
