@@ -117,8 +117,8 @@ export class ManagerComponent implements OnInit {
     this.globalService.uploadFile(formData, 'image/employee/')
       .then(
         (response) => {
-          this.gender ? this.managerCM.sex = false : this.managerCM.sex = true;
-          this.managerCM.roleId = 2;
+          (this.gender === 0) ? this.managerCM.sex = false : this.managerCM.sex = true;
+          this.managerCM.roleId = 1;
           this.managerCM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.managerCM.birthDate));
           this.managerCM.picture = response;
           this.managerService.create(this.managerCM)
@@ -141,8 +141,8 @@ export class ManagerComponent implements OnInit {
   }
 
   createManagerWithoutImage() {
-    this.gender ? this.managerCM.sex = false : this.managerCM.sex = true;
-    this.managerCM.roleId = 2;
+    (this.gender === 0) ? this.managerCM.sex = false : this.managerCM.sex = true;
+    this.managerCM.roleId = 1;
     this.managerCM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.managerCM.birthDate));
     this.managerService.create(this.managerCM)
       .then(
@@ -229,9 +229,12 @@ export class ManagerComponent implements OnInit {
 
       reader.onload = (event1: any) => { // called once readAsDataURL is completed
 
-        // this.employee.picture ? this.employee.picture = event1.target.result : this.url = event1.target.result;
+        this.managerCM.picture ? this.managerCM.picture = event1.target.result : this.url = event1.target.result;
 
       };
+
+      this.filesToUpload = event.target.files;
+
     }
   }
 }

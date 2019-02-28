@@ -152,10 +152,6 @@ export class ManagerUpdateComponent implements OnInit {
       );
   }
 
-  changeFile(event: any) {
-    this.filesToUpload = event.target.files;
-  }
-
   showFiles() {
     let files = '';
     for (let i = 0; i < this.files.length; i ++) {
@@ -215,6 +211,9 @@ export class ManagerUpdateComponent implements OnInit {
         this.manager.picture ? this.manager.picture = event1.target.result : this.url = event1.target.result;
 
       };
+
+      this.filesToUpload = event.target.files;
+
     }
   }
 

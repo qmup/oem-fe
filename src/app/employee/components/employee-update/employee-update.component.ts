@@ -52,7 +52,6 @@ export class EmployeeUpdateComponent implements OnInit {
     } else {
       this.gender = 1;
     }
-    console.log(this.employee.birthDate);
     const year = this.employee.birthDate.split('-', 3)[0];
     const month = this.employee.birthDate.split('-', 3)[1];
     const day = this.employee.birthDate.split('-', 3)[2];
@@ -105,6 +104,7 @@ export class EmployeeUpdateComponent implements OnInit {
           this.employeeUM.fullName = this.employee.fullName;
           this.employeeUM.lastName = this.employee.lastName;
           this.employeeUM.password = this.employee.password;
+          this.employeeUM.managerId = this.employee.managerId;
           this.employeeUM.phoneMacAddress = this.employee.phoneMacAddress;
           this.employeeUM.phoneNumber = this.employee.phoneNumber;
           this.employeeUM.picture = response;
@@ -164,10 +164,6 @@ export class EmployeeUpdateComponent implements OnInit {
       );
   }
 
-  changeFile(event: any) {
-    this.filesToUpload = event.target.files;
-  }
-
   startUpload(): void {
     const event: UploadInput = {
     type: 'uploadAll',
@@ -215,6 +211,9 @@ export class EmployeeUpdateComponent implements OnInit {
         this.employee.picture ? this.employee.picture = event1.target.result : this.url = event1.target.result;
 
       };
+
+      this.filesToUpload = event.target.files;
+
     }
   }
 

@@ -61,7 +61,7 @@
       <div mdbBtn floating="true" size="md" gradient="aqua" mdbWavesEffect>
         <i class="fa fa-cloud-upload" aria-hidden="true"></i>
         <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect (uploadOutput)="onUploadOutput($event)"
-          [uploadInput]="uploadInput" (change)="changeFile($event)">
+          [uploadInput]="uploadInput">
       </div>
       <div class="file-path-wrapper mt-3">
         <input class="file-path" type="text" placeholder="Chọn ảnh đại diện" [value]="showFiles()">

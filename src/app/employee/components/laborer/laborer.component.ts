@@ -134,7 +134,7 @@ export class LaborerComponent implements OnInit {
     this.globalService.uploadFile(formData, 'image/employee/')
       .then(
         (response) => {
-          this.gender ? this.employeeCM.sex = false : this.employeeCM.sex = true;
+          (this.gender === 0) ? this.employeeCM.sex = false : this.employeeCM.sex = true;
           this.employeeCM.roleId = 2;
           this.employeeCM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employeeCM.birthDate));
           this.employeeCM.picture = response;
@@ -158,7 +158,7 @@ export class LaborerComponent implements OnInit {
   }
 
   createEmployeeWithoutImage() {
-    this.gender ? this.employeeCM.sex = false : this.employeeCM.sex = true;
+    (this.gender === 0) ? this.employeeCM.sex = false : this.employeeCM.sex = true;
     this.employeeCM.roleId = 2;
     this.employeeCM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employeeCM.birthDate));
     this.employeeService.create(this.employeeCM)
@@ -245,9 +245,12 @@ export class LaborerComponent implements OnInit {
 
       reader.onload = (event1: any) => { // called once readAsDataURL is completed
 
-        // this.employee.picture ? this.employee.picture = event1.target.result : this.url = event1.target.result;
+        this.employeeCM.picture ? this.employeeCM.picture = event1.target.result : this.url = event1.target.result;
 
       };
+
+      this.filesToUpload = event.target.files;
+
     }
   }
 }

@@ -23,6 +23,7 @@ export class PlaceUpdateComponent implements OnInit {
   humanizeBytes: Function;
   dragOver: boolean;
   url: any;
+  filesToUpload: FileList;
 
   constructor(
     public modalRef: BsModalRef,
@@ -126,6 +127,9 @@ export class PlaceUpdateComponent implements OnInit {
         // this.employee.picture ? this.employee.picture = event1.target.result : this.url = event1.target.result;
 
       };
+
+      this.filesToUpload = event.target.files;
+
     }
   }
 

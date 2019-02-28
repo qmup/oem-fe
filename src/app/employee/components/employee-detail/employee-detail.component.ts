@@ -24,6 +24,7 @@ export class EmployeeDetailComponent implements OnInit {
   humanizeBytes: Function;
   dragOver: boolean;
   url: any;
+  filesToUpload: FileList;
 
   constructor(
     private route: ActivatedRoute,
@@ -115,9 +116,12 @@ export class EmployeeDetailComponent implements OnInit {
 
       reader.onload = (event1: any) => { // called once readAsDataURL is completed
 
-      this.employee.picture ? this.employee.picture = event1.target.result : this.url = event1.target.result;
+        this.employee.picture ? this.employee.picture = event1.target.result : this.url = event1.target.result;
 
       };
+
+      this.filesToUpload = event.target.files;
+
     }
   }
 }

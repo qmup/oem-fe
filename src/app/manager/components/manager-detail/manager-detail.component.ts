@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { UploadFile, UploadInput, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
+import { Manager } from '../../models/manager';
 
 @Component({
   selector: 'app-manager-detail',
@@ -8,12 +9,14 @@ import { UploadFile, UploadInput, humanizeBytes, UploadOutput } from 'ng-uikit-p
 })
 export class ManagerDetailComponent implements OnInit {
 
+  manager: Manager;
   formData: FormData;
   files: UploadFile[];
   uploadInput: EventEmitter<UploadInput>;
   humanizeBytes: Function;
   dragOver: boolean;
   url: any;
+  filesToUpload: FileList;
 
   constructor() {
     this.files = [];
@@ -79,9 +82,12 @@ export class ManagerDetailComponent implements OnInit {
 
       reader.onload = (event1: any) => { // called once readAsDataURL is completed
 
-        // this.employee.picture ? this.employee.picture = event1.target.result : this.url = event1.target.result;
+        this.manager.picture ? this.manager.picture = event1.target.result : this.url = event1.target.result;
 
       };
+
+      this.filesToUpload = event.target.files;
+
     }
   }
 
