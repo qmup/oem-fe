@@ -61,3 +61,15 @@ export class TaskModel {
     this.workplaceId = 0;
   }
 }
+
+export class TaskResponse {
+  content: Task[];
+  totalPages: number;
+  totalElements: number;
+  last: boolean;
+  numberOfElements: number;
+  sort: null;
+  first: boolean;
+  size: number;
+  number: number;
+}

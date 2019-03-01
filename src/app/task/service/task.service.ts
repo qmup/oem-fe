@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Task, TaskModel } from '../models/task';
+import { Task, TaskModel, TaskResponse } from '../models/task';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -30,14 +30,16 @@ export class TaskService {
       `${environment.endPoint}${environment.apiPaths.task.getTaskDetail}`
     ).toPromise();
   }
-  getTaskByDate(id: number, fromDate: string, toDate: string): Promise<Task[]> {
-    return this.httpClient.get<Task[]>(
+  getTaskByDate(employeeId: number, fromDate: string, toDate: string, page: number, size: number): Promise<TaskResponse> {
+    return this.httpClient.get<TaskResponse>(
       `${environment.endPoint}${environment.apiPaths.task.getTaskByDate}`,
       {
         params: {
-          id: `${id}`,
+          id: `${employeeId}`,
           fromDate: `${fromDate}`,
-          toDate: `${toDate}`
+          toDate: `${toDate}`,
+          page: `${page}`,
+          size: `${size}`,
         }
       }
     ).toPromise();

@@ -8,9 +8,10 @@ import { AuthorizeModule } from '../authorize/authorize.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ModalModule, BsDatepickerModule } from 'ngx-bootstrap';
 import { NotificationService } from './services/notification.service';
+import { PaginationComponent } from './components/pagination.component';
 
 @NgModule({
-  declarations: [LayoutComponent],
+  declarations: [LayoutComponent, PaginationComponent],
   imports: [
     CommonModule,
     HttpClientModule,
@@ -23,6 +24,7 @@ import { NotificationService } from './services/notification.service';
   ],
   exports: [
     LayoutComponent,
+    PaginationComponent,
   ],
   providers: [
     NotificationService
