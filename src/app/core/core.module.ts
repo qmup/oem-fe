@@ -9,6 +9,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { ModalModule, BsDatepickerModule } from 'ngx-bootstrap';
 import { NotificationService } from './services/notification.service';
 import { PaginationComponent } from './components/pagination.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+// import { FlatpickrModule } from 'angularx-flatpickr';
+
 
 @NgModule({
   declarations: [LayoutComponent, PaginationComponent],
@@ -20,7 +25,13 @@ import { PaginationComponent } from './components/pagination.component';
     ToastModule.forRoot(),
     ModalModule.forRoot(),
     BsDatepickerModule.forRoot(),
-    MDBBootstrapModulesPro.forRoot()
+    MDBBootstrapModulesPro.forRoot(),
+    NgbModalModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }),
+    // FlatpickrModule.forRoot(),
   ],
   exports: [
     LayoutComponent,

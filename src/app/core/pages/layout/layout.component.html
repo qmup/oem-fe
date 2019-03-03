@@ -28,20 +28,20 @@
               <mdb-accordion-item>
                 <mdb-accordion-item-head mdbWavesEffect routerLink="/laborer">
                   <i class="fa fa-users"></i> 
-                  <span>Employee</span>
+                  <span>Nhân viên</span>
                 </mdb-accordion-item-head>
                 <mdb-accordion-item-body>
                   <ul>
                     <li>
                       <a routerLink="/laborer" class="waves-effect" mdbWavesEffect>
                         <i class="fa fa-user"></i> 
-                        Laborer
+                        Lao công
                       </a>
                     </li>
                     <li>
                       <a routerLink="/saler" class="waves-effect" mdbWavesEffect>
                         <i class="fa fa-user"></i> 
-                        Saler
+                        Bán hàng
                       </a>
                     </li>
                   </ul>
@@ -52,7 +52,7 @@
               <mdb-accordion-item class="no-collase">
                 <mdb-accordion-item-head mdbWavesEffect routerLink="/manager">
                   <i class="fa fa-star"></i> 
-                  <span>Manager</span>
+                  <span>Quản lý</span>
                 </mdb-accordion-item-head>
                 <mdb-accordion-item-body></mdb-accordion-item-body>
               </mdb-accordion-item>
@@ -61,20 +61,20 @@
               <mdb-accordion-item>
                 <mdb-accordion-item-head mdbWavesEffect rounterLink="/task">
                   <i class="fa fa-list"></i> 
-                  <span>Task</span>
+                  <span>Công việc</span>
                 </mdb-accordion-item-head>
                 <mdb-accordion-item-body>
                   <ul>
                     <li>
                       <a routerLink="/task" class="waves-effect" mdbWavesEffect>
                         <i class="fa fa-tasks"></i> 
-                        Quick task
+                        Công việc đột xuất
                       </a>
                     </li>
                     <li>
                       <a routerLink="/schedule" class="waves-effect" mdbWavesEffect>
                         <i class="fa fa-tasks"></i> 
-                        Schedule task
+                        Công việc thường nhật
                       </a>
                     </li>
                   </ul>
@@ -84,7 +84,15 @@
               <mdb-accordion-item class="no-collase">
                 <mdb-accordion-item-head mdbWavesEffect routerLink="/place">
                   <i class="fa fa-location-arrow"></i> 
-                  <span>Place</span>
+                  <span>Nơi làm việc</span>
+                </mdb-accordion-item-head>
+                <mdb-accordion-item-body></mdb-accordion-item-body>
+              </mdb-accordion-item>
+
+              <mdb-accordion-item class="no-collase">
+                <mdb-accordion-item-head mdbWavesEffect routerLink="/calendar">
+                  <i class="fa fa-calendar"></i> 
+                  <span>Lịch làm việc</span>
                 </mdb-accordion-item-head>
                 <mdb-accordion-item-body></mdb-accordion-item-body>
               </mdb-accordion-item>
@@ -121,7 +129,7 @@
         <!--/. SideNav slide-out button -->
       </navlinks>
   
-      <mdb-navbar-brand>
+      <mdb-navbar-brand routerLink='/dashboard' style="cursor: pointer">
         <!-- Breadcrumb-->
         <div class="breadcrumbs breadcrumbs-hidden-nav breadcrumb-dn mr-auto">
           <p>Outdoor Employee Management</p>

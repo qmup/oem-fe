@@ -24,6 +24,7 @@ import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire';
 import { NotificationService } from './core/services/notification.service';
 import { AsyncPipe } from '@angular/common';
+import { TaskCalendarModule } from './task-calendar/task-calendar.module';
 
 @NgModule({
   declarations: [
@@ -41,11 +42,13 @@ import { AsyncPipe } from '@angular/common';
     }),
     CoreModule,
     EmployeeModule,
+    TaskCalendarModule,
     ManagerModule,
     PlaceModule,
     TaskModule,
     BeaconModule,
     AuthorizeModule,
+    // CalendarModule,
     DashboardModule,
     ToastModule.forRoot(),
     MDBBootstrapModulesPro.forRoot(),

@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+
 nav.navbar.fixed-top.navbar-toggleable-md.navbar-expand-lg.scrolling-navbar.double-nav {
   color: white;
   background: linear-gradient(40deg, #303f9f, #45CAFA, #303f9f) !important;
@@ -7,8 +9,8 @@ html, body, main {
   min-height: 100vh;
   height: auto;
 }
-.sn-bg-1 {
-  background-image: 'src/assets/sidenav.jpg' !important;
+.side-nav .sidenav-bg::after {
+  background: rgba(56,107,184,.2);
 }
 .modal-dialog.modal-notify.modal-primary .fa, .modal-dialog.modal-notify.modal-success .fa  {
   color: white !important;
@@ -139,6 +141,17 @@ main#main {
 }
 .toast {
   opacity: 1 !important;
+}
+#calendar {
+  h3 {
+    margin: 0 0 10px;
+  }
+  
+  pre {
+    background-color: #f5f5f5;
+    padding: 15px;
+  }
+    
 }
 .switch.primary-switch label input[type=checkbox]:checked + .lever {
   background-color: #689DF6;
