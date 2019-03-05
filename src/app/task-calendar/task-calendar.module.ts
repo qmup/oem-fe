@@ -10,9 +10,10 @@ import { FormsModule } from '@angular/forms';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
+import { DayViewSchedulerComponent } from './components/day-view-scheduler/day-view-scheduler.component';
 
 @NgModule({
-  declarations: [TaskCalendarPagesComponent, TaskCalendarComponent],
+  declarations: [TaskCalendarPagesComponent, TaskCalendarComponent, DayViewSchedulerComponent],
   imports: [
     CommonModule,
     FormsModule,

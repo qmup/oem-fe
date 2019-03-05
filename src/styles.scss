@@ -9,8 +9,12 @@ html, body, main {
   min-height: 100vh;
   height: auto;
 }
+.flatpickr-calendar.hasTime.animate {
+  display: none !important;
+}
 .side-nav .sidenav-bg::after {
-  background: rgba(56,107,184,.2);
+  // background: rgba(56,107,184,.2);
+  background: linear-gradient(#92A7C6, #101F3A);
 }
 .modal-dialog.modal-notify.modal-primary .fa, .modal-dialog.modal-notify.modal-success .fa  {
   color: white !important;

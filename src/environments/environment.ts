@@ -5,8 +5,8 @@
 
 export const environment = {
   production: false,
-  // endPoint: 'http://localhost:8080/',
-  endPoint: 'http://113.161.84.125/',
+  endPoint: 'http://localhost:8080/',
+  // endPoint: 'http://113.161.84.125/',
   apiPaths: {
     firebase: {
       apiKey: 'AIzaSyCv23Kx9Xfh4okq30jtY_QJi2CudhO_7f4',
@@ -61,6 +61,19 @@ export const environment = {
     },
     upload: {
       handlerUpload: 'upload/handler-upload',
+    },
+    company: {
+      create: 'company/add-company',
+      getAll: 'company/get-all',
+      getById: 'company/get-company-by-id',
+      remove: 'company/remove-company',
+      update: 'company/update-company-information',
+    },
+    zone: {
+      create: 'zone/add-zone',
+      getByCompany: 'zone/get-all-zone-by-company',
+      remove: 'zone/remove-zone',
+      update: 'zone/update-zone-information',
     }
   }
 };

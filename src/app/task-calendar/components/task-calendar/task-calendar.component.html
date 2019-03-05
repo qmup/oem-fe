@@ -123,7 +123,7 @@
 
 <br /><br /><br />
 
-<mdb-card>
+<!-- <mdb-card class="mb-5">
   <mdb-card-body>
     <h3>
       Edit events
@@ -210,5 +210,51 @@
         </tr>
       </tbody>
     </table>
+  </mdb-card-body>
+</mdb-card> -->
+
+<mdb-card>
+  <mdb-card-body>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="btn-group">
+          <div
+            class="btn btn-primary"
+            mwlCalendarPreviousView
+            [view]="'day'"
+            [(viewDate)]="viewDate"
+          >
+            Previous
+          </div>
+          <div
+            class="btn btn-outline-primary"
+            mwlCalendarToday
+            [(viewDate)]="viewDate"
+          >
+            Today
+          </div>
+          <div
+            class="btn btn-primary"
+            mwlCalendarNextView
+            [view]="'day'"
+            [(viewDate)]="viewDate"
+          >
+            Next
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 text-right">
+        <h3>{{ viewDate | calendarDate:('dayViewTitle') }}</h3>
+      </div>
+    </div>
+    <br />
+    <app-day-view-scheduler
+      [viewDate]="viewDate"
+      [events]="events"
+      (eventTimesChanged)="eventTimesChanged($event)"
+      (userChanged)="userChanged($event)"
+    >
+    </app-day-view-scheduler>
+
   </mdb-card-body>
 </mdb-card>

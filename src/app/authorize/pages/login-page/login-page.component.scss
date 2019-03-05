@@ -3,7 +3,7 @@ mdb-card-body.mx-4.card-body {
 }
 img {
   position: absolute;
-  top: 15%;
+  top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
   height: 100px;
@@ -17,4 +17,12 @@ div.row:first-child {
 }
 mdb-card.form-elegant {
   margin-top: 50px;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 400px;
+}
+form.pt80 {
+  padding-top: 80px;
 }

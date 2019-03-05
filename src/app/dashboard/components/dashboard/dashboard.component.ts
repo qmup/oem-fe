@@ -70,6 +70,7 @@ export class DashboardComponent implements OnInit {
     const userId = 'user001';
     this.notificationService.requestPermission(userId);
     this.notificationService.receiveMessage();
+    console.log(this.message);
     this.message = this.notificationService.currentMessage;
 
     const today = new Date();
