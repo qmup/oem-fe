@@ -5,8 +5,8 @@
 
 export const environment = {
   production: false,
-  endPoint: 'http://localhost:8080/',
-  // endPoint: 'http://113.161.84.125/',
+  // endPoint: 'http://localhost:8080/',
+  endPoint: 'http://113.161.84.125/',
   apiPaths: {
     firebase: {
       apiKey: 'AIzaSyCv23Kx9Xfh4okq30jtY_QJi2CudhO_7f4',
@@ -54,6 +54,8 @@ export const environment = {
       summaryManagerTask: 'task/summary-task-all-employee-by-manager',
       summaryEmployeeTask: 'task/summary-task-by-employe',
       getTaskByManager: 'task/get-task-by-manager',
+      createTaskBasic: 'task/create-task-basic',
+      getTaskBasic: 'task/get-task-basic',
     },
     schedule: {
       create: 'schedule/create',

@@ -44,9 +44,9 @@ export class TaskService {
       }
     ).toPromise();
   }
-  getTodayTask(): Promise<Task[]> {
+  getTodayTask(assigneeId: number): Promise<Task[]> {
     return this.httpClient.get<Task[]>(
-      `${environment.endPoint}${environment.apiPaths.task.getTodayTask}`
+      `${environment.endPoint}${environment.apiPaths.task.getTodayTask}?assigneeId=${assigneeId}`
     ).toPromise();
   }
 

@@ -1,30 +1,22 @@
-import { Component, OnInit, ViewChild, EventEmitter, Input } from '@angular/core';
-import { PlaceService } from '../../services/place.service';
-import { Place, PlaceModel } from '../../models/place';
-import { BsModalService, ModalDirective, ModalOptions, BsModalRef } from 'ngx-bootstrap';
-import { PlaceUpdateComponent } from '../place-update/place-update.component';
-import { Beacon } from 'src/app/beacon/models/beacon';
-import { BeaconService } from 'src/app/beacon/services/beacon.service';
-import { ToastService, UploadFile, UploadInput, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
-import { Location } from '@angular/common';
+import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { Company } from '../../models/company';
-import { Zone } from '../../models/zone';
+import { BsModalRef, ModalDirective, BsModalService, ModalOptions } from 'ngx-bootstrap';
+import { UploadFile, UploadInput, ToastService, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
+import { CompanyService } from '../../services/company.service';
+import { CompanyUpdateComponent } from '../company-update/company-update.component';
 
 @Component({
-  selector: 'app-place',
-  templateUrl: './place.component.html',
-  styleUrls: ['./place.component.scss']
+  selector: 'app-company',
+  templateUrl: './company.component.html',
+  styleUrls: ['./company.component.scss']
 })
-export class PlaceComponent implements OnInit {
+export class CompanyComponent implements OnInit {
 
-  @Input() zoneId: number;
-  @Input() company: Company;
   id: number;
-  placeCM: PlaceModel = new PlaceModel();
-  placeList: Place[];
+  companyCM: Company = new Company();
+  companyList: Company[];
   modalRef: BsModalRef;
   optionsSelect = new Array<any>();
-  beaconName: string;
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
   formData: FormData;
@@ -34,15 +26,12 @@ export class PlaceComponent implements OnInit {
   dragOver: boolean;
   url: any;
   filesToUpload: FileList;
-  companyName: string;
-  zoneName: string;
+  map: any = { lat: 10.774157, lng: 106.661049 };
 
   constructor(
-    private placeService: PlaceService,
-    private beaconService: BeaconService,
+    private companyService: CompanyService,
     private modalService: BsModalService,
     private toastService: ToastService,
-    public location: Location
     ) {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
@@ -50,54 +39,26 @@ export class PlaceComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getPlace();
-    this.getBeacon();
+    this.getCompany();
   }
 
-  getPlace() {
-    this.placeService.getAll(this.zoneId)
+  getCompany() {
+    this.companyService.getAll()
       .then(
-        (response: Place[]) => {
-          this.placeList = response;
-          this.zoneName = response[0].zoneDTO.name;
-          this.companyName = response[0].companyDTO.name;
-          for (let index = 0; index < this.placeList.length; index++) {
-            const element = this.placeList[index];
-            this.beaconService.getByWorkplace(element.id)
-              .then(
-                (response2: Beacon) => {
-                  if (response2) {
-                    // element.beaconName = response2.name;
-                  }
-                }
-              );
-          }
+        (response: Company[]) => {
+          this.companyList = response;
         }
       );
   }
 
-  getBeacon() {
-    this.beaconService.getAll()
-      .then(
-        (response: Beacon[]) => {
-          this.optionsSelect = response.map((beacon) => {
-            return {
-              value: beacon.workplaceId,
-              label: beacon.name,
-            };
-          });
-        }
-      );
-  }
-
-  createPlace() {
-    this.placeService.create(this.placeCM)
+  createCompany() {
+    this.companyService.create(this.companyCM)
       .then(
         () => {
-          this.toastService.success('Tạo nơi làm việc thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.toastService.success('Tạo công ty thành công', '', { positionClass: 'toast-bottom-right'} );
           this.createModal.hide();
-          this.placeList = [];
-          this.getPlace();
+          this.companyList = [];
+          this.getCompany();
         },
         (error: any) => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -105,23 +66,19 @@ export class PlaceComponent implements OnInit {
       );
   }
 
-  removePlace() {
-    this.placeService.remove(this.id)
+  removeCompany() {
+    this.companyService.remove(this.id)
       .then(
         () => {
-          this.toastService.success('Xóa nơi làm việc thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.toastService.success('Xóa công ty thành công', '', { positionClass: 'toast-bottom-right'} );
           this.deleteModal.hide();
-          this.placeList = [];
-          this.getPlace();
+          this.companyList = [];
+          this.getCompany();
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
         }
       );
-  }
-
-  changeBeacon(beaconId: number) {
-    // this.placeCM.address = this.optionsSelect[beaconId].label;
   }
 
   openCreateModal() {
@@ -133,14 +90,14 @@ export class PlaceComponent implements OnInit {
     this.deleteModal.show();
   }
 
-  openUpdateModal(place: Place) {
+  openUpdateModal(company: Company) {
     const modalOptions: ModalOptions = {
       animated: true,
       class: 'modal-notify modal-primary',
-      initialState: { place }
+      initialState: { company }
     };
-    this.modalRef = this.modalService.show(PlaceUpdateComponent, modalOptions);
-    this.modalRef.content.refresh.subscribe(() => this.getPlace());
+    this.modalRef = this.modalService.show(CompanyUpdateComponent, modalOptions);
+    this.modalRef.content.refresh.subscribe(() => this.getCompany());
 
   }
 
@@ -207,4 +164,5 @@ export class PlaceComponent implements OnInit {
 
     }
   }
+
 }

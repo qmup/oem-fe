@@ -100,19 +100,19 @@ export class ScheduleComponent implements OnInit {
       );
   }
 
-  getWorkplace() {
-    this.workplaceService.getAll()
-      .then(
-        (response: Place[]) => {
-          this.workplaceList = response.map((workplace) => {
-            return {
-              value: workplace.id,
-              label: workplace.name
-            };
-          });
-        }
-      );
-  }
+  // getWorkplace() {
+  //   this.workplaceService.getAll()
+  //     .then(
+  //       (response: Place[]) => {
+  //         this.workplaceList = response.map((workplace) => {
+  //           return {
+  //             value: workplace.id,
+  //             label: workplace.name
+  //           };
+  //         });
+  //       }
+  //     );
+  // }
 
   openCreateModal() {
     this.createModal.show();

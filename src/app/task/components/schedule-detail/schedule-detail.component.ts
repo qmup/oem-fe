@@ -40,7 +40,7 @@ export class ScheduleDetailComponent implements OnInit {
 
   ngOnInit() {
     this.getEmployee();
-    this.getWorkplace();
+    // this.getWorkplace();
     this.week = [
       { id: 1, inputId: 'option1', label: 'Thứ 2' , check: false},
       { id: 2, inputId: 'option2', label: 'Thứ 3' , check: false},
@@ -66,19 +66,19 @@ export class ScheduleDetailComponent implements OnInit {
       );
   }
 
-  getWorkplace() {
-    this.workplaceService.getAll()
-      .then(
-        (response: Place[]) => {
-          this.workplaceList = response.map((workplace) => {
-            return {
-              value: workplace.id,
-              label: workplace.name
-            };
-          });
-        }
-      );
-  }
+  // getWorkplace() {
+  //   this.workplaceService.getAll()
+  //     .then(
+  //       (response: Place[]) => {
+  //         this.workplaceList = response.map((workplace) => {
+  //           return {
+  //             value: workplace.id,
+  //             label: workplace.name
+  //           };
+  //         });
+  //       }
+  //     );
+  // }
 
   updateSchedule() {
     // const options = { positionClass: 'toast-bottom-right' };

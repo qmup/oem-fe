@@ -38,7 +38,7 @@ import { TaskCalendarModule } from './task-calendar/task-calendar.module';
     HttpModule,
     AgmCoreModule.forRoot({
       // https://developers.google.com/maps/documentation/javascript/get-api-key?hl=en#key
-      apiKey: 'Your_api_key'
+      apiKey: 'AIzaSyD02259nRLm-9mjD3-xDD9dsWyDJPv2B8k'
     }),
     CoreModule,
     EmployeeModule,

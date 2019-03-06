@@ -20,9 +20,9 @@ export class ZoneService {
   //     `${environment.endPoint}${environment.apiPaths.zone.}`
   //   ).toPromise();
   // }
-  getByCompany(): Promise<Zone[]> {
+  getByCompany(companyId: number): Promise<Zone[]> {
     return this.httpClient.get<Zone[]>(
-      `${environment.endPoint}${environment.apiPaths.zone.getByCompany}`
+      `${environment.endPoint}${environment.apiPaths.zone.getByCompany}?companyId=${companyId}`
     ).toPromise();
   }
   remove(id: number): Promise<any> {

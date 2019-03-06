@@ -141,7 +141,7 @@ export class LaborerComponent implements OnInit {
           this.employeeService.create(this.employeeCM)
             .then(
               () => {
-                this.toastService.success('Cập nhật thông tin thành công', '', { positionClass: 'toast-bottom-right'} );
+                this.toastService.success('Tạo nhân viên thành công', '', { positionClass: 'toast-bottom-right'} );
                 this.createModal.hide();
                 this.employeeList = [];
                 this.getEmployee();

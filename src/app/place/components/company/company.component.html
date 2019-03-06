@@ -1,9 +1,9 @@
-<div class="card card-cascade narrower" id="place">
+<div class="card card-cascade narrower" id="company">
   <section>
     <div class="row">
       <div class="col-xl-6 col-lg-12 mr-0">
         <div class="view view-cascade gradient-card-header light-blue lighten-1">
-          <h2 class="h2-responsive mb-0">Quản lý nơi làm việc</h2>
+          <h2 class="h2-responsive mb-0">Danh sách công ty</h2>
         </div>
       </div>
       <div class="col-xl-6 col-lg-12 px-5 pt-3 text-right">
@@ -11,19 +11,15 @@
       </div>
       <div class="card-body card-body-cascade pb-0 d-flex flex-wrap">
 
-        <h4 class="text-left col-11 mx-auto pb-3">
-          <span routerLink="/company" style="cursor: pointer; color: #007bff"> Công ty {{companyName}} </span>
-          <span (click)="location.back()" style="cursor: pointer; color: #6c757d; font-size: 20px;"> / {{zoneName}} </span>
-        </h4>
 
-        <div class="col-md-4 mb-4" *ngFor="let p of placeList; let i of index">
+        <div class="col-md-6 mb-4" *ngFor="let c of companyList; let i of index">
 
           <!--Card-->
           <mdb-card cascade="true" narrower="true">
 
             <!--Card image-->
-            <div class="view view-cascade overlay waves-light" mdbWavesEffect>
-              <mdb-card-img [src]="p.picture"></mdb-card-img>
+            <div class="view view-cascade overlay waves-light" mdbWavesEffect [routerLink]="['/zone', c.id]">
+              <mdb-card-img src="{{c.picture}}"></mdb-card-img>
               <a>
                 <div class="mask rgba-white-slight"></div>
               </a>
@@ -34,27 +30,23 @@
               <!--Card content-->
 
               <!--Title-->
-              <h4 class="card-title">{{p.name}}</h4>
+              <h4 class="card-title">{{c.name}}</h4>
               <!--Text-->
 
               <mdb-card-text>
-                Địa điểm: {{p.companyDTO.address}} - {{p.zoneDTO.name}}
+                {{c.address}}
               </mdb-card-text>
 
-              <mdb-card-text>
-                Chi tiết: {{p.description}}
-              </mdb-card-text>
-
-              <!-- <mdb-card-text>
-                Beacon: {{ p.beaconName ? p.beaconName : 'Chưa có' }}
-              </mdb-card-text> -->
+              <agm-map [latitude]="map.lat" [longitude]="map.lng" style="height: 200px">
+                <agm-marker [latitude]="map.lat" [longitude]="map.lng"></agm-marker>
+              </agm-map>
 
               <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light"
-                mdbWavesEffect (click)="openUpdateModal(p)">
+                mdbWavesEffect (click)="openUpdateModal(c)">
                 <i class="fa fa-pencil"></i>
               </button>
               <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light" mdbWavesEffect
-                (click)="openDeleteModal(p.id)">
+                (click)="openDeleteModal(c.id)">
                 <i class="fa fa-ban"></i>
               </button>
 
@@ -75,20 +67,20 @@
   <div class="modal-dialog modal-notify modal-success" role="document">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
-        <p class="heading">Tạo mới nơi làm việc</p>
+        <p class="heading">Tạo mới công ty</p>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body mx-3 row">
         <div class="md-form mt-0 mb-3 col-md-12">
-          <input type="text" id="name" class="form-control" mdbInput [(ngModel)]="placeCM.name">
+          <input type="text" id="name" class="form-control" mdbInput [(ngModel)]="companyCM.name">
           <label for="name">Tên</label>
         </div>
 
         <div class="md-form mt-0 mb-3 col-md-12">
-          <input type="text" id="description" class="form-control" mdbInput [(ngModel)]="placeCM.description">
-          <label for="description">Miêu tả</label>
+          <input type="text" id="firstName" class="form-control" mdbInput [(ngModel)]="companyCM.address">
+          <label for="firstName">Địa điểm</label>
         </div>
 
         <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
@@ -107,7 +99,7 @@
 
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createPlace()">Tạo mới
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createCompany()">Tạo mới
           <i class="fa fa-check ml-1"></i>
         </button>
       </div>
@@ -123,7 +115,7 @@
     <div class="modal-content text-center">
       <!--Header-->
       <div class="modal-header d-flex justify-content-center">
-        Xóa nơi làm việc này?
+        Xóa công ty này?
       </div>
 
       <!--Body-->
@@ -133,7 +125,7 @@
 
       <!--Footer-->
       <div class="modal-footer flex-center">
-        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removePlace()">Đồng ý</a>
+        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeCompany()">Đồng ý</a>
         <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">Hủy</a>
       </div>
     </div>

@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-place-pages',
-  templateUrl: './place-pages.component.html',
-  styleUrls: ['./place-pages.component.scss']
+  selector: 'app-zone-pages',
+  templateUrl: './zone-pages.component.html',
+  styleUrls: ['./zone-pages.component.scss']
 })
-export class PlacePagesComponent implements OnInit {
+export class ZonePagesComponent implements OnInit {
 
   sub: any;
   id: number;

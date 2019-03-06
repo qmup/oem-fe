@@ -54,7 +54,7 @@ export class TaskComponent implements OnInit {
   ngOnInit() {
     this.getTask();
     this.getEmployee();
-    this.getWorkplace();
+    // this.getWorkplace();
     this.iconPrioritySelect = [
       { value: 1, label: 'Rất cao',
       icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/highest.svg' },
@@ -94,7 +94,7 @@ export class TaskComponent implements OnInit {
   }
 
   getTask() {
-    this.taskService.getTaskByManager(2)
+    this.taskService.getTodayTask(1)
       .then(
         (response: Task[]) => {
           this.taskList = response;
@@ -116,19 +116,19 @@ export class TaskComponent implements OnInit {
       );
   }
 
-  getWorkplace() {
-    this.workplaceService.getAll()
-      .then(
-        (response: Place[]) => {
-          this.workplaceList = response.map((workplace) => {
-            return {
-              value: workplace.id,
-              label: workplace.name
-            };
-          });
-        }
-      );
-  }
+  // getWorkplace() {
+  //   this.workplaceService.getAll()
+  //     .then(
+  //       (response: Place[]) => {
+  //         this.workplaceList = response.map((workplace) => {
+  //           return {
+  //             value: workplace.id,
+  //             label: workplace.name
+  //           };
+  //         });
+  //       }
+  //     );
+  // }
 
   createTask() {
     this.taskCM.startTime = this.convertDateTime(this.dateFrom, this.timeFrom);

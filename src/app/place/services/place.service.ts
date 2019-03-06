@@ -1,4 +1,4 @@
-import { Place } from '../models/place';
+import { Place, PlaceModel } from '../models/place';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -10,15 +10,15 @@ export class PlaceService {
 
   constructor(private httpClient: HttpClient) { }
 
-  create(place: Place): Promise<any> {
+  create(placeCM: PlaceModel): Promise<any> {
     return this.httpClient.post(
-      `${environment.endPoint}${environment.apiPaths.workplace.create}`, place
+      `${environment.endPoint}${environment.apiPaths.workplace.create}`, placeCM
     ).toPromise();
   }
 
-  getAll(): Promise<Place[]> {
+  getAll(zoneId: number): Promise<Place[]> {
     return this.httpClient.get<Place[]>(
-      `${environment.endPoint}${environment.apiPaths.workplace.getAll}`,
+      `${environment.endPoint}${environment.apiPaths.workplace.getAll}?zoneId=${zoneId}`,
     ).toPromise();
   }
 

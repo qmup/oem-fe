@@ -23,12 +23,12 @@ export class BeaconUpdateComponent implements OnInit {
   constructor(
     public modalRef: BsModalRef,
     private beaconService: BeaconService,
-    private placeService: PlaceService,
+    private workplaceService: PlaceService,
     private toastService: ToastService,
   ) { }
 
   ngOnInit() {
-    this.getPlace();
+    // this.getPlace();
   }
 
   updateBeacon() {
@@ -47,17 +47,17 @@ export class BeaconUpdateComponent implements OnInit {
       );
   }
 
-  getPlace() {
-    this.placeService.getAll()
-      .then(
-        (response: Place[]) => {
-          this.optionsSelect = response.map((place) => {
-            return {
-              value: place.id,
-              label: place.name
-            };
-          });
-        }
-      );
-  }
+  // getPlace() {
+  //   this.workplaceService.getAll()
+  //     .then(
+  //       (response: Place[]) => {
+  //         this.optionsSelect = response.map((place) => {
+  //           return {
+  //             value: place.id,
+  //             label: place.name
+  //           };
+  //         });
+  //       }
+  //     );
+  // }
 }

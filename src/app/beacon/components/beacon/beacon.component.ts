@@ -29,13 +29,13 @@ export class BeaconComponent implements OnInit {
   constructor(
     private beaconService: BeaconService,
     private modalService: BsModalService,
-    private placeService: PlaceService,
+    private workplaceService: PlaceService,
     private toastService: ToastService,
   ) {}
 
   ngOnInit() {
     this.getBeacon();
-    this.getPlace();
+    // this.getPlace();
   }
 
   getBeacon() {
@@ -45,28 +45,28 @@ export class BeaconComponent implements OnInit {
           this.beaconList = response;
           for (let index = 0; index < this.beaconList.length; index++) {
             const element = this.beaconList[index];
-            if (element.workplace) {
-              element.placeName = `${element.workplace.address}` + ' - ' + `${element.workplace.name}`;
-            }
+            // if (element.workplace) {
+            //   element.placeName = `${element.workplace.address}` + ' - ' + `${element.workplace.name}`;
+            // }
           }
         }
       );
   }
 
-  getPlace() {
-    this.placeService.getAll()
-      .then(
-        (response: Place[]) => {
-          this.placeList = response;
-          this.optionsSelect = response.map((place) => {
-            return {
-              value: place.id,
-              label: place.name
-            };
-          });
-        }
-      );
-  }
+  // getPlace() {
+  //   this.workplaceService.getAll()
+  //     .then(
+  //       (response: Place[]) => {
+  //         this.placeList = response;
+  //         this.optionsSelect = response.map((place) => {
+  //           return {
+  //             value: place.id,
+  //             label: place.name
+  //           };
+  //         });
+  //       }
+  //     );
+  // }
 
   createBeacon() {
     const options = { positionClass: 'toast-bottom-right' };

@@ -9,6 +9,27 @@ html, body, main {
   min-height: 100vh;
   height: auto;
 }
+#company, #zone, #place {
+  .img-fluid {
+    position: absolute !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+#company {
+  .view.view-cascade.overlay.waves-light {
+    height: 300px !important;
+  }
+}
+#zone, #place {
+  .view.view-cascade.overlay.waves-light {
+    height: 150px !important;
+  }
+  h4.col-11 span {
+    color: rgb(137, 147, 164);    
+  }
+}
 .flatpickr-calendar.hasTime.animate {
   display: none !important;
 }
