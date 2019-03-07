@@ -22,14 +22,16 @@ export class ScheduleComponent implements OnInit {
   timeFrom: any;
   scheduleList: Schedule[] = [
     {
-      id: 1, assignee: { id: 1, name: 'test' }, assigner: { id: 2, name: 'test' },
-      daysOfWeek: '1, 2, 3', description: 'test', endTime: '2019-02-17T17:00:56.000+0000', startTime: '2019-02-17T17:00:56.000+0000',
-      status: 'not start', title: 'don ve sinh', workplace: {id: 1, name: 'test'}
+      id: 1, assignee: { id: 1, name: 'Nguyễn Sinh Cung' }, assigner: { id: 2, name: 'Bùi Hoàng Thông' },
+      daysOfWeek: '1, 2, 3', description: 'Dọn vệ sinh toilet tầng 3',
+      endTime: '2019-02-17T17:00:56.000+0000', startTime: '2019-02-17T17:00:56.000+0000',
+      status: 'Chưa bắt đầu', title: 'Dọn vệ sinh', workplace: {id: 1, name: 'NVS tầng 3'}
     },
     {
-      id: 2, assignee: { id: 1, name: 'test' }, assigner: { id: 2, name: 'test' },
-      daysOfWeek: '1, 2, 3', description: 'test', endTime: '2019-02-17T17:00:56.000+0000', startTime: '2019-02-17T17:00:56.000+0000',
-      status: 'not start', title: 'don ve sinh', workplace: {id: 1, name: 'test'}
+      id: 2, assignee: { id: 1, name: 'Nguyễn Hoàng Vũ' }, assigner: { id: 2, name: 'Bùi Hoàng Thông' },
+      daysOfWeek: '1, 2, 3', description: 'Dọn vệ sinh phòng 211',
+      endTime: '2019-02-17T17:00:56.000+0000', startTime: '2019-02-17T17:00:56.000+0000',
+      status: 'Chưa bắt đầu', title: 'Dọn vệ sinh', workplace: {id: 1, name: 'Phòng 211'}
     },
   ];
   @ViewChild('create') createModal: ModalDirective;

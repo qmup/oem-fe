@@ -1,6 +1,10 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { UploadFile, UploadInput, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
 import { Manager } from '../../models/manager';
+import { TaskService } from 'src/app/task/service/task.service';
+import { Task } from 'src/app/task/models/task';
+import { ActivatedRoute } from '@angular/router';
+import { EmployeeService } from 'src/app/employee/services/employee.service';
 
 @Component({
   selector: 'app-manager-detail',
@@ -9,7 +13,7 @@ import { Manager } from '../../models/manager';
 })
 export class ManagerDetailComponent implements OnInit {
 
-  manager: Manager;
+  manager: Manager = new Manager();
   formData: FormData;
   files: UploadFile[];
   uploadInput: EventEmitter<UploadInput>;
@@ -17,14 +21,46 @@ export class ManagerDetailComponent implements OnInit {
   dragOver: boolean;
   url: any;
   filesToUpload: FileList;
+  isShowMore1 = false;
+  isShowMore2 = false;
+  id: number;
+  sub: any;
+  taskList: Task[];
 
-  constructor() {
+  constructor(
+    private taskService: TaskService,
+    private employeeService: EmployeeService,
+    private route: ActivatedRoute
+  ) {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
     this.humanizeBytes = humanizeBytes;
   }
 
   ngOnInit() {
+    this.sub = this.route.params.subscribe(params => {
+      this.id = +params['id'];
+      this.getInfo();
+      this.getEmployeeTask();
+    });
+  }
+
+  getInfo() {
+    this.employeeService.getById(this.id)
+      .then(
+        (response: Manager) => {
+          this.manager = response;
+        }
+      );
+  }
+
+  getEmployeeTask() {
+    this.taskService.getTodayTask(1)
+      .then(
+        (response) => {
+          this.taskList = response;
+        }
+      );
   }
 
   showFiles() {

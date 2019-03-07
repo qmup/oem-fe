@@ -98,6 +98,46 @@ export class TaskComponent implements OnInit {
       .then(
         (response: Task[]) => {
           this.taskList = response;
+          this.taskList = [
+            {
+              assignee: {
+                name: 'Nguyễn Minh Quân'
+              },
+              assigner: {
+                name: 'Nguyễn Sinh Cung'
+              },
+              daysOfWeek: [1, 2, 3],
+              description: 'Dọn phòng 201',
+              endTime: '2019-03-01T10:26:00.996Z',
+              id: 1,
+              startTime: '2018-03-02T10:26:00.996Z',
+              status: 'Đã thực hiện',
+              title: 'Dọn vệ sinh',
+              workplace: {
+                name: 'Phòng 201'
+              },
+              priority: 1,
+            },
+            {
+              assignee: {
+                name: 'Nguyễn Hoàng Vũ'
+              },
+              assigner: {
+                name: 'Nguyễn Sinh Cung'
+              },
+              daysOfWeek: [1, 2, 3],
+              description: 'Dọn phòng 202',
+              endTime: '2019-03-01T10:26:00.996Z',
+              id: 1,
+              startTime: '2018-03-02T10:26:00.996Z',
+              status: 'Chưa bắt đầu',
+              title: 'Dọn vệ sinh',
+              workplace: {
+                name: 'Phòng 202'
+              },
+              priority: 1,
+            }
+          ];
         }
       );
   }

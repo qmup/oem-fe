@@ -9,6 +9,9 @@ html, body, main {
   min-height: 100vh;
   height: auto;
 }
+.rounded-circle.img-responsive {
+  height: 100% !important;
+}
 #company, #zone, #place {
   .img-fluid {
     position: absolute !important;
@@ -137,12 +140,16 @@ main#main {
     top: -.1rem !important;
   }
 }
-#employee-detail {
+#employee-detail, #manager-detail {
   .list-group-item.list-group-item-action.waves-light {
     border: none;
   }
   small {
     color: rgb(137, 147, 164);
+  }
+  .fa.fa-trash, .fa.fa-user {
+    font-size: 1.5rem;
+    color: #1976d2 !important;
   }
 }
 #laborer {

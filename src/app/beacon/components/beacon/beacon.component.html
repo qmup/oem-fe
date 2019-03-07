@@ -39,6 +39,9 @@
               <tr>
                 <th>#</th>
                 <th>Tên</th>
+                <th>UUID</th>
+                <th>Minor</th>
+                <th>Major</th>
                 <th>Địa điểm</th>
                 <th>Chi tiết</th>
                 <th>Thao tác</th>
@@ -51,7 +54,10 @@
               <tr *ngFor="let data of search()">
                 <th scope="row">{{ data.id }}</th>
                 <td>{{ data.name }}</td>
-                <td>{{ data.placeName }}</td>
+                <td>{{ data.uuid }}</td>
+                <td>{{ data.minor }}</td>
+                <td>{{ data.major }}</td>
+                <td>{{ data.address }}</td>
                 <td>{{ data.description }}</td>
                 <td class="d-flex justify-content-center">
                   <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light col"

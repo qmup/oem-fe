@@ -15,7 +15,7 @@ import { ToastService } from 'ng-uikit-pro-standard';
 export class BeaconComponent implements OnInit {
   id: number;
   beaconCM: Beacon = new Beacon();
-  beaconList: Beacon[];
+  beaconList: any[];
   modalRef: BsModalRef;
   optionsSelect = new Array<any>();
   haveWorkplace: boolean;
@@ -41,8 +41,20 @@ export class BeaconComponent implements OnInit {
   getBeacon() {
     this.beaconService.getAll()
       .then(
-        (response: Beacon[]) => {
+        (response: any[]) => {
           this.beaconList = response;
+          this.beaconList[0].minor = '1132';
+          this.beaconList[0].major = '4421';
+          this.beaconList[0].uuid = '12g31wqe28ne31df3g18124';
+          this.beaconList[0].address = 'Nhà vệ sinh 1';
+          this.beaconList[1].minor = '1293';
+          this.beaconList[1].major = '4569';
+          this.beaconList[1].address = 'Nhà vệ sinh 2';
+          this.beaconList[1].uuid = 'f2u3fnu8dfne3jknfne';
+          this.beaconList[2].minor = '1237';
+          this.beaconList[2].major = '4563';
+          this.beaconList[2].uuid = '2398gh394hnfndu239f';
+          this.beaconList[2].address = 'Nhà vệ sinh 3';
           for (let index = 0; index < this.beaconList.length; index++) {
             const element = this.beaconList[index];
             // if (element.workplace) {
