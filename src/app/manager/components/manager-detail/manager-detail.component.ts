@@ -1,10 +1,18 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, ViewChild } from '@angular/core';
 import { UploadFile, UploadInput, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
 import { Manager } from '../../models/manager';
 import { TaskService } from 'src/app/task/service/task.service';
 import { Task } from 'src/app/task/models/task';
 import { ActivatedRoute } from '@angular/router';
 import { EmployeeService } from 'src/app/employee/services/employee.service';
+import { ModalDirective } from 'ngx-bootstrap';
+import { Employee } from 'src/app/employee/models/employee';
+import { ZoneService } from 'src/app/place/services/zone.service';
+import { PlaceService } from 'src/app/place/services/place.service';
+import { CompanyService } from 'src/app/place/services/company.service';
+import { Company } from 'src/app/place/models/company';
+import { Zone } from 'src/app/place/models/zone';
+import { Place } from 'src/app/place/models/place';
 
 @Component({
   selector: 'app-manager-detail',
@@ -13,24 +21,37 @@ import { EmployeeService } from 'src/app/employee/services/employee.service';
 })
 export class ManagerDetailComponent implements OnInit {
 
+  id: number;
+  url: any;
+  sub: any;
+  @ViewChild('createEmployeeModal') createEmployeeModal: ModalDirective;
+  @ViewChild('createWorkplaceModal') createWorkplaceModal: ModalDirective;
   manager: Manager = new Manager();
   formData: FormData;
   files: UploadFile[];
   uploadInput: EventEmitter<UploadInput>;
   humanizeBytes: Function;
   dragOver: boolean;
-  url: any;
   filesToUpload: FileList;
   isShowMore1 = false;
   isShowMore2 = false;
-  id: number;
-  sub: any;
+  isSelectCompany = false;
+  isSelectZone = false;
+  employeeList: any[];
+  companyList: any[];
+  zoneList: any[];
+  placeList: any[];
   taskList: Task[];
+  listEmployeeId: number[];
+  listWorkplaceId: number[];
 
   constructor(
     private taskService: TaskService,
     private employeeService: EmployeeService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private companyService: CompanyService,
+    private zoneService: ZoneService,
+    private workplaceService: PlaceService
   ) {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
@@ -42,6 +63,8 @@ export class ManagerDetailComponent implements OnInit {
       this.id = +params['id'];
       this.getInfo();
       this.getEmployeeTask();
+      this.getEmployee();
+      this.getCompany();
     });
   }
 
@@ -61,6 +84,101 @@ export class ManagerDetailComponent implements OnInit {
           this.taskList = response;
         }
       );
+  }
+
+  getEmployee() {
+    this.employeeService.getAll()
+      .then(
+        (response: Employee[]) => {
+          this.employeeList = response.map((employee) => {
+            return {
+              value: employee.id,
+              label: employee.fullName,
+              icon: employee.picture
+            };
+          });
+        }
+      );
+  }
+
+  selectEmployee(e: any) {
+  }
+
+  getCompany() {
+    this.companyService.getAll()
+      .then(
+        (response: Company[]) => {
+          this.companyList = response.map((company) => {
+            return {
+              value: company.id,
+              label: company.name,
+              icon: company.picture
+            };
+          });
+        }
+      );
+  }
+
+  selectCompany(e: any) {
+    this.isSelectCompany = true;
+    this.getZone(e.value);
+  }
+
+  getZone(compannyId: number) {
+    this.zoneService.getByCompany(compannyId)
+      .then(
+        (response: Zone[]) => {
+          this.zoneList = response.map((zone) => {
+            return {
+              value: zone.id,
+              label: zone.name,
+              icon: zone.picture
+            };
+          });
+        }
+      );
+  }
+
+  selectZone(e: any) {
+    this.isSelectZone = true;
+    this.getWorkplace(e.value);
+  }
+
+  getWorkplace(zoneId: number) {
+    this.workplaceService.getAll(zoneId)
+      .then(
+        (response: Place[]) => {
+          this.placeList = response.map((place) => {
+            return {
+              value: place.id,
+              label: place.name,
+              icon: place.picture
+            };
+          });
+        }
+      );
+  }
+
+  selectWorkplace(e: any) {
+    e.forEach(element => {
+      this.listWorkplaceId.push(element.value);
+    });
+  }
+
+  openCreateEmployeeModal() {
+    this.createEmployeeModal.show();
+  }
+
+  openCreateWorkplaceModal() {
+    this.createWorkplaceModal.show();
+  }
+
+  addEmployeeForManager() {
+
+  }
+
+  addWorkplaceForManager() {
+
   }
 
   showFiles() {

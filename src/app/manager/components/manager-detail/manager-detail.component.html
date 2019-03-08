@@ -17,8 +17,8 @@
           <div class="card-body">
             <h4>{{ manager.fullName }}</h4>
             <p class="text-danger">Chức vụ: Quản lý</p>
-            <!--Triggering button-->
             <a class="rotate-btn" data-card="card-1" (click)="cards.toggle()">Chi tiết </a>
+            <!--Triggering button-->
           </div>
         </div>
         <!--/.Front Side-->
@@ -52,7 +52,7 @@
       </mdb-flipping-card>
     </div>
     <div class="col-md-7 mb-4 mx-auto">
-      <div class="view-all-button row">
+      <!-- <div class="view-all-button row">
         <div class="col pr-0">
           <p class="h5">Công việc trong ngày</p>
         </div>
@@ -92,13 +92,14 @@
             </button>
           </div>
         </mdb-card-body>
-      </mdb-card>
+      </mdb-card> -->
       <div class="view-all-button row mt-4">
         <div class="col pr-0">
           <p class="h5">Nhân viên đang quản lý</p>
         </div>
         <div class="col pl-0">
-          <a [routerLink]="['/employee']" class="link">Xem tất cả</a>
+          <a [routerLink]="['/laborer']" class="link">Xem tất cả</a>
+          <a class="btn-floating btn-md btn-success" (click)="openCreateEmployeeModal()"><i class="fa fa-plus"></i></a>
         </div>
       </div>
       <!-- Card -->
@@ -137,7 +138,7 @@
               mdbWavesEffect>
               Hiện thêm
             </button>
-            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="isShowMore1" [routerLink]="['/employee']"
+            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="isShowMore1" [routerLink]="['/laborer']"
               mdbWavesEffect>
               Xem tât cả
             </button>
@@ -145,6 +146,71 @@
         </mdb-card-body>
       </mdb-card>
 
+      <a class="btn-floating btn-md btn-success" (click)="openCreateWorkplaceModal()">
+        <!-- <i class="fa fa-plus"></i> -->
+        Test
+      </a>
+
+    </div>
+  </div>
+</div>
+
+<div mdbModal #createEmployeeModal="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="add"
+  aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-success" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Thêm nhân viên cho người quản lý</p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="createEmployeeModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3 row">
+        <div class="col-12">
+          <div class="md-form my-3">
+            <mdb-select [filterEnabled]="true" [options]="employeeList" (selected)="selectEmployee($event)"></mdb-select>
+            <label>Nhân viên</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="addEmployeeForManager()">Thêm nhân viên
+          <i class="fa fa-check ml-1"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div mdbModal #createWorkplaceModal="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="add"
+  aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-success" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Thêm khu vực cho người quản lý</p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="createWorkplaceModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3 row">
+        <div class="col-12 md-form my-3">
+          <mdb-select [filterEnabled]="true" [options]="companyList" (selected)="selectCompany($event)"></mdb-select>        
+          <label>Công ty</label>
+        </div>
+        <div class="col-12 md-form my-3" *ngIf="isSelectCompany">
+          <mdb-select [filterEnabled]="true" [options]="zoneList" (selected)="selectZone($event)"></mdb-select>        
+          <label>Khu vực</label>
+        </div>
+        <div class="col-12 md-form my-3" *ngIf="isSelectZone">
+          <mdb-select [filterEnabled]="true" [options]="placeList" (selected)="selectWorkplace($event)"></mdb-select>        
+          <label>Địa điểm</label>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="addWorkplaceForManager()">Tạo mới
+          <i class="fa fa-check ml-1"></i>
+        </button>
+      </div>
     </div>
   </div>
 </div>

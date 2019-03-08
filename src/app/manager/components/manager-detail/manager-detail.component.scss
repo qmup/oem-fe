@@ -20,3 +20,9 @@ mdb-flipping-card mdb-card-text {
   padding: 40px;
   color: #007bff !important;
 }
+a.btn-floating.btn-md.btn-success {
+  position: absolute;
+  top: 0;
+  left: 85%;
+  transform: translate(-50%, -50%);
+}
