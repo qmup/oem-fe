@@ -6,6 +6,7 @@ import { ToastService, humanizeBytes, UploadInput, UploadFile, UploadOutput } fr
 import { ManagerService } from 'src/app/manager/services/manager.service';
 import { Manager } from 'src/app/manager/models/manager';
 import { GlobalService } from 'src/app/core/services/global.service';
+import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Component({
   selector: 'app-employee-update',
@@ -21,7 +22,7 @@ export class EmployeeUpdateComponent implements OnInit {
   optionsSex: { value: number; label: string; }[];
   refresh: EventEmitter<any> = new EventEmitter<any>();
   filesToUpload: FileList;
-  managerList: any[];
+  managerList: PaginationResponse;
   formData: FormData;
   files: UploadFile[];
   uploadInput: EventEmitter<UploadInput>;
@@ -52,6 +53,7 @@ export class EmployeeUpdateComponent implements OnInit {
     } else {
       this.gender = 1;
     }
+    console.log(this.employee.managerId);
     const year = this.employee.birthDate.split('-', 3)[0];
     const month = this.employee.birthDate.split('-', 3)[1];
     const day = this.employee.birthDate.split('-', 3)[2];
@@ -59,9 +61,9 @@ export class EmployeeUpdateComponent implements OnInit {
   }
 
   getManager() {
-    this.managerService.getAll()
+    this.managerService.getAll(1, 'asc', 1, 5)
       .then(
-        (response: Manager[]) => {
+        (response: any) => {
           this.managerList = response;
           this.optionsSelect = response.map((manager) => {
             return {
@@ -69,6 +71,7 @@ export class EmployeeUpdateComponent implements OnInit {
               label: manager.fullName
             };
           });
+          console.log(this.optionsSelect);
         }
       );
   }

@@ -52,47 +52,6 @@
       </mdb-flipping-card>
     </div>
     <div class="col-md-7 mb-4 mx-auto">
-      <!-- <div class="view-all-button row">
-        <div class="col pr-0">
-          <p class="h5">Công việc trong ngày</p>
-        </div>
-        <div class="col pl-0">
-          <a [routerLink]="['/task']" class="link">Xem tất cả</a>
-        </div>
-      </div>
-      <mdb-card class="mt-3">
-        <mdb-card-body>
-          <div class="list-group">
-            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let i of [1,2,3]"
-              [routerLink]="['/task-detail', i]">
-              <i class="fa fa-trash mt-2 col"></i>
-              <div class="col-11">
-                OEM-{{i+20}} Dọn vệ sinh tầng {{i}}
-                <br>
-                <small>Từ {{i+5}} giờ sáng đến {{i+6}}h30 sáng</small>
-              </div>
-            </a>
-            <div class="list-group" mdbCollapse #moreEmp="bs-collapse">
-              <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let i of [6,7,8]">
-                <i class="fa fa-trash mt-2 col"></i>
-                <div class="col-11">
-                  OEM-{{i+20}} Dọn vệ sinh tầng {{i}}
-                  <br>
-                  <small>Từ {{i+5}} giờ sáng đến {{i+6}}h30 sáng</small>
-                </div>
-              </a>
-            </div>
-            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="!isShowMore2" (click)="moreEmp.toggle(); isShowMore2 = true"
-              mdbWavesEffect>
-              Hiện thêm
-            </button>
-            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="isShowMore2" [routerLink]="['/task']"
-              mdbWavesEffect>
-              Xem tất cả
-            </button>
-          </div>
-        </mdb-card-body>
-      </mdb-card> -->
       <div class="view-all-button row mt-4">
         <div class="col pr-0">
           <p class="h5">Nhân viên đang quản lý</p>
@@ -141,6 +100,47 @@
             <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="isShowMore1" [routerLink]="['/laborer']"
               mdbWavesEffect>
               Xem tât cả
+            </button>
+          </div>
+        </mdb-card-body>
+      </mdb-card>
+      <div class="view-all-button row">
+        <div class="col pr-0">
+          <p class="h5">Nơi làm việc đang quản lý</p>
+        </div>
+        <div class="col pl-0">
+          <a [routerLink]="['/task']" class="link">Xem tất cả</a>
+        </div>
+      </div>
+      <mdb-card class="mt-3">
+        <mdb-card-body>
+          <div class="list-group">
+            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let i of [1,2,3]"
+              [routerLink]="['/task-detail', i]">
+              <i class="fa fa-trash mt-2 col"></i>
+              <div class="col-11">
+                OEM-{{i+20}} Dọn vệ sinh tầng {{i}}
+                <br>
+                <small>Từ {{i+5}} giờ sáng đến {{i+6}}h30 sáng</small>
+              </div>
+            </a>
+            <div class="list-group" mdbCollapse #moreEmp="bs-collapse">
+              <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let i of [6,7,8]">
+                <i class="fa fa-trash mt-2 col"></i>
+                <div class="col-11">
+                  OEM-{{i+20}} Dọn vệ sinh tầng {{i}}
+                  <br>
+                  <small>Từ {{i+5}} giờ sáng đến {{i+6}}h30 sáng</small>
+                </div>
+              </a>
+            </div>
+            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="!isShowMore2" (click)="moreEmp.toggle(); isShowMore2 = true"
+              mdbWavesEffect>
+              Hiện thêm
+            </button>
+            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="isShowMore2" [routerLink]="['/task']"
+              mdbWavesEffect>
+              Xem tất cả
             </button>
           </div>
         </mdb-card-body>

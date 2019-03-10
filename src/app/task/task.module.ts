@@ -11,6 +11,9 @@ import { SchedulePagesComponent } from './pages/schedule-pages/schedule-pages.co
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { CoreModule } from '../core/core.module';
 import { ScheduleDetailComponent } from './components/schedule-detail/schedule-detail.component';
+import { BasicTaskComponent } from './components/basic-task/basic-task.component';
+import { BasicTaskPagesComponent } from './pages/basic-task-pages/basic-task-pages.component';
+import { BasicTaskUpdateComponent } from './components/basic-task-update/basic-task-update.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +23,10 @@ import { ScheduleDetailComponent } from './components/schedule-detail/schedule-d
     ScheduleComponent,
     SchedulePagesComponent,
     ScheduleComponent,
-    ScheduleDetailComponent],
+    ScheduleDetailComponent,
+    BasicTaskComponent,
+    BasicTaskPagesComponent,
+    BasicTaskUpdateComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -29,7 +35,8 @@ import { ScheduleDetailComponent } from './components/schedule-detail/schedule-d
     MDBBootstrapModulesPro.forRoot(),
   ],
   entryComponents: [
-    ScheduleDetailComponent
+    ScheduleDetailComponent,
+    BasicTaskUpdateComponent
   ]
 })
 export class TaskModule { }

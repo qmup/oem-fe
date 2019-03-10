@@ -5,6 +5,7 @@ import { BsModalRef } from 'ngx-bootstrap';
 import { EmployeeService } from 'src/app/employee/services/employee.service';
 import { ManagerService } from '../../services/manager.service';
 import { GlobalService } from 'src/app/core/services/global.service';
+import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Component({
   selector: 'app-manager-update',
@@ -20,7 +21,7 @@ export class ManagerUpdateComponent implements OnInit {
   optionsSex: { value: number; label: string; }[];
   refresh: EventEmitter<any> = new EventEmitter<any>();
   filesToUpload: FileList;
-  managerList: any[];
+  managerList: PaginationResponse;
   formData: FormData;
   files: UploadFile[];
   uploadInput: EventEmitter<UploadInput>;
@@ -59,9 +60,9 @@ export class ManagerUpdateComponent implements OnInit {
   }
 
   getManager() {
-    this.managerService.getAll()
+    this.managerService.getAll(1, 'asc', 1, 5)
       .then(
-        (response: Manager[]) => {
+        (response: any) => {
           this.managerList = response;
           this.optionsSelect = response.map((manager) => {
             return {

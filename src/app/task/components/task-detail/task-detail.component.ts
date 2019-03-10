@@ -26,6 +26,7 @@ export class TaskDetailComponent implements OnInit {
   dragOver: boolean;
   selectedPriority = '3';
   selectedStatus = '1';
+  isUpdate = false;
 
   constructor(
     private taskService: TaskService

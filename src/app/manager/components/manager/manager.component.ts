@@ -5,6 +5,7 @@ import { ManagerService } from '../../services/manager.service';
 import { ManagerUpdateComponent } from '../manager-update/manager-update.component';
 import { IMyOptions, UploadFile, UploadInput, humanizeBytes, UploadOutput, ToastService } from 'ng-uikit-pro-standard';
 import { GlobalService } from 'src/app/core/services/global.service';
+import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Component({
   selector: 'app-manager',
@@ -15,7 +16,7 @@ export class ManagerComponent implements OnInit {
 
   id: number;
   searchText: string;
-  managerList: Manager[];
+  managerList: PaginationResponse;
   optionsSelect = new Array<any>();
   optionsSex = new Array<any>();
   gender: number;
@@ -53,9 +54,9 @@ export class ManagerComponent implements OnInit {
   }
 
   getManager() {
-    this.managerService.getAll()
+    this.managerService.getAll(1, 'asc', 1, 5)
       .then(
-        (response: Manager[]) => {
+        (response: PaginationResponse) => {
           this.managerList = response;
         }
       );
@@ -126,7 +127,7 @@ export class ManagerComponent implements OnInit {
               () => {
                 this.toastService.success('Tạo manager thành công', '', { positionClass: 'toast-bottom-right'} );
                 this.createModal.hide();
-                this.managerList = [];
+                this.managerList = new PaginationResponse();
                 this.getManager();
               },
               () => {
@@ -149,7 +150,7 @@ export class ManagerComponent implements OnInit {
         () => {
           this.toastService.success('Tạo manager thành công', '', { positionClass: 'toast-bottom-right'} );
           this.createModal.hide();
-          this.managerList = [];
+          this.managerList = new PaginationResponse();
           this.getManager();
         },
         (error: any) => {
@@ -164,7 +165,7 @@ export class ManagerComponent implements OnInit {
         () => {
           this.toastService.success('Xóa manager thành công', '', { positionClass: 'toast-bottom-right'} );
           this.deleteModal.hide();
-          this.managerList = [];
+          this.managerList = new PaginationResponse();
           this.getManager();
         },
         () => {

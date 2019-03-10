@@ -15,8 +15,8 @@
           </div>
           <!--Content-->
           <div class="card-body">
-            <h4>{{ employee.fullName }}</h4>
-            <p class="text-danger">Chức vụ: {{ employee.roleId === 1 ? 'Quản lý' : 'Nhân viên' }}</p>
+            <h4>{{ employee.firstName }} {{ employee.lastName }}</h4>
+            <p class="text-danger">Chức vụ: Lao công</p>
             <!--Triggering button-->
             <a class="rotate-btn" data-card="card-1" (click)="cards.toggle()">Chi tiết </a>
           </div>

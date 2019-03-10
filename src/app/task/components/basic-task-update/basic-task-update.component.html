@@ -1,0 +1,42 @@
+<div class="modal-header d-flex justify-content-center">
+  <p class="heading">Cập nhật công việc</p>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body mx-3 row">
+  <div class="md-form mt-0 mb-3 col-6 col-md-12">
+    <input type="text" id="title" class="form-control" mdbInput [(ngModel)]="taskBasic.title">
+    <label for="title">Tên công việc</label>
+  </div>
+
+  <!-- <div class="col-12 md-form mt-0 mb-3">
+        <textarea type="text" id="description" class="md-textarea form-control" mdbInput [(ngModel)]="taskBasicCM.description"></textarea>
+        <label id="description">Miêu tả công việc</label>
+      </div> -->
+
+  <span>Thời gian hoàn thành</span>
+  <div class="w-100 d-flex justify-content-center align-items-center my-3">
+    <mdb-range-input id="range" [min]="0" [step]="5" [max]="30" name="range" [(ngModel)]="taskBasic.duration" class="w-100"></mdb-range-input>
+    <span class="ml-2">phút</span>
+  </div>
+
+  <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
+    <div mdbBtn floating="true" size="md" gradient="aqua" mdbWavesEffect>
+      <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+      <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect (uploadOutput)="onUploadOutput($event)"
+        [uploadInput]="uploadInput">
+    </div>
+    <div class="file-path-wrapper mt-3">
+      <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()">
+    </div>
+    <div class="col text-center w-100" *ngIf="taskBasic.picture || url">
+        <img [src]="taskBasic.picture || url" height="150">
+      </div>
+  </div>
+</div>
+<div class="modal-footer d-flex justify-content-center">
+  <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="updateTaskBasic()">Cập nhật
+    <i class="fa fa-check ml-1"></i>
+  </button>
+</div>

@@ -7,6 +7,7 @@ import { EmployeeUpdateComponent } from '../employee-update/employee-update.comp
 import { Manager } from 'src/app/manager/models/manager';
 import { ManagerService } from 'src/app/manager/services/manager.service';
 import { GlobalService } from 'src/app/core/services/global.service';
+import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Component({
   selector: 'app-laborer',
@@ -65,9 +66,9 @@ export class LaborerComponent implements OnInit {
   }
 
   getManager() {
-    this.managerService.getAll()
+    this.managerService.getAll(1, 'asc', 1, 5)
       .then(
-        (response: Manager[]) => {
+        (response: any) => {
           this.optionsSelect = response.map((manager) => {
             return {
               value: manager.id,
@@ -77,6 +78,16 @@ export class LaborerComponent implements OnInit {
         }
       );
   }
+
+  // getEmployeeByManager() {
+  //   this.employeeService.getEmployeeByManager(2, 'asc', 1, 5)
+  //     .then(
+  //       (response: PaginationResponse) => {
+  //         console.log(response);
+  //         this.employeeList = response.content;
+  //       }
+  //     );
+  // }
 
   openCreateModal() {
     this.createModal.show();
@@ -135,7 +146,7 @@ export class LaborerComponent implements OnInit {
       .then(
         (response) => {
           (this.gender === 0) ? this.employeeCM.sex = false : this.employeeCM.sex = true;
-          this.employeeCM.roleId = 2;
+          this.employeeCM.roleId = 3;
           this.employeeCM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employeeCM.birthDate));
           this.employeeCM.picture = response;
           this.employeeService.create(this.employeeCM)
@@ -159,7 +170,7 @@ export class LaborerComponent implements OnInit {
 
   createEmployeeWithoutImage() {
     (this.gender === 0) ? this.employeeCM.sex = false : this.employeeCM.sex = true;
-    this.employeeCM.roleId = 2;
+    this.employeeCM.roleId = 3;
     this.employeeCM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employeeCM.birthDate));
     this.employeeService.create(this.employeeCM)
       .then(

@@ -25,13 +25,13 @@
             <mdb-accordion [multiple]="false" aria-multiselectable="false">
   
               <!-- Sidebar item -->
-              <mdb-accordion-item>
+              <mdb-accordion-item class="no-collase">
                 <mdb-accordion-item-head mdbWavesEffect routerLink="/laborer">
                   <i class="fa fa-users"></i> 
                   <span>Nhân viên</span>
                 </mdb-accordion-item-head>
                 <mdb-accordion-item-body>
-                  <ul>
+                  <!-- <ul>
                     <li>
                       <a routerLink="/laborer" class="waves-effect" mdbWavesEffect>
                         <i class="fa fa-user"></i> 
@@ -44,7 +44,7 @@
                         Bán hàng
                       </a>
                     </li>
-                  </ul>
+                  </ul> -->
                 </mdb-accordion-item-body>
               </mdb-accordion-item>
   
@@ -66,15 +66,21 @@
                 <mdb-accordion-item-body>
                   <ul>
                     <li>
-                      <a routerLink="/task" class="waves-effect" mdbWavesEffect>
-                        <i class="fa fa-tasks"></i> 
-                        Công việc đột xuất
+                      <a routerLink="/basic-task" class="waves-effect" mdbWavesEffect>
+                        <i class="fa fa-caret-right"></i> 
+                        Công việc cơ bản
                       </a>
                     </li>
                     <li>
                       <a routerLink="/schedule" class="waves-effect" mdbWavesEffect>
-                        <i class="fa fa-tasks"></i> 
+                        <i class="fa fa-caret-right"></i> 
                         Công việc thường nhật
+                      </a>
+                    </li>
+                    <li>
+                      <a routerLink="/task" class="waves-effect" mdbWavesEffect>
+                        <i class="fa fa-caret-right"></i> 
+                        Danh sách công việc
                       </a>
                     </li>
                   </ul>

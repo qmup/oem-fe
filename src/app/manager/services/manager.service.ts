@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Manager } from '../models/manager';
 import { environment } from 'src/environments/environment';
+import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +17,17 @@ export class ManagerService {
     ).toPromise();
   }
 
-  getAll(): Promise<Manager[]> {
-    return this.httpClient.get<Manager[]>(
+  getAll(managerId?, sort?, page?, size? ): Promise<PaginationResponse> {
+    return this.httpClient.get<PaginationResponse>(
       `${environment.endPoint}${environment.apiPaths.manager.getAll}`,
+      {
+        params: {
+          search: managerId,
+          sort: sort,
+          page: page,
+          size: size
+        }
+      }
     ).toPromise();
   }
 

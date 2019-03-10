@@ -172,10 +172,10 @@ export class TaskComponent implements OnInit {
 
   createTask() {
     this.taskCM.startTime = this.convertDateTime(this.dateFrom, this.timeFrom);
-    this.taskCM.endTime = this.convertDateTime(this.dateTo, this.timeTo);
+    // this.taskCM.endTime = this.convertDateTime(this.dateTo, this.timeTo);
     this.taskCM.dateCreate = new Date().toISOString();
     // not manager yet
-    this.taskCM.assignerId = 2;
+    // this.taskCM.assignerId = 2;
     this.taskService.create(this.taskCM)
       .then(
         (response) => {
@@ -211,12 +211,12 @@ export class TaskComponent implements OnInit {
         this.scheduleCM.daysOfWeek.push(element.id);
       }
     }
-    this.scheduleCM.assigneeId = this.taskCM.assigneeId;
+    // this.scheduleCM.assigneeId = this.taskCM.assigneeId;
     // not manager yet
     this.scheduleCM.assignerId = 2;
     this.scheduleCM.description = this.taskCM.description;
     this.scheduleCM.title = this.taskCM.title;
-    this.scheduleCM.workplaceId = this.taskCM.workplaceId;
+    // this.scheduleCM.workplaceId = this.taskCM.workplaceId;
     console.log(this.dateFrom, this.timeFrom);
     this.scheduleCM.startTime = this.convertDateTime(this.dateFrom, this.timeFrom);
     console.log(this.scheduleCM.startTime);

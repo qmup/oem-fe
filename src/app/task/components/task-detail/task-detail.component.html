@@ -6,8 +6,8 @@
       <!--Panel -->
       <mdb-tab heading="<a class='list-group-item'> OEM-{{i}} </a>" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]">
         <div class="row" style="height: calc(100vh - 150px) !important;">
-            <div class="card card-cascade narrower col-8 waves-light" mdbWavesEffect>
-              <div class="p-5">
+          <div class="card card-cascade narrower col-8 waves-light">
+            <div class="p-5">
               <div class="mx-auto col-8">
                 <div class="view view-cascade gradient-card-header light-blue" style="margin-top: -5.25rem">
                   <h2 class="h2-responsive mb-0">Chi tiết công việc</h2>
@@ -15,13 +15,11 @@
               </div>
               <p class="h5"> OEM-{{i}} </p>
               <div class="md-form">
-                <textarea type="text" id="description{{i}}" class="md-textarea form-control" mdbInputDirective disabled>Dọn vệ sinh tầng {{i}}</textarea>
-                <label for="description{{i}}">Miêu tả</label>
+                <textarea type="text" id="description{{i}}" class="md-textarea form-control" mdbInputDirective [disabled]="!isUpdate">Dọn vệ sinh tầng {{i}}</textarea>
+                <label for="description{{i}}">Miêu tả</label>                
                 <div class="col-md-12 mt-3">
                   <h5 class="text-center">Sub-tasks </h5>
-                  <mdb-checkbox [inline]="true" [checked]="false" class="col-6">Lau cửa</mdb-checkbox>
-                  <mdb-checkbox [inline]="true" [checked]="true" class="col-6" *ngFor="let i of [1,1,1,1,1,1,1,1,1]">Lau
-                    nhà</mdb-checkbox>
+                  <mdb-checkbox [inline]="true" [checked]="false" class="col-6" [disabled]="!isUpdate">Lau cửa</mdb-checkbox>
                 </div>
                 <p class="h6 mt-4">Hình ảnh</p>
                 <div class="col-md-12">
@@ -50,35 +48,38 @@
               </div>
               <p class="h6 col-12"> Báo cáo</p>
               <textarea type="text" id="description{{i}}" class="md-textarea form-control" mdbInputDirective disabled>Chưa làm xong do quá lùn để lau quạt trần</textarea>
+              <div class="col-12 text-center">
+                <button mdbBtn type="button" color="primary" rounded="true" mdbWavesEffect (click)="isUpdate = true">Chỉnh sửa</button>
+              </div>
             </div>
           </div>
           <div class="offset col-3 card card-cascade narrower ml-3">
             <div style="position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%); width: 80%">
-              <mdb-select [options]="iconStatusSelect" [(ngModel)]="selectedStatus" class="select-wrapper mdb-select colorful-select dropdown-info md-form">
-              </mdb-select>
-              <label>Trạng thái</label>
-              <p class="h6">Manager</p>
-              <span>{{manager}}</span>
-              <p class="h6 mt-3">Employee</p>
+              <div class="md-form my-3">
+                <mdb-select [options]="iconStatusSelect" [(ngModel)]="selectedStatus" class="select-wrapper mdb-select colorful-select dropdown-info md-form">
+                </mdb-select>
+                <label>Trạng thái</label>
+              </div>
+              <p class="h6 mt-3">Người thực hiện</p>
               <span>{{employee}}</span>
-              <p class="h6 mt-3 mb-4">Time tracking</p>
+              <p class="h6 mt-3 mb-4">Thời gian</p>
               <div class="row">
                 <div class="col-6 pt-2">
-                  <mdb-date-picker name="dateFr" [placeholder]="'Selected date'" [(ngModel)]="dateFrom" [label]="'From Date'">
+                  <mdb-date-picker name="dateFr" [placeholder]="'Selected date'" [(ngModel)]="dateFrom" [label]="'From Date'" [disabled]="!isUpdate">
                   </mdb-date-picker>
                 </div>
                 <div class="col-6">
                   <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="true" [darktheme]="false" [placeholder]="'Selected time'"
-                    [label]="'Time'" [ngModel]="timeFrom">
+                    [label]="'Time'" [ngModel]="timeFrom" [disabled]="!isUpdate">
                   </mdb-time-picker>
                 </div>
                 <div class="col-6 pt-2">
-                  <mdb-date-picker name="dateT" [label]="'To Date'" [placeholder]="'Selected date'" [(ngModel)]="dateTo">
+                  <mdb-date-picker name="dateT" [label]="'To Date'" [placeholder]="'Selected date'" [(ngModel)]="dateTo" [disabled]="!isUpdate">
                   </mdb-date-picker>
                 </div>
                 <div class="col-6">
                   <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="true" [darktheme]="false" [placeholder]="'Selected time'"
-                    [label]="'Time'" [ngModel]="timeTo">
+                    [label]="'Time'" [ngModel]="timeTo" [disabled]="!isUpdate">
                   </mdb-time-picker>
                 </div>
               </div>

@@ -5,6 +5,7 @@ import { Employee } from '../../models/employee';
 import { ManagerService } from 'src/app/manager/services/manager.service';
 import { Manager } from 'src/app/manager/models/manager';
 import { humanizeBytes, UploadInput, UploadFile, UploadOutput } from 'ng-uikit-pro-standard';
+import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Component({
   selector: 'app-employee-detail',
@@ -53,10 +54,10 @@ export class EmployeeDetailComponent implements OnInit {
   }
 
   getManager() {
-    this.managerService.getAll()
+    this.managerService.getAll(1, 'asc', 1, 5)
       .then(
-        (response: Manager[]) => {
-          this.managerName = response.find((manager: Manager) => manager.id === this.employee.managerId).fullName;
+        (response: PaginationResponse) => {
+          this.managerName = response.content.find((manager: Manager) => manager.id === this.employee.managerId).fullName;
         }
       );
   }

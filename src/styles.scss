@@ -12,12 +12,13 @@ html, body, main {
 .rounded-circle.img-responsive {
   height: 100% !important;
 }
-#company, #zone, #place {
+#company, #zone, #place, #basic-task {
   .img-fluid {
     position: absolute !important;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    width: 100%;
   }
 }
 #company {
@@ -25,7 +26,7 @@ html, body, main {
     height: 300px !important;
   }
 }
-#zone, #place {
+#zone, #place, #basic-task {
   .view.view-cascade.overlay.waves-light {
     height: 150px !important;
   }
@@ -61,7 +62,7 @@ main#main {
   background-color: #eee;
   height: 100%;
 }
-#task, #schedule {
+#task, #schedule, #basic-task {
   h6 {
     color: rgb(137, 147, 164);    
   }

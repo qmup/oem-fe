@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Employee, EmployeeCreateModel, EmployeeUpdateModel } from '../models/employee';
+import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +17,29 @@ export class EmployeeService {
     ).toPromise();
   }
 
-  getByManager(managerId?): Promise<Employee[]> {
+  getEmployeeByManager(managerId, sort, page, size ): Promise<PaginationResponse> {
+    return this.httpClient.get<PaginationResponse>(
+      `${environment.endPoint}${environment.apiPaths.employee.getEmployeeByManager}`,
+      {
+        params: {
+          search: managerId,
+          sort: sort,
+          page: page,
+          size: size
+        }
+      }
+    ).toPromise();
+  }
+
+  getByManager(managerId, sort, page, size): Promise<Employee[]> {
     return this.httpClient.get<Employee[]>(
       `${environment.endPoint}${environment.apiPaths.employee.get}`,
       {
         params: {
-          managerId: managerId,
+          search: managerId,
+          sort: sort,
+          page: page,
+          size: size
         },
       }
     ).toPromise();
