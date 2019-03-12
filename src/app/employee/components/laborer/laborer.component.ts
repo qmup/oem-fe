@@ -19,7 +19,8 @@ export class LaborerComponent implements OnInit {
   id: number;
   searchText: string;
   employeeList: Employee[];
-  optionsSelect = new Array<any>();
+  employeeResponse: PaginationResponse;
+  managerList = new Array<any>();
   optionsSex = new Array<any>();
   gender: number;
   modalRef: BsModalRef;
@@ -53,26 +54,37 @@ export class LaborerComponent implements OnInit {
       { value: 2, label: 'Nữ' },
     ],
     this.getManager();
-    this.getEmployee();
+    this.getEmployeeByAdmin();
   }
 
-  getEmployee() {
-    this.employeeService.getAll()
+  // getEmployee() {
+  //   this.employeeService.getAll()
+  //     .then(
+  //       (response: Employee[]) => {
+  //         this.employeeList = response;
+  //       }
+  //     );
+  // }
+
+  getEmployeeByAdmin() {
+    this.employeeService.getByRole(3, '', '', 'id', 0, 10)
       .then(
-        (response: Employee[]) => {
-          this.employeeList = response;
+        (response: PaginationResponse) => {
+          this.employeeResponse = response;
+          this.employeeList = response.content;
         }
       );
   }
 
   getManager() {
-    this.managerService.getAll(1, 'asc', 1, 5)
+    this.employeeService.getByRole(1, '', '', 'id', 0, 10)
       .then(
-        (response: any) => {
-          this.optionsSelect = response.map((manager) => {
+        (response: PaginationResponse) => {
+          this.managerList = response.content.map((manager) => {
             return {
               value: manager.id,
-              label: manager.fullName
+              label: manager.fullName,
+              icon: manager.picture
             };
           });
         }
@@ -105,7 +117,7 @@ export class LaborerComponent implements OnInit {
       initialState: { employee }
     };
     this.modalRef = this.modalService.show(EmployeeUpdateComponent, modalOptions);
-    this.modalRef.content.refresh.subscribe(() => this.getEmployee());
+    this.modalRef.content.refresh.subscribe(() => this.getEmployeeByAdmin());
 
   }
 
@@ -155,7 +167,7 @@ export class LaborerComponent implements OnInit {
                 this.toastService.success('Tạo nhân viên thành công', '', { positionClass: 'toast-bottom-right'} );
                 this.createModal.hide();
                 this.employeeList = [];
-                this.getEmployee();
+                this.getEmployeeByAdmin();
               },
               () => {
                 this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -178,7 +190,7 @@ export class LaborerComponent implements OnInit {
           this.toastService.success('Tạo nhân viên thành công', '', { positionClass: 'toast-bottom-right'} );
           this.createModal.hide();
           this.employeeList = [];
-          this.getEmployee();
+          this.getEmployeeByAdmin();
         },
         (error: any) => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -193,7 +205,7 @@ export class LaborerComponent implements OnInit {
           this.toastService.success('Xóa nhân viên thành công', '', { positionClass: 'toast-bottom-right'} );
           this.deleteModal.hide();
           this.employeeList = [];
-          this.getEmployee();
+          this.getEmployeeByAdmin();
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -255,6 +267,8 @@ export class LaborerComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]); // read file as data url
 
       reader.onload = (event1: any) => { // called once readAsDataURL is completed
+
+        this.url = event1.target.result;
 
         this.employeeCM.picture ? this.employeeCM.picture = event1.target.result : this.url = event1.target.result;
 

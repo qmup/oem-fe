@@ -1,0 +1,20 @@
+<div class="modal-header d-flex justify-content-center">
+  <p class="heading">Quản lý công việc</p>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body mx-3 row">
+  <div *ngFor="let list of taskBasicList; let i of index" class="col-6">
+    <div>
+      <mdb-checkbox [checked]="list.checked" name="item-{{i}}"
+      #checkbox
+     (change)="changeCheckbox(list.id, $event)">{{list.title}}</mdb-checkbox>
+    </div>
+  </div>
+</div>
+<div class="modal-footer d-flex justify-content-center">
+  <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="updateTaskBasic()">Cập nhật
+    <i class="fa fa-check ml-1"></i>
+  </button>
+</div>

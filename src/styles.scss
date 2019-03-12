@@ -12,13 +12,14 @@ html, body, main {
 .rounded-circle.img-responsive {
   height: 100% !important;
 }
-#company, #zone, #place, #basic-task {
+#company, #zone, #basic-task {
   .img-fluid {
     position: absolute !important;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 100%;
+    max-width: unset !important;
+    width: 100% !important;
   }
 }
 #company {
@@ -26,7 +27,7 @@ html, body, main {
     height: 300px !important;
   }
 }
-#zone, #place, #basic-task {
+#zone, #basic-task {
   .view.view-cascade.overlay.waves-light {
     height: 150px !important;
   }

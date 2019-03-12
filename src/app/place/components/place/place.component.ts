@@ -7,8 +7,15 @@ import { Beacon } from 'src/app/beacon/models/beacon';
 import { BeaconService } from 'src/app/beacon/services/beacon.service';
 import { ToastService, UploadFile, UploadInput, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
 import { Location } from '@angular/common';
-import { Company } from '../../models/company';
-import { Zone } from '../../models/zone';
+import { PlaceTaskBasicComponent } from '../place-task-basic/place-task-basic.component';
+import { TaskBasic } from 'src/app/task/models/task-basic';
+import { GlobalService } from 'src/app/core/services/global.service';
+import { TaskService } from 'src/app/task/service/task.service';
+import { TaskModel } from 'src/app/task/models/task';
+import { EmployeeService } from 'src/app/employee/services/employee.service';
+import { Employee } from 'src/app/employee/models/employee';
+import { TaskBasicService } from 'src/app/task/service/task-basic.service';
+import { AssignTask, PaginationResponse } from 'src/app/core/models/shared';
 
 @Component({
   selector: 'app-place',
@@ -18,14 +25,16 @@ import { Zone } from '../../models/zone';
 export class PlaceComponent implements OnInit {
 
   @Input() zoneId: number;
-  @Input() company: Company;
   id: number;
+  currentWorkplaceId: number;
+  taskCM: TaskModel = new TaskModel();
   placeCM: PlaceModel = new PlaceModel();
   placeList: Place[];
   modalRef: BsModalRef;
   optionsSelect = new Array<any>();
   beaconName: string;
   @ViewChild('create') createModal: ModalDirective;
+  @ViewChild('createTaskModal') createTaskModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
   formData: FormData;
   files: UploadFile[];
@@ -36,13 +45,23 @@ export class PlaceComponent implements OnInit {
   filesToUpload: FileList;
   companyName: string;
   zoneName: string;
+  taskBasicList: TaskBasic[];
+  assigneeId: number;
+  employeeList: any[];
+  timeFrom: any;
+  assignTask: AssignTask = new AssignTask();
+  iconPrioritySelect: any[];
 
   constructor(
+    public location: Location,
     private placeService: PlaceService,
     private beaconService: BeaconService,
+    private taskBasicService: TaskBasicService,
     private modalService: BsModalService,
     private toastService: ToastService,
-    public location: Location
+    private globalService: GlobalService,
+    private taskService: TaskService,
+    private employeeService: EmployeeService
     ) {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
@@ -52,6 +71,8 @@ export class PlaceComponent implements OnInit {
   ngOnInit() {
     this.getPlace();
     this.getBeacon();
+    this.getEmployee();
+    this.iconPrioritySelect = this.globalService.iconPrioritySelect;
   }
 
   getPlace() {
@@ -63,12 +84,10 @@ export class PlaceComponent implements OnInit {
           this.companyName = response[0].companyDTO.name;
           for (let index = 0; index < this.placeList.length; index++) {
             const element = this.placeList[index];
-            this.beaconService.getByWorkplace(element.id)
+            this.placeService.getTaskBasic(element.id)
               .then(
-                (response2: Beacon) => {
-                  if (response2) {
-                    // element.beaconName = response2.name;
-                  }
+                (response2: TaskBasic[]) => {
+                  element.basicTaskList = response2;
                 }
               );
           }
@@ -90,17 +109,71 @@ export class PlaceComponent implements OnInit {
       );
   }
 
+  getEmployee() {
+    // get BY manager not get all
+    this.employeeService.getEmployeeByManager(19, '', 'id', 0, 99)
+      .then(
+        (response: PaginationResponse) => {
+          this.employeeList = response.content.map((employee) => {
+            return {
+              value: employee.id,
+              label: employee.fullName,
+              icon: employee.picture
+            };
+          });
+        }
+      );
+  }
+
   createPlace() {
+    this.filesToUpload ? this.createPlaceWithImage() : this.createPlaceWithoutImage();
+  }
+
+  createPlaceWithoutImage() {
+    this.placeCM.zoneId = this.zoneId;
     this.placeService.create(this.placeCM)
       .then(
         () => {
-          this.toastService.success('Tạo nơi làm việc thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
           this.createModal.hide();
           this.placeList = [];
           this.getPlace();
         },
         (error: any) => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
+  }
+
+  createPlaceWithImage() {
+    const formData: FormData = new FormData();
+    if (!!this.filesToUpload) {
+      for (let index = 0; index < this.filesToUpload.length; index++) {
+        const file: File = this.filesToUpload[index];
+        formData.append('dataFile', file);
+      }
+    }
+    this.globalService.uploadFile(formData, 'image/workplace/')
+      .then(
+        (response) => {
+          this.placeCM.picture = response;
+          this.placeCM.zoneId = this.zoneId;
+          this.placeService.create(this.placeCM)
+            .then(
+              () => {
+                this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+                this.createModal.hide();
+                this.placeList = [];
+                this.getPlace();
+              },
+              (error: any) => {
+                this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+              }
+            );
+
+        },
+        (error) => {
+          console.error(error);
         }
       );
   }
@@ -120,10 +193,56 @@ export class PlaceComponent implements OnInit {
       );
   }
 
+  createTask() {
+    this.placeService.getTaskBasic(this.currentWorkplaceId)
+      .then(
+        (response) => {
+          this.taskCM.taskBasics = response;
+          this.taskCM.duration *= 1000;
+          this.taskCM.dateCreate = new Date().toISOString();
+          this.taskCM.startTime = this.convertTime(this.timeFrom);
+          this.taskService.create(this.taskCM)
+            .then(
+              (response2) => {
+                this.assignTask.assigneeId = this.assigneeId;
+                this.assignTask.assigneeId = 2;
+                this.assignTask.dateAssign = new Date().toISOString();
+                this.assignTask.taskId = response2;
+                this.globalService.assignTask(this.assignTask)
+                  .then(
+                    () => {
+                      const taskBasicData = {
+                        listTaskID: [response2],
+                        workplaceID: this.currentWorkplaceId
+                      };
+                      this.placeService.addTask(taskBasicData)
+                        .then(
+                          () => {
+                            this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+                            this.createTaskModal.hide();
+                            this.placeList = [];
+                            this.getPlace();
+                          },
+                          () => {
+                            this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+                          }
+                        );
+                    }
+                  );
+              }
+            );
+        }
+      );
+  }
+
   changeBeacon(beaconId: number) {
     // this.placeCM.address = this.optionsSelect[beaconId].label;
   }
 
+  openCreateTaskModal(id: number) {
+    this.currentWorkplaceId = id;
+    this.createTaskModal.show();
+  }
   openCreateModal() {
     this.createModal.show();
   }
@@ -142,6 +261,35 @@ export class PlaceComponent implements OnInit {
     this.modalRef = this.modalService.show(PlaceUpdateComponent, modalOptions);
     this.modalRef.content.refresh.subscribe(() => this.getPlace());
 
+  }
+
+  convertTime(time: string) {
+    const h = time.split(':')[0];
+    const mm = time.split(':')[1];
+    const today = new Date();
+    let d: any = today.getDate();
+    let m: any = today.getMonth();
+    const y = today.getFullYear();
+
+    if (d < 10) {
+      d = '0' + d;
+    }
+
+    if (m < 10) {
+      m = '0' + m;
+    }
+    const day = new Date(y, m, d, +h, +mm, 0, 0).toISOString();
+    return day;
+  }
+
+  openTaskBasicModal(taskBasic: TaskBasic[], workplaceId: number) {
+    const modalOptions: ModalOptions = {
+      animated: true,
+      class: 'modal-notify modal-primary',
+      initialState: { taskBasic, workplaceId }
+    };
+    this.modalRef = this.modalService.show(PlaceTaskBasicComponent, modalOptions);
+    this.modalRef.content.refresh.subscribe(() => this.getPlace());
   }
 
   showFiles() {
@@ -199,7 +347,9 @@ export class PlaceComponent implements OnInit {
 
       reader.onload = (event1: any) => { // called once readAsDataURL is completed
 
-        // this.employee.picture ? this.employee.picture = event1.target.result : this.url = event1.target.result;
+        this.url = event1.target.result;
+
+        this.placeCM.picture ? this.placeCM.picture = event1.target.result : this.url = event1.target.result;
 
       };
 

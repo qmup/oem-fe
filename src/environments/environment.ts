@@ -16,6 +16,9 @@ export const environment = {
       storageBucket: 'outdoor-management-servi-8ca4e.appspot.com',
       messagingSenderId: '244083668959'
     },
+    assign: {
+      assignTask: 'assign-task/',
+    },
     beacon: {
       create: 'beacon/create',
       getAll: 'beacon/get-all',
@@ -44,6 +47,8 @@ export const environment = {
       getAll: 'workplace/get-all',
       remove: 'workplace/remove/',
       update: 'workplace/update-dto/',
+      addTask: 'workplace/add-task/',
+      getTaskBasic: 'workplace/get-task-basic/',
     },
     task: {
       create: 'task/create',
@@ -61,6 +66,8 @@ export const environment = {
     },
     taskBasic: {
       get: 'task/get-task-basic',
+      getListBasic: 'task-basic/get-list-basic/',
+      setToManager: 'task-basic/set-to-manager',
     },
     schedule: {
       create: 'schedule/create',
@@ -81,7 +88,7 @@ export const environment = {
       getByCompany: 'zone/get-all-zone-by-company',
       remove: 'zone/remove-zone',
       update: 'zone/update-zone-information',
-    }
+    },
   }
 };
 

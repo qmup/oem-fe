@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2, EventEmitter } from '@angular/core';
-import { TaskBasic } from '../../models/task-basic';
+import { TaskBasic, TaskBasicManager } from '../../models/task-basic';
 import { ModalDirective, ModalOptions, BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { TaskBasicService } from '../../service/task-basic.service';
 import { ToastService, UploadFile, UploadInput, UploadOutput } from 'ng-uikit-pro-standard';
@@ -33,6 +33,7 @@ export class BasicTaskComponent implements OnInit {
   filesToUpload: FileList;
   modalRef: BsModalRef;
   currentPage = 0;
+  taskBasicManager: TaskBasicManager = new TaskBasicManager();
 
   constructor(
     private renderer: Renderer2,
@@ -47,7 +48,7 @@ export class BasicTaskComponent implements OnInit {
   }
 
   getTaskBasic() {
-    this.taskBasicService.getTaskBasic('', '', '', this.currentPage, 8)
+    this.taskBasicService.getListTaskBasic(1 , '', '', 'id', this.currentPage, 8)
       .then(
         (response: any) => {
           this.taskBasicResponse = response;
@@ -101,19 +102,24 @@ export class BasicTaskComponent implements OnInit {
           this.taskBasicCM.basic = true;
           this.taskBasicService.create(this.taskBasicCM)
             .then(
-              () => {
-                this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-                this.createModal.hide();
-                this.taskBasicList = [];
-                this.getTaskBasic();
+              (response1) => {
+                this.taskBasicManager.employeeId = 1;
+                this.taskBasicManager.editable = true;
+                this.taskBasicManager.taskBasicId = response1;
+                this.taskBasicService.setToManager(this.taskBasicManager)
+                  .then(
+                    () => {
+                      this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+                      this.createModal.hide();
+                      this.taskBasicList = [];
+                      this.getTaskBasic();
+                    },
+                    () => {
+                      this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+                    }
+                );
               },
-              () => {
-                this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
-              }
             );
-        },
-        (error) => {
-          console.error(error);
         }
       );
   }
@@ -121,11 +127,22 @@ export class BasicTaskComponent implements OnInit {
     this.taskBasicCM.basic = true;
     this.taskBasicService.create(this.taskBasicCM)
       .then(
-        () => {
-          this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-          this.createModal.hide();
-          this.taskBasicList = [],
-          this.getTaskBasic();
+        (response1) => {
+          this.taskBasicManager.employeeId = 1;
+          this.taskBasicManager.editable = true;
+          this.taskBasicManager.taskBasicId = response1;
+          this.taskBasicService.setToManager(this.taskBasicManager)
+            .then(
+              () => {
+                this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+                this.createModal.hide();
+                this.taskBasicList = [],
+                this.getTaskBasic();
+              },
+              () => {
+                this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+              }
+            );
         }
       );
   }

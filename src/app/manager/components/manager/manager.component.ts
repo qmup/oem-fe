@@ -6,6 +6,7 @@ import { ManagerUpdateComponent } from '../manager-update/manager-update.compone
 import { IMyOptions, UploadFile, UploadInput, humanizeBytes, UploadOutput, ToastService } from 'ng-uikit-pro-standard';
 import { GlobalService } from 'src/app/core/services/global.service';
 import { PaginationResponse } from 'src/app/core/models/shared';
+import { EmployeeService } from 'src/app/employee/services/employee.service';
 
 @Component({
   selector: 'app-manager',
@@ -16,7 +17,8 @@ export class ManagerComponent implements OnInit {
 
   id: number;
   searchText: string;
-  managerList: PaginationResponse;
+  managerList: Manager[];
+  managerResponse: PaginationResponse;
   optionsSelect = new Array<any>();
   optionsSex = new Array<any>();
   gender: number;
@@ -38,6 +40,7 @@ export class ManagerComponent implements OnInit {
     private managerService: ManagerService,
     private modalService: BsModalService,
     private toastService: ToastService,
+    private employeeService: EmployeeService,
     private globalService: GlobalService
     ) {
     this.files = [];
@@ -54,10 +57,11 @@ export class ManagerComponent implements OnInit {
   }
 
   getManager() {
-    this.managerService.getAll(1, 'asc', 1, 5)
+    this.employeeService.getByRole(1, '', '', 'id', 0, 10)
       .then(
         (response: PaginationResponse) => {
-          this.managerList = response;
+          this.managerResponse = response;
+          this.managerList = response.content;
         }
       );
   }
@@ -127,7 +131,8 @@ export class ManagerComponent implements OnInit {
               () => {
                 this.toastService.success('Tạo manager thành công', '', { positionClass: 'toast-bottom-right'} );
                 this.createModal.hide();
-                this.managerList = new PaginationResponse();
+                this.managerList = new Array<Manager>();
+                this.managerResponse = new PaginationResponse();
                 this.getManager();
               },
               () => {
@@ -150,7 +155,8 @@ export class ManagerComponent implements OnInit {
         () => {
           this.toastService.success('Tạo manager thành công', '', { positionClass: 'toast-bottom-right'} );
           this.createModal.hide();
-          this.managerList = new PaginationResponse();
+          this.managerList = new Array<Manager>();
+          this.managerResponse = new PaginationResponse();
           this.getManager();
         },
         (error: any) => {
@@ -165,7 +171,8 @@ export class ManagerComponent implements OnInit {
         () => {
           this.toastService.success('Xóa manager thành công', '', { positionClass: 'toast-bottom-right'} );
           this.deleteModal.hide();
-          this.managerList = new PaginationResponse();
+          this.managerList = new Array<Manager>();
+          this.managerResponse = new PaginationResponse();
           this.getManager();
         },
         () => {
@@ -229,6 +236,8 @@ export class ManagerComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]); // read file as data url
 
       reader.onload = (event1: any) => { // called once readAsDataURL is completed
+
+        this.url = event1.target.result;
 
         this.managerCM.picture ? this.managerCM.picture = event1.target.result : this.url = event1.target.result;
 

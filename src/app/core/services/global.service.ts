@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { AssignTask } from '../models/shared';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,18 @@ export class GlobalService {
   isLogin = true;
   userName: string;
   requestEvent: EventEmitter<number> = new EventEmitter<number>();
+  iconPrioritySelect = [
+    { value: '1', label: 'Rất cao',
+    icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/highest.svg' },
+    { value: '2', label: 'Cao',
+    icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/high.svg' },
+    { value: '3', label: 'Bình thường',
+    icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/medium.svg' },
+    { value: '4', label: 'Thấp',
+    icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/low.svg' },
+    { value: '5', label: 'Rất thấp',
+    icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/lowest.svg' },
+  ];
 
   constructor(private httpClient: HttpClient) {
   }
@@ -41,6 +54,12 @@ export class GlobalService {
       `${environment.endPoint}${environment.apiPaths.upload.handlerUpload}?pathPackage=${pathPackage}`,
       formData,
       { headers: headers, responseType: 'text' }
+    ).toPromise();
+  }
+
+  assignTask(assignTask: AssignTask): Promise<any> {
+    return this.httpClient.post(
+      `${environment.endPoint}${environment.apiPaths.assign.assignTask}`, assignTask
     ).toPromise();
   }
 

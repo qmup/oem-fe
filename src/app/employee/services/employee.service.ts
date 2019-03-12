@@ -17,29 +17,31 @@ export class EmployeeService {
     ).toPromise();
   }
 
-  getEmployeeByManager(managerId, sort, page, size ): Promise<PaginationResponse> {
+  getEmployeeByManager(managerId: number, sort: string, fieldSort: string, page: number, size: number ): Promise<PaginationResponse> {
     return this.httpClient.get<PaginationResponse>(
       `${environment.endPoint}${environment.apiPaths.employee.getEmployeeByManager}`,
       {
         params: {
-          search: managerId,
-          sort: sort,
-          page: page,
-          size: size
+          managerID: `${managerId}`,
+          sort: `${sort}`,
+          fieldShort: `${fieldSort}`,
+          page: `${page}`,
+          size: `${size}`
         }
       }
     ).toPromise();
   }
 
-  getByManager(managerId, sort, page, size): Promise<Employee[]> {
+  getByManager(managerId: number, sort: string, fieldSort: string, page: number, size: number): Promise<Employee[]> {
     return this.httpClient.get<Employee[]>(
       `${environment.endPoint}${environment.apiPaths.employee.get}`,
       {
         params: {
-          search: managerId,
-          sort: sort,
-          page: page,
-          size: size
+          managerID: `${managerId}`,
+          sort: `${sort}`,
+          fieldShort: `${fieldSort}`,
+          page: `${page}`,
+          size: `${size}`
         },
       }
     ).toPromise();
@@ -66,6 +68,22 @@ export class EmployeeService {
   update(employeeUM: EmployeeUpdateModel): Promise<EmployeeUpdateModel> {
     return this.httpClient.put<EmployeeUpdateModel>(
       `${environment.endPoint}${environment.apiPaths.employee.update}`, employeeUM
+    ).toPromise();
+  }
+
+  getByRole(roleId: number, search: string, sort: string, fieldSort: string, page: number, size: number): Promise<PaginationResponse> {
+    return this.httpClient.get<PaginationResponse>(
+      `${environment.endPoint}${environment.apiPaths.employee.getByRole}`,
+      {
+        params: {
+          roleID: `${roleId}`,
+          search: `${search}`,
+          fieldSort: `${fieldSort}`,
+          sort: `${sort}`,
+          page: `${page}`,
+          size: `${size}`
+        },
+      }
     ).toPromise();
   }
 }

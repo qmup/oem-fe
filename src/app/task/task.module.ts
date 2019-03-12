@@ -26,7 +26,8 @@ import { BasicTaskUpdateComponent } from './components/basic-task-update/basic-t
     ScheduleDetailComponent,
     BasicTaskComponent,
     BasicTaskPagesComponent,
-    BasicTaskUpdateComponent],
+    BasicTaskUpdateComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,

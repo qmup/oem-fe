@@ -162,6 +162,8 @@ export class ZoneComponent implements OnInit {
 
       reader.onload = (event1: any) => { // called once readAsDataURL is completed
 
+        this.url = event1.target.result;
+
         // this.employee.picture ? this.employee.picture = event1.target.result : this.url = event1.target.result;
 
       };

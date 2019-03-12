@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { UploadFile, UploadInput, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
 import { TaskService } from '../../service/task.service';
+import { GlobalService } from 'src/app/core/services/global.service';
 
 @Component({
   selector: 'app-task-detail',
@@ -29,7 +30,8 @@ export class TaskDetailComponent implements OnInit {
   isUpdate = false;
 
   constructor(
-    private taskService: TaskService
+    private taskService: TaskService,
+    private globalService: GlobalService
   ) {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
@@ -93,18 +95,7 @@ export class TaskDetailComponent implements OnInit {
       { value: '4', label: 'Late',
       icon: 'https://cdn2.iconfinder.com/data/icons/perfect-flat-icons-2/512/Danger_hanger_triangle_traffic_cone.png' },
     ];
-    this.iconPrioritySelect = [
-      { value: '1', label: 'Rất cao',
-      icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/highest.svg' },
-      { value: '2', label: 'Cao',
-      icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/high.svg' },
-      { value: '3', label: 'Bình thường',
-      icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/medium.svg' },
-      { value: '4', label: 'Thấp',
-      icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/low.svg' },
-      { value: '5', label: 'Rất thấp',
-      icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/lowest.svg' },
-    ];
+    this.iconPrioritySelect = this.globalService.iconPrioritySelect;
   }
 
   getTaskByEmployee() {

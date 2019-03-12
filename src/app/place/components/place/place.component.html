@@ -13,56 +13,66 @@
 
         <h4 class="text-left col-11 mx-auto pb-3">
           <span routerLink="/company" style="cursor: pointer; color: #007bff"> Công ty {{companyName}} </span>
-          <span (click)="location.back()" style="cursor: pointer; color: #6c757d; font-size: 20px;"> / {{zoneName}} </span>
+          <span (click)="location.back()" style="cursor: pointer; color: #6c757d; font-size: 20px;"> / {{zoneName}}
+          </span>
         </h4>
 
-        <div class="col-md-4 mb-4" *ngFor="let p of placeList; let i of index">
+        <div class="col-md-4 mb-4" *ngFor="let p of placeList; let i = index">
 
-          <!--Card-->
-          <mdb-card cascade="true" narrower="true">
+          <mdb-flipping-card #card>
+            <!--Front Side-->
+            <div class="face front card tp-box_side tp-box_front">
+              <!-- Image-->
+              <div class="card-up">
+                <div class="view overlay hm-white-slight waves-light" mdbWavesEffect (click)="openUpdateModal(p)">
+                  <img [src]="p.picture" class="img-fluid" alt="">
 
-            <!--Card image-->
-            <div class="view view-cascade overlay waves-light" mdbWavesEffect>
-              <mdb-card-img [src]="p.picture"></mdb-card-img>
-              <a>
-                <div class="mask rgba-white-slight"></div>
+                </div>
+              </div>
+
+              <a class="btn-floating btn-action ml-auto mr-4 mdb-color primary-color waves-light" (click)="card.toggle()"
+                mdbWavesEffect>
+                <mdb-icon icon="chevron-right" mdbWavesEffect></mdb-icon>
               </a>
+              <!--Content-->
+              <div class="content">
+                <h4>{{p.name}}</h4>
+                <hr>
+                <p>Công ty: {{p.companyDTO.name}} - Khu vực: {{p.zoneDTO.name}}</p>
+                <p>Số lần vệ sinh trong ngày: <span class="text-danger font-weight-bold h5">{{p.numberOfReworks}}</span></p>
+                <div class="d-flex justify-content-center">
+                  <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect (click)="openCreateTaskModal(p.id)">Tạo công việc</button>
+                </div>
+
+              </div>
+              <!--/.Content-->
+
             </div>
-            <!--/Card image-->
+            <!--/.Front Side-->
 
-            <mdb-card-body cascade="true" class="text-center">
-              <!--Card content-->
+            <!--Back Side-->
+            <div class="face back tp-box_side tp-box_back">
+              <div class="d-flex justify-content-center flex-wrap pt-3">
+                <p class="h5">Công việc thường nhật</p>
+                <div *ngFor="let bt of placeList[i].basicTaskList; let idx = index" class="col-12">
+                  {{ idx + 1 }}. {{ bt.title }}
+                </div>
+                <br>
+                <button title="Thêm xóa sửa công việc" mdbBtn type="button" rounded="true" color="primary" class="waves-light list-btn"
+                  mdbWavesEffect (click)="openTaskBasicModal(p.basicTaskList, p.id)">
+                  <i class="mr-2 fa fa-list-ol"></i>Danh sách công việc
+                </button>
+              </div>
+              <hr>
+              <div class="d-flex justify-content-center">
+                <a class="rotate-btn" data-card="card-1" (click)="card.toggle()">Trở lại</a>
+              </div>
 
-              <!--Title-->
-              <h4 class="card-title">{{p.name}}</h4>
-              <!--Text-->
+              <!--Social Icons-->
 
-              <mdb-card-text>
-                Địa điểm: {{p.companyDTO.address}} - {{p.zoneDTO.name}}
-              </mdb-card-text>
-
-              <mdb-card-text>
-                Chi tiết: {{p.description}}
-              </mdb-card-text>
-
-              <!-- <mdb-card-text>
-                Beacon: {{ p.beaconName ? p.beaconName : 'Chưa có' }}
-              </mdb-card-text> -->
-
-              <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light"
-                mdbWavesEffect (click)="openUpdateModal(p)">
-                <i class="fa fa-pencil"></i>
-              </button>
-              <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light" mdbWavesEffect
-                (click)="openDeleteModal(p.id)">
-                <i class="fa fa-ban"></i>
-              </button>
-
-            </mdb-card-body>
-            <!--/.Card content-->
-
-          </mdb-card>
-          <!--/.Card-->
+            </div>
+            <!--/.Back Side-->
+          </mdb-flipping-card>
         </div>
       </div>
     </div>
@@ -86,6 +96,13 @@
           <label for="name">Tên</label>
         </div>
 
+        <span>Số lần vệ sinh trong ngày</span>
+        <div class="w-100 d-flex justify-content-center align-items-center my-3">
+          <mdb-range-input id="range" [min]="0" [value]="3" [step]="1" [max]="5" name="range" [(ngModel)]="placeCM.numberOfReworks"
+            class="w-100"></mdb-range-input>
+          <span class="ml-2">lần</span>
+        </div>
+
         <div class="md-form mt-0 mb-3 col-md-12">
           <input type="text" id="description" class="form-control" mdbInput [(ngModel)]="placeCM.description">
           <label for="description">Miêu tả</label>
@@ -98,11 +115,11 @@
               [uploadInput]="uploadInput">
           </div>
           <div class="file-path-wrapper mt-3">
-            <input class="file-path" type="text" placeholder="Chọn hình ảnh tải lên" [value]="showFiles()">
+            <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()">
           </div>
-        </div>
-        <div class="col text-center" *ngIf="url">
-          <img [src]="url" height="150">
+          <div class="col text-center w-100" *ngIf="url">
+            <img [src]="url" height="100">
+          </div>
         </div>
 
       </div>
@@ -115,6 +132,60 @@
   </div>
 </div>
 
+<div mdbModal #createTaskModal="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="add"
+  aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-success" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Tạo công việc</p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3 row">
+        <div class="md-form mt-0 mb-3 col-6 col-md-12">
+          <input type="text" id="title" class="form-control" mdbInput [(ngModel)]="taskCM.title">
+          <label for="title">Tên công việc</label>
+        </div>
+
+        <div class="md-form mt-0 mb-3 col-6 col-md-12">
+          <mdb-select [placeholder]="'Người thực hiện'" [options]="employeeList" [filterEnabled]="true" [(ngModel)]="assigneeId"></mdb-select>
+        </div>
+
+        <label class="col-md-2 col-xs-12" style="position: relative">
+          <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px">Từ</span>
+        </label>
+        <div class="col-md-10 col-xs-12">
+          <mdb-time-picker [buttonLabel]="'Chọn'" [twelvehour]="false" [darktheme]="false" [placeholder]="'Chọn'"
+            [label]="'Giờ'" [(ngModel)]="timeFrom">
+          </mdb-time-picker>
+        </div>
+
+        <span>Thời gian hoàn thành</span>
+        <div class="w-100 d-flex justify-content-center align-items-center my-3">
+          <mdb-range-input id="range" [min]="0" [step]="10" [max]="300" name="range" [(ngModel)]="taskCM.duration" class="w-100"></mdb-range-input>
+          <span class="ml-2">phút</span>
+        </div>
+
+        <div class="col-12 md-form mt-0 mb-3">
+          <mdb-select class="select-wrapper mdb-select colorful-select dropdown-success" [options]="iconPrioritySelect"
+            [(ngModel)]="taskCM.priority" placeholder="Chọn">
+          </mdb-select>
+          <label>Mức độ ưu tiên</label>
+        </div>
+        <div class="col-12 md-form mt-0 mb-3">
+          <textarea type="text" id="description" class="md-textarea form-control" mdbInput [(ngModel)]="taskCM.description"></textarea>
+          <label id="description">Miêu tả công việc</label>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createTask()">Tạo mới
+          <i class="fa fa-check ml-1"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
   aria-hidden="true">

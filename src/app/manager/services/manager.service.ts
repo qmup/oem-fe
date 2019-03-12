@@ -17,15 +17,16 @@ export class ManagerService {
     ).toPromise();
   }
 
-  getAll(managerId?, sort?, page?, size? ): Promise<PaginationResponse> {
+  getAll(managerId: number, sort: string, fieldSort: string, page: number, size: number ): Promise<PaginationResponse> {
     return this.httpClient.get<PaginationResponse>(
       `${environment.endPoint}${environment.apiPaths.manager.getAll}`,
       {
         params: {
-          search: managerId,
-          sort: sort,
-          page: page,
-          size: size
+          managerID: `${managerId}`,
+          sort: `${sort}`,
+          fieldSort: `${fieldSort}`,
+          page: `${page}`,
+          size: `${size}`
         }
       }
     ).toPromise();

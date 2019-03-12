@@ -21,7 +21,7 @@ export class ManagerUpdateComponent implements OnInit {
   optionsSex: { value: number; label: string; }[];
   refresh: EventEmitter<any> = new EventEmitter<any>();
   filesToUpload: FileList;
-  managerList: PaginationResponse;
+  managerList: Manager[];
   formData: FormData;
   files: UploadFile[];
   uploadInput: EventEmitter<UploadInput>;
@@ -43,7 +43,6 @@ export class ManagerUpdateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getManager();
     this.optionsSex = [
       { value: 0, label: 'Nam'},
       { value: 1, label: 'Nữ'},
@@ -57,21 +56,6 @@ export class ManagerUpdateComponent implements OnInit {
     const month = this.manager.birthDate.split('-', 3)[1];
     const day = this.manager.birthDate.split('-', 3)[2];
     this.manager.birthDate = `${day}-${month}-${year}`;
-  }
-
-  getManager() {
-    this.managerService.getAll(1, 'asc', 1, 5)
-      .then(
-        (response: any) => {
-          this.managerList = response;
-          this.optionsSelect = response.map((manager) => {
-            return {
-              value: manager.id,
-              label: manager.fullName
-            };
-          });
-        }
-      );
   }
 
   updateManager() {
@@ -208,6 +192,8 @@ export class ManagerUpdateComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]); // read file as data url
 
       reader.onload = (event1: any) => { // called once readAsDataURL is completed
+
+        this.url = event1.target.result;
 
         this.manager.picture ? this.manager.picture = event1.target.result : this.url = event1.target.result;
 

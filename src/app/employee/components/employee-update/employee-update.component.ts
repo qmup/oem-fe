@@ -22,7 +22,7 @@ export class EmployeeUpdateComponent implements OnInit {
   optionsSex: { value: number; label: string; }[];
   refresh: EventEmitter<any> = new EventEmitter<any>();
   filesToUpload: FileList;
-  managerList: PaginationResponse;
+  managerList: any[];
   formData: FormData;
   files: UploadFile[];
   uploadInput: EventEmitter<UploadInput>;
@@ -61,17 +61,16 @@ export class EmployeeUpdateComponent implements OnInit {
   }
 
   getManager() {
-    this.managerService.getAll(1, 'asc', 1, 5)
+    this.employeeService.getByRole(1, '', '', 'id', 0, 10)
       .then(
-        (response: any) => {
-          this.managerList = response;
-          this.optionsSelect = response.map((manager) => {
+        (response: PaginationResponse) => {
+          this.managerList = response.content.map((manager) => {
             return {
               value: manager.id,
-              label: manager.fullName
+              label: manager.fullName,
+              icon: manager.picture
             };
           });
-          console.log(this.optionsSelect);
         }
       );
   }
@@ -210,6 +209,8 @@ export class EmployeeUpdateComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]); // read file as data url
 
       reader.onload = (event1: any) => { // called once readAsDataURL is completed
+
+        this.url = event1.target.result;
 
         this.employee.picture ? this.employee.picture = event1.target.result : this.url = event1.target.result;
 

@@ -37,7 +37,7 @@
                     <h4 class="card-title">
                       <strong>{{t.title}}</strong>
                     </h4>
-                    <h5>{{t.duration}} phút</h5>
+                    <!-- <h5>{{t.duration}} phút</h5> -->
 
                     <!--Edit button-->
                     <a type="button" class="btn-floating btn-small btn-primary waves-light" mdbWavesEffect (click)="openUpdateModal(t)">
@@ -85,11 +85,11 @@
           <label id="description">Miêu tả công việc</label>
         </div> -->
 
-        <span>Thời gian hoàn thành</span>
+        <!-- <span>Thời gian hoàn thành</span>
         <div class="w-100 d-flex justify-content-center align-items-center my-3">
           <mdb-range-input id="range" [min]="0" [step]="5" [max]="30" name="range" [(ngModel)]="taskBasicCM.duration" class="w-100"></mdb-range-input>
           <span class="ml-2">phút</span>
-        </div>
+        </div> -->
 
         <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
           <div mdbBtn floating="true" size="md" gradient="aqua" mdbWavesEffect>
@@ -113,30 +113,5 @@
         </button>
       </div>
     </div>
-  </div>
-</div>
-
-<div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
-  aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-    <!--Content-->
-    <div class="modal-content text-center">
-      <!--Header-->
-      <div class="modal-header d-flex justify-content-center">
-        <p class="heading">Xóa công việc này?</p>
-      </div>
-
-      <!--Body-->
-      <div class="modal-body">
-        <i class="fa fa-times fa-4x animated rotateIn"></i>
-      </div>
-
-      <!--Footer-->
-      <div class="modal-footer flex-center">
-        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeTaskBasic()">Đồng ý</a>
-        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">Hủy</a>
-      </div>
-    </div>
-    <!--/.Content-->
   </div>
 </div>

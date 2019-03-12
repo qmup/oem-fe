@@ -11,8 +11,14 @@
   </div>
 
   <div class="md-form mt-0 mb-3 col-md-12">
-    <input type="text" id="address" class="form-control" mdbInput [(ngModel)]="place.address">
-    <label for="address">Địa điểm</label>
+    <input type="text" id="address" class="form-control" mdbInput [(ngModel)]="place.description">
+    <label for="address">Miêu tả</label>
+  </div>
+
+  <span>Số lần vệ sinh trong ngày</span>
+  <div class="w-100 d-flex justify-content-center align-items-center my-3">
+    <mdb-range-input id="range" [min]="0" [value]="3" [step]="1" [max]="5" name="range" [(ngModel)]="place.numberOfReworks" class="w-100"></mdb-range-input>
+    <span class="ml-2">lần</span>
   </div>
 
   <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
@@ -25,13 +31,8 @@
       <input class="file-path" type="text" placeholder="Chọn hình ảnh tải lên" [value]="showFiles()">
     </div>
   </div>
-  <div class="col text-center" *ngIf="url">
-    <img [src]="url" height="150">
-  </div>
-
-  <div class="md-form mt-0 mb-3 col-md-12">
-    <textarea type="text" id="description" class="form-control md-textarea" mdbInput [(ngModel)]="place.description"></textarea>
-    <label for="description">Chi tiết</label>
+  <div class="col text-center w-100" *ngIf="place.picture || url">
+    <img [src]="place.picture || url" height="150">
   </div>
 
 </div>

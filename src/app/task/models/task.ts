@@ -1,4 +1,5 @@
 import { Shared } from 'src/app/core/models/shared';
+import { TaskBasic } from './task-basic';
 
 export class Task {
   attendanceStatus: number;
@@ -14,7 +15,7 @@ export class Task {
   startTime: string;
   status: number;
   title: string;
-
+  taskBasics: TaskBasic[];
 
   constructor() {
     this.attendanceStatus = 0;
@@ -22,7 +23,7 @@ export class Task {
     this.checkInTime = '';
     this.dateCreate = '';
     this.description = '';
-    this.duration = 5;
+    this.duration = 0;
     this.id = 0;
     this.picture = '';
     this.priority = 0;
@@ -30,6 +31,8 @@ export class Task {
     this.startTime = '';
     this.status = 0;
     this.title = '';
+    this.taskBasics = new Array<TaskBasic>();
+
   }
 }
 
@@ -47,7 +50,7 @@ export class TaskModel {
   startTime: string;
   status: number;
   title: string;
-
+  taskBasics: TaskBasic[];
 
   constructor() {
     this.attendanceStatus = 0;
@@ -63,6 +66,7 @@ export class TaskModel {
     this.startTime = '';
     this.status = 0;
     this.title = '';
+    this.taskBasics = new Array<TaskBasic>();
   }
 }
 

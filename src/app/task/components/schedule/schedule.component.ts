@@ -37,7 +37,6 @@ export class ScheduleComponent implements OnInit {
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
   scheduleCM: ScheduleModel = new ScheduleModel();
-  iconPrioritySelect: any[];
   week: any[];
   workplaceList: any[];
   employeeList: any[];

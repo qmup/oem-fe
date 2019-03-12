@@ -1,10 +1,12 @@
+import { TaskBasic } from 'src/app/task/models/task-basic';
+
 export class PlaceModel {
-    description: string;
-    id: number;
-    name: string;
-    numberOfReworks: number;
-    picture: string;
-    zoneId: number;
+  description: string;
+  id: number;
+  name: string;
+  numberOfReworks: number;
+  picture: string;
+  zoneId: number;
 
   constructor() {
     this.description = '';
@@ -20,9 +22,11 @@ export class Place {
   id: number;
   name: string;
   description: string;
+  numberOfReworks: number;
   picture: string;
   zoneDTO: ZoneDTO;
   companyDTO: CompanyDTO;
+  basicTaskList: TaskBasic[];
 
   constructor() {
     this.description = '';
@@ -32,6 +36,8 @@ export class Place {
     this.description = '';
     this.zoneDTO = new ZoneDTO();
     this.companyDTO = new CompanyDTO();
+    this.numberOfReworks = 0;
+    this.basicTaskList = new Array<TaskBasic>();
   }
 }
 

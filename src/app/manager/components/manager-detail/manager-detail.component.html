@@ -52,48 +52,51 @@
       </mdb-flipping-card>
     </div>
     <div class="col-md-7 mb-4 mx-auto">
-      <div class="view-all-button row mt-4">
-        <div class="col pr-0">
-          <p class="h5">Nhân viên đang quản lý</p>
-        </div>
-        <div class="col pl-0">
-          <a [routerLink]="['/laborer']" class="link">Xem tất cả</a>
-          <a class="btn-floating btn-md btn-success" (click)="openCreateEmployeeModal()"><i class="fa fa-plus"></i></a>
-        </div>
-      </div>
       <!-- Card -->
-      <mdb-card class="mt-3">
-        <div class="view rgba-white-slight waves-light" mdbWavesEffect>
-          <!-- Card img -->
-          <a>
-            <div class="mask"></div>
-          </a>
-        </div>
+      <mdb-card class="mt-3" cascade="true">
+        
         <!--Card content-->
-        <mdb-card-body>
+        <mdb-card-body cascade="true" class="text-left"> 
+          <mdb-card-title class="d-flex flex-wrap">
+            <div class="col pr-0">
+              <p class="h5">Nhân viên đang quản lý</p>
+            </div>
+            <div class="col pl-0">
+              <a [routerLink]="['/laborer']" class="link">Xem tất cả</a>
+              <a class="btn-floating btn-md btn-success" (click)="openCreateEmployeeModal()"><i class="fa fa-plus"></i></a>
+            </div>
+          </mdb-card-title>
 
           <!--Text-->
           <div class="list-group">
-            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let i of [1,2,3]"
-              [routerLink]="['/task-detail', i]">
-              <i class="fa fa-user mt-2 col"></i>
+            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let e of employeeListByManager | slice:0:3"
+              [routerLink]="['/task-detail', e.id]">
+              <div class="avatar">
+                <img [src]="e.picture" alt="" class="rounded-circle img-responsive list-avatar">
+              </div>
               <div class="col-11">
-                Nguyễn Minh Quân
+                {{e.firstName}} {{e.lastName}}
                 <br>
-                <small>Nơi làm việc: Tòa nhà A</small>
+                <small>Địa chỉ: {{e.address}}</small>
+                <br>
+                <small>Số điện thoại: {{e.phoneNumber}}</small>
               </div>
             </a>
-            <div class="list-group" mdbCollapse #moreTask="bs-collapse">
-              <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let i of [6,7,8]">
-                <i class="fa fa-user mt-2 col"></i>
+            <div class="list-group" mdbCollapse #moreEmp="bs-collapse" *ngIf="employeeListByManager?.length > 3">
+              <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let e of employeeListByManager | slice:3:(employeeListByManager.length + 1)">
+                <div class="avatar">
+                  <img [src]="e.picture" alt="" class="rounded-circle img-responsive list-avatar">
+                </div>
                 <div class="col-11">
-                  Nguyễn Minh Quân
+                  {{e.firstName}} {{e.lastName}}
                   <br>
-                  <small>Nơi làm việc: Tòa nhà A</small>
+                  <small>Địa chỉ: {{e.address}}</small>
+                  <br>
+                  <small>Số điện thoại: {{e.phoneNumber}}</small>
                 </div>
               </a>
             </div>
-            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="!isShowMore1" (click)="moreTask.toggle(); isShowMore1 = true"
+            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="!isShowMore1 && employeeListByManager?.length > 3" (click)="toggleEmp()"
               mdbWavesEffect>
               Hiện thêm
             </button>
@@ -104,53 +107,39 @@
           </div>
         </mdb-card-body>
       </mdb-card>
-      <div class="view-all-button row">
-        <div class="col pr-0">
-          <p class="h5">Nơi làm việc đang quản lý</p>
-        </div>
-        <div class="col pl-0">
-          <a [routerLink]="['/task']" class="link">Xem tất cả</a>
-        </div>
-      </div>
       <mdb-card class="mt-3">
-        <mdb-card-body>
-          <div class="list-group">
-            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let i of [1,2,3]"
-              [routerLink]="['/task-detail', i]">
-              <i class="fa fa-trash mt-2 col"></i>
+        <mdb-card-body cascade="true" class="text-left"> 
+          <mdb-card-title class="d-flex flex-wrap">
+            <div class="col pr-0">
+              <p class="h5">Nơi làm việc đang quản lý</p>
+            </div>
+            <div class="col pl-0">
+              <a [routerLink]="['/company']" class="link">Xem tất cả</a>
+              <a class="btn-floating btn-md btn-success" (click)="openCreateWorkplaceModal()"><i class="fa fa-plus"></i></a>
+            </div>
+          </mdb-card-title>
+          <div class="list-group" mdbCollapse #moreWP="bs-collapse" *ngIf="workplaceListByManager?.length > 3">
+            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let wp of workplaceListByManager | slice:4:6">
+              <div class="avatar">
+                <img [src]="wp.picture" alt="" class="rounded-circle img-responsive list-avatar">
+              </div>
               <div class="col-11">
-                OEM-{{i+20}} Dọn vệ sinh tầng {{i}}
+                {{wp.name}}
                 <br>
-                <small>Từ {{i+5}} giờ sáng đến {{i+6}}h30 sáng</small>
+                <small>{{wp.description}}</small>
               </div>
             </a>
-            <div class="list-group" mdbCollapse #moreEmp="bs-collapse">
-              <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let i of [6,7,8]">
-                <i class="fa fa-trash mt-2 col"></i>
-                <div class="col-11">
-                  OEM-{{i+20}} Dọn vệ sinh tầng {{i}}
-                  <br>
-                  <small>Từ {{i+5}} giờ sáng đến {{i+6}}h30 sáng</small>
-                </div>
-              </a>
-            </div>
-            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="!isShowMore2" (click)="moreEmp.toggle(); isShowMore2 = true"
-              mdbWavesEffect>
-              Hiện thêm
-            </button>
-            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="isShowMore2" [routerLink]="['/task']"
-              mdbWavesEffect>
-              Xem tất cả
-            </button>
           </div>
+          <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="!isShowMore2" (click)="toggleWorkplace()"
+            mdbWavesEffect>
+            Hiện thêm
+          </button>
+          <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="isShowMore2" [routerLink]="['/company']"
+            mdbWavesEffect>
+            Xem tất cả
+          </button>
         </mdb-card-body>
       </mdb-card>
-
-      <a class="btn-floating btn-md btn-success" (click)="openCreateWorkplaceModal()">
-        <!-- <i class="fa fa-plus"></i> -->
-        Test
-      </a>
-
     </div>
   </div>
 </div>

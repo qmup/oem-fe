@@ -54,7 +54,6 @@ export class BasicTaskUpdateComponent implements OnInit {
         (response) => {
           this.taskBasicUM.id = this.taskBasic.id;
           this.taskBasicUM.title = this.taskBasic.title;
-          this.taskBasicUM.duration = this.taskBasic.duration;
           this.taskBasicUM.basic = true;
           this.taskBasicUM.picture = response;
           this.taskService.updateTask(this.taskBasicUM)
@@ -79,7 +78,6 @@ export class BasicTaskUpdateComponent implements OnInit {
     this.taskBasicUM.id = this.taskBasic.id;
     this.taskBasicUM.title = this.taskBasic.title;
     this.taskBasicUM.basic = true;
-    this.taskBasicUM.duration = this.taskBasic.duration;
     this.taskService.updateTask(this.taskBasicUM)
       .then(
         () => {

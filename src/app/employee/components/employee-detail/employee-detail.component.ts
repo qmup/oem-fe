@@ -54,7 +54,7 @@ export class EmployeeDetailComponent implements OnInit {
   }
 
   getManager() {
-    this.managerService.getAll(1, 'asc', 1, 5)
+    this.employeeService.getByRole(1, '', '', 'id', 0, 10)
       .then(
         (response: PaginationResponse) => {
           this.managerName = response.content.find((manager: Manager) => manager.id === this.employee.managerId).fullName;
@@ -116,6 +116,8 @@ export class EmployeeDetailComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]); // read file as data url
 
       reader.onload = (event1: any) => { // called once readAsDataURL is completed
+
+        this.url = event1.target.result;
 
         this.employee.picture ? this.employee.picture = event1.target.result : this.url = event1.target.result;
 

@@ -14,6 +14,8 @@ import { CompanyUpdateComponent } from './components/company-update/company-upda
 import { AgmCoreModule } from '@agm/core';
 import { CompanyPagesComponent } from './pages/company-pages/company-pages.component';
 import { ZonePagesComponent } from './pages/zone-pages/zone-pages.component';
+import { PlaceTaskBasicComponent } from './components/place-task-basic/place-task-basic.component';
+import { PlaceRemoveComponent } from './components/place-remove/place-remove.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { ZonePagesComponent } from './pages/zone-pages/zone-pages.component';
     ZoneUpdateComponent,
     CompanyUpdateComponent,
     CompanyPagesComponent,
-    ZonePagesComponent
+    ZonePagesComponent,
+    PlaceTaskBasicComponent,
+    PlaceRemoveComponent
   ],
   imports: [
     CommonModule,
@@ -41,6 +45,8 @@ import { ZonePagesComponent } from './pages/zone-pages/zone-pages.component';
     PlaceUpdateComponent,
     CompanyUpdateComponent,
     ZoneUpdateComponent,
+    PlaceTaskBasicComponent,
+    PlaceRemoveComponent
   ]
 })
 export class PlaceModule { }

@@ -1,10 +1,11 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
-import { Place } from '../../models/place';
+import { Place, PlaceModel } from '../../models/place';
 import { BsModalRef } from 'ngx-bootstrap';
 import { PlaceService } from '../../services/place.service';
 import { Beacon } from 'src/app/beacon/models/beacon';
 import { BeaconService } from 'src/app/beacon/services/beacon.service';
 import { ToastService, UploadFile, UploadInput, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
+import { GlobalService } from 'src/app/core/services/global.service';
 
 @Component({
   selector: 'app-place-update',
@@ -13,7 +14,7 @@ import { ToastService, UploadFile, UploadInput, humanizeBytes, UploadOutput } fr
 })
 export class PlaceUpdateComponent implements OnInit {
   place: Place;
-  placeUM: Place = new Place();
+  placeUM: PlaceModel = new PlaceModel();
   beaconList: Beacon[];
   optionsSelect: any[] = [];
   refresh: EventEmitter<any> = new EventEmitter<any>();
@@ -30,6 +31,7 @@ export class PlaceUpdateComponent implements OnInit {
     private placeService: PlaceService,
     private beaconService: BeaconService,
     private toastService: ToastService,
+    private globalService: GlobalService
     ) {
       this.files = [];
       this.uploadInput = new EventEmitter<UploadInput>();
@@ -38,19 +40,63 @@ export class PlaceUpdateComponent implements OnInit {
 
   ngOnInit() {
     this.getBeacon();
-    console.log(this.optionsSelect);
   }
 
   updatePlace() {
-    this.placeService.update(this.place)
+    this.filesToUpload ? this.updatePlaceWithImage() : this.updatePlaceWithoutImage();
+  }
+
+  updatePlaceWithoutImage() {
+    this.placeUM.id = this.place.id;
+    this.placeUM.description = this.place.description;
+    this.placeUM.name = this.place.name;
+    this.placeUM.numberOfReworks = this.place.numberOfReworks;
+    this.placeUM.picture = this.place.picture;
+    this.placeUM.zoneId = this.place.zoneDTO.id;
+    this.placeService.update(this.placeUM)
       .then(
         response => {
-          this.toastService.success('Cập nhật nơi làm việc thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
           this.modalRef.hide();
           this.refresh.emit();
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
+  }
+
+  updatePlaceWithImage() {
+    const formData: FormData = new FormData();
+    if (!!this.filesToUpload) {
+      for (let index = 0; index < this.filesToUpload.length; index++) {
+        const file: File = this.filesToUpload[index];
+        formData.append('dataFile', file);
+      }
+    }
+    this.globalService.uploadFile(formData, 'image/workplace/')
+      .then(
+        (response) => {
+          this.placeUM.id = this.place.id;
+          this.placeUM.description = this.place.description;
+          this.placeUM.name = this.place.name;
+          this.placeUM.numberOfReworks = this.place.numberOfReworks;
+          this.placeUM.picture = response;
+          this.placeUM.zoneId = this.place.zoneDTO.id;
+          this.placeService.update(this.placeUM)
+            .then(
+              () => {
+                this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
+                this.modalRef.hide();
+                this.refresh.emit();
+              },
+              () => {
+                this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+              }
+            );
+        },
+        (error) => {
+          console.error(error);
         }
       );
   }
@@ -123,6 +169,8 @@ export class PlaceUpdateComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]); // read file as data url
 
       reader.onload = (event1: any) => { // called once readAsDataURL is completed
+
+        this.url = event1.target.result;
 
         // this.employee.picture ? this.employee.picture = event1.target.result : this.url = event1.target.result;
 

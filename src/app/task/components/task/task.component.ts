@@ -9,6 +9,7 @@ import { Employee } from 'src/app/employee/models/employee';
 import { Place } from 'src/app/place/models/place';
 import { ScheduleService } from '../../service/schedule.service';
 import { ScheduleModel } from '../../models/schedule';
+import { GlobalService } from 'src/app/core/services/global.service';
 
 @Component({
   selector: 'app-task',
@@ -49,24 +50,14 @@ export class TaskComponent implements OnInit {
     private employeeService: EmployeeService,
     private scheduleService: ScheduleService,
     private workplaceService: PlaceService,
+    private globalService: GlobalService
   ) {}
 
   ngOnInit() {
     this.getTask();
     this.getEmployee();
     // this.getWorkplace();
-    this.iconPrioritySelect = [
-      { value: 1, label: 'Rất cao',
-      icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/highest.svg' },
-      { value: 2, label: 'Cao',
-      icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/high.svg' },
-      { value: 3, label: 'Bình thường',
-      icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/medium.svg' },
-      { value: 4, label: 'Thấp',
-      icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/low.svg' },
-      { value: 5, label: 'Rất thấp',
-      icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/lowest.svg' },
-    ];
+    this.iconPrioritySelect = this.globalService.iconPrioritySelect;
     this.week = [
       { id: 1, inputId: 'option1', label: 'Thứ 2' , check: false},
       { id: 2, inputId: 'option2', label: 'Thứ 3' , check: false},

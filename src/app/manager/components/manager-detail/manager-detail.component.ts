@@ -13,6 +13,7 @@ import { CompanyService } from 'src/app/place/services/company.service';
 import { Company } from 'src/app/place/models/company';
 import { Zone } from 'src/app/place/models/zone';
 import { Place } from 'src/app/place/models/place';
+import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Component({
   selector: 'app-manager-detail',
@@ -26,6 +27,8 @@ export class ManagerDetailComponent implements OnInit {
   sub: any;
   @ViewChild('createEmployeeModal') createEmployeeModal: ModalDirective;
   @ViewChild('createWorkplaceModal') createWorkplaceModal: ModalDirective;
+  @ViewChild('moreEmp') empToggle: any;
+  @ViewChild('moreWP') workplaceToggle: any;
   manager: Manager = new Manager();
   formData: FormData;
   files: UploadFile[];
@@ -38,6 +41,10 @@ export class ManagerDetailComponent implements OnInit {
   isSelectCompany = false;
   isSelectZone = false;
   employeeList: any[];
+  employeeListByManager: Employee[] = [];
+  employeeResponseByManager: PaginationResponse;
+  workplaceListByManager: Place[] = [];
+  workplaceResponseByManager: PaginationResponse;
   companyList: any[];
   zoneList: any[];
   placeList: any[];
@@ -61,11 +68,12 @@ export class ManagerDetailComponent implements OnInit {
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
-      this.getInfo();
-      this.getEmployeeTask();
-      this.getEmployee();
-      this.getCompany();
+      this.getEmployeeByManager(this.id);
     });
+    this.getInfo();
+    this.getEmployeeTask();
+    this.getEmployee();
+    this.getCompany();
   }
 
   getInfo() {
@@ -99,6 +107,26 @@ export class ManagerDetailComponent implements OnInit {
           });
         }
       );
+  }
+
+  getEmployeeByManager(managerId: number) {
+    this.employeeService.getEmployeeByManager(managerId, '', 'id', 0, 99)
+      .then(
+        (response: PaginationResponse) => {
+          this.employeeListByManager = response.content;
+          this.employeeResponseByManager = response;
+        }
+      );
+  }
+
+  getWorkplaceByManager(managerId: number) {
+    // this.workplaceService.getWorkplaceByManager(managerId, '', 'id', 0, 99)
+    //   .then(
+    //     (response: PaginationResponse) => {
+    //       this.workplaceListByManager = response.content;
+    //       this.workplaceResponseByManager = response;
+    //     }
+    //   );
   }
 
   selectEmployee(e: any) {
@@ -181,6 +209,16 @@ export class ManagerDetailComponent implements OnInit {
 
   }
 
+  toggleEmp() {
+    this.empToggle.toggle();
+    this.isShowMore1 = true;
+  }
+
+  toggleWorkplace() {
+    this.workplaceToggle.toggle();
+    this.isShowMore2 = true;
+  }
+
   showFiles() {
     let files = '';
     for (let i = 0; i < this.files.length; i ++) {
@@ -235,6 +273,8 @@ export class ManagerDetailComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]); // read file as data url
 
       reader.onload = (event1: any) => { // called once readAsDataURL is completed
+
+        this.url = event1.target.result;
 
         this.manager.picture ? this.manager.picture = event1.target.result : this.url = event1.target.result;
 
