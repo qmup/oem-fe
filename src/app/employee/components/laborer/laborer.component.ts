@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { EmployeeService } from '../../services/employee.service';
-import { Employee, EmployeeCreateModel } from '../../models/employee';
+import { Employee } from '../../models/employee';
 import { ModalDirective, ToastService, UploadInput, UploadFile, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap';
 import { EmployeeUpdateComponent } from '../employee-update/employee-update.component';
@@ -24,7 +24,7 @@ export class LaborerComponent implements OnInit {
   optionsSex = new Array<any>();
   gender: number;
   modalRef: BsModalRef;
-  employeeCM: EmployeeCreateModel = new EmployeeCreateModel();
+  employeeCM: Employee = new Employee();
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
   formData: FormData;
@@ -143,6 +143,7 @@ export class LaborerComponent implements OnInit {
   }
 
   createEmployee() {
+    this.employeeCM.fullName = `${this.employeeCM.firstName} ${this.employeeCM.lastName}`;
     this.filesToUpload ? this.createEmployeeWithImage() : this.createEmployeeWithoutImage();
   }
 

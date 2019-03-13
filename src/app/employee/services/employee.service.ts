@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Employee, EmployeeCreateModel, EmployeeUpdateModel } from '../models/employee';
+import { Employee } from '../models/employee';
 import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Injectable({
@@ -11,7 +11,7 @@ export class EmployeeService {
 
   constructor(private httpClient: HttpClient) { }
 
-  create(employeeCM: EmployeeCreateModel): Promise<any> {
+  create(employeeCM: Employee): Promise<any> {
     return this.httpClient.post<any>(
       `${environment.endPoint}${environment.apiPaths.employee.create}`, employeeCM
     ).toPromise();
@@ -65,8 +65,8 @@ export class EmployeeService {
     ).toPromise();
   }
 
-  update(employeeUM: EmployeeUpdateModel): Promise<EmployeeUpdateModel> {
-    return this.httpClient.put<EmployeeUpdateModel>(
+  update(employeeUM: Employee): Promise<Employee> {
+    return this.httpClient.put<Employee>(
       `${environment.endPoint}${environment.apiPaths.employee.update}`, employeeUM
     ).toPromise();
   }

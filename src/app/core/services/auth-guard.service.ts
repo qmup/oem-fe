@@ -29,16 +29,6 @@ export class AuthGuardService {
     return token;
   }
 
-  getUserAccount(): UserAccount {
-    let userAccount: UserAccount;
-    try {
-      userAccount = JSON.parse(localStorage.getItem(environment.account));
-    } catch (exception) {
-
-    }
-    return userAccount;
-  }
-
   setToken(token: string) {
     localStorage.setItem(environment.token, JSON.stringify(token));
   }

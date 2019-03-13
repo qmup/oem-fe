@@ -49,6 +49,10 @@ export class GlobalService {
     this.isLogin = token ? true : false;
   }
 
+  getUserAccount(): UserAccount {
+      return JSON.parse(localStorage.getItem(environment.account));
+  }
+
   convertToYearMonthDay(date) {
     const year = date.getFullYear();
 

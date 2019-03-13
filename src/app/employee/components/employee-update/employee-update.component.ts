@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
-import { Employee, EmployeeUpdateModel } from '../../models/employee';
+import { Employee } from '../../models/employee';
 import { BsModalRef } from 'ngx-bootstrap';
 import { EmployeeService } from '../../services/employee.service';
 import { ToastService, humanizeBytes, UploadInput, UploadFile, UploadOutput } from 'ng-uikit-pro-standard';
@@ -17,7 +17,7 @@ export class EmployeeUpdateComponent implements OnInit {
 
   gender: number;
   employee: Employee;
-  employeeUM: EmployeeUpdateModel = new EmployeeUpdateModel();
+  employeeUM: Employee = new Employee();
   optionsSelect: { value: number; label: string; }[];
   optionsSex: { value: number; label: string; }[];
   refresh: EventEmitter<any> = new EventEmitter<any>();
