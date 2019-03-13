@@ -3,11 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { LaborerPagesComponent } from './pages/laborer-pages/laborer-pages.component';
 import { SalerPagesComponent } from './pages/saler-pages/saler-pages.component';
 import { EmployeeDetailComponent } from './components/employee-detail/employee-detail.component';
+import { AuthGuardService } from '../core/services/auth-guard.service';
 
 const routes: Routes = [
-  { path: 'laborer', component: LaborerPagesComponent },
-  { path: 'saler', component: SalerPagesComponent },
-  { path: 'employee-detail/:id', component: EmployeeDetailComponent },
+  { path: 'laborer', component: LaborerPagesComponent, canActivate: [AuthGuardService] },
+  { path: 'saler', component: SalerPagesComponent, canActivate: [AuthGuardService] },
+  { path: 'employee-detail/:id', component: EmployeeDetailComponent, canActivate: [AuthGuardService] },
 ];
 
 @NgModule({

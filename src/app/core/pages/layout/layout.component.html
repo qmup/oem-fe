@@ -147,14 +147,17 @@
         <ul class="nav navbar-nav nav-flex-icons ml-auto ie-double-nav ie-hidden-double-nav">
           <li class="nav-item dropdown btn-group" dropdown>
             <span>
+              <!-- <img [src]="globalService.userAccount.picture"> -->
               <img src="https://avatars3.githubusercontent.com/u/29126668?s=400&u=81f773df3ce61b5cffab8422e8280b4ce0a7b7b9&v=4">
+              
             </span>
             <a dropdownToggle type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-              Nguyễn Minh Quân
+              <!-- Nguyễn Minh Quân -->
+              {{ globalService.userAccount.username }}
             </a>
             <div class="dropdown-menu dropdown-info dropdown-menu-right" role="menu">
-              <a class="dropdown-item" [routerLink]="['/view-profile']">Settings</a>
-              <a class="dropdown-item" href="#">Logout</a>
+              <a class="dropdown-item" [routerLink]="['/view-profile']">Thông tin cá nhân</a>
+              <a class="dropdown-item" href="#" (click)="logOut()">Đăng xuất</a>
             </div>
           </li>
         </ul>

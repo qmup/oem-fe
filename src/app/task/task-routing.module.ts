@@ -5,13 +5,14 @@ import { TaskDetailComponent } from './components/task-detail/task-detail.compon
 import { SchedulePagesComponent } from './pages/schedule-pages/schedule-pages.component';
 import { ScheduleDetailComponent } from './components/schedule-detail/schedule-detail.component';
 import { BasicTaskPagesComponent } from './pages/basic-task-pages/basic-task-pages.component';
+import { AuthGuardService } from '../core/services/auth-guard.service';
 
 const routes: Routes = [
-  { path: 'task', component: TaskPagesComponent },
-  { path: 'task-detail/:id', component: TaskDetailComponent },
-  { path: 'schedule', component: SchedulePagesComponent },
-  { path: 'schedule-detail/:id', component: ScheduleDetailComponent },
-  { path: 'basic-task', component: BasicTaskPagesComponent },
+  { path: 'task', component: TaskPagesComponent, canActivate: [AuthGuardService] },
+  { path: 'task-detail/:id', component: TaskDetailComponent, canActivate: [AuthGuardService] },
+  { path: 'schedule', component: SchedulePagesComponent, canActivate: [AuthGuardService] },
+  { path: 'schedule-detail/:id', component: ScheduleDetailComponent, canActivate: [AuthGuardService] },
+  { path: 'basic-task', component: BasicTaskPagesComponent, canActivate: [AuthGuardService] },
 ];
 
 @NgModule({

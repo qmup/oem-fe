@@ -2,29 +2,51 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { AssignTask } from '../models/shared';
+import { AuthGuardService } from './auth-guard.service';
+import { UserAccount } from 'src/app/authorize/models/token';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GlobalService {
 
-  isLogin = true;
-  userName: string;
-  requestEvent: EventEmitter<number> = new EventEmitter<number>();
+  isLogin: boolean;
+  userAccount: UserAccount;
+  isRequesting: EventEmitter<boolean> = new EventEmitter<boolean>();
   iconPrioritySelect = [
-    { value: '1', label: 'Rất cao',
-    icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/highest.svg' },
-    { value: '2', label: 'Cao',
-    icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/high.svg' },
-    { value: '3', label: 'Bình thường',
-    icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/medium.svg' },
-    { value: '4', label: 'Thấp',
-    icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/low.svg' },
-    { value: '5', label: 'Rất thấp',
-    icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/lowest.svg' },
+    {
+      value: '1',
+      label: 'Rất cao',
+      icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/highest.svg'
+    },
+    {
+      value: '2',
+      label: 'Cao',
+      icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/high.svg'
+    },
+    {
+      value: '3',
+      label: 'Bình thường',
+      icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/medium.svg'
+    },
+    {
+      value: '4',
+      label: 'Thấp',
+      icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/low.svg'
+    },
+    {
+      value: '5',
+      label: 'Rất thấp',
+      icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/lowest.svg'
+    },
   ];
 
-  constructor(private httpClient: HttpClient) {
+  constructor(
+    private httpClient: HttpClient,
+    private authGuardService: AuthGuardService
+  ) {
+    const token = this.authGuardService.getToken();
+    this.isLogin = token ? true : false;
   }
 
   convertToYearMonthDay(date) {

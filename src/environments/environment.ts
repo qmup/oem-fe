@@ -5,6 +5,8 @@
 
 export const environment = {
   production: false,
+  token: 'OEM_TOKEN',
+  account: 'OEM_ACCOUNT',
   endPoint: 'http://localhost:8080/',
   // endPoint: 'http://113.161.84.125/',
   apiPaths: {
@@ -15,6 +17,10 @@ export const environment = {
       projectId: 'outdoor-management-servi-8ca4e',
       storageBucket: 'outdoor-management-servi-8ca4e.appspot.com',
       messagingSenderId: '244083668959'
+    },
+    authorize: {
+      login: 'account/login',
+      getInformation: 'account/get-info',
     },
     assign: {
       assignTask: 'assign-task/',

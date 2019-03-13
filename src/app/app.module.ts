@@ -25,6 +25,8 @@ import { AngularFireModule } from '@angular/fire';
 import { NotificationService } from './core/services/notification.service';
 import { AsyncPipe } from '@angular/common';
 import { TaskCalendarModule } from './task-calendar/task-calendar.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { RequestInterceptorService } from './core/services/request-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,16 @@ import { TaskCalendarModule } from './task-calendar/task-calendar.module';
     AngularFireModule.initializeApp(environment.apiPaths.firebase),
 
   ],
-  providers: [MDBSpinningPreloader, NotificationService, AsyncPipe],
+  providers: [
+    MDBSpinningPreloader,
+    NotificationService,
+    AsyncPipe,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RequestInterceptorService,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent],
   schemas:      [ NO_ERRORS_SCHEMA ]
 })
