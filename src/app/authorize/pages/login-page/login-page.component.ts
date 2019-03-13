@@ -34,12 +34,13 @@ export class LoginPageComponent implements OnInit {
       .then(
         (response: any) => {
           this.authGuardService.setToken(response.Authorization);
+          this.globalService.isLogin = true;
           this.authService.getInformation(this.email)
           .then(
             (response2: UserAccount) => {
               this.globalService.userAccount = response2;
+              this.authGuardService.setUserAccount(response2);
               this.toastService.success('Đăng nhập thành công', '', { positionClass: 'toast-bottom-right'} );
-              this.globalService.isLogin = true;
               this.router.navigate(['']);
               },
               (error: string) => {
@@ -48,7 +49,7 @@ export class LoginPageComponent implements OnInit {
             );
         },
         (error: any) => {
-          console.log(error);
+          this.globalService.isLogin = false;
         }
       );
   }

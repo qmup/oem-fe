@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { AuthGuardService } from '../../services/auth-guard.service';
 import { GlobalService } from '../../services/global.service';
 import { Router } from '@angular/router';
 import { UserAccount } from 'src/app/authorize/models/token';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-layout',
@@ -12,7 +13,7 @@ import { UserAccount } from 'src/app/authorize/models/token';
 export class LayoutComponent implements OnInit {
   @Input() isLogin: boolean;
   userAccount: UserAccount;
-
+  routerSubscription: Subscription;
   constructor(
     private authGuardService: AuthGuardService,
     public globalService: GlobalService,
@@ -25,6 +26,7 @@ export class LayoutComponent implements OnInit {
 
   logOut() {
     this.authGuardService.clearToken();
+    this.globalService.isLogin = false;
     this.router.navigate(['login']);
   }
 
