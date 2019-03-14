@@ -29,6 +29,8 @@ export class EmployeeUpdateComponent implements OnInit {
   humanizeBytes: Function;
   dragOver: boolean;
   url: any;
+  isExist: boolean;
+  roleList: any;
 
   constructor(
     public modalRef: BsModalRef,
@@ -44,6 +46,7 @@ export class EmployeeUpdateComponent implements OnInit {
 
   ngOnInit() {
     this.getManager();
+    this.getRole();
     this.optionsSex = [
       { value: 0, label: 'Nam'},
       { value: 1, label: 'Nữ'},
@@ -53,15 +56,37 @@ export class EmployeeUpdateComponent implements OnInit {
     } else {
       this.gender = 1;
     }
-    console.log(this.employee.managerId);
     const year = this.employee.birthDate.split('-', 3)[0];
     const month = this.employee.birthDate.split('-', 3)[1];
     const day = this.employee.birthDate.split('-', 3)[2];
     this.employee.birthDate = `${day}-${month}-${year}`;
   }
 
+  checkEmailExist() {
+    this.employeeService.checkExist(this.employee.email)
+      .then(
+        (response) => {
+          this.isExist = response;
+        }
+      );
+  }
+
+  getRole() {
+    this.employeeService.getRole()
+      .then(
+        (response) => {
+          response.shift();
+          this.roleList = response.map((role) => {
+            return {
+              value: role.id,
+              label: role.roleName
+            };
+          });
+        }
+      );
+  }
   getManager() {
-    this.employeeService.getByRole(1, '', '', 'id', 0, 10)
+    this.employeeService.getByRole(2, '', '', 'id', 0, 10)
       .then(
         (response: PaginationResponse) => {
           this.managerList = response.content.map((manager) => {
@@ -87,6 +112,10 @@ export class EmployeeUpdateComponent implements OnInit {
   }
 
   updateEmployee() {
+    this.employee.fullName = `${this.employee.firstName} ${this.employee.lastName}`;
+    if (this.employee.roleId === 2) {
+      this.employee.managerId = 0;
+    }
     this.filesToUpload ? this.updateEmployeeWithImage() : this.updateEmployeeWithoutImage();
   }
 
@@ -102,6 +131,7 @@ export class EmployeeUpdateComponent implements OnInit {
       .then(
         (response) => {
           this.employeeUM.id = this.employee.id;
+          this.employeeUM.employeeId = this.employee.employeeId;
           this.employeeUM.firstName = this.employee.firstName;
           this.employeeUM.fullName = this.employee.fullName;
           this.employeeUM.lastName = this.employee.lastName;
@@ -115,7 +145,9 @@ export class EmployeeUpdateComponent implements OnInit {
           this.employeeUM.sex = this.employee.sex;
           (this.gender === 0) ? this.employeeUM.sex = true : this.employeeUM.sex = false;
           this.employeeUM.address = this.employee.address;
+          console.log(this.employeeUM.birthDate);
           this.employeeUM.birthDate = this.globalService.convertStringToYearMonthDay(this.employee.birthDate);
+          console.log(this.employeeUM.birthDate);
           this.employeeUM.email = this.employee.email;
           console.log('with', this.employeeUM);
           this.employeeService.update(this.employeeUM)
@@ -138,6 +170,7 @@ export class EmployeeUpdateComponent implements OnInit {
 
   updateEmployeeWithoutImage() {
     this.employeeUM.id = this.employee.id;
+    this.employeeUM.employeeId = this.employee.employeeId;
     this.employeeUM.firstName = this.employee.firstName;
     this.employeeUM.fullName = this.employee.fullName;
     this.employeeUM.lastName = this.employee.lastName;
@@ -145,6 +178,7 @@ export class EmployeeUpdateComponent implements OnInit {
     this.employeeUM.phoneMacAddress = this.employee.phoneMacAddress;
     this.employeeUM.phoneNumber = this.employee.phoneNumber;
     this.employeeUM.picture = this.employee.picture;
+    this.employeeUM.managerId = this.employee.managerId;
     this.employeeUM.resetPasswordToken = this.employee.resetPasswordToken;
     this.employeeUM.roleId = this.employee.roleId;
     this.employeeUM.sex = this.employee.sex;

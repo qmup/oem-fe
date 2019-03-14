@@ -32,6 +32,12 @@ export class EmployeeService {
     ).toPromise();
   }
 
+  getRole(): Promise<any> {
+    return this.httpClient.get<any>(
+      `${environment.endPoint}${environment.apiPaths.employee.getAllRole}`,
+    ).toPromise();
+  }
+
   getByManager(managerId: number, sort: string, fieldSort: string, page: number, size: number): Promise<Employee[]> {
     return this.httpClient.get<Employee[]>(
       `${environment.endPoint}${environment.apiPaths.employee.get}`,
@@ -85,5 +91,26 @@ export class EmployeeService {
         },
       }
     ).toPromise();
+  }
+
+  checkExist(username: string): Promise<any> {
+    return this.httpClient.get<any>(
+      `${environment.endPoint}${environment.apiPaths.employee.checkExist}`,
+      {
+        params: {
+          username: `${username}`
+        }
+      }
+    ).toPromise();
+  }
+
+  updateField(id, key, value): Promise<any> {
+    return this.httpClient.put<any>(
+      `${environment.endPoint}${environment.apiPaths.employee.updateField}${id}`,
+        {
+          key: `${key}`,
+          value: `${value}`
+        }
+      ).toPromise();
   }
 }

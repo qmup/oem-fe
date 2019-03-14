@@ -1,11 +1,12 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EmployeeService } from '../../services/employee.service';
 import { Employee } from '../../models/employee';
 import { ManagerService } from 'src/app/manager/services/manager.service';
 import { Manager } from 'src/app/manager/models/manager';
-import { humanizeBytes, UploadInput, UploadFile, UploadOutput } from 'ng-uikit-pro-standard';
+import { humanizeBytes, UploadInput, UploadFile, UploadOutput, ToastService } from 'ng-uikit-pro-standard';
 import { PaginationResponse } from 'src/app/core/models/shared';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-employee-detail',
@@ -14,11 +15,12 @@ import { PaginationResponse } from 'src/app/core/models/shared';
 })
 export class EmployeeDetailComponent implements OnInit {
 
+  @ViewChild('updateManagerModal') updateModal: ModalDirective;
   employee: Employee = new Employee();
   isShowMore = false;
   id: number;
   sub: any;
-  managerName: string;
+  managerInfo: Manager = new Manager();
   formData: FormData;
   files: UploadFile[];
   uploadInput: EventEmitter<UploadInput>;
@@ -26,11 +28,14 @@ export class EmployeeDetailComponent implements OnInit {
   dragOver: boolean;
   url: any;
   filesToUpload: FileList;
+  managerList: any[];
+  selectingManagerId: number;
 
   constructor(
     private route: ActivatedRoute,
     private employeeService: EmployeeService,
     private managerService: ManagerService,
+    private toastService: ToastService
   ) {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
@@ -42,6 +47,7 @@ export class EmployeeDetailComponent implements OnInit {
       this.id = +params['id'];
       this.getEmployeeDetail(this.id);
     });
+    // this.getManager();
   }
 
   getEmployeeDetail(id: number) {
@@ -49,19 +55,47 @@ export class EmployeeDetailComponent implements OnInit {
       .then(
         (response: Employee) => {
           this.employee = response;
+          this.getManager();
         }
       );
   }
 
   getManager() {
-    this.employeeService.getByRole(1, '', '', 'id', 0, 10)
+    this.employeeService.getByRole(2, '', '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
-          this.managerName = response.content.find((manager: Manager) => manager.id === this.employee.managerId).fullName;
+          this.managerList = response.content.map((manager) => {
+            return {
+              value: manager.id,
+              label: manager.fullName,
+              icon: manager.picture
+            };
+          });
+          if (this.employee.managerId !== 0) {
+            this.managerInfo = response.content.find((manager: Manager) => manager.id === this.employee.managerId);
+          }
         }
       );
   }
 
+  openUpdateManagerModal() {
+    this.updateModal.show();
+  }
+
+  selectManager(e: any) {
+    this.selectingManagerId = e.value;
+  }
+
+  updateEmployeeForManager() {
+    this.employeeService.updateField(this.id , 'managerId', this.selectingManagerId)
+      .then(
+        () => {
+          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.updateModal.hide();
+          this.getEmployeeDetail(this.id);
+        }
+      );
+  }
   showFiles() {
     let files = '';
     for (let i = 0; i < this.files.length; i ++) {

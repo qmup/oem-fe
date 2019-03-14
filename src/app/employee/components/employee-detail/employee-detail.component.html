@@ -6,7 +6,7 @@
         <div class="face front tp-box_side tp-box_front">
 
           <!-- Image-->
-          <div class="card-up blue-gradient lighten-1">
+          <div class="card-up">
             <img src="assets/background-profile.jpg" class="img-fluid">
           </div>
           <!--Avatar-->
@@ -15,10 +15,12 @@
           </div>
           <!--Content-->
           <div class="card-body">
-            <h4>{{ employee.firstName }} {{ employee.lastName }}</h4>
+            <h4>{{ employee.fullName }}</h4>
             <p class="text-danger">Chức vụ: Lao công</p>
+
+            <!-- Button for manager -->
             <!--Triggering button-->
-            <a class="rotate-btn" data-card="card-1" (click)="cards.toggle()">Chi tiết </a>
+            <!-- <a class="rotate-btn" data-card="card-1" (click)="cards.toggle()">Chi tiết </a> -->
           </div>
         </div>
         <!--/.Front Side-->
@@ -30,51 +32,45 @@
           <h4>Thông tin chi tiết</h4>
           <hr>
 
-            <mdb-card-text style="text-align: left" class="profile-text">
-              <i class="fa fa-birthday-cake mr-2 mb-3"></i>
-              <span class="mb-3">Sinh nhật: {{ employee.birthDate | date: 'dd-MM-yyyy' }}</span>
-              <br>
-              <i class="fa fa-phone mr-2 mb-3"></i>
-              <span class="mb-3">Số điện thoại: {{ employee.phoneNumber }}</span>
-              <br>
-              <i class="fa fa-envelope-open-o mr-2 mb-3"></i>
-              <span class="mb-3">Email: {{ employee.email }}</span>
-              <br>
-              <i class="fa fa-map-marker mr-2 mb-3"></i>
-              <span class="mb-3">Địa chỉ: {{ employee.address }}</span>
-              <br>
-              <i class="fa fa-user mr-2 mb-3"></i>
-              <span class="mb-3">Người quản lý: {{ managerName }}</span>
-            </mdb-card-text>
+          <mdb-card-text style="text-align: left" class="profile-text">
+            <i class="fa fa-birthday-cake mr-2 mb-3"></i>
+            <span class="mb-3">Sinh nhật: {{ employee.birthDate | date: 'dd-MM-yyyy' }}</span>
+            <br>
+            <i class="fa fa-phone mr-2 mb-3"></i>
+            <span class="mb-3">Số điện thoại: {{ employee.phoneNumber }}</span>
+            <br>
+            <i class="fa fa-envelope-open-o mr-2 mb-3"></i>
+            <span class="mb-3">Email: {{ employee.email }}</span>
+            <br>
+            <i class="fa fa-map-marker mr-2 mb-3"></i>
+            <span class="mb-3">Địa chỉ: {{ employee.address }}</span>
+            <br>
+            <i class="fa fa-user mr-2 mb-3"></i>
+            <span class="mb-3">Người quản lý: {{ managerInfo.fullName }}</span>
+          </mdb-card-text>
 
           <!--Triggering button-->
-          <a class="rotate-btn" data-card="card-1" (click)="cards.toggle()">Trở lại</a>
+          <a class="rotate-btn font-weight-normal" data-card="card-1" (click)="cards.toggle()">Trở lại</a>
 
         </div>
         <!--/.Back Side-->
       </mdb-flipping-card>
     </div>
     <div class="col-md-7 mb-4 mx-auto">
-      <div class="view-all-button row">
-        <div class="col pr-0">
-          <p class="h5">Worked on</p>
-        </div>
-        <div class="col-9 pl-0">
-          <a [routerLink]="['/task']" class="link">View all</a>
-        </div>
-      </div>
-      <!-- Card -->
-      <mdb-card class="mt-3">
-        <div class="view rgba-white-slight waves-light" mdbWavesEffect>
-          <!-- Card img -->
-          <a>
-            <div class="mask"></div>
-          </a>
-        </div>
-        <!--Card content-->
-        <mdb-card-body>
+      <!-- Card for manager -->
+      <!-- <mdb-card class="mt-3" cascade="true">
+        
+        <mdb-card-body cascade="true" class="text-left"> 
+          <mdb-card-title class="d-flex flex-wrap">
+            <div class="col pr-0">
+              <p class="h5">Danh sách công việc</p>
+            </div>
+            <div class="col pl-0">
+              <a [routerLink]="['/employee']" class="link">Xem tất cả</a>
+              <a class="btn-floating btn-md btn-success"><i class="fa fa-plus"></i></a>
+            </div>
+          </mdb-card-title>
 
-          <!--Text-->
           <div class="list-group">
             <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let i of [1,2,3,4,5]" [routerLink]="['/task-detail', i]">
               <i class="fa fa-trash mt-2 col"></i>
@@ -102,7 +98,7 @@
               *ngIf="!isShowMore"
               (click)="moreTask.toggle(); isShowMore = true"
               mdbWavesEffect>
-              Show more
+              Hiện thêm
             </button>
             <button
               mdbBtn
@@ -112,11 +108,109 @@
               *ngIf="isShowMore"
               [routerLink]="['/task']"
               mdbWavesEffect>
-              View all
+              Xem tất cả
             </button>
           </div>
         </mdb-card-body>
+      </mdb-card> -->
+
+      <!-- Card for admin -->
+      <mdb-card class="mt-3" cascade="true">
+
+        <!--Card content-->
+        <mdb-card-body cascade="true" class="text-left">
+          <mdb-card-title class="d-flex flex-wrap">
+            <div class="col pr-0">
+              <p class="h5">Người quản lý</p>
+            </div>
+            <div class="col pl-0" *ngIf="employee.managerId !== 0">
+              <a class="btn-floating btn-md btn-primary"><i class="fa fa-pencil" (click)="openUpdateManagerModal()"></i></a>
+            </div>
+          </mdb-card-title>
+
+          <!--Text-->
+          <div class="list-group" *ngIf="employee.managerId !== 0">
+            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect>
+              <div class="avatar">
+                <img [src]="managerInfo.picture" alt="" class="rounded-circle img-responsive list-avatar">
+              </div>
+              <div class="col-11">
+                {{managerInfo.fullName}}
+                <br>
+                <small>Địa chỉ: {{managerInfo.address}}</small>
+                <br>
+                <small>Số điện thoại: {{managerInfo.phoneNumber}}</small>
+              </div>
+            </a>
+          </div>
+          <p class="text-danger pl-3" *ngIf="employee.managerId === 0">Chưa có người quản lý</p>
+          <button mdbBtn type="button" color="success" rounded="true" class="waves-light" *ngIf="employee.managerId === 0" (click)="openUpdateManagerModal()" mdbWavesEffect>Thêm người quản lý</button>
+        </mdb-card-body>
       </mdb-card>
+
+      <mdb-card class="mt-3" cascade="true">
+
+        <!--Card content-->
+        <mdb-card-body cascade="true" class="text-left">
+          <mdb-card-title class="d-flex flex-wrap">
+            <div class="col pr-0">
+              <p class="h5">Thông tin cơ bản</p>
+            </div>
+            <!-- <div class="col pl-0">
+              <a class="btn-floating btn-md btn-primary"><i class="fa fa-pencil"></i></a>
+            </div> -->
+          </mdb-card-title>
+
+          <!--Text-->
+          <mdb-card-text style="text-align: left; font-size: 16px" class="profile-text pl-5 mb-0">
+            <i class="fa fa-venus-mars mr-2 mb-4"></i>
+            <span class="mb-3">Giới tính: {{ employee.sex ? 'Nam' : 'Nữ' }}</span>
+            <br>
+            <i class="fa fa-birthday-cake mr-2 mb-4"></i>
+            <span class="mb-3">Sinh nhật: {{ employee.birthDate | date: 'dd-MM-yyyy' }}</span>
+            <br>
+            <i class="fa fa-phone mr-2 mb-4"></i>
+            <span class="mb-3">Số điện thoại: {{ employee.phoneNumber }}</span>
+            <br>
+            <i class="fa fa-envelope-open-o mr-2 mb-4"></i>
+            <span class="mb-3">Email: {{ employee.email }}</span>
+            <br>
+            <i class="fa fa-map-marker mr-2 mb-4"></i>
+            <span class="mb-3">Địa chỉ: {{ employee.address }}</span>
+            <br>
+            <i class="fa fa-mobile mr-2 mb-4"></i>
+            <span class="mb-3">MAC Address: {{ employee.phoneMacAddress }}</span>
+            <br>
+          </mdb-card-text>
+        </mdb-card-body>
+      </mdb-card>
+    </div>
+  </div>
+</div>
+
+<div mdbModal #updateManagerModal="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="add"
+  aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Chọn người quản lý khác</p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="updateManagerModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3 row">
+        <div class="col-12">
+          <div class="md-form my-3">
+            <mdb-select [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="managerList" (selected)="selectManager($event)"></mdb-select>
+            <label>Quản lý</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="updateEmployeeForManager()">Sửa
+          <i class="fa fa-check ml-1"></i>
+        </button>
+      </div>
     </div>
   </div>
 </div>

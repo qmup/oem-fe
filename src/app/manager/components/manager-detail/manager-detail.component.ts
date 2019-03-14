@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, ViewChild } from '@angular/core';
-import { UploadFile, UploadInput, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
+import { UploadFile, UploadInput, humanizeBytes, UploadOutput, ToastService } from 'ng-uikit-pro-standard';
 import { Manager } from '../../models/manager';
 import { TaskService } from 'src/app/task/service/task.service';
 import { Task } from 'src/app/task/models/task';
@@ -12,7 +12,7 @@ import { PlaceService } from 'src/app/place/services/place.service';
 import { CompanyService } from 'src/app/place/services/company.service';
 import { Company } from 'src/app/place/models/company';
 import { Zone } from 'src/app/place/models/zone';
-import { Place } from 'src/app/place/models/place';
+import { Place, ManageWorkplace } from 'src/app/place/models/place';
 import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Component({
@@ -27,6 +27,8 @@ export class ManagerDetailComponent implements OnInit {
   sub: any;
   @ViewChild('createEmployeeModal') createEmployeeModal: ModalDirective;
   @ViewChild('createWorkplaceModal') createWorkplaceModal: ModalDirective;
+  @ViewChild('removeEmp') removeEmployeeModal: ModalDirective;
+  @ViewChild('removeWp') removeWorkplaceModal: ModalDirective;
   @ViewChild('moreEmp') empToggle: any;
   @ViewChild('moreWP') workplaceToggle: any;
   manager: Manager = new Manager();
@@ -51,6 +53,10 @@ export class ManagerDetailComponent implements OnInit {
   taskList: Task[];
   listEmployeeId: number[];
   listWorkplaceId: number[];
+  addingEmpId: number;
+  deletingEmpId: number;
+  deletingWpId: number;
+  manageWorkplace: ManageWorkplace = new ManageWorkplace();
 
   constructor(
     private taskService: TaskService,
@@ -58,7 +64,8 @@ export class ManagerDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private companyService: CompanyService,
     private zoneService: ZoneService,
-    private workplaceService: PlaceService
+    private workplaceService: PlaceService,
+    private toastService: ToastService
   ) {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
@@ -69,10 +76,12 @@ export class ManagerDetailComponent implements OnInit {
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
       this.getEmployeeByManager(this.id);
+      this.getWorkplaceByManager(this.id);
+      this.manageWorkplace.managerId = this.id;
     });
     this.getInfo();
     this.getEmployeeTask();
-    this.getEmployee();
+    this.getEmployeeWithoutManager();
     this.getCompany();
   }
 
@@ -94,11 +103,11 @@ export class ManagerDetailComponent implements OnInit {
       );
   }
 
-  getEmployee() {
-    this.employeeService.getAll()
+  getEmployeeWithoutManager() {
+    this.employeeService.getEmployeeByManager(0, '', 'id', 0, 99)
       .then(
-        (response: Employee[]) => {
-          this.employeeList = response.map((employee) => {
+        (response: PaginationResponse) => {
+          this.employeeList = response.content.map((employee) => {
             return {
               value: employee.id,
               label: employee.fullName,
@@ -110,7 +119,7 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   getEmployeeByManager(managerId: number) {
-    this.employeeService.getEmployeeByManager(managerId, '', 'id', 0, 99)
+    this.employeeService.getEmployeeByManager(managerId, '', 'id', 0, 6)
       .then(
         (response: PaginationResponse) => {
           this.employeeListByManager = response.content;
@@ -120,16 +129,17 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   getWorkplaceByManager(managerId: number) {
-    // this.workplaceService.getWorkplaceByManager(managerId, '', 'id', 0, 99)
-    //   .then(
-    //     (response: PaginationResponse) => {
-    //       this.workplaceListByManager = response.content;
-    //       this.workplaceResponseByManager = response;
-    //     }
-    //   );
+    this.workplaceService.getWorkplaceByManager(managerId, '', 'id', 0, 6)
+      .then(
+        (response: PaginationResponse) => {
+          this.workplaceListByManager = response.content;
+          this.workplaceResponseByManager = response;
+        }
+      );
   }
 
   selectEmployee(e: any) {
+    this.addingEmpId = e.value;
   }
 
   getCompany() {
@@ -148,6 +158,7 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   selectCompany(e: any) {
+    this.manageWorkplace.companyId = e.value;
     this.isSelectCompany = true;
     this.getZone(e.value);
   }
@@ -168,6 +179,7 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   selectZone(e: any) {
+    this.manageWorkplace.zoneId = e.value;
     this.isSelectZone = true;
     this.getWorkplace(e.value);
   }
@@ -188,9 +200,7 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   selectWorkplace(e: any) {
-    e.forEach(element => {
-      this.listWorkplaceId.push(element.value);
-    });
+    this.manageWorkplace.workplaceId = e.value;
   }
 
   openCreateEmployeeModal() {
@@ -201,12 +211,83 @@ export class ManagerDetailComponent implements OnInit {
     this.createWorkplaceModal.show();
   }
 
-  addEmployeeForManager() {
+  openRemoveEmployeeModal(id: number) {
+    this.deletingEmpId = id;
+    this.removeEmployeeModal.show();
+  }
 
+  openRemoveWorkplaceModal(id: number) {
+    this.deletingWpId = id;
+    this.removeWorkplaceModal.show();
+  }
+
+  addEmployeeForManager() {
+    this.employeeService.updateField(this.addingEmpId, 'managerId', this.id)
+      .then(
+        () => {
+          this.toastService.success('Thêm thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.createEmployeeModal.hide();
+          this.employeeListByManager = [];
+          this.employeeResponseByManager = new PaginationResponse();
+          this.getEmployeeByManager(this.id);
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
   }
 
   addWorkplaceForManager() {
+    this.workplaceService.addManagerToWorkplace(this.manageWorkplace)
+      .then(
+        () => {
+          this.toastService.success('Cập nhật thông tin thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.createWorkplaceModal.hide();
+          this.workplaceListByManager = [];
+          this.workplaceResponseByManager = new PaginationResponse();
+          this.getWorkplaceByManager(this.id);
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
+  }
 
+  removeEmployeeByManager() {
+    this.employeeService.updateField(this.deletingEmpId, 'managerId', 0)
+      .then(
+        (response) => {
+          console.log(response);
+          this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.getEmployeeByManager(this.id);
+          this.removeEmployeeModal.hide();
+          this.employeeListByManager = [];
+          this.employeeResponseByManager = new PaginationResponse();
+
+        },
+        (error) => {
+          console.log(error);
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
+  }
+
+  removeWorkplaceByManager() {
+    this.workplaceService.removeFromManager(this.id, this.deletingWpId)
+      .then(
+        (response) => {
+          console.log(response);
+          this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.getWorkplaceByManager(this.id);
+          this.removeWorkplaceModal.hide();
+          this.workplaceListByManager = [];
+          this.workplaceResponseByManager = new PaginationResponse();
+        },
+        (error) => {
+          console.log(error);
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
   }
 
   toggleEmp() {

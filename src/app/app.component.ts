@@ -17,9 +17,9 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.globalService.isRequesting.subscribe(
       (isLoading) => {
-      setTimeout(() => {
-        this.isRequesting = isLoading;
-      }, isLoading ? 0 : 500);
+        setTimeout(() => {
+          this.isRequesting = isLoading;
+        }, isLoading ? 0 : 500);
     });
   }
 }

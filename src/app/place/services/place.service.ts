@@ -1,8 +1,9 @@
-import { Place, PlaceModel } from '../models/place';
+import { Place, PlaceModel, ManageWorkplace } from '../models/place';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { TaskBasic } from 'src/app/task/models/task-basic';
+import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,33 @@ export class PlaceService {
   addTask(taskBasicData): Promise<any> {
     return this.httpClient.post(
       `${environment.endPoint}${environment.apiPaths.workplace.addTask}`, taskBasicData
+    ).toPromise();
+  }
+  getWorkplaceByManager(managerId: number, sort: string, fieldSort: string, page: number, size: number ): Promise<PaginationResponse> {
+    return this.httpClient.get<PaginationResponse>(
+      `${environment.endPoint}${environment.apiPaths.workplace.getByManager}`,
+      {
+        params: {
+          managerID: `${managerId}`,
+          sort: `${sort}`,
+          fieldShort: `${fieldSort}`,
+          page: `${page}`,
+          size: `${size}`
+        }
+      }
+    ).toPromise();
+  }
+  addManagerToWorkplace(manageWorkplace: ManageWorkplace): Promise<any> {
+    return this.httpClient.post<any>(
+      `${environment.endPoint}${environment.apiPaths.workplace.addManager}`, manageWorkplace,
+      {
+        responseType: 'text' as 'json'
+      }
+    ).toPromise();
+  }
+  removeFromManager(managerId: number, workplaceId: number): Promise<any> {
+    return this.httpClient.delete<any>(
+      `${environment.endPoint}${environment.apiPaths.workplace.removeFromManager}/${managerId}/${workplaceId}`,
     ).toPromise();
   }
 }

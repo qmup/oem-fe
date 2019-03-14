@@ -12,6 +12,12 @@ html, body, main {
 .rounded-circle.img-responsive {
   height: 100% !important;
 }
+.modal {
+  overflow-y: auto !important;
+}
+.card .card-body .card-text {
+  font-size: 16px !important;
+}
 #company, #zone, #basic-task {
   .img-fluid {
     position: absolute !important;
@@ -142,6 +148,11 @@ main#main {
     top: -.1rem !important;
   }
 }
+// #employee-detail {
+//   .flip-container.card-wrapper {
+//     height: 600px !important;
+//   }
+// }
 #employee-detail, #manager-detail {
   .list-group-item.list-group-item-action.waves-light {
     border: none;

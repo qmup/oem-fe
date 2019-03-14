@@ -28,7 +28,7 @@ export class ManagerUpdateComponent implements OnInit {
   humanizeBytes: Function;
   dragOver: boolean;
   url: any;
-
+  isExist: boolean;
 
   constructor(
     public modalRef: BsModalRef,
@@ -56,6 +56,15 @@ export class ManagerUpdateComponent implements OnInit {
     const month = this.manager.birthDate.split('-', 3)[1];
     const day = this.manager.birthDate.split('-', 3)[2];
     this.manager.birthDate = `${day}-${month}-${year}`;
+  }
+
+  checkEmailExist() {
+    this.employeeService.checkExist(this.manager.email)
+      .then(
+        (response) => {
+          this.isExist = response;
+        }
+      );
   }
 
   updateManager() {

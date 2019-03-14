@@ -7,8 +7,8 @@ export const environment = {
   production: false,
   token: 'OEM_TOKEN',
   account: 'OEM_ACCOUNT',
-  endPoint: 'http://localhost:8080/',
-  // endPoint: 'http://113.161.84.125/',
+  // endPoint: 'http://localhost:8080/',
+  endPoint: 'http://113.161.84.125/',
   apiPaths: {
     firebase: {
       apiKey: 'AIzaSyCv23Kx9Xfh4okq30jtY_QJi2CudhO_7f4',
@@ -38,9 +38,12 @@ export const environment = {
       getAll: 'employee/get-all',
       remove: 'employee/remove/',
       update: 'employee/update-dto/',
+      updateField: 'employee/update/',
       getById: 'employee/get-info',
       getEmployeeByManager: 'employee/get-list/by-manager',
-      getByRole: 'employee/get-list/by-role'
+      getByRole: 'employee/get-list/by-role',
+      getAllRole: `employee/get-all-role`,
+      checkExist: 'account/check-exist-username'
     },
     manager: {
       create: 'employee/create',
@@ -54,7 +57,10 @@ export const environment = {
       remove: 'workplace/remove/',
       update: 'workplace/update-dto/',
       addTask: 'workplace/add-task/',
+      addManager: 'workplace/add-manager',
       getTaskBasic: 'workplace/get-task-basic/',
+      getByManager: 'workplace/get-list-by-manager',
+      removeFromManager: 'workplace/remove-workplace-from-manager'
     },
     task: {
       create: 'task/create',

@@ -68,3 +68,19 @@ export class CompanyDTO {
     this.picture = '';
   }
 }
+
+export class ManageWorkplace {
+  companyId: number;
+  id: number;
+  managerId: number;
+  workplaceId: number;
+  zoneId: number;
+
+  constructor() {
+    this.companyId = 0;
+    this.id = 0;
+    this.managerId = 0;
+    this.workplaceId = 0;
+    this.zoneId = 0;
+  }
+}

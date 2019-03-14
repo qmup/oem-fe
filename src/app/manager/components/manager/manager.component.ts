@@ -32,6 +32,7 @@ export class ManagerComponent implements OnInit {
   dragOver: boolean;
   url: any;
   filesToUpload: FileList;
+  isExist = false;
 
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
@@ -54,6 +55,15 @@ export class ManagerComponent implements OnInit {
       { value: 2, label: 'Nữ' },
     ],
     this.getManager();
+  }
+
+  checkEmailExist() {
+    this.employeeService.checkExist(this.managerCM.email)
+      .then(
+        (response) => {
+          this.isExist = response;
+        }
+      );
   }
 
   getManager() {

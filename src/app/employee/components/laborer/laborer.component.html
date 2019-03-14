@@ -43,8 +43,9 @@
                 <th>Hình ảnh</th>
                 <th>Họ</th>
                 <th>Tên</th>
-                <th style="width: 100px; max-width: 100px">Giới tính</th>
-                <th style="width: 150px; max-width: 150px">Số điện thoại</th>
+                <!-- <th style="width: 100px; max-width: 100px">Giới tính</th> -->
+                <th style="width: 100px; max-width: 100px">Chức vụ</th>
+                <th style="width: 140px; max-width: 140px">Số điện thoại</th>
                 <th>Địa chỉ</th>
                 <th style="width: 300px; max-width: 300px">Thao tác</th>
               </tr>
@@ -53,18 +54,23 @@
 
             <!--Table body-->
             <tbody>
-              <tr *ngFor="let data of search()">
+              <tr *ngFor="let data of employeeList">
                 <td scope="row" style="position: relative; width: 120px">
                   <img src="{{data.picture}}" alt="image" class="avatar">
                 </td>
                 <td>{{data.firstName}}</td>
                 <td>{{data.lastName}}</td>
-                <td>{{data.sex ? 'Nam' : 'Nữ'}}</td>
+                <td [ngClass]="{'text-danger' : data.roleId === 2}">{{data.roleId === 2 ? 'Quản lý' : 'Nhân viên'}}</td>
+                <!-- <td>{{data.sex ? 'Nam' : 'Nữ'}}</td> -->
                 <td>{{data.phoneNumber}}</td>
                 <td>{{data.address}}</td>
                 <td class="d-flex justify-content-center">
-                  <button title="Chi tiết" mdbBtn type="button" rounded="true" color="warning" class="waves-light col"
+                  <button *ngIf="data.roleId !== 2" title="Chi tiết" mdbBtn type="button" rounded="true" color="warning" class="waves-light col"
                     size="sm" mdbWavesEffect [routerLink]="['/employee-detail', data.id]">
+                    <i class="fa fa-eye"></i>
+                  </button>
+                  <button *ngIf="data.roleId === 2" title="Chi tiết" mdbBtn type="button" rounded="true" color="warning" class="waves-light col"
+                    size="sm" mdbWavesEffect [routerLink]="['/manager-detail', data.id]">
                     <i class="fa fa-eye"></i>
                   </button>
                   <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light col"
@@ -100,62 +106,77 @@
         </button>
       </div>
       <div class="modal-body mx-3 row">
-        <div class="md-form mt-0 mb-3 col-md-12">
-          <input type="text" id="email" class="form-control" mdbInput [(ngModel)]="employeeCM.email">
+        <div class="md-form mt-1 mb-3 col-md-12">
+          <input
+            type="text"
+            id="email"
+            class="form-control"
+            mdbInput
+            [(ngModel)]="employeeCM.email"
+            (blur)="checkEmailExist()"
+            #email=ngModel
+            [class.has-error]="isExist">
           <label for="email">Email</label>
+          <mdb-error *ngIf="isExist">
+            <p class="font-weight-bold">Email đã tồn tại</p>
+          </mdb-error>
         </div>
         
-        <div class="md-form mt-0 mb-3 col-md-6">
+        <div class="md-form mt-1 mb-3 col-md-6">
           <input type="text" id="employeeId" class="form-control" mdbInput [(ngModel)]="employeeCM.employeeId">
           <label for="userName">Mã số nhân viên</label>
         </div>
         
-        <div class="md-form mt-0 mb-3 col-md-6">
+        <div class="md-form mt-1 mb-3 col-md-6">
           <input type="password" id="password" class="form-control" mdbInput [(ngModel)]="employeeCM.password">
           <label for="password">Mật khẩu</label>
         </div>
 
-        <div class="md-form mt-0 mb-3 col-md-6">
+        <div class="md-form mt-1 mb-3 col-md-6">
           <input type="text" id="firstName" class="form-control" mdbInput [(ngModel)]="employeeCM.firstName">
           <label for="firstName">Họ</label>
         </div>
 
-        <div class="md-form mt-0 mb-3 col-md-6">
+        <div class="md-form mt-1 mb-3 col-md-6">
           <input type="text" id="lastName" class="form-control" mdbInput [(ngModel)]="employeeCM.lastName">
           <label for="lastName">Tên</label>
         </div>
 
-        <div class="md-form mt-0 mb-3 col-md-6 ">
+        <div class="md-form mt-1 mb-3 col-md-6 ">
           <mdb-select [options]="optionsSex" id="gender" placeholder="Giới tính" [(ngModel)]="gender"></mdb-select>
         </div>
 
-        <div class="md-form mt-0 mb-3 col-md-6">
+        <div class="md-form mt-1 mb-3 col-md-6">
           <input type="text" id="phoneNumber" class="form-control" mdbInput [(ngModel)]="employeeCM.phoneNumber">
           <label for="phoneNumber">Số điện thoại</label>
         </div>
 
-        <div class="md-form mt-0 mb-3 col-md-12">
+        <div class="md-form mt-1 mb-3 col-md-12">
           <input type="text" id="address" class="form-control" mdbInput [(ngModel)]="employeeCM.address">
           <label for="address">Địa chỉ</label>
         </div>
 
-        <div class="md-form mt-0 mb-3 col-md-6">
+        <div class="md-form mt-1 mb-3 col-md-6">
           <div class="form-group">
             <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
               [(ngModel)]="employeeCM.birthDate" [placeholder]="'Ngày sinh'">
           </div>
         </div>
 
-        <div class="md-form mt-0 mb-3 col-md-6">
+        <div class="md-form mt-1 mb-3 col-md-6">
           <input type="text" id="macAddress" class="form-control" mdbInput [(ngModel)]="employeeCM.phoneMacAddress">
           <label for="macAddress">Địa chỉ MAC</label>
         </div>
 
-        <div class="md-form mt-0 mb-3 col-md-12 ">
-          <mdb-select [options]="managerList" placeholder="Người quản lý" [(ngModel)]="employeeCM.managerId"></mdb-select>
+        <div class="md-form mt-1 mb-3 col-md-12 ">
+          <mdb-select [notFoundMsg]="'Không tìm thấy'" [options]="roleList" placeholder="Chức vụ" [(ngModel)]="employeeCM.roleId"></mdb-select>
         </div>
 
-        <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
+        <div class="md-form mt-1 mb-3 col-md-12" *ngIf="employeeCM.roleId === 3">
+          <mdb-select [notFoundMsg]="'Không tìm thấy'" [options]="managerList" placeholder="Người quản lý" [(ngModel)]="employeeCM.managerId"></mdb-select>
+        </div>
+
+        <div class="file-field md-form col-12 pl-0 mt-1 mb-3">
           <div mdbBtn floating="true" size="md" gradient="aqua" mdbWavesEffect>
             <i class="fa fa-cloud-upload" aria-hidden="true"></i>
             <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect (uploadOutput)="onUploadOutput($event)"
@@ -170,7 +191,7 @@
         </div>
 
       </div>
-      <div class="modal-footer d-flex justify-content-center">
+      <div class="modal-footer d-flex justify-content-center" *ngIf="!isExist">
         <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createEmployee()">Tạo mới
           <i class="fa fa-check ml-1"></i>
         </button>

@@ -94,11 +94,11 @@
         </div>
 
         <div class="md-form mt-0 mb-3 col-6 col-md-12">
-          <mdb-select [placeholder]="'Người thực hiện'" [options]="employeeList" [filterEnabled]="true" [(ngModel)]="scheduleCM.assigneeId"></mdb-select>
+          <mdb-select [notFoundMsg]="'Không tìm thấy'" [placeholder]="'Người thực hiện'" [options]="employeeList" [filterEnabled]="true" [(ngModel)]="scheduleCM.assigneeId"></mdb-select>
         </div>
 
         <div class="md-form mt-0 mb-3 col-6 col-md-12">
-          <mdb-select [placeholder]="'Địa điểm'" [options]="workplaceList" [filterEnabled]="true" [(ngModel)]="scheduleCM.workplaceId"></mdb-select>
+          <mdb-select [notFoundMsg]="'Không tìm thấy'" [placeholder]="'Địa điểm'" [options]="workplaceList" [filterEnabled]="true" [(ngModel)]="scheduleCM.workplaceId"></mdb-select>
         </div>
 
         <label class="col-md-2 col-xs-12" style="position: relative">

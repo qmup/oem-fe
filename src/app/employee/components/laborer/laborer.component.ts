@@ -34,7 +34,8 @@ export class LaborerComponent implements OnInit {
   dragOver: boolean;
   url: any;
   filesToUpload: FileList;
-
+  isExist = false;
+  roleList: any[];
 
   constructor(
     private employeeService: EmployeeService,
@@ -54,17 +55,18 @@ export class LaborerComponent implements OnInit {
       { value: 2, label: 'Nữ' },
     ],
     this.getManager();
-    this.getEmployeeByAdmin();
+    this.getEmployee();
+    this.getRole();
   }
 
-  // getEmployee() {
-  //   this.employeeService.getAll()
-  //     .then(
-  //       (response: Employee[]) => {
-  //         this.employeeList = response;
-  //       }
-  //     );
-  // }
+  getEmployee() {
+    this.employeeService.getAll()
+      .then(
+        (response: Employee[]) => {
+          this.employeeList = response;
+        }
+      );
+  }
 
   getEmployeeByAdmin() {
     this.employeeService.getByRole(3, '', '', 'id', 0, 10)
@@ -76,8 +78,23 @@ export class LaborerComponent implements OnInit {
       );
   }
 
+  getRole() {
+    this.employeeService.getRole()
+      .then(
+        (response) => {
+          response.shift();
+          this.roleList = response.map((role) => {
+            return {
+              value: role.id,
+              label: role.roleName
+            };
+          });
+        }
+      );
+  }
+
   getManager() {
-    this.employeeService.getByRole(1, '', '', 'id', 0, 10)
+    this.employeeService.getByRole(2, '', '', 'id', 0, 10)
       .then(
         (response: PaginationResponse) => {
           this.managerList = response.content.map((manager) => {
@@ -117,7 +134,7 @@ export class LaborerComponent implements OnInit {
       initialState: { employee }
     };
     this.modalRef = this.modalService.show(EmployeeUpdateComponent, modalOptions);
-    this.modalRef.content.refresh.subscribe(() => this.getEmployeeByAdmin());
+    this.modalRef.content.refresh.subscribe(() => this.getEmployee());
 
   }
 
@@ -142,6 +159,15 @@ export class LaborerComponent implements OnInit {
     }
   }
 
+  checkEmailExist() {
+    this.employeeService.checkExist(this.employeeCM.email)
+      .then(
+        (response) => {
+          this.isExist = response;
+        }
+      );
+  }
+
   createEmployee() {
     this.employeeCM.fullName = `${this.employeeCM.firstName} ${this.employeeCM.lastName}`;
     this.filesToUpload ? this.createEmployeeWithImage() : this.createEmployeeWithoutImage();
@@ -159,7 +185,6 @@ export class LaborerComponent implements OnInit {
       .then(
         (response) => {
           (this.gender === 0) ? this.employeeCM.sex = false : this.employeeCM.sex = true;
-          this.employeeCM.roleId = 3;
           this.employeeCM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employeeCM.birthDate));
           this.employeeCM.picture = response;
           this.employeeService.create(this.employeeCM)
@@ -168,7 +193,7 @@ export class LaborerComponent implements OnInit {
                 this.toastService.success('Tạo nhân viên thành công', '', { positionClass: 'toast-bottom-right'} );
                 this.createModal.hide();
                 this.employeeList = [];
-                this.getEmployeeByAdmin();
+                this.getEmployee();
               },
               () => {
                 this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -183,7 +208,6 @@ export class LaborerComponent implements OnInit {
 
   createEmployeeWithoutImage() {
     (this.gender === 0) ? this.employeeCM.sex = false : this.employeeCM.sex = true;
-    this.employeeCM.roleId = 3;
     this.employeeCM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employeeCM.birthDate));
     this.employeeService.create(this.employeeCM)
       .then(
@@ -191,7 +215,7 @@ export class LaborerComponent implements OnInit {
           this.toastService.success('Tạo nhân viên thành công', '', { positionClass: 'toast-bottom-right'} );
           this.createModal.hide();
           this.employeeList = [];
-          this.getEmployeeByAdmin();
+          this.getEmployee();
         },
         (error: any) => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -206,7 +230,7 @@ export class LaborerComponent implements OnInit {
           this.toastService.success('Xóa nhân viên thành công', '', { positionClass: 'toast-bottom-right'} );
           this.deleteModal.hide();
           this.employeeList = [];
-          this.getEmployeeByAdmin();
+          this.getEmployee();
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});

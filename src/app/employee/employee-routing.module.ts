@@ -6,7 +6,7 @@ import { EmployeeDetailComponent } from './components/employee-detail/employee-d
 import { AuthGuardService } from '../core/services/auth-guard.service';
 
 const routes: Routes = [
-  { path: 'laborer', component: LaborerPagesComponent, canActivate: [AuthGuardService] },
+  { path: 'employee', component: LaborerPagesComponent, canActivate: [AuthGuardService] },
   { path: 'saler', component: SalerPagesComponent, canActivate: [AuthGuardService] },
   { path: 'employee-detail/:id', component: EmployeeDetailComponent, canActivate: [AuthGuardService] },
 ];

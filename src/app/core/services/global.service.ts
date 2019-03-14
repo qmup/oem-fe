@@ -66,11 +66,14 @@ export class GlobalService {
   }
 
   convertStringToYearMonthDay(string) {
-    const year = string.split('-', 3)[2];
-    const month = string.split('-', 3)[1];
     const day = string.split('-', 3)[0];
-    console.log(year, month, day);
-    return `${year}-${month}-${day}`;
+    const month = string.split('-', 3)[1];
+    const year = string.split('-', 3)[2];
+    if (year.length !== 4) {
+      return string;
+    } else {
+      return `${year}-${month}-${day}`;
+    }
   }
 
   uploadFile(formData: FormData, pathPackage: string): Promise<any> {

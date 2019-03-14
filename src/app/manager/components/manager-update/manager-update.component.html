@@ -5,59 +5,64 @@
     </button>
   </div>
   <div class="modal-body mx-3 row">
-    <div class="md-form mt-0 mb-3 col-md-6">
-      <input type="text" id="userName" class="form-control" mdbInput [(ngModel)]="manager.fullName">
-      <label for="userName">Tên account</label>
+    <div class="md-form mt-1 mb-3 col-md-12">
+      <input
+        type="text"
+        id="email"
+        class="form-control"
+        mdbInput
+        [(ngModel)]="manager.email"
+        (blur)="checkEmailExist()"
+        #email=ngModel
+        [class.has-error]="isExist">
+      <label for="email">Email</label>
+      <mdb-error *ngIf="isExist">
+        <p class="font-weight-bold">Email đã tồn tại</p>
+      </mdb-error>
     </div>
-  
-    <div class="md-form mt-0 mb-3 col-md-6">
-      <input type="password" id="password" class="form-control" mdbInput [(ngModel)]="manager.password">
-      <label for="password">Mật khẩu</label>
+    
+    <div class="md-form mt-1 mb-3 col-md-12">
+      <input type="text" id="employeeId" class="form-control" mdbInput [(ngModel)]="manager.employeeId">
+      <label for="userName">Mã số nhân viên</label>
     </div>
-  
-    <div class="md-form mt-0 mb-3 col-md-6">
+
+    <div class="md-form mt-1 mb-3 col-md-6">
       <input type="text" id="firstName" class="form-control" mdbInput [(ngModel)]="manager.firstName">
       <label for="firstName">Họ</label>
     </div>
-  
-    <div class="md-form mt-0 mb-3 col-md-6">
+
+    <div class="md-form mt-1 mb-3 col-md-6">
       <input type="text" id="lastName" class="form-control" mdbInput [(ngModel)]="manager.lastName">
       <label for="lastName">Tên</label>
     </div>
-  
-    <div class="md-form mt-0 mb-3 col-md-6 ">
-      <mdb-select [options]="optionsSex" id="gender" [(ngModel)]="gender"></mdb-select>
-      <label>Giới tính</label>
+
+    <div class="md-form mt-1 mb-3 col-md-6 ">
+      <mdb-select [options]="optionsSex" id="gender" placeholder="Giới tính" [(ngModel)]="gender"></mdb-select>
     </div>
-  
-    <div class="md-form mt-0 mb-3 col-md-6">
+
+    <div class="md-form mt-1 mb-3 col-md-6">
       <input type="text" id="phoneNumber" class="form-control" mdbInput [(ngModel)]="manager.phoneNumber">
       <label for="phoneNumber">Số điện thoại</label>
     </div>
-  
-    <div class="md-form mt-0 mb-3 col-md-6">
+
+    <div class="md-form mt-1 mb-3 col-md-12">
       <input type="text" id="address" class="form-control" mdbInput [(ngModel)]="manager.address">
       <label for="address">Địa chỉ</label>
     </div>
-  
-    <div class="md-form mt-0 mb-3 col-md-6">
-      <input type="text" id="email" class="form-control" mdbInput [(ngModel)]="manager.email">
-      <label for="email">Email</label>
-    </div>
-  
-    <div class="md-form mt-0 mb-3 col-md-6">
+
+    <div class="md-form mt-1 mb-3 col-md-6">
       <div class="form-group">
-        <input type="text" class="form-control" [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }" bsDatepicker [(ngModel)]="manager.birthDate"
-          [placeholder]="'Ngày sinh'">
+        <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
+          [(ngModel)]="manager.birthDate" [placeholder]="'Ngày sinh'">
       </div>
     </div>
-  
-    <div class="md-form mt-0 mb-3 col-md-6">
+
+    <div class="md-form mt-1 mb-3 col-md-6">
       <input type="text" id="macAddress" class="form-control" mdbInput [(ngModel)]="manager.phoneMacAddress">
       <label for="macAddress">Địa chỉ MAC</label>
     </div>
-  
-    <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
+
+    <div class="file-field md-form col-12 pl-0 mt-1 mb-3">
       <div mdbBtn floating="true" size="md" gradient="aqua" mdbWavesEffect>
         <i class="fa fa-cloud-upload" aria-hidden="true"></i>
         <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect (uploadOutput)="onUploadOutput($event)"
@@ -66,11 +71,11 @@
       <div class="file-path-wrapper mt-3">
         <input class="file-path" type="text" placeholder="Chọn ảnh đại diện" [value]="showFiles()">
       </div>
-      <div class="col text-center w-100" *ngIf="manager.picture || url">
-        <img [src]="manager.picture || url" height="150">
+      <div class="col text-center w-100" *ngIf="url">
+        <img [src]="url" height="150">
       </div>
     </div>
-  
+
   </div>
   <div class="modal-footer d-flex justify-content-center">
     <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="updateManager()">Cập nhật

@@ -15,9 +15,9 @@
           </div>
           <!--Content-->
           <div class="card-body">
-            <h4>{{ manager.fullName }}</h4>
-            <p class="text-danger">Chức vụ: Quản lý</p>
-            <a class="rotate-btn" data-card="card-1" (click)="cards.toggle()">Chi tiết </a>
+            <h4>{{ manager.firstName }} {{ manager.lastName }}</h4>
+            <p class="text-danger font-weight-normal">Chức vụ: Quản lý</p>
+            <a class="rotate-btn font-weight-normal" data-card="card-1" (click)="cards.toggle()">Chi tiết </a>
             <!--Triggering button-->
           </div>
         </div>
@@ -45,7 +45,7 @@
           </mdb-card-text>
 
           <!--Triggering button-->
-          <a class="rotate-btn" data-card="card-1" (click)="cards.toggle()">Trở lại</a>
+          <a class="rotate-btn font-weight-normal" data-card="card-1" (click)="cards.toggle()">Trở lại</a>
 
         </div>
         <!--/.Back Side-->
@@ -54,15 +54,15 @@
     <div class="col-md-7 mb-4 mx-auto">
       <!-- Card -->
       <mdb-card class="mt-3" cascade="true">
-        
+
         <!--Card content-->
-        <mdb-card-body cascade="true" class="text-left"> 
+        <mdb-card-body cascade="true" class="text-left">
           <mdb-card-title class="d-flex flex-wrap">
             <div class="col pr-0">
               <p class="h5">Nhân viên đang quản lý</p>
             </div>
             <div class="col pl-0">
-              <a [routerLink]="['/laborer']" class="link">Xem tất cả</a>
+              <a [routerLink]="['/employee']" class="link">Xem tất cả</a>
               <a class="btn-floating btn-md btn-success" (click)="openCreateEmployeeModal()"><i class="fa fa-plus"></i></a>
             </div>
           </mdb-card-title>
@@ -70,16 +70,21 @@
           <!--Text-->
           <div class="list-group">
             <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let e of employeeListByManager | slice:0:3"
-              [routerLink]="['/task-detail', e.id]">
+              [routerLink]="['/employee-detail', e.id]">
               <div class="avatar">
                 <img [src]="e.picture" alt="" class="rounded-circle img-responsive list-avatar">
               </div>
-              <div class="col-11">
+              <div class="col-9">
                 {{e.firstName}} {{e.lastName}}
                 <br>
                 <small>Địa chỉ: {{e.address}}</small>
                 <br>
                 <small>Số điện thoại: {{e.phoneNumber}}</small>
+              </div>
+              <div class="col-2">
+                <button mdbBtn type="button" color="danger" size="sm" rounded="true"  mdbWavesEffect (click)="openRemoveEmployeeModal(e.id)">
+                  <i class="fa fa-ban"></i>
+                </button>
               </div>
             </a>
             <div class="list-group" mdbCollapse #moreEmp="bs-collapse" *ngIf="employeeListByManager?.length > 3">
@@ -87,20 +92,28 @@
                 <div class="avatar">
                   <img [src]="e.picture" alt="" class="rounded-circle img-responsive list-avatar">
                 </div>
-                <div class="col-11">
+                <div class="col-9">
                   {{e.firstName}} {{e.lastName}}
                   <br>
                   <small>Địa chỉ: {{e.address}}</small>
                   <br>
                   <small>Số điện thoại: {{e.phoneNumber}}</small>
                 </div>
+                <div class="col-2">
+                  <button mdbBtn type="button" color="danger" size="sm" rounded="true" mdbWavesEffect (click)="openRemoveEmployeeModal(e.id)">
+                    <i class="fa fa-ban"></i>
+                  </button>
+                </div>
               </a>
             </div>
-            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="!isShowMore1 && employeeListByManager?.length > 3" (click)="toggleEmp()"
-              mdbWavesEffect>
+            <div *ngIf="employeeListByManager.length === 0">
+              <span class="text-danger pl-3">Chưa quản lý nhân viên nào</span>
+            </div>
+            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="!isShowMore1 && employeeListByManager?.length > 3"
+              (click)="toggleEmp()" mdbWavesEffect>
               Hiện thêm
             </button>
-            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="isShowMore1" [routerLink]="['/laborer']"
+            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="isShowMore1" [routerLink]="['/employee']"
               mdbWavesEffect>
               Xem tât cả
             </button>
@@ -108,7 +121,7 @@
         </mdb-card-body>
       </mdb-card>
       <mdb-card class="mt-3">
-        <mdb-card-body cascade="true" class="text-left"> 
+        <mdb-card-body cascade="true" class="text-left">
           <mdb-card-title class="d-flex flex-wrap">
             <div class="col pr-0">
               <p class="h5">Nơi làm việc đang quản lý</p>
@@ -118,34 +131,62 @@
               <a class="btn-floating btn-md btn-success" (click)="openCreateWorkplaceModal()"><i class="fa fa-plus"></i></a>
             </div>
           </mdb-card-title>
-          <div class="list-group" mdbCollapse #moreWP="bs-collapse" *ngIf="workplaceListByManager?.length > 3">
-            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let wp of workplaceListByManager | slice:4:6">
+          <div class="list-group">
+            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let wp of workplaceListByManager | slice:0:3">
               <div class="avatar">
                 <img [src]="wp.picture" alt="" class="rounded-circle img-responsive list-avatar">
               </div>
-              <div class="col-11">
+              <div class="col-9">
                 {{wp.name}}
                 <br>
                 <small>{{wp.description}}</small>
               </div>
+              <div class="col-2">
+                <button mdbBtn type="button" color="danger" size="sm" rounded="true" mdbWavesEffect (click)="openRemoveWorkplaceModal(wp.id)">
+                  <i class="fa fa-ban"></i>
+                </button>
+              </div>
             </a>
+            <div class="list-group" mdbCollapse #moreWP="bs-collapse" *ngIf="workplaceListByManager?.length > 3">
+              <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let wp of workplaceListByManager | slice:3:(workplaceListByManager.length + 1)">
+                <div class="avatar">
+                  <img [src]="wp.picture" alt="" class="rounded-circle img-responsive list-avatar">
+                </div>
+                <div class="col-9">
+                  {{wp.name}}
+                  <br>
+                  <small>{{wp.description}}</small>
+                </div>
+                <div class="col-2">
+                  <button mdbBtn type="button" color="danger" size="sm" rounded="true" mdbWavesEffect (click)="openRemoveWorkplaceModal(wp.id)">
+                    <i class="fa fa-ban"></i>
+                  </button>
+                </div>
+              </a>
+              <div *ngIf="workplaceListByManager.length === 0">
+                <span class="text-danger">Chưa quản lý nơi làm việc nào</span>
+              </div>
+            </div>
+            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="!isShowMore2 && workplaceListByManager?.length > 3"
+              (click)="toggleWorkplace()" mdbWavesEffect>
+              Hiện thêm
+            </button>
+            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="isShowMore2" [routerLink]="['/company']"
+              mdbWavesEffect>
+              Xem tât cả
+            </button>
           </div>
-          <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="!isShowMore2" (click)="toggleWorkplace()"
-            mdbWavesEffect>
-            Hiện thêm
-          </button>
-          <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="isShowMore2" [routerLink]="['/company']"
-            mdbWavesEffect>
-            Xem tất cả
-          </button>
+          <div *ngIf="workplaceListByManager.length === 0">
+            <span class="text-danger pl-3">Chưa quản lý nơi làm việc nào</span>
+          </div>
         </mdb-card-body>
       </mdb-card>
     </div>
   </div>
 </div>
 
-<div mdbModal #createEmployeeModal="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="add"
-  aria-hidden="true">
+<div mdbModal #createEmployeeModal="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="add" aria-hidden="true">
   <div class="modal-dialog modal-notify modal-success" role="document">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
@@ -157,13 +198,13 @@
       <div class="modal-body mx-3 row">
         <div class="col-12">
           <div class="md-form my-3">
-            <mdb-select [filterEnabled]="true" [options]="employeeList" (selected)="selectEmployee($event)"></mdb-select>
+            <mdb-select [notFoundMsg]="'Không tìm thấy'"  [filterEnabled]="true" [options]="employeeList" (selected)="selectEmployee($event)"></mdb-select>
             <label>Nhân viên</label>
           </div>
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="addEmployeeForManager()">Thêm nhân viên
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="addEmployeeForManager()">Thêm
           <i class="fa fa-check ml-1"></i>
         </button>
       </div>
@@ -171,8 +212,8 @@
   </div>
 </div>
 
-<div mdbModal #createWorkplaceModal="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="add"
-  aria-hidden="true">
+<div mdbModal #createWorkplaceModal="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="add" aria-hidden="true">
   <div class="modal-dialog modal-notify modal-success" role="document">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
@@ -183,23 +224,73 @@
       </div>
       <div class="modal-body mx-3 row">
         <div class="col-12 md-form my-3">
-          <mdb-select [filterEnabled]="true" [options]="companyList" (selected)="selectCompany($event)"></mdb-select>        
+          <mdb-select [notFoundMsg]="'Không tìm thấy'"  [filterEnabled]="true" [options]="companyList" (selected)="selectCompany($event)"></mdb-select>
           <label>Công ty</label>
         </div>
         <div class="col-12 md-form my-3" *ngIf="isSelectCompany">
-          <mdb-select [filterEnabled]="true" [options]="zoneList" (selected)="selectZone($event)"></mdb-select>        
+          <mdb-select [notFoundMsg]="'Không tìm thấy'"  [filterEnabled]="true" [options]="zoneList" (selected)="selectZone($event)"></mdb-select>
           <label>Khu vực</label>
         </div>
         <div class="col-12 md-form my-3" *ngIf="isSelectZone">
-          <mdb-select [filterEnabled]="true" [options]="placeList" (selected)="selectWorkplace($event)"></mdb-select>        
+          <mdb-select [notFoundMsg]="'Không tìm thấy'"  [filterEnabled]="true" [options]="placeList" (selected)="selectWorkplace($event)"></mdb-select>
           <label>Địa điểm</label>
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="addWorkplaceForManager()">Tạo mới
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="addWorkplaceForManager()">Thêm
           <i class="fa fa-check ml-1"></i>
         </button>
       </div>
     </div>
+  </div>
+</div>
+
+<div mdbModal #removeEmp="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Xóa khỏi danh sách quản lý?</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-times fa-4x animated rotateIn"></i>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeEmployeeByManager()">Đồng ý</a>
+        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="removeEmp.hide()">Hủy</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+<div mdbModal #removeWp="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Xóa khỏi danh sách quản lý?</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-times fa-4x animated rotateIn"></i>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeWorkplaceByManager()">Đồng ý</a>
+        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="removeWp.hide()">Hủy</a>
+      </div>
+    </div>
+    <!--/.Content-->
   </div>
 </div>

@@ -107,7 +107,7 @@
         </div>
 
         <div class="md-form mt-0 mb-3 col-md-6" *ngIf="haveWorkplace">
-          <mdb-select [options]="optionsSelect" placeholder="Địa điểm" [(ngModel)]="beaconCM.workplaceId"></mdb-select>
+          <mdb-select [notFoundMsg]="'Không tìm thấy'" [options]="optionsSelect" placeholder="Địa điểm" [(ngModel)]="beaconCM.workplaceId"></mdb-select>
         </div>
 
       </div>
