@@ -17,14 +17,14 @@ export class TaskBasicService {
       `${environment.endPoint}${environment.apiPaths.task.create}`, taskCM
     ).toPromise();
   }
-  getTaskBasic(search: string, sort: string, fieldShort: string, page: number, size: number): Promise<PaginationResponse> {
+  getTaskBasic(search: string, sort: string, fieldSort: string, page: number, size: number): Promise<PaginationResponse> {
     return this.httpClient.get<PaginationResponse>(
       `${environment.endPoint}${environment.apiPaths.taskBasic.get}`,
       {
         params: {
           search: `${search}`,
           sort: `${sort}`,
-          fieldShort: `${fieldShort}`,
+          fieldSort: `${fieldSort}`,
           page: `${page}`,
           size: `${size}`,
         }
@@ -44,7 +44,7 @@ export class TaskBasicService {
   }
 
   getListTaskBasic(
-    managerId: number, search: string, sort: string, fieldShort: string, page: number, size: number
+    managerId: number, search: string, sort: string, fieldSort: string, page: number, size: number
   ): Promise<PaginationResponse> {
     return this.httpClient.get<PaginationResponse>(
       `${environment.endPoint}${environment.apiPaths.taskBasic.getListBasic}${managerId}`,
@@ -52,7 +52,7 @@ export class TaskBasicService {
         params: {
           search: `${search}`,
           sort: `${sort}`,
-          fieldShort: `${fieldShort}`,
+          fieldSort: `${fieldSort}`,
           page: `${page}`,
           size: `${size}`,
         }

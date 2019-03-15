@@ -56,7 +56,7 @@ export class BasicTaskUpdateComponent implements OnInit {
           this.taskBasicUM.title = this.taskBasic.title;
           this.taskBasicUM.basic = true;
           this.taskBasicUM.picture = response;
-          this.taskService.updateTask(this.taskBasicUM)
+          this.taskService.update(this.taskBasicUM)
             .then(
               () => {
                 this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
@@ -78,7 +78,7 @@ export class BasicTaskUpdateComponent implements OnInit {
     this.taskBasicUM.id = this.taskBasic.id;
     this.taskBasicUM.title = this.taskBasic.title;
     this.taskBasicUM.basic = true;
-    this.taskService.updateTask(this.taskBasicUM)
+    this.taskService.update(this.taskBasicUM)
       .then(
         () => {
           this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );

@@ -1,7 +1,11 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
-import { UploadFile, UploadInput, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
+import { UploadFile, UploadInput, humanizeBytes, UploadOutput, IMyOptions } from 'ng-uikit-pro-standard';
 import { TaskService } from '../../service/task.service';
 import { GlobalService } from 'src/app/core/services/global.service';
+import { ActivatedRoute } from '@angular/router';
+import { TaskDetail } from '../../models/task';
+import { ReportService } from 'src/app/report/services/report.service';
+import { TaskReport } from 'src/app/report/models/report';
 
 @Component({
   selector: 'app-task-detail',
@@ -28,10 +32,17 @@ export class TaskDetailComponent implements OnInit {
   selectedPriority = '3';
   selectedStatus = '1';
   isUpdate = false;
+  id: number;
+  sub: any;
+  task: TaskDetail = new TaskDetail();
+  report: TaskReport[] = new Array<TaskReport>();
+  picture: string[] = [];
 
   constructor(
     private taskService: TaskService,
-    private globalService: GlobalService
+    private globalService: GlobalService,
+    private route: ActivatedRoute,
+    private reportService: ReportService,
   ) {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
@@ -85,21 +96,39 @@ export class TaskDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.iconStatusSelect = [
-      { value: '1', label: 'To Do',
-      icon: 'https://cdn2.iconfinder.com/data/icons/perfect-flat-icons-2/512/History_clock_time_clear_url_watch_hourglass.png' },
-      { value: '2', label: 'Progress',
-      icon: 'https://cdn2.iconfinder.com/data/icons/perfect-flat-icons-2/512/Hourglass_time_loading_wait_go_delete_add.png' },
-      { value: '3', label: 'Done',
-      icon: 'https://cdn2.iconfinder.com/data/icons/perfect-flat-icons-2/512/Ok_check_yes_tick_accept_success_green_correct.png' },
-      { value: '4', label: 'Late',
-      icon: 'https://cdn2.iconfinder.com/data/icons/perfect-flat-icons-2/512/Danger_hanger_triangle_traffic_cone.png' },
-    ];
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
+    this.sub = this.route.params.subscribe(params => {
+      this.id = +params['id'];
+      this.getTaskDetail(this.id);
+      this.getTaskReport(this.id);
+    });
   }
 
-  getTaskByEmployee() {
-    // this.taskService.get
+  getTaskDetail(id: number) {
+    this.taskService.getTaskDetail(id)
+      .then(
+        (response: TaskDetail) => {
+          this.task = response;
+        }
+      );
+  }
+
+  getTaskReport(id: number) {
+    this.reportService.getByTaskId(17)
+      .then(
+        (response) => {
+          this.report = response;
+          if (this.report.length !== 0) {
+            this.report.forEach(element => {
+              if (element.photo.includes(';')) {
+                this.picture = element.photo.split(';');
+              } else {
+                this.picture[0] = element.photo;
+              }
+            });
+          }
+        }
+      );
   }
 
 }

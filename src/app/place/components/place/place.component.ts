@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, EventEmitter, Input } from '@angular/core';
 import { PlaceService } from '../../services/place.service';
-import { Place, PlaceModel } from '../../models/place';
+import { Place, PlaceModel, PlacePagination } from '../../models/place';
 import { BsModalService, ModalDirective, ModalOptions, BsModalRef } from 'ngx-bootstrap';
 import { PlaceUpdateComponent } from '../place-update/place-update.component';
 import { Beacon } from 'src/app/beacon/models/beacon';
@@ -29,7 +29,7 @@ export class PlaceComponent implements OnInit {
   currentWorkplaceId: number;
   taskCM: TaskModel = new TaskModel();
   placeCM: PlaceModel = new PlaceModel();
-  placeList: Place[];
+  placeList: Place[] = new Array<Place>();
   modalRef: BsModalRef;
   optionsSelect = new Array<any>();
   beaconName: string;
@@ -76,12 +76,12 @@ export class PlaceComponent implements OnInit {
   }
 
   getPlace() {
-    this.placeService.getAll(this.zoneId)
+    this.placeService.getAll(this.zoneId, '', '', 'id', 0, 99)
       .then(
-        (response: Place[]) => {
-          this.placeList = response;
-          this.zoneName = response[0].zoneDTO.name;
-          this.companyName = response[0].companyDTO.name;
+        (response: PlacePagination) => {
+          this.placeList = response.listOfWorkplace.content;
+          this.zoneName = response.zone.name;
+          this.companyName = response.company.name;
           for (let index = 0; index < this.placeList.length; index++) {
             const element = this.placeList[index];
             this.placeService.getTaskBasic(element.id)
@@ -111,7 +111,7 @@ export class PlaceComponent implements OnInit {
 
   getEmployee() {
     // get BY manager not get all
-    this.employeeService.getEmployeeByManager(19, '', 'id', 0, 99)
+    this.employeeService.getEmployeeByManager(19, 3, '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
           this.employeeList = response.content.map((employee) => {

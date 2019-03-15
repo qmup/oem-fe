@@ -71,13 +71,13 @@
                         Công việc cơ bản
                       </a>
                     </li>
-                    <li>
+                    <li *ngIf="globalService.userAccount?.roleId === 2">
                       <a routerLink="/schedule" class="waves-effect" mdbWavesEffect>
                         <i class="fa fa-caret-right"></i> 
                         Công việc thường nhật
                       </a>
                     </li>
-                    <li>
+                    <li *ngIf="globalService.userAccount?.roleId === 2">
                       <a routerLink="/task" class="waves-effect" mdbWavesEffect>
                         <i class="fa fa-caret-right"></i> 
                         Danh sách công việc
@@ -95,7 +95,7 @@
                 <mdb-accordion-item-body></mdb-accordion-item-body>
               </mdb-accordion-item>
 
-              <mdb-accordion-item class="no-collase">
+              <mdb-accordion-item class="no-collase" *ngIf="globalService.userAccount?.roleId === 2">
                 <mdb-accordion-item-head mdbWavesEffect routerLink="/calendar">
                   <i class="fa fa-calendar"></i> 
                   <span>Lịch làm việc</span>
@@ -104,7 +104,7 @@
               </mdb-accordion-item>
               
               <!-- Sidebar item -->
-              <mdb-accordion-item class="no-collase">
+              <mdb-accordion-item class="no-collase" *ngIf="globalService.userAccount?.roleId === 1">
                 <mdb-accordion-item-head mdbWavesEffect routerLink="/beacon">
                   <i class="fa fa-microchip"></i> 
                   <span>Beacon</span>
@@ -142,26 +142,13 @@
         </div>
         <!--/. Breadcrumb-->
       </mdb-navbar-brand>
-  
+
       <navlinks>
         <ul class="nav navbar-nav nav-flex-icons ml-auto ie-double-nav ie-hidden-double-nav">
-          <li class="nav-item dropdown btn-group" dropdown>
-            <span>
-              <!-- <img [src]="globalService.userAccount.picture"> -->
-              <img src="https://avatars3.githubusercontent.com/u/29126668?s=400&u=81f773df3ce61b5cffab8422e8280b4ce0a7b7b9&v=4">
-              
-            </span>
-            <a dropdownToggle type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-              <!-- Nguyễn Minh Quân -->
-              {{ userAccount?.username }}
-            </a>
-            <div class="dropdown-menu dropdown-info dropdown-menu-right" role="menu">
-              <a class="dropdown-item" [routerLink]="['/view-profile']">Thông tin cá nhân</a>
-              <a class="dropdown-item" href="#" (click)="logOut()">Đăng xuất</a>
-            </div>
-          </li>
+          <app-user-info [userAccount]="userAccount"></app-user-info>
         </ul>
       </navlinks>
+
     </mdb-navbar>
     <!--/. Navbar -->
   

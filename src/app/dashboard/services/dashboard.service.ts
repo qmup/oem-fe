@@ -12,13 +12,13 @@ export class DashboardService {
 
   summaryManagerTask(id: number, from: string, to: string): Promise<SummaryTask> {
     return this.httpClient.get<SummaryTask>(
-      `${environment.endPoint}${environment.apiPaths.task.summaryManagerTask}?managerId=${id}&fromDate=${from}&toDate=${to}`
+      `${environment.endPoint}${environment.apiPaths.task.summaryTaskAllEmployeeByManager}?managerId=${id}&fromDate=${from}&toDate=${to}`
     ).toPromise();
   }
 
   summaryEmployeeTask(id: number, from: string, to: string): Promise<SummaryTask> {
     return this.httpClient.get<SummaryTask>(
-      `${environment.endPoint}${environment.apiPaths.task.summaryEmployeeTask}?employeeId=${id}&fromDate=${from}&toDate=${to}`
+      `${environment.endPoint}${environment.apiPaths.task.summaryTaskByEmployee}?employeeId=${id}&fromDate=${from}&toDate=${to}`
     ).toPromise();
   }
 }

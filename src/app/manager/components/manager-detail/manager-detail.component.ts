@@ -12,7 +12,7 @@ import { PlaceService } from 'src/app/place/services/place.service';
 import { CompanyService } from 'src/app/place/services/company.service';
 import { Company } from 'src/app/place/models/company';
 import { Zone } from 'src/app/place/models/zone';
-import { Place, ManageWorkplace } from 'src/app/place/models/place';
+import { Place, ManageWorkplace, PlacePagination } from 'src/app/place/models/place';
 import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Component({
@@ -104,7 +104,7 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   getEmployeeWithoutManager() {
-    this.employeeService.getEmployeeByManager(0, '', 'id', 0, 99)
+    this.employeeService.getEmployeeByManager(0, 3, '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
           this.employeeList = response.content.map((employee) => {
@@ -119,7 +119,7 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   getEmployeeByManager(managerId: number) {
-    this.employeeService.getEmployeeByManager(managerId, '', 'id', 0, 6)
+    this.employeeService.getEmployeeByManager(managerId, 3, '', 'id', 0, 6)
       .then(
         (response: PaginationResponse) => {
           this.employeeListByManager = response.content;
@@ -185,10 +185,10 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   getWorkplace(zoneId: number) {
-    this.workplaceService.getAll(zoneId)
+    this.workplaceService.getAll(zoneId, '', '', 'id', 0, 99)
       .then(
-        (response: Place[]) => {
-          this.placeList = response.map((place) => {
+        (response: PlacePagination) => {
+          this.placeList = response.listOfWorkplace.content.map((place) => {
             return {
               value: place.id,
               label: place.name,

@@ -111,19 +111,13 @@ main#main {
     background-color: #fff;
     background-clip: border-box;
     border-radius: 0.25rem;
-    margin-left: 15px;
     ul.nav.tabs-white.flex-column.nav-stacked {
       flex: 1 1 auto;
       padding: 1.25rem;
     }
   }
-  .col-md-9 {
-    flex: 0 0 74% !important;
-    max-width: 74% !important;
-    .offset.col-3.card.card-cascade.narrower.ml-3 {
-      flex: 0 0 32%;
-      max-width: 32%;
-    }
+  .list-group-item.active {
+    color: #fff !important;
   }
   .flex-column a {
     border-bottom: 1px solid rgba(0, 0, 0, 0.125) !important;

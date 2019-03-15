@@ -1,4 +1,5 @@
 import { TaskBasic } from 'src/app/task/models/task-basic';
+import { Shared, PaginationResponse } from 'src/app/core/models/shared';
 
 export class PlaceModel {
   description: string;
@@ -24,8 +25,8 @@ export class Place {
   description: string;
   numberOfReworks: number;
   picture: string;
-  zoneDTO: ZoneDTO;
-  companyDTO: CompanyDTO;
+  zone: ZoneDTO;
+  company: CompanyDTO;
   basicTaskList: TaskBasic[];
 
   constructor() {
@@ -34,8 +35,8 @@ export class Place {
     this.name = '';
     this.picture = '';
     this.description = '';
-    this.zoneDTO = new ZoneDTO();
-    this.companyDTO = new CompanyDTO();
+    this.zone = new ZoneDTO();
+    this.company = new CompanyDTO();
     this.numberOfReworks = 0;
     this.basicTaskList = new Array<TaskBasic>();
   }
@@ -83,4 +84,10 @@ export class ManageWorkplace {
     this.workplaceId = 0;
     this.zoneId = 0;
   }
+}
+
+export class PlacePagination {
+  company: Shared;
+  zone: Shared;
+  listOfWorkplace: PaginationResponse;
 }

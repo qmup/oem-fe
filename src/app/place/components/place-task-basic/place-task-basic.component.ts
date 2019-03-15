@@ -29,7 +29,6 @@ export class PlaceTaskBasicComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.workplaceId, this.taskBasic);
     this.getTaskBasic();
   }
 

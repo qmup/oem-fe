@@ -14,6 +14,7 @@ import { ScheduleDetailComponent } from './components/schedule-detail/schedule-d
 import { BasicTaskComponent } from './components/basic-task/basic-task.component';
 import { BasicTaskPagesComponent } from './pages/basic-task-pages/basic-task-pages.component';
 import { BasicTaskUpdateComponent } from './components/basic-task-update/basic-task-update.component';
+import { BsDatepickerModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { BasicTaskUpdateComponent } from './components/basic-task-update/basic-t
     FormsModule,
     TaskRoutingModule,
     CoreModule,
+    BsDatepickerModule.forRoot(),
     MDBBootstrapModulesPro.forRoot(),
   ],
   entryComponents: [

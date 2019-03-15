@@ -1,0 +1,15 @@
+<li class="nav-item dropdown btn-group" dropdown>
+  <span>
+    <!-- <img [src]="globalService.userAccount.picture"> -->
+    <img [src]="userAccount.picture">
+
+  </span>
+  <a dropdownToggle type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+    <!-- Nguyễn Minh Quân -->
+    {{ userAccount.accountDTO.username }}
+  </a>
+  <div class="dropdown-menu dropdown-info dropdown-menu-right" role="menu">
+    <a class="dropdown-item" [routerLink]="['/view-profile']">Thông tin cá nhân</a>
+    <a class="dropdown-item" href="#" (click)="logOut()">Đăng xuất</a>
+  </div>
+</li>

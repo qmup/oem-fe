@@ -1,98 +1,112 @@
 <div class="row" id="task-detail">
   <div class="col pt-3">
     <!-- <h4 class="text-center">Search Filter here</h4> -->
-    <!-- Tabset tabs -->
-    <mdb-tabset [vertical]="true" [buttonClass]="'tabs-white flex-column'" [contentClass]="'vertical'">
-      <!--Panel -->
-      <mdb-tab heading="<a class='list-group-item'> OEM-{{i}} </a>" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]">
-        <div class="row" style="height: calc(100vh - 150px) !important;">
-          <div class="card card-cascade narrower col-8 waves-light">
-            <div class="p-5">
-              <div class="mx-auto col-8">
-                <div class="view view-cascade gradient-card-header light-blue" style="margin-top: -5.25rem">
-                  <h2 class="h2-responsive mb-0">Chi tiết công việc</h2>
-                </div>
-              </div>
-              <p class="h5"> OEM-{{i}} </p>
-              <div class="md-form">
-                <textarea type="text" id="description{{i}}" class="md-textarea form-control" mdbInputDirective [disabled]="!isUpdate">Dọn vệ sinh tầng {{i}}</textarea>
-                <label for="description{{i}}">Miêu tả</label>                
-                <div class="col-md-12 mt-3">
-                  <h5 class="text-center">Sub-tasks </h5>
-                  <mdb-checkbox [inline]="true" [checked]="false" class="col-6" [disabled]="!isUpdate">Lau cửa</mdb-checkbox>
-                </div>
+    <div class="d-flex flex-wrap">
+      <div class="col-md-3 mx-auto">
+        <!--Card content-->
+        <mdb-card-body>
+
+          <!--Title-->
+          <h4 class="text-center">Danh sách công việc</h4>
+
+          <!--Text-->
+          <ul class="list-group list-group-flush">
+            <a class="list-group-item active waves-light">92</a>
+            <a class="list-group-item list-group-item-action waves-light" mdbWavesEffect>Dapibus ac facilisis in</a>
+            <a class="list-group-item list-group-item-action waves-light" mdbWavesEffect>Morbi leo risus</a>
+            <a class="list-group-item list-group-item-action waves-light" mdbWavesEffect>Porta ac consectetur ac</a>
+          </ul>
+
+        </mdb-card-body>
+      </div>
+      <div class="card card-cascade narrower col-md-5 mx-auto waves-light">
+        <div class="p-5">
+          <div class="mx-auto col-8">
+            <div class="view view-cascade gradient-card-header light-blue" style="margin-top: -5.25rem">
+              <h2 class="h2-responsive mb-0">Chi tiết công việc</h2>
+            </div>
+          </div>
+          <!-- {{task.startTime | date: 'medium'}} -->
+          <p class="h3 mt-3">{{task.title}} </p>
+          <p class="h6 col-12 pl-0 mt-4">Miêu tả công việc</p>
+          <div class="md-form my-3">
+            <textarea type="text" id="description" class="md-textarea form-control" mdbInputDirective [disabled]="!isUpdate">{{task.description}}</textarea>
+          </div>
+          <div class="col-md-12 mt-3">
+            <h5 class="text-center">Công việc phải làm </h5>
+            <div class="d-flex flex-wrap">
+              <mdb-checkbox *ngFor="let ck of task.checkList" [inline]="true" class="col-6" [checked]="ck.status"
+                [disabled]="!isUpdate">{{ck.title}}</mdb-checkbox>
+            </div>
+          </div>
+          <mdb-accordion [multiple]="false" aria-multiselectable="true">
+            <mdb-accordion-item [collapsed]="true" *ngFor="let item of report">
+              <mdb-accordion-item-head> {{ item.dateReport | date: 'hh-mm dd-MM-yyyy' }} </mdb-accordion-item-head>
+              <mdb-accordion-item-body>
                 <p class="h6 mt-4">Hình ảnh</p>
-                <div class="col-md-12">
+                <p class="text-danger" *ngIf="picture.length === 0">Không có hình ảnh</p>
+                <div class="col-md-12" *ngIf="picture.length > 0">
                   <div id="mdb-lightbox-ui"></div>
                   <div class="mdb-lightbox">
-                    <figure class="col-md-4 pl-0">
-                      <a href="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(145).jpg" data-size="1600x1067">
-                        <img src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(145).jpg" alt="placeholder"
-                          class="img-fluid">
-                      </a>
-                    </figure>
-                    <figure class="col-md-4">
-                      <a href="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(150).jpg" data-size="1600x1067">
-                        <img src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(150).jpg" alt="placeholder"
-                          class="img-fluid" />
-                      </a>
-                    </figure>
-                    <figure class="col-md-4 pr-0">
-                      <a href="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(152).jpg" data-size="1600x1067">
-                        <img src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(152).jpg" alt="placeholder"
-                          class="img-fluid" />
+                    <figure class="col-md-4" *ngFor="let p of picture">
+                      <a [href]="p" data-size="1600x1067">
+                        <img [src]="p" alt="placeholder" class="img-fluid">
                       </a>
                     </figure>
                   </div>
                 </div>
-              </div>
-              <p class="h6 col-12"> Báo cáo</p>
-              <textarea type="text" id="description{{i}}" class="md-textarea form-control" mdbInputDirective disabled>Chưa làm xong do quá lùn để lau quạt trần</textarea>
-              <div class="col-12 text-center">
-                <button mdbBtn type="button" color="primary" rounded="true" mdbWavesEffect (click)="isUpdate = true">Chỉnh sửa</button>
-              </div>
-            </div>
-          </div>
-          <div class="offset col-3 card card-cascade narrower ml-3">
-            <div style="position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%); width: 80%">
-              <div class="md-form my-3">
-                <mdb-select [options]="iconStatusSelect" [(ngModel)]="selectedStatus" class="select-wrapper mdb-select colorful-select dropdown-info md-form">
-                </mdb-select>
-                <label>Trạng thái</label>
-              </div>
-              <p class="h6 mt-3">Người thực hiện</p>
-              <span>{{employee}}</span>
-              <p class="h6 mt-3 mb-4">Thời gian</p>
-              <div class="row">
-                <div class="col-6 pt-2">
-                  <mdb-date-picker name="dateFr" [placeholder]="'Selected date'" [(ngModel)]="dateFrom" [label]="'From Date'" [disabled]="!isUpdate">
-                  </mdb-date-picker>
-                </div>
-                <div class="col-6">
-                  <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="true" [darktheme]="false" [placeholder]="'Selected time'"
-                    [label]="'Time'" [ngModel]="timeFrom" [disabled]="!isUpdate">
-                  </mdb-time-picker>
-                </div>
-                <div class="col-6 pt-2">
-                  <mdb-date-picker name="dateT" [label]="'To Date'" [placeholder]="'Selected date'" [(ngModel)]="dateTo" [disabled]="!isUpdate">
-                  </mdb-date-picker>
-                </div>
-                <div class="col-6">
-                  <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="true" [darktheme]="false" [placeholder]="'Selected time'"
-                    [label]="'Time'" [ngModel]="timeTo" [disabled]="!isUpdate">
-                  </mdb-time-picker>
-                </div>
-              </div>
-              <div class="md-form">
-                <mdb-select class="select-wrapper mdb-select colorful-select dropdown-info md-form" [options]="iconPrioritySelect"
-                  [(ngModel)]="selectedPriority" placeholder="Choose your option">
-                </mdb-select>
-                <label>Priority</label>
-              </div>
-            </div>
+              </mdb-accordion-item-body>
+            </mdb-accordion-item>
+          </mdb-accordion>
+          <br>
+          <div class="col-12 text-center">
+            <button mdbBtn type="button" color="primary" rounded="true" mdbWavesEffect (click)="isUpdate = true">Chỉnh
+              sửa</button>
           </div>
         </div>
-      </mdb-tab>
-    </mdb-tabset>
+      </div>
+      <div class="col-md-3 mx-auto">
+        <div style="position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%); width: 80%">
+          <div class="md-form my-3">
+            <mdb-select [options]="iconStatusSelect" [(ngModel)]="selectedStatus" class="select-wrapper mdb-select colorful-select dropdown-info md-form">
+            </mdb-select>
+            <label>Trạng thái</label>
+          </div>
+          <p class="h6 mt-3">Người thực hiện</p>
+          <span>{{employee}}</span>
+          <p class="h6 mt-3 mb-4">Thời gian</p>
+          <div class="row">
+            <div class="md-form mt-1 mb-3 col-md-6">
+              <div class="form-group">
+                <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
+                  [(ngModel)]="task.startTime" [placeholder]="'Ngày bắt đầu'" [disabled]="!isUpdate">
+              </div>
+            </div>
+            <div class="col-6">
+              <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="true" [darktheme]="false" [placeholder]="'Thời gian bắt đầu'"
+                [label]="'Time'" [ngModel]="timeFrom" [disabled]="!isUpdate">
+              </mdb-time-picker>
+            </div>
+            <div class="md-form mt-1 mb-3 col-md-6">
+              <div class="form-group">
+                <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
+                  [(ngModel)]="task.endTime" [placeholder]="'Ngày hoàn thành'" [disabled]="!isUpdate">
+              </div>
+            </div>
+            <div class="col-6">
+              <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="true" [darktheme]="false" [placeholder]="'Thời gian kết thúc'"
+                [label]="'Time'" [ngModel]="timeTo" [disabled]="!isUpdate">
+              </mdb-time-picker>
+            </div>
+          </div>
+          <div class="md-form">
+            <mdb-select class="select-wrapper mdb-select colorful-select dropdown-info md-form" [options]="iconPrioritySelect"
+              [(ngModel)]="selectedPriority" placeholder="Choose your option">
+            </mdb-select>
+            <label>Priority</label>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -6,9 +6,10 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
 import { ProfileComponent } from './components/profile/profile.component';
 import { FormsModule } from '@angular/forms';
+import { UserInfoComponent } from './components/user-info/user-info.component';
 
 @NgModule({
-  declarations: [LoginPageComponent, ProfileComponent],
+  declarations: [LoginPageComponent, ProfileComponent, UserInfoComponent],
   imports: [
     CommonModule,
     AuthorizeRoutingModule,
@@ -16,6 +17,7 @@ import { FormsModule } from '@angular/forms';
     MDBBootstrapModulesPro.forRoot(),
   ],
   exports: [
+    UserInfoComponent,
   ]
 })
 export class AuthorizeModule { }

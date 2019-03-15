@@ -5,6 +5,7 @@ export class TaskBasic {
   picture: string;
   title: string;
   editable: boolean;
+  status: number;
 
   constructor() {
     this.description = '';
@@ -13,6 +14,7 @@ export class TaskBasic {
     this.picture = '';
     this.title = '';
     this.editable = false;
+    this.status = 0;
   }
 }
 

@@ -52,7 +52,7 @@ export class PlaceUpdateComponent implements OnInit {
     this.placeUM.name = this.place.name;
     this.placeUM.numberOfReworks = this.place.numberOfReworks;
     this.placeUM.picture = this.place.picture;
-    this.placeUM.zoneId = this.place.zoneDTO.id;
+    this.placeUM.zoneId = this.place.zone.id;
     this.placeService.update(this.placeUM)
       .then(
         response => {
@@ -82,7 +82,7 @@ export class PlaceUpdateComponent implements OnInit {
           this.placeUM.name = this.place.name;
           this.placeUM.numberOfReworks = this.place.numberOfReworks;
           this.placeUM.picture = response;
-          this.placeUM.zoneId = this.place.zoneDTO.id;
+          this.placeUM.zoneId = this.place.zone.id;
           this.placeService.update(this.placeUM)
             .then(
               () => {

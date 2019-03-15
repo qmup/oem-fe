@@ -17,14 +17,21 @@ export class EmployeeService {
     ).toPromise();
   }
 
-  getEmployeeByManager(managerId: number, sort: string, fieldSort: string, page: number, size: number ): Promise<PaginationResponse> {
+  getEmployeeByManager(
+    managerId: number,
+    roleId: number,
+    sort: string,
+    fieldSort: string,
+    page: number,
+    size: number): Promise<PaginationResponse> {
     return this.httpClient.get<PaginationResponse>(
       `${environment.endPoint}${environment.apiPaths.employee.getEmployeeByManager}`,
       {
         params: {
           managerID: `${managerId}`,
+          roleID: `${roleId}`,
           sort: `${sort}`,
-          fieldShort: `${fieldSort}`,
+          fieldSort: `${fieldSort}`,
           page: `${page}`,
           size: `${size}`
         }
@@ -45,7 +52,7 @@ export class EmployeeService {
         params: {
           managerID: `${managerId}`,
           sort: `${sort}`,
-          fieldShort: `${fieldSort}`,
+          fieldSort: `${fieldSort}`,
           page: `${page}`,
           size: `${size}`
         },

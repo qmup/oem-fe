@@ -50,7 +50,7 @@ export class GlobalService {
   }
 
   getUserAccount(): UserAccount {
-      return JSON.parse(localStorage.getItem(environment.account));
+    return JSON.parse(localStorage.getItem(environment.account));
   }
 
   convertToYearMonthDay(date) {

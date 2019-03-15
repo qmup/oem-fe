@@ -38,7 +38,7 @@
               <div class="content">
                 <h4>{{p.name}}</h4>
                 <hr>
-                <p>Công ty: {{p.companyDTO.name}} - Khu vực: {{p.zoneDTO.name}}</p>
+                <p>Công ty: {{companyName}} - Khu vực: {{zoneName}}</p>
                 <p>Số lần vệ sinh trong ngày: <span class="text-danger font-weight-bold h5">{{p.numberOfReworks}}</span></p>
                 <div class="d-flex justify-content-center">
                   <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect (click)="openCreateTaskModal(p.id)">Tạo công việc</button>

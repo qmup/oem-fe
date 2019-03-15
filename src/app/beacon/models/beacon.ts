@@ -15,3 +15,17 @@ export class Beacon {
     this.name = '';
   }
 }
+
+export class BeaconModel {
+  id: number;
+  major: number;
+  minor: number;
+  uuid: string;
+
+  constructor() {
+    this.id = 0;
+    this.major = 0;
+    this.minor = 0;
+    this.uuid = '';
+  }
+}

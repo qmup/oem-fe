@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from './core/services/global.service';
+import { EmployeeService } from './employee/services/employee.service';
+import { AuthService } from './authorize/services/auth.service';
 
 @Component({
   selector: 'app-root',

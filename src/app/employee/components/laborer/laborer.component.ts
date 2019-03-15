@@ -8,6 +8,7 @@ import { Manager } from 'src/app/manager/models/manager';
 import { ManagerService } from 'src/app/manager/services/manager.service';
 import { GlobalService } from 'src/app/core/services/global.service';
 import { PaginationResponse } from 'src/app/core/models/shared';
+import { UserAccount } from 'src/app/authorize/models/token';
 
 @Component({
   selector: 'app-laborer',
@@ -36,6 +37,7 @@ export class LaborerComponent implements OnInit {
   filesToUpload: FileList;
   isExist = false;
   roleList: any[];
+  userAccount: UserAccount;
 
   constructor(
     private employeeService: EmployeeService,
@@ -54,12 +56,17 @@ export class LaborerComponent implements OnInit {
       { value: 1, label: 'Nam' },
       { value: 2, label: 'Nữ' },
     ],
+    this.userAccount = this.globalService.getUserAccount();
     this.getManager();
-    this.getEmployee();
     this.getRole();
+    this.getEmployee();
   }
 
   getEmployee() {
+    this.userAccount.roleId === 1 ? this.getEmployeeByAdmin() : this.getEmployeeByManager();
+  }
+
+  getEmployeeByAdmin() {
     this.employeeService.getAll()
       .then(
         (response: Employee[]) => {
@@ -68,8 +75,8 @@ export class LaborerComponent implements OnInit {
       );
   }
 
-  getEmployeeByAdmin() {
-    this.employeeService.getByRole(3, '', '', 'id', 0, 10)
+  getEmployeeByManager() {
+    this.employeeService.getEmployeeByManager(this.userAccount.accountDTO.employeeId, 3, '', 'id', 0, 10)
       .then(
         (response: PaginationResponse) => {
           this.employeeResponse = response;
@@ -134,7 +141,9 @@ export class LaborerComponent implements OnInit {
       initialState: { employee }
     };
     this.modalRef = this.modalService.show(EmployeeUpdateComponent, modalOptions);
-    this.modalRef.content.refresh.subscribe(() => this.getEmployee());
+    this.modalRef.content.refresh.subscribe(
+      () => this.getEmployee()
+    );
 
   }
 
