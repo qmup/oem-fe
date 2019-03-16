@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, OnChanges } from '@angular/core';
 import { GlobalService } from '../../services/global.service';
-import { UserAccount } from 'src/app/authorize/models/token';
-import { environment } from 'src/environments/environment';
+import { Employee } from 'src/app/employee/models/employee';
 
 @Component({
   selector: 'app-layout',
@@ -10,7 +9,7 @@ import { environment } from 'src/environments/environment';
 })
 export class LayoutComponent implements OnChanges {
   @Input() isLogin: boolean;
-  userAccount: UserAccount = new UserAccount();
+  userAccount: Employee = new Employee();
 
   constructor(
     public globalService: GlobalService,

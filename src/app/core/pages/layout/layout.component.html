@@ -71,13 +71,13 @@
                         Công việc cơ bản
                       </a>
                     </li>
-                    <li *ngIf="globalService.userAccount?.roleId === 2">
+                    <li *ngIf="userAccount?.roleId === 2">
                       <a routerLink="/schedule" class="waves-effect" mdbWavesEffect>
                         <i class="fa fa-caret-right"></i> 
                         Công việc thường nhật
                       </a>
                     </li>
-                    <li *ngIf="globalService.userAccount?.roleId === 2">
+                    <li *ngIf="userAccount?.roleId === 2">
                       <a routerLink="/task" class="waves-effect" mdbWavesEffect>
                         <i class="fa fa-caret-right"></i> 
                         Danh sách công việc
@@ -95,7 +95,7 @@
                 <mdb-accordion-item-body></mdb-accordion-item-body>
               </mdb-accordion-item>
 
-              <mdb-accordion-item class="no-collase" *ngIf="globalService.userAccount?.roleId === 2">
+              <mdb-accordion-item class="no-collase" *ngIf="userAccount?.roleId === 2">
                 <mdb-accordion-item-head mdbWavesEffect routerLink="/calendar">
                   <i class="fa fa-calendar"></i> 
                   <span>Lịch làm việc</span>
@@ -104,7 +104,7 @@
               </mdb-accordion-item>
               
               <!-- Sidebar item -->
-              <mdb-accordion-item class="no-collase" *ngIf="globalService.userAccount?.roleId === 1">
+              <mdb-accordion-item class="no-collase" *ngIf="userAccount?.roleId === 1">
                 <mdb-accordion-item-head mdbWavesEffect routerLink="/beacon">
                   <i class="fa fa-microchip"></i> 
                   <span>Beacon</span>

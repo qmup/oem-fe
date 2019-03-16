@@ -69,12 +69,11 @@
 
           <!--Text-->
           <div class="list-group">
-            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let e of employeeListByManager | slice:0:3"
-              [routerLink]="['/employee-detail', e.id]">
-              <div class="avatar">
+            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let e of employeeListByManager | slice:0:3">
+              <div class="avatar" [routerLink]="['/employee-detail', e.id]">
                 <img [src]="e.picture" alt="" class="rounded-circle img-responsive list-avatar">
               </div>
-              <div class="col-9">
+              <div class="col-9" [routerLink]="['/employee-detail', e.id]">
                 {{e.firstName}} {{e.lastName}}
                 <br>
                 <small>Địa chỉ: {{e.address}}</small>
@@ -89,10 +88,10 @@
             </a>
             <div class="list-group" mdbCollapse #moreEmp="bs-collapse" *ngIf="employeeListByManager?.length > 3">
               <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let e of employeeListByManager | slice:3:(employeeListByManager.length + 1)">
-                <div class="avatar">
+                <div class="avatar" [routerLink]="['/employee-detail', e.id]">
                   <img [src]="e.picture" alt="" class="rounded-circle img-responsive list-avatar">
                 </div>
-                <div class="col-9">
+                <div class="col-9" [routerLink]="['/employee-detail', e.id]">
                   {{e.firstName}} {{e.lastName}}
                   <br>
                   <small>Địa chỉ: {{e.address}}</small>

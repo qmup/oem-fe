@@ -40,6 +40,7 @@ export const environment = {
       update: 'employee/update-dto/',
       updateField: 'employee/update/',
       getById: 'employee/get-info',
+      getByEmail: 'employee/get-info/email',
       getEmployeeByManager: 'employee/get-list/by-manager',
       getByRole: 'employee/get-list/by-role',
       getAllRole: `employee/get-all-role`,
@@ -103,12 +104,15 @@ export const environment = {
       getById: 'company/get-company-by-id',
       remove: 'company/remove-company',
       update: 'company/update-company-information',
+      getByManager: 'company/get-all-company-by-manager/'
+
     },
     zone: {
       create: 'zone/add-zone',
       getByCompany: 'zone/get-all-zone-by-company',
       remove: 'zone/remove-zone',
       update: 'zone/update-zone-information',
+      getByManager: 'zone/get-all-zone-by-manager/'
     },
   }
 };

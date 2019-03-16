@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { UserAccount } from 'src/app/authorize/models/token';
+import { Employee } from 'src/app/employee/models/employee';
 
 @Injectable({
   providedIn: 'root'
@@ -33,8 +33,8 @@ export class AuthGuardService {
     localStorage.setItem(environment.token, JSON.stringify(token));
   }
 
-  setUserAccount(userAccount: UserAccount) {
-    localStorage.setItem(environment.account, JSON.stringify(userAccount));
+  setUserAccount(employee: Employee) {
+    localStorage.setItem(environment.account, JSON.stringify(employee));
   }
 
   clearToken() {

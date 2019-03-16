@@ -3,7 +3,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { AssignTask } from '../models/shared';
 import { AuthGuardService } from './auth-guard.service';
-import { UserAccount } from 'src/app/authorize/models/token';
+import { Employee } from 'src/app/employee/models/employee';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ import { UserAccount } from 'src/app/authorize/models/token';
 export class GlobalService {
 
   isLogin: boolean;
-  userAccount: UserAccount;
+  userAccount: Employee;
   isRequesting: EventEmitter<boolean> = new EventEmitter<boolean>();
   iconPrioritySelect = [
     {
@@ -49,7 +49,7 @@ export class GlobalService {
     this.isLogin = token ? true : false;
   }
 
-  getUserAccount(): UserAccount {
+  getUserAccount(): Employee {
     return JSON.parse(localStorage.getItem(environment.account));
   }
 

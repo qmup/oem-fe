@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { UserAccount } from '../models/token';
+import { Employee } from 'src/app/employee/models/employee';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +10,14 @@ export class AuthService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getInformation(username: string): Promise<UserAccount> {
-    return this.httpClient.post<UserAccount>(
-      `${environment.endPoint}${environment.apiPaths.authorize.getInformation}`, { username }
+  getInformation(email: string): Promise<Employee> {
+    return this.httpClient.get<Employee>(
+      `${environment.endPoint}${environment.apiPaths.employee.getByEmail}`,
+      {
+        params: {
+          email: `${email}`
+        }
+      }
     ).toPromise();
   }
 }

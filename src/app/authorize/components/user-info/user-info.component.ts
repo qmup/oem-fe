@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UserAccount } from '../../models/token';
 import { AuthGuardService } from 'src/app/core/services/auth-guard.service';
 import { Router } from '@angular/router';
 import { GlobalService } from 'src/app/core/services/global.service';
+import { Employee } from 'src/app/employee/models/employee';
 
 @Component({
   selector: 'app-user-info',
@@ -11,7 +11,7 @@ import { GlobalService } from 'src/app/core/services/global.service';
 })
 export class UserInfoComponent implements OnInit {
 
-  @Input() userAccount: UserAccount;
+  @Input() userAccount: Employee;
 
   constructor(
     private authGuardService: AuthGuardService,

@@ -8,7 +8,6 @@ import { PlaceService } from 'src/app/place/services/place.service';
 import { ScheduleService } from '../../service/schedule.service';
 import { ScheduleModel } from '../../models/schedule';
 import { GlobalService } from 'src/app/core/services/global.service';
-import { UserAccount } from 'src/app/authorize/models/token';
 import { PaginationResponse, AssignTask } from 'src/app/core/models/shared';
 import { ManageWorkplace, Place, PlacePagination } from 'src/app/place/models/place';
 import { Zone } from 'src/app/place/models/zone';
@@ -17,6 +16,7 @@ import { CompanyService } from 'src/app/place/services/company.service';
 import { Company } from 'src/app/place/models/company';
 import { TaskBasicService } from '../../service/task-basic.service';
 import { TaskBasic } from '../../models/task-basic';
+import { Employee } from 'src/app/employee/models/employee';
 
 @Component({
   selector: 'app-task',
@@ -43,7 +43,7 @@ export class TaskComponent implements OnInit {
   week: any[];
   assignTask: AssignTask = new AssignTask();
   manageWorkplace: ManageWorkplace = new ManageWorkplace();
-  userAccount: UserAccount;
+  userAccount: Employee;
   taskListResponse: PaginationResponse;
   isSelectZone: boolean;
   isSelectWorkplace: boolean;
@@ -146,7 +146,7 @@ export class TaskComponent implements OnInit {
   }
 
   getEmployee() {
-    this.employeeService.getEmployeeByManager(this.userAccount.accountDTO.employeeId, 3, '', 'id', 0, 99)
+    this.employeeService.getEmployeeByManager(this.userAccount.id, 3, '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
           this.employeeList = response.content.map((employee) => {
@@ -161,10 +161,10 @@ export class TaskComponent implements OnInit {
   }
 
   getCompany() {
-    this.companyService.getAll()
+    this.companyService.getCompanyByManager(this.userAccount.id, '', 'id', 0, 99)
       .then(
-        (response: Company[]) => {
-          this.companyList = response.map((company) => {
+        (response: PaginationResponse) => {
+          this.companyList = response.content.map((company) => {
             return {
               value: company.id,
               label: company.name,
@@ -182,10 +182,10 @@ export class TaskComponent implements OnInit {
   }
 
   getZone(compannyId: number) {
-    this.zoneService.getByCompany(compannyId)
+    this.zoneService.getZoneByManager(this.userAccount.id, '', 'id', 0, 99)
       .then(
-        (response: Zone[]) => {
-          this.zoneList = response.map((zone) => {
+        (response: PaginationResponse) => {
+          this.zoneList = response.content.map((zone) => {
             return {
               value: zone.id,
               label: zone.name,

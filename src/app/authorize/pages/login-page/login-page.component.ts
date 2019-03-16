@@ -3,9 +3,9 @@ import { GlobalService } from 'src/app/core/services/global.service';
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
 import { AuthService } from '../../services/auth.service';
-import { UserAccount } from '../../models/token';
 import { AuthGuardService } from 'src/app/core/services/auth-guard.service';
 import { ToastService } from 'ng-uikit-pro-standard';
+import { Employee } from 'src/app/employee/models/employee';
 
 @Component({
   selector: 'app-login-page',
@@ -36,8 +36,9 @@ export class LoginPageComponent implements OnInit {
           this.authGuardService.setToken(response.Authorization);
           this.authService.getInformation(this.email)
           .then(
-            (response2: UserAccount) => {
+            (response2: Employee) => {
               this.globalService.userAccount = response2;
+              // this.globalService.userAccount.roleId = 1;
               this.authGuardService.setUserAccount(this.globalService.userAccount);
               this.globalService.isLogin = true;
               this.toastService.success('Đăng nhập thành công', '', { positionClass: 'toast-bottom-right'} );

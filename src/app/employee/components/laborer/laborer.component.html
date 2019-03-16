@@ -15,7 +15,7 @@
             <!-- Grid column -->
             <div class="col-md-2">
               <!-- Add button -->
-              <button title="Tạo mới nhân viên" mdbBtn type="button" color="success" rounded="true" size="sm" class="addNewButton w-75"
+              <button *ngIf="userAccount.roleId === 1" title="Tạo mới nhân viên" mdbBtn type="button" color="success" rounded="true" size="sm" class="addNewButton w-75"
                 mdbWavesEffect (click)="openCreateModal()">
                 <i class="fa fa-plus"></i>
               </button>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Company } from '../models/company';
+import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,20 @@ export class CompanyService {
   update(companyUM: Company): Promise<Company> {
     return this.httpClient.put<Company>(
       `${environment.endPoint}${environment.apiPaths.company.update}`, companyUM
+    ).toPromise();
+  }
+  getCompanyByManager(managerId: number, sort: string, fieldSort: string, page: number, size: number ): Promise<PaginationResponse> {
+    return this.httpClient.get<PaginationResponse>(
+      `${environment.endPoint}${environment.apiPaths.company.getByManager}`,
+      {
+        params: {
+          managerID: `${managerId}`,
+          sort: `${sort}`,
+          fieldSort: `${fieldSort}`,
+          page: `${page}`,
+          size: `${size}`
+        }
+      }
     ).toPromise();
   }
 }

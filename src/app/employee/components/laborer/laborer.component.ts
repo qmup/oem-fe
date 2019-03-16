@@ -4,11 +4,9 @@ import { Employee } from '../../models/employee';
 import { ModalDirective, ToastService, UploadInput, UploadFile, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap';
 import { EmployeeUpdateComponent } from '../employee-update/employee-update.component';
-import { Manager } from 'src/app/manager/models/manager';
 import { ManagerService } from 'src/app/manager/services/manager.service';
 import { GlobalService } from 'src/app/core/services/global.service';
 import { PaginationResponse } from 'src/app/core/models/shared';
-import { UserAccount } from 'src/app/authorize/models/token';
 
 @Component({
   selector: 'app-laborer',
@@ -37,7 +35,7 @@ export class LaborerComponent implements OnInit {
   filesToUpload: FileList;
   isExist = false;
   roleList: any[];
-  userAccount: UserAccount;
+  userAccount: Employee;
 
   constructor(
     private employeeService: EmployeeService,
@@ -76,7 +74,7 @@ export class LaborerComponent implements OnInit {
   }
 
   getEmployeeByManager() {
-    this.employeeService.getEmployeeByManager(this.userAccount.accountDTO.employeeId, 3, '', 'id', 0, 10)
+    this.employeeService.getEmployeeByManager(this.userAccount.id, 3, '', 'id', 0, 10)
       .then(
         (response: PaginationResponse) => {
           this.employeeResponse = response;
