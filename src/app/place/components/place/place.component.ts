@@ -153,7 +153,7 @@ export class PlaceComponent implements OnInit {
         (response: Beacon[]) => {
           this.beaconList = response.map((beacon) => {
             return {
-              value: beacon.workplaceId,
+              value: beacon.id,
               label: beacon.name,
             };
           });
@@ -287,8 +287,19 @@ export class PlaceComponent implements OnInit {
       );
   }
 
-  changeBeacon(beaconId: number) {
-    // this.placeCM.address = this.optionsSelect[beaconId].label;
+  addBeacon() {
+    this.beaconService.updateField(this.beaconId, 'workplaceId', this.id)
+      .then(
+        (response) => {
+          this.toastService.success('Thêm thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.beaconModal.hide();
+          this.placeList = [];
+          this.getPlace();
+        },
+        (error) => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
   }
 
   openCreateTaskModal(id: number) {

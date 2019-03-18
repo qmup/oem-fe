@@ -33,6 +33,15 @@ export class BeaconService {
       `${environment.endPoint}${environment.apiPaths.beacon.update}`, beacon
     ).toPromise();
   }
+  updateField(id, key, value): Promise<any> {
+    return this.httpClient.put<any>(
+      `${environment.endPoint}${environment.apiPaths.beacon.updateField}${id}`,
+        {
+          key: `${key}`,
+          value: `${value}`
+        }
+      ).toPromise();
+  }
 
   getByWorkplace(workplaceId: number): Promise<Beacon> {
     return this.httpClient.get<Beacon>(

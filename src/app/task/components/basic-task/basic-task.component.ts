@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2, EventEmitter } from '@angular/core';
-import { TaskBasic, TaskBasicManager } from '../../models/task-basic';
+import { TaskBasicManager } from '../../models/task-basic';
 import { ModalDirective, ModalOptions, BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { TaskBasicService } from '../../service/task-basic.service';
 import { ToastService, UploadFile, UploadInput, UploadOutput } from 'ng-uikit-pro-standard';
@@ -7,6 +7,7 @@ import { GlobalService } from 'src/app/core/services/global.service';
 import { Task } from '../../models/task';
 import { PaginationResponse } from 'src/app/core/models/shared';
 import { BasicTaskUpdateComponent } from '../basic-task-update/basic-task-update.component';
+import { Employee } from 'src/app/employee/models/employee';
 
 @Component({
   selector: 'app-basic-task',
@@ -34,17 +35,20 @@ export class BasicTaskComponent implements OnInit {
   modalRef: BsModalRef;
   currentPage = 0;
   taskBasicManager: TaskBasicManager = new TaskBasicManager();
+  userAccount: Employee;
+  taskBasicManagerResponse: PaginationResponse;
+  taskBasicManagerList: Task[];
 
   constructor(
     private renderer: Renderer2,
     private taskBasicService: TaskBasicService,
     private toastService: ToastService,
     private globalService: GlobalService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
   ) { }
 
   ngOnInit() {
-    this.getTaskBasic();
+    this.userAccount.roleId === 1 ? this.getTaskBasic() : this.getTaskBasicByManager();
   }
 
   getTaskBasic() {
@@ -53,6 +57,34 @@ export class BasicTaskComponent implements OnInit {
         (response: any) => {
           this.taskBasicResponse = response;
           this.taskBasicList = response.content;
+        }
+      );
+  }
+
+  getTaskBasicByManager() {
+    this.taskBasicService.getListTaskBasic(this.userAccount.id, '', '', 'id', this.currentPage, 8)
+      .then(
+        (response: any) => {
+          this.taskBasicManagerResponse = response;
+          this.taskBasicManagerList = response.content;
+        }
+      );
+  }
+
+  selectTask(task: Task) {
+    const taskBasicManager: TaskBasicManager = new TaskBasicManager();
+    taskBasicManager.employeeId = this.userAccount.id;
+    taskBasicManager.editable = true;
+    taskBasicManager.taskBasicId = task.id;
+    this.taskBasicService.setToManager(taskBasicManager)
+      .then(
+        () => {
+          this.toastService.success('Thêm thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.taskBasicManagerList = [];
+          this.getTaskBasicByManager();
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
         }
       );
   }
@@ -103,7 +135,7 @@ export class BasicTaskComponent implements OnInit {
           this.taskBasicService.create(this.taskBasicCM)
             .then(
               (response1) => {
-                this.taskBasicManager.employeeId = 1;
+                this.taskBasicManager.employeeId = this.userAccount.id;
                 this.taskBasicManager.editable = true;
                 this.taskBasicManager.taskBasicId = response1;
                 this.taskBasicService.setToManager(this.taskBasicManager)

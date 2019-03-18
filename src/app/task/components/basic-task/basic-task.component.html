@@ -10,7 +10,7 @@
         <div class="col-xl-6 col-lg-12 px-5 pt-3 text-right">
           <a class="btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i></a>
         </div>
-        <div class="card-body card-body-cascade pb-0 px-5 col-12">
+        <div [ngClass]="{'col-12': userAccount.roleId === 1, 'col-6': userAccount.roleId === 2}" class="card-body card-body-cascade pb-0 px-5">
 
           <div class="col-md-12 mx-auto text-left my-3">
             <div class="d-flex flex-wrap">
@@ -42,6 +42,63 @@
                     <!--Edit button-->
                     <a type="button" class="btn-floating btn-small btn-primary waves-light" mdbWavesEffect (click)="openUpdateModal(t)">
                       <i class="fa fa-pencil"></i>
+                    </a>
+
+                    <a type="button" class="btn-floating btn-small btn-success waves-light" mdbWavesEffect (click)="selectTask(t)">
+                      <i class="fa fa-plus"></i>
+                    </a>
+
+                  </mdb-card-body>
+                  <!--/.Card content-->
+
+                </mdb-card>
+              </div>
+            </div>
+            <app-pagination
+              *ngIf="taskBasicResponse?.totalPages > 1"
+              [pageSize]="taskBasicResponse.size"
+              [totalPage]="taskBasicResponse.totalPages"
+              [currentPage]="taskBasicResponse.number"
+              (changePage)="changePage($event)">
+            </app-pagination>
+          </div>
+        </div>
+        <div *ngIf="userAccount.roleId === 2" class="card-body card-body-cascade pb-0 px-5">
+
+          <div class="col-md-12 mx-auto text-left my-3">
+            <div class="d-flex flex-wrap">
+              <div class="col-12 mr-0 text-right pr-0">
+                <h4 class="text-left pt-3">Danh sách của tôi</h4>
+              </div>
+            </div>
+            <div class="row pt-5">
+              <div class="col-md-3 mb-4" *ngFor="let t of taskBasicManagerList">
+
+                <mdb-card cascade="true">
+
+                  <!--Card image-->
+                  <div class="view view-cascade overlay waves-light regular-card">
+                    <mdb-card-img [src]="t.picture"></mdb-card-img>
+                    <a>
+                      <div class="mask rgba-white-slight"></div>
+                    </a>
+                  </div>
+                  <!--/Card image-->
+
+                  <mdb-card-body cascade="true" class="text-center">
+                    <!--Card content-->
+                    <h4 class="card-title">
+                      <strong>{{t.title}}</strong>
+                    </h4>
+                    <!-- <h5>{{t.duration}} phút</h5> -->
+
+                    <!--Edit button-->
+                    <a type="button" class="btn-floating btn-small btn-primary waves-light" mdbWavesEffect (click)="openUpdateModal(t)">
+                      <i class="fa fa-pencil"></i>
+                    </a>
+
+                    <a type="button" class="btn-floating btn-small btn-success waves-light" mdbWavesEffect (click)="selectTask(t)">
+                      <i class="fa fa-plus"></i>
                     </a>
 
                   </mdb-card-body>

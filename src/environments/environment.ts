@@ -30,6 +30,7 @@ export const environment = {
       getAll: 'beacon/get-all',
       remove: 'beacon/remove/',
       update: 'beacon/update-dto/',
+      updateField: 'beacon/update/',
       getByWorkplace: 'beacon/get-beacon-by-workplace',
       getAvailable: 'beacon/get-available-beacon',
 
