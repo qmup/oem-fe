@@ -112,11 +112,16 @@ export class ZoneComponent implements OnInit {
   removeZone() {
     this.zoneService.remove(this.id)
       .then(
-        () => {
-          this.toastService.success('Xóa khu vực thành công', '', { positionClass: 'toast-bottom-right'} );
+        (response) => {
+          if (response) {
+            this.toastService.success('Xóa khu vực thành công', '', { positionClass: 'toast-bottom-right'} );
+            this.deleteModal.hide();
+            this.zoneList = [];
+            this.getZone();
+          } else {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
           this.deleteModal.hide();
-          this.zoneList = [];
-          this.getZone();
+          }
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});

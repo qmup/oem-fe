@@ -7,8 +7,8 @@ export const environment = {
   production: false,
   token: 'OEM_TOKEN',
   account: 'OEM_ACCOUNT',
-  endPoint: 'http://localhost:8080/',
-  // endPoint: 'http://113.161.84.125/',
+  // endPoint: 'http://localhost:8080/',
+  endPoint: 'http://113.161.84.125/',
   apiPaths: {
     firebase: {
       apiKey: 'AIzaSyCv23Kx9Xfh4okq30jtY_QJi2CudhO_7f4',
@@ -31,6 +31,8 @@ export const environment = {
       remove: 'beacon/remove/',
       update: 'beacon/update-dto/',
       getByWorkplace: 'beacon/get-beacon-by-workplace',
+      getAvailable: 'beacon/get-available-beacon',
+
     },
     employee: {
       create: 'employee/create',
@@ -79,6 +81,7 @@ export const environment = {
       summaryTaskAllEmployeeByManager: 'task/summary-task-all-employee-by-manager',
       summaryTaskByEmployee: 'task/summary-task-by-employee',
       update: 'task/update-task',
+      updateWorkplace: 'task/update-workplace',
     },
     report: {
       delete: 'report/delete-report/',

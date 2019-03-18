@@ -94,6 +94,7 @@ export class TaskModel {
   description: string;
   duration: number;
   id: number;
+  endTime: string;
   picture: string;
   priority: number;
   scheduleId: number;
@@ -103,6 +104,7 @@ export class TaskModel {
   taskBasics: TaskBasic[];
 
   constructor() {
+    this.endTime = '';
     this.attendanceStatus = 0;
     this.basic = false;
     this.checkInTime = '';

@@ -105,11 +105,16 @@ export class CompanyComponent implements OnInit {
   removeCompany() {
     this.companyService.remove(this.id)
       .then(
-        () => {
-          this.toastService.success('Xóa công ty thành công', '', { positionClass: 'toast-bottom-right'} );
-          this.deleteModal.hide();
-          this.companyList = [];
-          this.getCompany();
+        (response) => {
+          if (response) {
+            this.toastService.success('Xóa công ty thành công', '', { positionClass: 'toast-bottom-right'} );
+            this.deleteModal.hide();
+            this.companyList = [];
+            this.getCompany();
+          } else {
+            this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+            this.deleteModal.hide();
+          }
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});

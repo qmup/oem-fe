@@ -14,9 +14,10 @@ import { ScheduleDetailComponent } from './components/schedule-detail/schedule-d
 import { BasicTaskComponent } from './components/basic-task/basic-task.component';
 import { BasicTaskPagesComponent } from './pages/basic-task-pages/basic-task-pages.component';
 import { BasicTaskUpdateComponent } from './components/basic-task-update/basic-task-update.component';
-import { BsDatepickerModule } from 'ngx-bootstrap';
+import { BsDatepickerModule, ModalModule } from 'ngx-bootstrap';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { OwlFormFieldModule, OwlInputModule } from 'owl-ng';
+import { PlaceTaskBasicComponent } from '../place/components/place-task-basic/place-task-basic.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { OwlFormFieldModule, OwlInputModule } from 'owl-ng';
   ],
   entryComponents: [
     ScheduleDetailComponent,
-    BasicTaskUpdateComponent
+    BasicTaskUpdateComponent,
+    PlaceTaskBasicComponent,
   ]
 })
 export class TaskModule { }

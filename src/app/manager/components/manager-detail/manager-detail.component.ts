@@ -186,7 +186,7 @@ export class ManagerDetailComponent implements OnInit {
   selectZone(e: any) {
     this.manageWorkplace.zoneId = e.value;
     this.isSelectZone = true;
-    // this.getWorkplaceWithoutManager(e.value);
+    this.getWorkplaceWithoutManager(e.value);
   }
 
   getWorkplaceWithoutManager(zoneId: number) {

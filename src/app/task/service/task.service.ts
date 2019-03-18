@@ -83,5 +83,10 @@ export class TaskService {
       `${environment.endPoint}${environment.apiPaths.task.update}`, taskUM
     ).toPromise();
   }
+  updateWorkplace(taskId: number, workplaceId: number): Promise<any> {
+    return this.httpClient.put<any>(
+      `${environment.endPoint}${environment.apiPaths.task.updateWorkplace}/${taskId}/${workplaceId}`, {}
+    ).toPromise();
+  }
 
 }

@@ -53,10 +53,10 @@ export class GlobalService {
       value: 2,
       label: 'Hoàn thành'
     },
-    {
-      value: 3,
-      label: 'Quá hạn'
-    }
+    // {
+    //   value: 3,
+    //   label: 'Quá hạn'
+    // }
   ];
   week = [
     { id: 1, inputId: 'option1', label: 'Thứ 2' , check: false},

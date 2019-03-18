@@ -36,6 +36,7 @@ export class PlaceComponent implements OnInit {
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('createTaskModal') createTaskModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
+  @ViewChild('beacon') beaconModal: ModalDirective;
   formData: FormData;
   files: UploadFile[];
   uploadInput: EventEmitter<UploadInput>;
@@ -57,6 +58,8 @@ export class PlaceComponent implements OnInit {
   haveManager = false;
   managerList = [];
   managerId = 0;
+  beaconId = 0;
+  beaconList = [];
 
   constructor(
     public location: Location,
@@ -145,10 +148,10 @@ export class PlaceComponent implements OnInit {
   }
 
   getBeacon() {
-    this.beaconService.getAll()
+    this.beaconService.getAvailableBeacon()
       .then(
         (response: Beacon[]) => {
-          this.optionsSelect = response.map((beacon) => {
+          this.beaconList = response.map((beacon) => {
             return {
               value: beacon.workplaceId,
               label: beacon.name,
@@ -299,6 +302,11 @@ export class PlaceComponent implements OnInit {
   openDeleteModal(id: number) {
     this.id = id;
     this.deleteModal.show();
+  }
+
+  openBeaconModal(id: number) {
+    this.id = id;
+    this.beaconModal.show();
   }
 
   openUpdateModal(place: Place, zoneId: number) {

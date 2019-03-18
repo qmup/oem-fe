@@ -11,6 +11,8 @@ import { PaginationResponse, AssignTask, Shared } from 'src/app/core/models/shar
 import { EmployeeService } from 'src/app/employee/services/employee.service';
 import { ManageWorkplace, PlacePagination } from 'src/app/place/models/place';
 import { PlaceService } from 'src/app/place/services/place.service';
+import { ModalOptions, BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { PlaceTaskBasicComponent } from 'src/app/place/components/place-task-basic/place-task-basic.component';
 
 @Component({
   selector: 'app-task-detail',
@@ -42,9 +44,13 @@ export class TaskDetailComponent implements OnInit {
   manageWorkplace: ManageWorkplace = new ManageWorkplace();
   workplaceListByManager = [];
   workplaceResponseByManager: PlacePagination = new PlacePagination();
+  minDate = new Date();
+  modalRef: BsModalRef;
 
   constructor(
+    // public modalRef: BsModalRef,
     private taskService: TaskService,
+    private modalService: BsModalService,
     private globalService: GlobalService,
     private route: ActivatedRoute,
     private reportService: ReportService,
@@ -108,11 +114,11 @@ export class TaskDetailComponent implements OnInit {
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
     });
+    this.getEmployeeByManager();
+    this.getWorkplaceByManager(this.userAccount.id);
     this.getTaskDetail(this.id);
     this.getTaskReport(this.id);
     this.getTodayTask();
-    this.getEmployeeByManager();
-    this.getWorkplaceByManager(this.userAccount.id);
     this.iconStatusSelect = this.globalService.iconStatusSelect;
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
   }
@@ -122,8 +128,8 @@ export class TaskDetailComponent implements OnInit {
       .then(
         (response: TaskDetail) => {
           this.task = response;
-          this.assignTask.assigneeId = this.task.assignee.id;
-          this.manageWorkplace.workplaceId = this.task.workplace.id;
+          this.manageWorkplace.workplaceId = response.workplace.id;
+          this.assignTask.assigneeId = response.assignee.id;
           this.dateRange = [
             new Date(this.task.startTime),
             new Date(this.task.endTime)
@@ -195,9 +201,8 @@ export class TaskDetailComponent implements OnInit {
   }
 
   updateTask() {
-    this.checkAssignee();
-    this.checkWorkplace();
     this.taskUM.startTime = this.dateRange[0];
+    this.taskUM.endTime = this.dateRange[1];
     this.taskUM.duration = this.dateRange[1] - this.dateRange[0];
     this.taskUM.description = this.task.description;
     this.taskUM.title = this.task.title;
@@ -218,27 +223,40 @@ export class TaskDetailComponent implements OnInit {
     // }
   }
 
-  checkAssignee(): any {
-    if (this.task.assignee.id !== this.assignTask.assigneeId) {
-      this.globalService.assignTask(this.assignTask)
-        .then(
-          (response) => {
-            console.log(response);
-          }
-        );
-    }
+  assign(): any {
+    this.assignTask.dateAssign = new Date().toISOString();
+    this.globalService.assignTask(this.assignTask)
+      .then(
+        (response) => {
+          console.log(response);
+        }
+      );
+  }
+
+  changeWorkplace(event: any) {
+    this.openTaskBasicModal(event.value, this.task);
+  }
+
+  openTaskBasicModal(workplaceId: number, task: TaskDetail) {
+    const modalOptions: ModalOptions = {
+      animated: true,
+      class: 'modal-notify modal-primary',
+      initialState: { workplaceId, task }
+    };
+    this.modalRef = this.modalService.show(PlaceTaskBasicComponent, modalOptions);
+    this.modalRef.content.refresh.subscribe(() => this.getTaskDetail(this.id));
   }
 
   removeTask() {
-    // this.taskService.remove(this.id)
-    //   .then(
-    //     (response) => {
-    //       this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
-    //     },
-    //     (error) => {
-    //       this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
-    //     }
-    //   );
+    this.taskService.remove(this.id)
+      .then(
+        (response) => {
+          this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
+        },
+        (error) => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
   }
 
 }

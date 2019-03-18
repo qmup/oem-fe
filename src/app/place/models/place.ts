@@ -27,6 +27,7 @@ export class Place {
   description: string;
   numberOfReworks: number;
   picture: string;
+  setToBeacon: boolean;
   zone: ZoneDTO;
   company: CompanyDTO;
   basicTaskList: TaskBasic[];
@@ -36,6 +37,7 @@ export class Place {
     this.id = 0;
     this.name = '';
     this.picture = '';
+    this.setToBeacon = false;
     this.description = '';
     this.zone = new ZoneDTO();
     this.company = new CompanyDTO();

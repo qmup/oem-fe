@@ -39,4 +39,10 @@ export class BeaconService {
       `${environment.endPoint}${environment.apiPaths.beacon.getByWorkplace}?workplaceId=${workplaceId}`,
     ).toPromise();
   }
+
+  getAvailableBeacon(): Promise<Beacon[]> {
+    return this.httpClient.get<Beacon[]>(
+      `${environment.endPoint}${environment.apiPaths.beacon.getAvailable}`,
+    ).toPromise();
+  }
 }

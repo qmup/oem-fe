@@ -48,7 +48,7 @@
                 <button class="btn-add-task" mdbBtn type="button" color="success" rounded="true" size="sm"
                   mdbWavesEffect (click)="openCreateTaskModal(p.id)" *ngIf="userAccount.roleId === 2">Tạo công việc</button>
                 <button class="btn-add-task" mdbBtn type="button" color="success" rounded="true" size="sm"
-                  mdbWavesEffect (click)="openCreateTaskModal(p.id)" *ngIf="userAccount.roleId === 1">Thêm beacon</button>
+                  mdbWavesEffect (click)="openBeaconModal(p.id)" *ngIf="userAccount.roleId === 1 && (p.setToBeacon === false)">Thêm beacon</button>
               </div>
               <!--/.Content-->
 
@@ -137,6 +137,32 @@
           <div class="col text-center w-100" *ngIf="url">
             <img [src]="url" height="100">
           </div>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createPlace()">Tạo mới
+          <i class="fa fa-check ml-1"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div mdbModal #beacon="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="add"
+  aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-success" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Thêm beacon vào nơi làm việc</p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3 row">
+
+        <div class="md-form mt-0 mb-3 col-md-12">
+          <mdb-select [notFoundMsg]="'Không tìm thấy'" [options]="beaconList" placeholder="Beacon" [(ngModel)]="beaconId"></mdb-select>
         </div>
 
       </div>

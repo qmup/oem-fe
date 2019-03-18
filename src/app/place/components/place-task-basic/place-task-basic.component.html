@@ -14,7 +14,10 @@
   </div>
 </div>
 <div class="modal-footer d-flex justify-content-center">
-  <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="updateTaskBasic()">Cập nhật
+  <button *ngIf="taskBasic.length !== 0" mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="updateTaskBasic()">Cập nhật
+    <i class="fa fa-check ml-1"></i>
+  </button>
+  <button *ngIf="taskBasic.length === 0" mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="selectTaskBasic()">Chọn
     <i class="fa fa-check ml-1"></i>
   </button>
 </div>

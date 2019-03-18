@@ -27,18 +27,23 @@
               <h2 class="h2-responsive mb-0">Chi tiết công việc</h2>
             </div>
           </div>
-          <!-- {{task.startTime | date: 'medium'}} -->
-          <p class="h3 mt-3">{{task.title}} </p>
-          <p class="h6 col-12 pl-0 mt-4">Miêu tả công việc</p>
-          <div class="md-form" *ngIf="isUpdate">
-            <textarea type="text" id="description" class="md-textarea form-control" mdbInputDirective [disabled]="!isUpdate">{{task.description}}</textarea>
+
+          <p class="h6 col-12 pl-0 mt-4">Tên công việc</p>
+          <p class="h3 mt-3" *ngIf="task.status !== 0">{{task.title}} </p>
+          <div class="md-form" *ngIf="task.status === 0">
+            <input mdbInput type="text" id="form1" class="form-control" [(ngModel)]="task.title">
           </div>
-          <label *ngIf="!isUpdate">{{task.description}}</label>
+
+          <p class="h6 col-12 pl-0 mt-4">Miêu tả công việc</p>
+          <div class="md-form" *ngIf="task.status === 0">
+            <textarea type="text" id="description" class="md-textarea form-control" mdbInput>{{task.description}}</textarea>
+          </div>
+          <label *ngIf="task.status !== 0">{{task.description}}</label>
+
           <div class="col-md-12 mt-3">
             <h5 class="text-center">Công việc phải làm </h5>
             <div class="d-flex flex-wrap">
-              <mdb-checkbox *ngFor="let ck of task.checkList" [inline]="true" class="col-6" [checked]="ck.status"
-                [disabled]="!isUpdate">{{ck.title}}</mdb-checkbox>
+              <mdb-checkbox *ngFor="let ck of task.checkList" [inline]="true" class="col-6" [checked]="ck.status">{{ck.title}}</mdb-checkbox>
             </div>
           </div>
           <mdb-accordion [multiple]="false" aria-multiselectable="true">
@@ -61,14 +66,14 @@
             </mdb-accordion-item>
           </mdb-accordion>
           <br>
-          <button *ngIf="!isUpdate" class="btn-edit" mdbBtn type="button" color="primary" rounded="true" mdbWavesEffect
-            (click)="isUpdate = true">Chỉnh sửa</button>
-          <button *ngIf="!isUpdate" class="btn-delete" mdbBtn type="button" color="danger" rounded="true"
+          <!-- <button *ngIf="!isUpdate" class="btn-edit" mdbBtn type="button" color="primary" rounded="true" mdbWavesEffect
+            (click)="isUpdate = true">Chỉnh sửa</button> -->
+          <button *ngIf="task.status === 0" class="btn-delete" mdbBtn type="button" color="danger" rounded="true"
             mdbWavesEffect (click)="removeTask()">Xoá</button>
-          <button *ngIf="isUpdate" class="btn-confirm" mdbBtn type="button" color="success" rounded="true"
+          <!-- <button *ngIf="isUpdate" class="btn-confirm" mdbBtn type="button" color="success" rounded="true"
             mdbWavesEffect (click)="updateTask()">Xác nhận</button>
           <button *ngIf="isUpdate" class="btn-close" mdbBtn type="button" color="light" rounded="true" mdbWavesEffect
-            (click)="isUpdate = false">Hủy</button>
+            (click)="isUpdate = false">Hủy</button> -->
         </div>
       </div>
       <div class="col-md-3 mx-auto">
@@ -76,39 +81,36 @@
 
           <div class="md-form ">
             <h6 class="font-weight-bold">Trạng thái</h6>
-            <mdb-select *ngIf="isUpdate" [options]="iconStatusSelect" [(ngModel)]="task.status" class="select-wrapper mdb-select colorful-select dropdown-info md-form">
+            <span *ngIf="task.status === 0" style="font-size: 15px" class="badge badge-light">Chưa bắt đầu</span>
+            <span *ngIf="task.status === 1" style="font-size: 15px" class="badge badge-primary">Đang thực hiện</span>
+            <span *ngIf="task.status === 2" style="font-size: 15px" class="badge badge-success">Hoàn thành</span>
+            <mdb-select *ngIf="task.status === 1" [options]="iconStatusSelect" [(ngModel)]="task.status" class="select-wrapper mdb-select colorful-select dropdown-info md-form">
             </mdb-select>
-            <div *ngIf="!isUpdate" class="mx-3">
-              <span *ngIf="task.status === 0" style="font-size: 15px" class="badge badge-light">Chưa bắt đầu</span>
-              <span *ngIf="task.status === 1" style="font-size: 15px" class="badge badge-primary">Đang thực hiện</span>
-              <span *ngIf="task.status === 2" style="font-size: 15px" class="badge badge-success">Hoàn thành</span>
-              <span *ngIf="task.status === 3" style="font-size: 15px" class="badge badge-danger">Quá hạn</span>
-            </div>
           </div>
 
           <div class="md-form ">
             <p class="h6 mt-3">Người thực hiện</p>
-            <span *ngIf="!isUpdate" class="mx-3">{{task.assignee.name}}</span>
-            <mdb-select *ngIf="isUpdate" [placeholder]="'Người thực hiện'" [options]="employeeList" [filterEnabled]="true"
-              [(ngModel)]="assignTask.assigneeId"></mdb-select>
+            <span *ngIf="task.status !== 0" class="mx-3">{{task.assignee.name}}</span>
+            <mdb-select *ngIf="task.status === 0" [placeholder]="'Người thực hiện'" [options]="employeeList" [filterEnabled]="true"
+              [(ngModel)]="assignTask.assigneeId" (selected)="assign()"></mdb-select>
           </div>
 
           <div class="md-form ">
             <p class="h6 mt-3">Nơi làm việc</p>
-            <span class="mx-3" *ngIf="!isUpdate">{{task.workplace.name}}</span>
-            <mdb-select *ngIf="isUpdate" [placeholder]="'Nơi làm việc'" [options]="workplaceListByManager"
-              [filterEnabled]="true" [(ngModel)]="manageWorkplace.workplaceId"></mdb-select>
+            <span class="mx-3" *ngIf="task.status !== 0">{{task.workplace.name}}</span>
+            <mdb-select *ngIf="task.status === 0" [placeholder]="'Nơi làm việc'" [options]="workplaceListByManager"
+              [filterEnabled]="true" [(ngModel)]="manageWorkplace.workplaceId" (selected)="changeWorkplace($event)"></mdb-select>
           </div>
 
           <div class="md-form ">
             <p class="h6 mt-3 mb-4">Thời gian</p>
-            <div class="col-12 mx-0" *ngIf="!isUpdate">Từ: <span>{{task.startTime | date: 'HH:mm dd-MM-yyyy'}}</span></div>
-            <div class="col-12 mx-0" *ngIf="!isUpdate">Đến: <span>{{task.endTime | date: 'HH:mm dd-MM-yyyy'}}</span></div>
-            <div class="row" *ngIf="isUpdate">
+            <div class="col-12 mx-0" *ngIf="task.status !== 0">Từ: <span>{{task.startTime | date: 'HH:mm dd-MM-yyyy'}}</span></div>
+            <div class="col-12 mx-0" *ngIf="task.status !== 0">Đến: <span>{{task.endTime | date: 'HH:mm dd-MM-yyyy'}}</span></div>
+            <div class="row" *ngIf="task.status === 0">
               <owl-form-field class="w-100 px-3 text-center">
-                <input owlInput [(ngModel)]="dateRange" [selectMode]="'range'" [owlDateTimeTrigger]="dtPicker3"
-                  [owlDateTime]="dtPicker3">
-                <owl-date-time #dtPicker3></owl-date-time>
+                <input owlInput [min]="minDate" [(ngModel)]="dateRange" [selectMode]="'range'" [owlDateTimeTrigger]="datepicker"
+                  [owlDateTime]="datepicker">
+                <owl-date-time #datepicker></owl-date-time>
               </owl-form-field>
             </div>
           </div>

@@ -4,6 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { ToastService } from 'ng-uikit-pro-standard';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,7 @@ export class NotificationService {
   currentMessage = new BehaviorSubject(null);
 
   constructor(
-    // private toastService: ToastService,
-    // private http: Http,
+    private toastService: ToastService,
     private angularFireDB: AngularFireDatabase,
     private angularFireAuth: AngularFireAuth,
     private angularFireMessaging: AngularFireMessaging,
@@ -70,7 +70,8 @@ export class NotificationService {
   receiveMessage() {
     this.angularFireMessaging.messages.subscribe(
       (payload) => {
-        console.log('new message received. ', payload);
+
+        this.toastService.success(payload.toString(), '', { positionClass: 'toast-bottom-right'} );
         this.currentMessage.next(payload);
       });
   }

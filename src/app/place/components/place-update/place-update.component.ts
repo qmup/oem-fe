@@ -117,6 +117,20 @@ export class PlaceUpdateComponent implements OnInit {
       );
   }
 
+  removePlace() {
+    this.placeService.remove(this.place.id)
+      .then(
+        (response) => {
+          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.modalRef.hide();
+          this.refresh.emit();
+        },
+        (error) => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
+  }
+
   showFiles() {
     let files = '';
     for (let i = 0; i < this.files.length; i ++) {

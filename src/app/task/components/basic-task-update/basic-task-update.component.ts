@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 import { UploadFile, UploadInput, ToastService, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
 import { BsModalRef } from 'ngx-bootstrap';
 import { GlobalService } from 'src/app/core/services/global.service';
-import { Task } from '../../models/task';
+import { Task, TaskModel } from '../../models/task';
 import { TaskService } from '../../service/task.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { TaskService } from '../../service/task.service';
 export class BasicTaskUpdateComponent implements OnInit {
 
   taskBasic: Task;
-  taskBasicUM: Task = new Task();
+  taskBasicUM: TaskModel = new TaskModel();
   formData: FormData;
   files: UploadFile[];
   uploadInput: EventEmitter<UploadInput>;
