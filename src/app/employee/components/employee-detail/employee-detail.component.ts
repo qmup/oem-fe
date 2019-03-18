@@ -8,6 +8,8 @@ import { humanizeBytes, UploadInput, UploadFile, UploadOutput, ToastService } fr
 import { PaginationResponse } from 'src/app/core/models/shared';
 import { ModalDirective } from 'ngx-bootstrap';
 import { GlobalService } from 'src/app/core/services/global.service';
+import { TaskService } from 'src/app/task/service/task.service';
+import { Task } from 'src/app/task/models/task';
 
 @Component({
   selector: 'app-employee-detail',
@@ -17,6 +19,8 @@ import { GlobalService } from 'src/app/core/services/global.service';
 export class EmployeeDetailComponent implements OnInit {
 
   @ViewChild('updateManagerModal') updateModal: ModalDirective;
+  @ViewChild('delete') deleteModal: ModalDirective;
+  @ViewChild('moreTask') placeToggle: any;
   employee: Employee = new Employee();
   isShowMore = false;
   id: number;
@@ -32,13 +36,16 @@ export class EmployeeDetailComponent implements OnInit {
   managerList = [];
   selectingManagerId: number;
   userAccount: Employee;
+  taskList: Task[] = new Array<Task>();
+  deletingId = 0;
 
   constructor(
     private route: ActivatedRoute,
     private employeeService: EmployeeService,
     private managerService: ManagerService,
     private toastService: ToastService,
-    private globalService: GlobalService
+    private globalService: GlobalService,
+    private taskService: TaskService,
   ) {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
@@ -88,6 +95,11 @@ export class EmployeeDetailComponent implements OnInit {
     this.updateModal.show();
   }
 
+  openRemoveTaskModal(id: number) {
+    this.deletingId = id;
+    this.deleteModal.show();
+  }
+
   selectManager(e: any) {
     this.selectingManagerId = e.value;
   }
@@ -102,6 +114,32 @@ export class EmployeeDetailComponent implements OnInit {
         }
       );
   }
+  getTodayTaskByEmployee() {
+    this.taskService.getTodayTaskByEmployee(this.id)
+      .then(
+        (response) => {
+          this.taskList = response;
+        }
+      );
+  }
+
+  toogleTask() {
+    this.placeToggle.toggle();
+    this.isShowMore = true;
+  }
+
+  removeTask() {
+    this.taskService.remove(this.deletingId)
+      .then(
+        (response) => {
+          this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
+        },
+        (error) => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
+  }
+
   showFiles() {
     let files = '';
     for (let i = 0; i < this.files.length; i ++) {

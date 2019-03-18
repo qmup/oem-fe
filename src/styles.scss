@@ -90,6 +90,11 @@ main#main {
     cursor: pointer;
   }
 }
+#basic-task {
+  .border-right {
+    border-right: 1px solid #b3b3b3;
+  }
+}
 #createTaskModal {
   input.mydp-date {
     margin-top: 32.5px !important;

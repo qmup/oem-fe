@@ -21,7 +21,7 @@
               </button>
 
             </div>
-            <div class="col-md-10">
+            <div [ngClass]="{'col-md-10': userAccount.roleId === 1, 'col-md-12': userAccount.roleId === 2}">
               <!-- Search -->
               <div class="md-form">
                 <input type="search" [(ngModel)]="searchText" id="search" class="form-control" mdbInput>
@@ -47,7 +47,7 @@
                 <th style="width: 100px; max-width: 100px">Chức vụ</th>
                 <th style="width: 140px; max-width: 140px">Số điện thoại</th>
                 <th>Địa chỉ</th>
-                <th style="width: 300px; max-width: 300px">Thao tác</th>
+                <th [ngStyle]="userAccount.roleId === 1 && {'width': '300px', 'max-width': '300px'}">Thao tác</th>
               </tr>
             </thead>
             <!--Table head-->
@@ -64,20 +64,20 @@
                 <!-- <td>{{data.sex ? 'Nam' : 'Nữ'}}</td> -->
                 <td>{{data.phoneNumber}}</td>
                 <td>{{data.address}}</td>
-                <td class="d-flex justify-content-center">
-                  <button *ngIf="data.roleId !== 2" title="Chi tiết" mdbBtn type="button" rounded="true" color="warning" class="waves-light col"
+                <td class="d-flex justify-content-start">
+                  <button *ngIf="data.roleId !== 2" title="Chi tiết" mdbBtn type="button" rounded="true" color="warning" class="waves-light"
                     size="sm" mdbWavesEffect [routerLink]="['/employee-detail', data.id]">
                     <i class="fa fa-eye"></i>
                   </button>
-                  <button *ngIf="data.roleId === 2" title="Chi tiết" mdbBtn type="button" rounded="true" color="warning" class="waves-light col"
+                  <button *ngIf="data.roleId === 2" title="Chi tiết" mdbBtn type="button" rounded="true" color="warning" class="waves-light"
                     size="sm" mdbWavesEffect [routerLink]="['/manager-detail', data.id]">
                     <i class="fa fa-eye"></i>
                   </button>
-                  <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light col"
+                  <button *ngIf="userAccount.roleId === 1" title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light"
                     size="sm" mdbWavesEffect (click)="openUpdateModal(data)">
                     <i class="fa fa-pencil"></i>
                   </button>
-                  <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light col" size="sm"
+                  <button *ngIf="userAccount.roleId === 1" title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light" size="sm"
                     mdbWavesEffect (click)="openDeleteModal(data.id)">
                     <i class="fa fa-ban"></i>
                   </button>
@@ -192,9 +192,9 @@
           <div class="file-path-wrapper mt-3">
             <input class="file-path" type="text" placeholder="Chọn ảnh đại diện" [value]="showFiles()">
           </div>
-          <div class="col text-center w-100" *ngIf="url">
-            <img [src]="url" height="150">
-          </div>
+        </div>
+        <div class="col text-center w-100" *ngIf="url">
+          <img [src]="url" height="150">
         </div>
 
       </div>

@@ -10,7 +10,7 @@
         <div class="col-xl-6 col-lg-12 px-5 pt-3 text-right">
           <a class="btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i></a>
         </div>
-        <div [ngClass]="{'col-12': userAccount.roleId === 1, 'col-6': userAccount.roleId === 2}" class="card-body card-body-cascade pb-0 px-5">
+        <div [ngClass]="{'col-12': userAccount.roleId === 1, 'col-6': userAccount.roleId === 2}" class="card-body card-body-cascade pb-0 px-5 border-right">
 
           <div class="col-md-12 mx-auto text-left my-3">
             <div class="d-flex flex-wrap">
@@ -19,7 +19,7 @@
               </div>
             </div>
             <div class="row pt-5">
-              <div class="col-md-3 mb-4" *ngFor="let t of taskBasicList">
+              <div [ngClass]="{'col-md-3': userAccount.roleId === 1, 'col-md-6': userAccount.roleId === 2}" class="mb-4" *ngFor="let t of taskBasicList">
 
                 <mdb-card cascade="true">
 
@@ -40,12 +40,12 @@
                     <!-- <h5>{{t.duration}} phút</h5> -->
 
                     <!--Edit button-->
-                    <a type="button" class="btn-floating btn-small btn-primary waves-light" mdbWavesEffect (click)="openUpdateModal(t)">
-                      <i class="fa fa-pencil"></i>
-                    </a>
-
-                    <a type="button" class="btn-floating btn-small btn-success waves-light" mdbWavesEffect (click)="selectTask(t)">
+                    <a *ngIf="userAccount.roleId === 2" type="button" class="btn-floating btn-small btn-success waves-light" mdbWavesEffect (click)="selectTask(t)">
                       <i class="fa fa-plus"></i>
+                    </a>
+                    
+                    <a *ngIf="t.editable" type="button" class="btn-floating btn-small btn-primary waves-light" mdbWavesEffect (click)="openUpdateModal(t)">
+                      <i class="fa fa-pencil"></i>
                     </a>
 
                   </mdb-card-body>
@@ -59,11 +59,11 @@
               [pageSize]="taskBasicResponse.size"
               [totalPage]="taskBasicResponse.totalPages"
               [currentPage]="taskBasicResponse.number"
-              (changePage)="changePage($event)">
+              (changePage)="changePage1($event)">
             </app-pagination>
           </div>
         </div>
-        <div *ngIf="userAccount.roleId === 2" class="card-body card-body-cascade pb-0 px-5">
+        <div *ngIf="userAccount.roleId === 2" class="card-body card-body-cascade pb-0 px-5 col-6">
 
           <div class="col-md-12 mx-auto text-left my-3">
             <div class="d-flex flex-wrap">
@@ -72,7 +72,7 @@
               </div>
             </div>
             <div class="row pt-5">
-              <div class="col-md-3 mb-4" *ngFor="let t of taskBasicManagerList">
+                <div class="col-md-6 mb-4" *ngFor="let t of taskBasicManagerList">
 
                 <mdb-card cascade="true">
 
@@ -97,10 +97,6 @@
                       <i class="fa fa-pencil"></i>
                     </a>
 
-                    <a type="button" class="btn-floating btn-small btn-success waves-light" mdbWavesEffect (click)="selectTask(t)">
-                      <i class="fa fa-plus"></i>
-                    </a>
-
                   </mdb-card-body>
                   <!--/.Card content-->
 
@@ -108,11 +104,11 @@
               </div>
             </div>
             <app-pagination
-              *ngIf="taskBasicResponse?.totalPages > 1"
-              [pageSize]="taskBasicResponse.size"
-              [totalPage]="taskBasicResponse.totalPages"
-              [currentPage]="taskBasicResponse.number"
-              (changePage)="changePage($event)">
+              *ngIf="taskBasicManagerResponse?.totalPages > 1"
+              [pageSize]="taskBasicManagerResponse.size"
+              [totalPage]="taskBasicManagerResponse.totalPages"
+              [currentPage]="taskBasicManagerResponse.number"
+              (changePage)="changePage2($event)">
             </app-pagination>
           </div>
         </div>
@@ -157,9 +153,9 @@
           <div class="file-path-wrapper mt-3">
             <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()">
           </div>
-          <div class="col text-center w-100" *ngIf="url">
-            <img [src]="url" height="100">
-          </div>
+        </div>
+        <div class="col text-center" *ngIf="url">
+          <img [src]="url" height="100">
         </div>
 
       </div>

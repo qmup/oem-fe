@@ -19,6 +19,7 @@ export class Task {
   status: number;
   title: string;
   taskBasics: TaskBasic[];
+  editable: boolean;
 
   constructor() {
     this.attendanceStatus = 0;
@@ -35,7 +36,7 @@ export class Task {
     this.status = 0;
     this.title = '';
     this.taskBasics = new Array<TaskBasic>();
-
+    this.editable = false;
   }
 }
 
@@ -110,7 +111,7 @@ export class TaskModel {
     this.checkInTime = '';
     this.dateCreate = '';
     this.description = '';
-    this.duration = 5;
+    this.duration = 0;
     this.id = 0;
     this.picture = '';
     this.priority = 0;

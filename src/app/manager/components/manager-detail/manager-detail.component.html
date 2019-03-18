@@ -87,7 +87,7 @@
               </div>
             </a>
             <div class="list-group" mdbCollapse #moreEmp="bs-collapse" *ngIf="employeeListByManager?.length > 3">
-              <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let e of employeeListByManager | slice:3:(employeeListByManager.length + 1)">
+              <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let e of employeeListByManager | slice:3">
                 <div class="avatar" [routerLink]="['/employee-detail', e.id]">
                   <img [src]="e.picture" alt="" class="rounded-circle img-responsive list-avatar">
                 </div>
@@ -147,7 +147,7 @@
               </div>
             </a>
             <div class="list-group" mdbCollapse #moreWP="bs-collapse" *ngIf="workplaceListByManager?.length > 3">
-              <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let wp of workplaceListByManager | slice:3:(workplaceListByManager.length + 1)">
+              <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let wp of workplaceListByManager | slice:3">
                 <div class="avatar">
                   <img [src]="wp.picture" alt="" class="rounded-circle img-responsive list-avatar">
                 </div>

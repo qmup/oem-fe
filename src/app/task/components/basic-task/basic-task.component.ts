@@ -33,7 +33,8 @@ export class BasicTaskComponent implements OnInit {
   url: any;
   filesToUpload: FileList;
   modalRef: BsModalRef;
-  currentPage = 0;
+  currentPage1 = 0;
+  currentPage2 = 0;
   taskBasicManager: TaskBasicManager = new TaskBasicManager();
   userAccount: Employee;
   taskBasicManagerResponse: PaginationResponse;
@@ -48,21 +49,35 @@ export class BasicTaskComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.userAccount.roleId === 1 ? this.getTaskBasic() : this.getTaskBasicByManager();
+    this.userAccount = this.globalService.getUserAccount();
+    this.getTaskBasic();
   }
 
   getTaskBasic() {
-    this.taskBasicService.getListTaskBasic(1 , '', '', 'id', this.currentPage, 8)
+    this.userAccount.roleId === 1 ? this.getTaskBasicByAdmin() : (this.getTaskBasicByAdmin(), this.getTaskBasicByManager());
+  }
+
+  getTaskBasicByAdmin() {
+    this.taskBasicService.getListTaskBasic(1, '', '', 'id', this.currentPage1, 8)
       .then(
         (response: any) => {
           this.taskBasicResponse = response;
           this.taskBasicList = response.content;
+          if (this.userAccount.roleId === 1) {
+            this.taskBasicList.forEach(element => {
+              element.editable = true;
+            });
+          } else {
+            this.taskBasicList.forEach(element => {
+              element.editable = false;
+            });
+          }
         }
       );
   }
 
   getTaskBasicByManager() {
-    this.taskBasicService.getListTaskBasic(this.userAccount.id, '', '', 'id', this.currentPage, 8)
+    this.taskBasicService.getListTaskBasic(this.userAccount.id, '', '', 'id', this.currentPage2, 8)
       .then(
         (response: any) => {
           this.taskBasicManagerResponse = response;
@@ -78,10 +93,14 @@ export class BasicTaskComponent implements OnInit {
     taskBasicManager.taskBasicId = task.id;
     this.taskBasicService.setToManager(taskBasicManager)
       .then(
-        () => {
-          this.toastService.success('Thêm thành công', '', { positionClass: 'toast-bottom-right'} );
-          this.taskBasicManagerList = [];
-          this.getTaskBasicByManager();
+        (response) => {
+          if (+response === 0) {
+            this.toastService.error('Công việc đã tồn tại' , '', { positionClass: 'toast-bottom-right'});
+          } else {
+            this.toastService.success('Thêm thành công', '', { positionClass: 'toast-bottom-right'} );
+            this.taskBasicManagerList = [];
+            this.getTaskBasicByManager();
+          }
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -257,8 +276,13 @@ export class BasicTaskComponent implements OnInit {
     }
   }
 
-  changePage(event) {
-    this.currentPage = event - 1;
-    this.getTaskBasic();
+  changePage1(event) {
+    this.currentPage1 = event - 1;
+    this.getTaskBasicByAdmin();
+  }
+
+  changePage2(event) {
+    this.currentPage2 = event - 1;
+    this.getTaskBasicByManager();
   }
 }

@@ -51,10 +51,7 @@ export class LaborerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.optionsSex = [
-      { value: 1, label: 'Nam' },
-      { value: 2, label: 'Nữ' },
-    ],
+    this.optionsSex = this.globalService.optionsSex;
     this.userAccount = this.globalService.getUserAccount();
     this.getManager();
     this.getRole();

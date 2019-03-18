@@ -76,6 +76,7 @@ export class BasicTaskUpdateComponent implements OnInit {
 
   updateTaskWithoutImage() {
     this.taskBasicUM.id = this.taskBasic.id;
+    this.taskBasicUM.picture = this.taskBasicUM.picture;
     this.taskBasicUM.title = this.taskBasic.title;
     this.taskBasicUM.basic = true;
     this.taskService.update(this.taskBasicUM)
@@ -148,8 +149,8 @@ export class BasicTaskUpdateComponent implements OnInit {
       reader.onload = (event1: any) => { // called once readAsDataURL is completed
 
         this.url = event1.target.result;
-        this.taskBasic.picture ? this.taskBasic.picture = event1.target.result : this.url = event1.target.result;
 
+        this.taskBasic.picture ? this.taskBasic.picture = event1.target.result : this.url = event1.target.result;
       };
 
       this.filesToUpload = event.target.files;

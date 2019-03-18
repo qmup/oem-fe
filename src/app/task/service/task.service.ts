@@ -88,5 +88,10 @@ export class TaskService {
       `${environment.endPoint}${environment.apiPaths.task.updateWorkplace}/${taskId}/${workplaceId}`, {}
     ).toPromise();
   }
+  getTodayTaskByEmployee(assignerId: number) {
+    return this.httpClient.get<Task[]>(
+      `${environment.endPoint}${environment.apiPaths.task.getTodayTask}?assignerId=${assignerId}`
+    ).toPromise();
+  }
 
 }

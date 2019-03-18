@@ -15,11 +15,11 @@
         <label id="description">Miêu tả công việc</label>
       </div> -->
 
-  <span>Thời gian hoàn thành</span>
+  <!-- <span>Thời gian hoàn thành</span>
   <div class="w-100 d-flex justify-content-center align-items-center my-3">
     <mdb-range-input id="range" [min]="0" [step]="5" [max]="30" name="range" [(ngModel)]="taskBasic.duration" class="w-100"></mdb-range-input>
     <span class="ml-2">phút</span>
-  </div>
+  </div> -->
 
   <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
     <div mdbBtn floating="true" size="md" gradient="aqua" mdbWavesEffect>
@@ -30,9 +30,9 @@
     <div class="file-path-wrapper mt-3">
       <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()">
     </div>
-    <div class="col text-center w-100" *ngIf="taskBasic.picture || url">
-        <img [src]="taskBasic.picture || url" height="150">
-      </div>
+  </div>
+  <div class="col text-center w-100" *ngIf="taskBasic.picture || url">
+    <img [src]="taskBasic.picture || url" height="150">
   </div>
 </div>
 <div class="modal-footer d-flex justify-content-center">
