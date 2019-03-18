@@ -28,7 +28,7 @@ export class CompanyService {
   }
   remove(id: number): Promise<any> {
     return this.httpClient.delete(
-      `${environment.endPoint}${environment.apiPaths.company.remove}?companyId=${id}`
+      `${environment.endPoint}${environment.apiPaths.company.remove}/${id}`
     ).toPromise();
   }
   update(companyUM: Company): Promise<Company> {
@@ -38,10 +38,9 @@ export class CompanyService {
   }
   getCompanyByManager(managerId: number, sort: string, fieldSort: string, page: number, size: number ): Promise<PaginationResponse> {
     return this.httpClient.get<PaginationResponse>(
-      `${environment.endPoint}${environment.apiPaths.company.getByManager}`,
+      `${environment.endPoint}${environment.apiPaths.company.getByManager}/${managerId}`,
       {
         params: {
-          managerID: `${managerId}`,
           sort: `${sort}`,
           fieldSort: `${fieldSort}`,
           page: `${page}`,

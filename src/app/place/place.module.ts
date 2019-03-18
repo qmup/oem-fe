@@ -16,6 +16,7 @@ import { CompanyPagesComponent } from './pages/company-pages/company-pages.compo
 import { ZonePagesComponent } from './pages/zone-pages/zone-pages.component';
 import { PlaceTaskBasicComponent } from './components/place-task-basic/place-task-basic.component';
 import { PlaceRemoveComponent } from './components/place-remove/place-remove.component';
+import { CoreModule } from '../core/core.module';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { PlaceRemoveComponent } from './components/place-remove/place-remove.com
   imports: [
     CommonModule,
     FormsModule,
+    CoreModule,
     PlaceRoutingModule,
     MDBBootstrapModulesPro.forRoot(),
     AgmCoreModule.forRoot({

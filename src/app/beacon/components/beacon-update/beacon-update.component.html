@@ -5,14 +5,29 @@
   </button>
 </div>
 <div class="modal-body mx-3 row">
-  <div class="md-form mt-0 mb-3 col-md-6">
+  <div class="md-form mt-0 mb-3 col-md-12">
     <input type="text" id="name" class="form-control" mdbInput [(ngModel)]="beacon.name">
     <label for="name">Tên</label>
   </div>
 
-  <div class="md-form mt-0 mb-3 col-md-6">
-    <mdb-select [notFoundMsg]="'Không tìm thấy'" [options]="optionsSelect" placeholder="Beacon" [(ngModel)]="beacon.workplaceId"></mdb-select>
+  <div class="md-form mt-0 mb-3 col-md-12">
+    <input type="text" id="uuid" class="form-control" mdbInput [(ngModel)]="beacon.uuid">
+    <label for="uuid">UUID</label>
   </div>
+
+  <div class="md-form mt-0 mb-3 col-md-6">
+    <input type="text" id="major" class="form-control" mdbInput [(ngModel)]="beacon.major">
+    <label for="major">Major</label>
+  </div>
+
+  <div class="md-form mt-0 mb-3 col-md-6">
+    <input type="text" id="minor" class="form-control" mdbInput [(ngModel)]="beacon.minor">
+    <label for="minor">Minor</label>
+  </div>
+
+  <!-- <div class="md-form mt-0 mb-3 col-md-6">
+    <mdb-select [notFoundMsg]="'Không tìm thấy'" [options]="optionsSelect" placeholder="Beacon" [(ngModel)]="beacon.workplaceId"></mdb-select>
+  </div> -->
 
   <div class="md-form mt-0 mb-3 col-md-12">
     <textarea type="text" id="description" class="form-control md-textarea" mdbInput [(ngModel)]="beacon.description"></textarea>

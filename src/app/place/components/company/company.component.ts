@@ -4,6 +4,9 @@ import { BsModalRef, ModalDirective, BsModalService, ModalOptions } from 'ngx-bo
 import { UploadFile, UploadInput, ToastService, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
 import { CompanyService } from '../../services/company.service';
 import { CompanyUpdateComponent } from '../company-update/company-update.component';
+import { Employee } from 'src/app/employee/models/employee';
+import { GlobalService } from 'src/app/core/services/global.service';
+import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Component({
   selector: 'app-company',
@@ -13,6 +16,7 @@ import { CompanyUpdateComponent } from '../company-update/company-update.compone
 export class CompanyComponent implements OnInit {
 
   id: number;
+  userAccount: Employee;
   companyCM: Company = new Company();
   companyList: Company[];
   modalRef: BsModalRef;
@@ -27,11 +31,14 @@ export class CompanyComponent implements OnInit {
   url: any;
   filesToUpload: FileList;
   map: any = { lat: 10.774157, lng: 106.661049 };
+  currentPage = 0;
+  companyResponse: PaginationResponse;
 
   constructor(
     private companyService: CompanyService,
     private modalService: BsModalService,
     private toastService: ToastService,
+    private globalService: GlobalService
     ) {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
@@ -39,10 +46,16 @@ export class CompanyComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.userAccount = this.globalService.getUserAccount();
     this.getCompany();
   }
 
   getCompany() {
+    this.userAccount.roleId === 1 ? this.getCompanyByAdmin() : this.getCompanyByManager();
+  }
+
+
+  getCompanyByAdmin() {
     this.companyService.getAll()
       .then(
         (response: Company[]) => {
@@ -51,17 +64,40 @@ export class CompanyComponent implements OnInit {
       );
   }
 
-  createCompany() {
-    this.companyService.create(this.companyCM)
+  getCompanyByManager() {
+    this.companyService.getCompanyByManager(this.userAccount.id, '', 'id', this.currentPage, 6)
       .then(
-        () => {
-          this.toastService.success('Tạo công ty thành công', '', { positionClass: 'toast-bottom-right'} );
-          this.createModal.hide();
-          this.companyList = [];
-          this.getCompany();
-        },
-        (error: any) => {
-          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        (response: PaginationResponse) => {
+          this.companyResponse = response;
+          this.companyList = response.content;
+        }
+      );
+  }
+
+  createCompany() {
+    const formData: FormData = new FormData();
+    if (!!this.filesToUpload) {
+      for (let index = 0; index < this.filesToUpload.length; index++) {
+        const file: File = this.filesToUpload[index];
+        formData.append('dataFile', file);
+      }
+    }
+    this.globalService.uploadFile(formData, 'image/employee/')
+      .then(
+        (response) => {
+          this.companyCM.picture = response;
+          this.companyService.create(this.companyCM)
+            .then(
+              () => {
+                this.toastService.success('Tạo công ty thành công', '', { positionClass: 'toast-bottom-right'} );
+                this.createModal.hide();
+                this.companyList = [];
+                this.getCompany();
+              },
+              (error: any) => {
+                this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+              }
+            );
         }
       );
   }
@@ -158,13 +194,18 @@ export class CompanyComponent implements OnInit {
 
         this.url = event1.target.result;
 
-        // this.employee.picture ? this.employee.picture = event1.target.result : this.url = event1.target.result;
+        this.companyCM.picture ? this.companyCM.picture = event1.target.result : this.url = event1.target.result;
 
       };
 
       this.filesToUpload = event.target.files;
 
     }
+  }
+
+  changePage(event) {
+    this.currentPage = event - 1;
+    this.getCompany();
   }
 
 }

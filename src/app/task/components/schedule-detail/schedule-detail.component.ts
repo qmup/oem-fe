@@ -16,10 +16,10 @@ import { Place } from 'src/app/place/models/place';
 export class ScheduleDetailComponent implements OnInit {
 
   isUpdate = false;
-  iconPrioritySelect: any[];
-  week: any[];
-  workplaceList: any[];
-  employeeList: any[];
+  iconPrioritySelect = [];
+  week = [];
+  workplaceList = [];
+  employeeList = [];
   timeFrom: any;
   timeTo: any;
   schedule: Schedule;

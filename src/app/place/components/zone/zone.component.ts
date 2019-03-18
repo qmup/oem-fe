@@ -1,11 +1,15 @@
 import { Component, OnInit, Input, ViewChild, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Zone, ZoneModel } from '../../models/zone';
+import { Zone, ZoneModel, ZonePagination } from '../../models/zone';
 import { BsModalRef, ModalDirective, BsModalService, ModalOptions } from 'ngx-bootstrap';
 import { UploadFile, UploadInput, ToastService, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
 import { ZoneService } from '../../services/zone.service';
 import { ZoneUpdateComponent } from '../zone-update/zone-update.component';
 import { Location } from '@angular/common';
+import { Employee } from 'src/app/employee/models/employee';
+import { PaginationResponse } from 'src/app/core/models/shared';
+import { Company } from '../../models/company';
+import { GlobalService } from 'src/app/core/services/global.service';
 
 @Component({
   selector: 'app-zone',
@@ -30,12 +34,15 @@ export class ZoneComponent implements OnInit {
   dragOver: boolean;
   url: any;
   filesToUpload: FileList;
-  map: any = { lat: 10.774157, lng: 106.661049 };
+  userAccount: Employee;
+  currentPage = 0;
+  zoneResponse: ZonePagination;
 
   constructor(
     private zoneService: ZoneService,
     private modalService: BsModalService,
     private toastService: ToastService,
+    private globalService: GlobalService,
     public location: Location
     ) {
     this.files = [];
@@ -44,30 +51,60 @@ export class ZoneComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.userAccount = this.globalService.getUserAccount();
     this.getZone();
   }
 
   getZone() {
-    this.zoneService.getByCompany(this.companyId)
+    this.userAccount.roleId === 1 ? this.getZoneByAdmin() : this.getZoneByManager();
+  }
+
+  getZoneByAdmin() {
+    this.zoneService.getByCompany(this.companyId, '', '', 'id', 0, 99)
       .then(
-        (response: Zone[]) => {
-          this.zoneList = response;
-          this.companyName = response[0].companyModel.name;
+        (response: ZonePagination) => {
+          this.zoneResponse = response;
+          this.zoneList = response.listOfZone.content;
+          this.companyName = response.company.name;
+        }
+      );
+  }
+
+  getZoneByManager() {
+    this.zoneService.getAll(this.userAccount.id, this.companyId, '', '', 'id', 0, 99)
+      .then(
+        (response: ZonePagination) => {
+          this.zoneResponse = response;
+          this.zoneList = response.listOfZone.content;
         }
       );
   }
 
   createZone() {
-    this.zoneService.create(this.zoneCM)
+    const formData: FormData = new FormData();
+    if (!!this.filesToUpload) {
+      for (let index = 0; index < this.filesToUpload.length; index++) {
+        const file: File = this.filesToUpload[index];
+        formData.append('dataFile', file);
+      }
+    }
+    this.globalService.uploadFile(formData, 'image/zone/')
       .then(
-        () => {
-          this.toastService.success('Tạo công ty thành công', '', { positionClass: 'toast-bottom-right'} );
-          this.createModal.hide();
-          this.zoneList = [];
-          this.getZone();
-        },
-        (error: any) => {
-          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        (response) => {
+          this.zoneCM.companyId = this.zoneResponse.company.id;
+          this.zoneCM.picture = response;
+          this.zoneService.create(this.zoneCM)
+            .then(
+              () => {
+                this.toastService.success('Tạo khu vực thành công', '', { positionClass: 'toast-bottom-right'} );
+                this.createModal.hide();
+                this.zoneList = [];
+                this.getZone();
+              },
+              (error: any) => {
+                this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+              }
+            );
         }
       );
   }
@@ -76,7 +113,7 @@ export class ZoneComponent implements OnInit {
     this.zoneService.remove(this.id)
       .then(
         () => {
-          this.toastService.success('Xóa công ty thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.toastService.success('Xóa khu vực thành công', '', { positionClass: 'toast-bottom-right'} );
           this.deleteModal.hide();
           this.zoneList = [];
           this.getZone();
@@ -164,7 +201,7 @@ export class ZoneComponent implements OnInit {
 
         this.url = event1.target.result;
 
-        // this.employee.picture ? this.employee.picture = event1.target.result : this.url = event1.target.result;
+        this.zoneCM.picture ? this.zoneCM.picture = event1.target.result : this.url = event1.target.result;
 
       };
 

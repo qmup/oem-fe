@@ -1,3 +1,18 @@
 .md-form.col-md-6 {
   margin-top: 31px !important;
 }
+.col-md-3 {
+  height: 100vh;
+}
+.btn-confirm, .btn-edit {
+  position: absolute;
+  bottom: 0%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+}
+.btn-close, .btn-delete {
+  position: absolute;
+  bottom: 0%;
+  right: 25%;
+  transform: translate(-50%, -50%);
+}

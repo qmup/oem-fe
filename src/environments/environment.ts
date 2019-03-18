@@ -7,8 +7,8 @@ export const environment = {
   production: false,
   token: 'OEM_TOKEN',
   account: 'OEM_ACCOUNT',
-  // endPoint: 'http://localhost:8080/',
-  endPoint: 'http://113.161.84.125/',
+  endPoint: 'http://localhost:8080/',
+  // endPoint: 'http://113.161.84.125/',
   apiPaths: {
     firebase: {
       apiKey: 'AIzaSyCv23Kx9Xfh4okq30jtY_QJi2CudhO_7f4',
@@ -60,7 +60,7 @@ export const environment = {
       addTask: 'workplace/add-task/',
       addManager: 'workplace/add-manager',
       getTaskBasic: 'workplace/get-task-basic/',
-      getByManager: 'workplace/get-list-by-manager',
+      getByManager: 'workplace/get-list-by-manager/',
       removeFromManager: 'workplace/remove-workplace-from-manager',
       addTaskToWorkplace: 'workplace/add-task-to-workplace',
     },

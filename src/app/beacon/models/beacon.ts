@@ -7,12 +7,18 @@ export class Beacon {
   description: string;
   name: string;
   placeName: string;
+  major: number;
+  minor: number;
+  uuid: string;
 
   constructor() {
     this.id = 0;
     this.workplaceId = 0;
     this.description = '';
     this.name = '';
+    this.major = 0;
+    this.minor = 0;
+    this.uuid = '';
   }
 }
 

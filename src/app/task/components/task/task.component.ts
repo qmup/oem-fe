@@ -10,7 +10,7 @@ import { ScheduleModel } from '../../models/schedule';
 import { GlobalService } from 'src/app/core/services/global.service';
 import { PaginationResponse, AssignTask } from 'src/app/core/models/shared';
 import { ManageWorkplace, Place, PlacePagination } from 'src/app/place/models/place';
-import { Zone } from 'src/app/place/models/zone';
+import { Zone, ZonePagination } from 'src/app/place/models/zone';
 import { ZoneService } from 'src/app/place/services/zone.service';
 import { CompanyService } from 'src/app/place/services/company.service';
 import { Company } from 'src/app/place/models/company';
@@ -33,28 +33,28 @@ export class TaskComponent implements OnInit {
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('schedule') scheduleModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
-  employeeList: any[];
-  workplaceList: any[];
+  employeeList = [];
+  workplaceList = [];
   dateFrom: any;
   timeFrom: any;
   dateTo: any;
   timeTo: any;
-  iconPrioritySelect: any[];
-  week: any[];
+  iconPrioritySelect = [];
+  week = [];
   assignTask: AssignTask = new AssignTask();
   manageWorkplace: ManageWorkplace = new ManageWorkplace();
   userAccount: Employee;
   taskListResponse: PaginationResponse;
   isSelectZone: boolean;
   isSelectWorkplace: boolean;
-  placeList: { value: number; label: string; icon: string; }[];
-  zoneList: { value: any; label: any; icon: any; }[];
+  placeList = [];
+  zoneList = [];
   isSelectCompany: boolean;
-  companyList: { value: number; label: string; icon: string; }[];
-  selectedIds: any[];
-  taskBasicList: any[];
-  taskBasic: any[];
-  selectedTaskBasic: TaskBasic[];
+  companyList = [];
+  selectedIds = [];
+  taskBasicList = [];
+  taskBasic = [];
+  selectedTaskBasic = [];
 
   constructor(
     private taskService: TaskService,
@@ -70,22 +70,14 @@ export class TaskComponent implements OnInit {
 
   ngOnInit() {
     this.userAccount = this.globalService.getUserAccount();
-    this.manageWorkplace.managerId = 2;
-    this.assignTask.assignerId = 2;
+    this.manageWorkplace.managerId = this.userAccount.id;
+    this.assignTask.assignerId = this.userAccount.id;
     this.assignTask.dateAssign = this.globalService.convertToYearMonthDay(new Date());
+    this.iconPrioritySelect = this.globalService.iconPrioritySelect;
+    this.week = this.globalService.week;
     this.getTask();
     this.getEmployee();
     this.getCompany();
-    this.iconPrioritySelect = this.globalService.iconPrioritySelect;
-    this.week = [
-      { id: 1, inputId: 'option1', label: 'Thứ 2' , check: false},
-      { id: 2, inputId: 'option2', label: 'Thứ 3' , check: false},
-      { id: 3, inputId: 'option3', label: 'Thứ 4' , check: false},
-      { id: 4, inputId: 'option4', label: 'Thứ 5' , check: false},
-      { id: 5, inputId: 'option5', label: 'Thứ 6' , check: false},
-      { id: 6, inputId: 'option6', label: 'Thứ 7' , check: false},
-      { id: 7, inputId: 'option7', label: 'Chủ nhật' , check: false},
-    ];
   }
 
   sortBy(by: string | any): void {
@@ -104,8 +96,7 @@ export class TaskComponent implements OnInit {
   }
 
   getTask() {
-    // this.taskService.getTaskByManager(this.userAccount.employeeId, '', '', 'id', 0, 5)
-    this.taskService.getTaskByManager(2, '', '', 'id', 0, 5)
+    this.taskService.getTaskByManager(this.userAccount.id, '', '', 'id', 0, 5)
       .then(
         (response: PaginationResponse) => {
           this.taskListResponse = response;
@@ -113,6 +104,7 @@ export class TaskComponent implements OnInit {
         }
       );
   }
+
 
   suggestTaskBasic() {
     // this.taskBasicService.getListTaskBasic(this.userAccount.employeeId, '', '', 'id', 0, 99)
@@ -128,6 +120,7 @@ export class TaskComponent implements OnInit {
                   this.taskBasic.forEach((element2, j) => {
                     if (element1.id === element2.id) {
                       element1.checked = true;
+                      this.selectedTaskBasic.push(element1);
                       i++;
                       j = 0;
                     }
@@ -139,9 +132,11 @@ export class TaskComponent implements OnInit {
       );
   }
 
-  changeCheckbox(event: any) {
-    if (event.checked === true) {
-      this.selectedTaskBasic.push(event);
+  changeCheckbox(id: number, event: any) {
+    if (event.checked && !this.selectedTaskBasic.includes((task: Task) => task.id === id)) {
+      this.selectedTaskBasic.push(this.taskBasicList.find(task => task.id === id));
+    } else {
+      this.selectedTaskBasic = this.selectedTaskBasic.filter(task => task.id !== id);
     }
   }
 
@@ -181,11 +176,11 @@ export class TaskComponent implements OnInit {
     this.getZone(e.value);
   }
 
-  getZone(compannyId: number) {
-    this.zoneService.getZoneByManager(this.userAccount.id, '', 'id', 0, 99)
+  getZone(companyId: number) {
+    this.zoneService.getAll(this.userAccount.id, companyId, '', '', 'id', 0, 99)
       .then(
-        (response: PaginationResponse) => {
-          this.zoneList = response.content.map((zone) => {
+        (response: ZonePagination) => {
+          this.zoneList = response.listOfZone.content.map((zone) => {
             return {
               value: zone.id,
               label: zone.name,
@@ -203,7 +198,7 @@ export class TaskComponent implements OnInit {
   }
 
   getWorkplace(zoneId: number) {
-    this.workplaceService.getAll(zoneId, '', '', 'id', 0, 99)
+    this.workplaceService.getWorkplaceByManager(this.userAccount.id, zoneId, '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content.map((place) => {
@@ -223,49 +218,30 @@ export class TaskComponent implements OnInit {
     this.suggestTaskBasic();
   }
 
-  // getWorkplace() {
-  //   this.workplaceService.getAll()
-  //     .then(
-  //       (response: Place[]) => {
-  //         this.workplaceList = response.map((workplace) => {
-  //           return {
-  //             value: workplace.id,
-  //             label: workplace.name
-  //           };
-  //         });
-  //       }
-  //     );
-  // }
-
   createTask() {
-    this.workplaceService.getTaskBasic(this.manageWorkplace.workplaceId)
+    this.taskCM.taskBasics = this.selectedTaskBasic;
+    this.taskCM.duration *= 60000;
+    this.taskCM.dateCreate = new Date().toISOString();
+    this.taskCM.startTime = this.convertDateTime(this.dateFrom, this.timeFrom);
+    this.taskService.create(this.taskCM)
       .then(
-        (response) => {
-          this.taskCM.taskBasics = response;
-          this.taskCM.duration *= 1000;
-          this.taskCM.dateCreate = new Date().toISOString();
-          this.taskCM.startTime = this.convertDateTime(this.dateFrom, this.timeFrom);
-          this.taskService.create(this.taskCM)
+        (response2) => {
+          this.assignTask.dateAssign = new Date().toISOString();
+          this.assignTask.taskId = response2;
+          this.globalService.assignTask(this.assignTask)
             .then(
-              (response2) => {
-                this.assignTask.dateAssign = new Date().toISOString();
-                this.assignTask.taskId = response2;
-                this.globalService.assignTask(this.assignTask)
+              () => {
+                this.workplaceService.addTaskToWorkplace(response2, this.manageWorkplace.workplaceId)
                   .then(
                     () => {
-                      this.workplaceService.addTaskToWorkplace(response2, this.manageWorkplace.workplaceId)
-                        .then(
-                          () => {
-                            this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-                            this.createModal.hide();
-                            this.scheduleModal.hide();
-                            this.taskList = [];
-                            this.getTask();
-                          },
-                          () => {
-                            this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
-                          }
-                        );
+                      this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+                      this.createModal.hide();
+                      this.scheduleModal.hide();
+                      this.taskList = [];
+                      this.getTask();
+                    },
+                    () => {
+                      this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
                     }
                   );
               }

@@ -19,8 +19,8 @@
             <p class="text-danger">Chức vụ: Lao công</p>
 
             <!-- Button for manager -->
-            <!--Triggering button-->
-            <!-- <a class="rotate-btn" data-card="card-1" (click)="cards.toggle()">Chi tiết </a> -->
+            <!-- Triggering button-->
+            <a class="rotate-btn" data-card="card-1" (click)="cards.toggle()">Chi tiết </a>
           </div>
         </div>
         <!--/.Front Side-->
@@ -29,7 +29,7 @@
         <div class="back tp-box_side tp-box_back">
 
           <!--Content-->
-          <h4>Thông tin chi tiết</h4>
+          <h4>Hồ sơ nhân viên</h4>
           <hr>
 
           <mdb-card-text style="text-align: left" class="profile-text">
@@ -50,7 +50,7 @@
           </mdb-card-text>
 
           <!--Triggering button-->
-          <a class="rotate-btn font-weight-normal" data-card="card-1" (click)="cards.toggle()">Trở lại</a>
+          <a *ngIf="userAccount.roleId === 2" class="rotate-btn font-weight-normal" data-card="card-1" (click)="cards.toggle()">Trở lại</a>
 
         </div>
         <!--/.Back Side-->
@@ -58,7 +58,7 @@
     </div>
     <div class="col-md-7 mb-4 mx-auto">
       <!-- Card for manager -->
-      <!-- <mdb-card class="mt-3" cascade="true">
+      <mdb-card class="mt-3" cascade="true" *ngIf="userAccount.roleId === 2">
         
         <mdb-card-body cascade="true" class="text-left"> 
           <mdb-card-title class="d-flex flex-wrap">
@@ -66,7 +66,7 @@
               <p class="h5">Danh sách công việc</p>
             </div>
             <div class="col pl-0">
-              <a [routerLink]="['/employee']" class="link">Xem tất cả</a>
+              <a [routerLink]="['/task']" class="link">Xem tất cả</a>
               <a class="btn-floating btn-md btn-success"><i class="fa fa-plus"></i></a>
             </div>
           </mdb-card-title>
@@ -112,10 +112,9 @@
             </button>
           </div>
         </mdb-card-body>
-      </mdb-card> -->
+      </mdb-card>
 
-      <!-- Card for admin -->
-      <mdb-card class="mt-3" cascade="true">
+      <mdb-card class="mt-3" cascade="true" *ngIf="userAccount.roleId === 1">
 
         <!--Card content-->
         <mdb-card-body cascade="true" class="text-left">
@@ -150,18 +149,13 @@
 
       <mdb-card class="mt-3" cascade="true">
 
-        <!--Card content-->
-        <mdb-card-body cascade="true" class="text-left">
+        <mdb-card-body cascade="true" class="text-left" *ngIf="userAccount.roleId === 1">
           <mdb-card-title class="d-flex flex-wrap">
             <div class="col pr-0">
-              <p class="h5">Thông tin cơ bản</p>
+              <p class="h5">Hồ sơ nhân viên</p>
             </div>
-            <!-- <div class="col pl-0">
-              <a class="btn-floating btn-md btn-primary"><i class="fa fa-pencil"></i></a>
-            </div> -->
           </mdb-card-title>
 
-          <!--Text-->
           <mdb-card-text style="text-align: left; font-size: 16px" class="profile-text pl-5 mb-0">
             <i class="fa fa-venus-mars mr-2 mb-4"></i>
             <span class="mb-3">Giới tính: {{ employee.sex ? 'Nam' : 'Nữ' }}</span>

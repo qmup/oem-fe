@@ -47,10 +47,16 @@ export class PlaceComponent implements OnInit {
   zoneName: string;
   taskBasicList: TaskBasic[];
   assigneeId: number;
-  employeeList: any[];
+  employeeList = [];
   timeFrom: any;
   assignTask: AssignTask = new AssignTask();
-  iconPrioritySelect: any[];
+  iconPrioritySelect = [];
+  currentPage = 0;
+  userAccount: Employee;
+  placeResponse: PaginationResponse;
+  haveManager = false;
+  managerList = [];
+  managerId = 0;
 
   constructor(
     public location: Location,
@@ -69,17 +75,24 @@ export class PlaceComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.userAccount = this.globalService.getUserAccount();
     this.getPlace();
     this.getBeacon();
     this.getEmployee();
+    this.getManager();
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
   }
 
   getPlace() {
+    this.userAccount.roleId === 1 ? this.getWorkplaceByAdmin() : this.getWorkplaceByManager();
+  }
+
+  getWorkplaceByAdmin() {
     this.placeService.getAll(this.zoneId, '', '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content;
+          this.placeResponse = response.listOfWorkplace;
           this.zoneName = response.zone.name;
           this.companyName = response.company.name;
           for (let index = 0; index < this.placeList.length; index++) {
@@ -91,6 +104,42 @@ export class PlaceComponent implements OnInit {
                 }
               );
           }
+        }
+      );
+  }
+
+  getWorkplaceByManager() {
+    this.placeService.getWorkplaceByManager(this.userAccount.id, this.zoneId, '', 'id', 0, 99)
+      .then(
+        (response: PlacePagination) => {
+          this.placeList = response.listOfWorkplace.content;
+          this.placeResponse = response.listOfWorkplace;
+          this.zoneName = response.zone.name;
+          this.companyName = response.company.name;
+          for (let index = 0; index < this.placeList.length; index++) {
+            const element = this.placeList[index];
+            this.placeService.getTaskBasic(element.id)
+              .then(
+                (response2: TaskBasic[]) => {
+                  element.basicTaskList = response2;
+                }
+              );
+          }
+        }
+      );
+  }
+
+  getManager() {
+    this.employeeService.getByRole(2, '', '', 'id', 0, 99)
+      .then(
+        (response) => {
+          this.managerList = response.content.map((m: Employee) => {
+            return {
+              label: m.fullName,
+              value: m.id,
+              icon: m.picture
+            };
+          });
         }
       );
   }
@@ -131,7 +180,7 @@ export class PlaceComponent implements OnInit {
 
   createPlaceWithoutImage() {
     this.placeCM.zoneId = this.zoneId;
-    this.placeService.create(this.placeCM)
+    this.placeService.create(this.placeCM, this.managerId)
       .then(
         () => {
           this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
@@ -158,7 +207,7 @@ export class PlaceComponent implements OnInit {
         (response) => {
           this.placeCM.picture = response;
           this.placeCM.zoneId = this.zoneId;
-          this.placeService.create(this.placeCM)
+          this.placeService.create(this.placeCM, this.managerId)
             .then(
               () => {
                 this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
@@ -198,7 +247,7 @@ export class PlaceComponent implements OnInit {
       .then(
         (response) => {
           this.taskCM.taskBasics = response;
-          this.taskCM.duration *= 1000;
+          this.taskCM.duration *= 60000;
           this.taskCM.dateCreate = new Date().toISOString();
           this.taskCM.startTime = this.convertTime(this.timeFrom);
           this.taskService.create(this.taskCM)
@@ -252,11 +301,12 @@ export class PlaceComponent implements OnInit {
     this.deleteModal.show();
   }
 
-  openUpdateModal(place: Place) {
+  openUpdateModal(place: Place, zoneId: number) {
+    zoneId = this.zoneId;
     const modalOptions: ModalOptions = {
       animated: true,
       class: 'modal-notify modal-primary',
-      initialState: { place }
+      initialState: { place, zoneId }
     };
     this.modalRef = this.modalService.show(PlaceUpdateComponent, modalOptions);
     this.modalRef.content.refresh.subscribe(() => this.getPlace());
@@ -356,5 +406,10 @@ export class PlaceComponent implements OnInit {
       this.filesToUpload = event.target.files;
 
     }
+  }
+
+  changePage(event) {
+    this.currentPage = event - 1;
+    this.getPlace();
   }
 }

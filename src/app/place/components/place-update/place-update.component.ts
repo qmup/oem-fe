@@ -14,9 +14,10 @@ import { GlobalService } from 'src/app/core/services/global.service';
 })
 export class PlaceUpdateComponent implements OnInit {
   place: Place;
+  zoneId: number;
   placeUM: PlaceModel = new PlaceModel();
   beaconList: Beacon[];
-  optionsSelect: any[] = [];
+  optionsSelect = [];
   refresh: EventEmitter<any> = new EventEmitter<any>();
   formData: FormData;
   files: UploadFile[];
@@ -40,6 +41,7 @@ export class PlaceUpdateComponent implements OnInit {
 
   ngOnInit() {
     this.getBeacon();
+    console.log(this.place);
   }
 
   updatePlace() {
@@ -52,7 +54,7 @@ export class PlaceUpdateComponent implements OnInit {
     this.placeUM.name = this.place.name;
     this.placeUM.numberOfReworks = this.place.numberOfReworks;
     this.placeUM.picture = this.place.picture;
-    this.placeUM.zoneId = this.place.zone.id;
+    this.placeUM.zoneId = this.zoneId;
     this.placeService.update(this.placeUM)
       .then(
         response => {
@@ -82,7 +84,7 @@ export class PlaceUpdateComponent implements OnInit {
           this.placeUM.name = this.place.name;
           this.placeUM.numberOfReworks = this.place.numberOfReworks;
           this.placeUM.picture = response;
-          this.placeUM.zoneId = this.place.zone.id;
+          this.placeUM.zoneId = this.zoneId;
           this.placeService.update(this.placeUM)
             .then(
               () => {
@@ -172,7 +174,7 @@ export class PlaceUpdateComponent implements OnInit {
 
         this.url = event1.target.result;
 
-        // this.employee.picture ? this.employee.picture = event1.target.result : this.url = event1.target.result;
+        this.place.picture ? this.place.picture = event1.target.result : this.url = event1.target.result;
 
       };
 

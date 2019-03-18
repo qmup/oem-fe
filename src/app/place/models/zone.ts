@@ -1,4 +1,4 @@
-import { Shared } from 'src/app/core/models/shared';
+import { Shared, PaginationResponse } from 'src/app/core/models/shared';
 
 export class Zone {
   companyModel: Shared;
@@ -26,4 +26,10 @@ export class ZoneModel {
     this.name = '';
     this.picture = '';
   }
+}
+
+export class ZonePagination {
+  company: Shared;
+  zone: Shared;
+  listOfZone: PaginationResponse;
 }

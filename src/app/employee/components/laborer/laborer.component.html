@@ -84,6 +84,13 @@
                 </td>
               </tr>
             </tbody>
+            <app-pagination
+              *ngIf="employeeResponse?.totalPages > 1"
+              [pageSize]="employeeResponse.size"
+              [totalPage]="employeeResponse.totalPages"
+              [currentPage]="employeeResponse.number"
+              (changePage)="changePage($event)">
+            </app-pagination>
             <!--Table body-->
           </table>
           <!--Table-->

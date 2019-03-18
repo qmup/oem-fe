@@ -15,6 +15,8 @@ import { BasicTaskComponent } from './components/basic-task/basic-task.component
 import { BasicTaskPagesComponent } from './pages/basic-task-pages/basic-task-pages.component';
 import { BasicTaskUpdateComponent } from './components/basic-task-update/basic-task-update.component';
 import { BsDatepickerModule } from 'ngx-bootstrap';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { OwlFormFieldModule, OwlInputModule } from 'owl-ng';
 
 @NgModule({
   declarations: [
@@ -32,8 +34,12 @@ import { BsDatepickerModule } from 'ngx-bootstrap';
   imports: [
     CommonModule,
     FormsModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
     TaskRoutingModule,
     CoreModule,
+    OwlFormFieldModule,
+    OwlInputModule,
     BsDatepickerModule.forRoot(),
     MDBBootstrapModulesPro.forRoot(),
   ],

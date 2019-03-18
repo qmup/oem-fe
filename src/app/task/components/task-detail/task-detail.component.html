@@ -7,20 +7,21 @@
         <mdb-card-body>
 
           <!--Title-->
-          <h4 class="text-center">Danh sách công việc</h4>
+          <h4 class="text-center font-weight-bold">Danh sách công việc</h4>
 
+          <hr>
           <!--Text-->
-          <ul class="list-group list-group-flush">
-            <a class="list-group-item active waves-light">92</a>
-            <a class="list-group-item list-group-item-action waves-light" mdbWavesEffect>Dapibus ac facilisis in</a>
-            <a class="list-group-item list-group-item-action waves-light" mdbWavesEffect>Morbi leo risus</a>
-            <a class="list-group-item list-group-item-action waves-light" mdbWavesEffect>Porta ac consectetur ac</a>
+          <ul class="list-group list-group-flush pt-3">
+            <!-- <a class="list-group-item active waves-light">92</a> -->
+            <a *ngFor="let task of taskList; let i = index" class="list-group-item list-group-item-action waves-light"
+              [ngClass]="{'list-group-item-action': task.id !== id, 'active': task.id === id}" mdbWavesEffect (click)="loadTask(task.id)">{{i+1}}.
+              {{task.title}}</a>
           </ul>
 
         </mdb-card-body>
       </div>
       <div class="card card-cascade narrower col-md-5 mx-auto waves-light">
-        <div class="p-5">
+        <div class="p-5 h-100">
           <div class="mx-auto col-8">
             <div class="view view-cascade gradient-card-header light-blue" style="margin-top: -5.25rem">
               <h2 class="h2-responsive mb-0">Chi tiết công việc</h2>
@@ -29,9 +30,10 @@
           <!-- {{task.startTime | date: 'medium'}} -->
           <p class="h3 mt-3">{{task.title}} </p>
           <p class="h6 col-12 pl-0 mt-4">Miêu tả công việc</p>
-          <div class="md-form my-3">
+          <div class="md-form" *ngIf="isUpdate">
             <textarea type="text" id="description" class="md-textarea form-control" mdbInputDirective [disabled]="!isUpdate">{{task.description}}</textarea>
           </div>
+          <label *ngIf="!isUpdate">{{task.description}}</label>
           <div class="col-md-12 mt-3">
             <h5 class="text-center">Công việc phải làm </h5>
             <div class="d-flex flex-wrap">
@@ -59,51 +61,56 @@
             </mdb-accordion-item>
           </mdb-accordion>
           <br>
-          <div class="col-12 text-center">
-            <button mdbBtn type="button" color="primary" rounded="true" mdbWavesEffect (click)="isUpdate = true">Chỉnh
-              sửa</button>
-          </div>
+          <button *ngIf="!isUpdate" class="btn-edit" mdbBtn type="button" color="primary" rounded="true" mdbWavesEffect
+            (click)="isUpdate = true">Chỉnh sửa</button>
+          <button *ngIf="!isUpdate" class="btn-delete" mdbBtn type="button" color="danger" rounded="true"
+            mdbWavesEffect (click)="removeTask()">Xoá</button>
+          <button *ngIf="isUpdate" class="btn-confirm" mdbBtn type="button" color="success" rounded="true"
+            mdbWavesEffect (click)="updateTask()">Xác nhận</button>
+          <button *ngIf="isUpdate" class="btn-close" mdbBtn type="button" color="light" rounded="true" mdbWavesEffect
+            (click)="isUpdate = false">Hủy</button>
         </div>
       </div>
       <div class="col-md-3 mx-auto">
-        <div style="position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%); width: 80%">
-          <div class="md-form my-3">
-            <mdb-select [options]="iconStatusSelect" [(ngModel)]="selectedStatus" class="select-wrapper mdb-select colorful-select dropdown-info md-form">
+        <div style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); width: 80%">
+
+          <div class="md-form ">
+            <h6 class="font-weight-bold">Trạng thái</h6>
+            <mdb-select *ngIf="isUpdate" [options]="iconStatusSelect" [(ngModel)]="task.status" class="select-wrapper mdb-select colorful-select dropdown-info md-form">
             </mdb-select>
-            <label>Trạng thái</label>
-          </div>
-          <p class="h6 mt-3">Người thực hiện</p>
-          <span>{{employee}}</span>
-          <p class="h6 mt-3 mb-4">Thời gian</p>
-          <div class="row">
-            <div class="md-form mt-1 mb-3 col-md-6">
-              <div class="form-group">
-                <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
-                  [(ngModel)]="task.startTime" [placeholder]="'Ngày bắt đầu'" [disabled]="!isUpdate">
-              </div>
-            </div>
-            <div class="col-6">
-              <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="true" [darktheme]="false" [placeholder]="'Thời gian bắt đầu'"
-                [label]="'Time'" [ngModel]="timeFrom" [disabled]="!isUpdate">
-              </mdb-time-picker>
-            </div>
-            <div class="md-form mt-1 mb-3 col-md-6">
-              <div class="form-group">
-                <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
-                  [(ngModel)]="task.endTime" [placeholder]="'Ngày hoàn thành'" [disabled]="!isUpdate">
-              </div>
-            </div>
-            <div class="col-6">
-              <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="true" [darktheme]="false" [placeholder]="'Thời gian kết thúc'"
-                [label]="'Time'" [ngModel]="timeTo" [disabled]="!isUpdate">
-              </mdb-time-picker>
+            <div *ngIf="!isUpdate" class="mx-3">
+              <span *ngIf="task.status === 0" style="font-size: 15px" class="badge badge-light">Chưa bắt đầu</span>
+              <span *ngIf="task.status === 1" style="font-size: 15px" class="badge badge-primary">Đang thực hiện</span>
+              <span *ngIf="task.status === 2" style="font-size: 15px" class="badge badge-success">Hoàn thành</span>
+              <span *ngIf="task.status === 3" style="font-size: 15px" class="badge badge-danger">Quá hạn</span>
             </div>
           </div>
-          <div class="md-form">
-            <mdb-select class="select-wrapper mdb-select colorful-select dropdown-info md-form" [options]="iconPrioritySelect"
-              [(ngModel)]="selectedPriority" placeholder="Choose your option">
-            </mdb-select>
-            <label>Priority</label>
+
+          <div class="md-form ">
+            <p class="h6 mt-3">Người thực hiện</p>
+            <span *ngIf="!isUpdate" class="mx-3">{{task.assignee.name}}</span>
+            <mdb-select *ngIf="isUpdate" [placeholder]="'Người thực hiện'" [options]="employeeList" [filterEnabled]="true"
+              [(ngModel)]="assignTask.assigneeId"></mdb-select>
+          </div>
+
+          <div class="md-form ">
+            <p class="h6 mt-3">Nơi làm việc</p>
+            <span class="mx-3" *ngIf="!isUpdate">{{task.workplace.name}}</span>
+            <mdb-select *ngIf="isUpdate" [placeholder]="'Nơi làm việc'" [options]="workplaceListByManager"
+              [filterEnabled]="true" [(ngModel)]="manageWorkplace.workplaceId"></mdb-select>
+          </div>
+
+          <div class="md-form ">
+            <p class="h6 mt-3 mb-4">Thời gian</p>
+            <div class="col-12 mx-0" *ngIf="!isUpdate">Từ: <span>{{task.startTime | date: 'HH:mm dd-MM-yyyy'}}</span></div>
+            <div class="col-12 mx-0" *ngIf="!isUpdate">Đến: <span>{{task.endTime | date: 'HH:mm dd-MM-yyyy'}}</span></div>
+            <div class="row" *ngIf="isUpdate">
+              <owl-form-field class="w-100 px-3 text-center">
+                <input owlInput [(ngModel)]="dateRange" [selectMode]="'range'" [owlDateTimeTrigger]="dtPicker3"
+                  [owlDateTime]="dtPicker3">
+                <owl-date-time #dtPicker3></owl-date-time>
+              </owl-form-field>
+            </div>
           </div>
         </div>
       </div>

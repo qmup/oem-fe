@@ -40,6 +40,33 @@ export class GlobalService {
       icon: 'https://capstonedfk.atlassian.net/images/icons/priorities/lowest.svg'
     },
   ];
+  iconStatusSelect = [
+    {
+      value: 0,
+      label: 'Chưa bắt đầu'
+    },
+    {
+      value: 1,
+      label: 'Đang thực hiện'
+    },
+    {
+      value: 2,
+      label: 'Hoàn thành'
+    },
+    {
+      value: 3,
+      label: 'Quá hạn'
+    }
+  ];
+  week = [
+    { id: 1, inputId: 'option1', label: 'Thứ 2' , check: false},
+    { id: 2, inputId: 'option2', label: 'Thứ 3' , check: false},
+    { id: 3, inputId: 'option3', label: 'Thứ 4' , check: false},
+    { id: 4, inputId: 'option4', label: 'Thứ 5' , check: false},
+    { id: 5, inputId: 'option5', label: 'Thứ 6' , check: false},
+    { id: 6, inputId: 'option6', label: 'Thứ 7' , check: false},
+    { id: 7, inputId: 'option7', label: 'Chủ nhật' , check: false},
+  ];
 
   constructor(
     private httpClient: HttpClient,

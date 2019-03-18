@@ -11,9 +11,10 @@ import { ZoneService } from 'src/app/place/services/zone.service';
 import { PlaceService } from 'src/app/place/services/place.service';
 import { CompanyService } from 'src/app/place/services/company.service';
 import { Company } from 'src/app/place/models/company';
-import { Zone } from 'src/app/place/models/zone';
+import { Zone, ZonePagination } from 'src/app/place/models/zone';
 import { Place, ManageWorkplace, PlacePagination } from 'src/app/place/models/place';
 import { PaginationResponse } from 'src/app/core/models/shared';
+import { GlobalService } from 'src/app/core/services/global.service';
 
 @Component({
   selector: 'app-manager-detail',
@@ -42,14 +43,14 @@ export class ManagerDetailComponent implements OnInit {
   isShowMore2 = false;
   isSelectCompany = false;
   isSelectZone = false;
-  employeeList: any[];
+  employeeList = [];
   employeeListByManager: Employee[] = [];
   employeeResponseByManager: PaginationResponse;
   workplaceListByManager: Place[] = [];
-  workplaceResponseByManager: PaginationResponse;
-  companyList: any[];
-  zoneList: any[];
-  placeList: any[];
+  workplaceResponseByManager: PlacePagination;
+  companyList = [];
+  zoneList = [];
+  placeList = [];
   taskList: Task[];
   listEmployeeId: number[];
   listWorkplaceId: number[];
@@ -57,6 +58,7 @@ export class ManagerDetailComponent implements OnInit {
   deletingEmpId: number;
   deletingWpId: number;
   manageWorkplace: ManageWorkplace = new ManageWorkplace();
+  userAccount: Employee;
 
   constructor(
     private taskService: TaskService,
@@ -65,6 +67,7 @@ export class ManagerDetailComponent implements OnInit {
     private companyService: CompanyService,
     private zoneService: ZoneService,
     private workplaceService: PlaceService,
+    private globalService: GlobalService,
     private toastService: ToastService
   ) {
     this.files = [];
@@ -73,6 +76,7 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.userAccount = this.globalService.getUserAccount();
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
       this.getEmployeeByManager(this.id);
@@ -114,6 +118,7 @@ export class ManagerDetailComponent implements OnInit {
               icon: employee.picture
             };
           });
+          console.log(this.employeeList);
         }
       );
   }
@@ -129,10 +134,10 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   getWorkplaceByManager(managerId: number) {
-    this.workplaceService.getWorkplaceByManager(managerId, '', 'id', 0, 6)
+    this.workplaceService.getWorkplaceByManager(managerId, '', '', 'id', 0, 6)
       .then(
-        (response: PaginationResponse) => {
-          this.workplaceListByManager = response.content;
+        (response: PlacePagination) => {
+          this.workplaceListByManager = response.listOfWorkplace.content;
           this.workplaceResponseByManager = response;
         }
       );
@@ -163,11 +168,11 @@ export class ManagerDetailComponent implements OnInit {
     this.getZone(e.value);
   }
 
-  getZone(compannyId: number) {
-    this.zoneService.getByCompany(compannyId)
+  getZone(companyId: number) {
+    this.zoneService.getByCompany(companyId, '', '', 'id', 0, 99)
       .then(
-        (response: Zone[]) => {
-          this.zoneList = response.map((zone) => {
+        (response: ZonePagination) => {
+          this.zoneList = response.listOfZone.content.map((zone) => {
             return {
               value: zone.id,
               label: zone.name,
@@ -181,11 +186,11 @@ export class ManagerDetailComponent implements OnInit {
   selectZone(e: any) {
     this.manageWorkplace.zoneId = e.value;
     this.isSelectZone = true;
-    this.getWorkplace(e.value);
+    // this.getWorkplaceWithoutManager(e.value);
   }
 
-  getWorkplace(zoneId: number) {
-    this.workplaceService.getAll(zoneId, '', '', 'id', 0, 99)
+  getWorkplaceWithoutManager(zoneId: number) {
+    this.workplaceService.getWorkplaceByManager(0, zoneId, '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content.map((place) => {
@@ -244,7 +249,7 @@ export class ManagerDetailComponent implements OnInit {
           this.toastService.success('Cập nhật thông tin thành công', '', { positionClass: 'toast-bottom-right'} );
           this.createWorkplaceModal.hide();
           this.workplaceListByManager = [];
-          this.workplaceResponseByManager = new PaginationResponse();
+          this.workplaceResponseByManager = new PlacePagination();
           this.getWorkplaceByManager(this.id);
         },
         () => {
@@ -281,7 +286,7 @@ export class ManagerDetailComponent implements OnInit {
           this.getWorkplaceByManager(this.id);
           this.removeWorkplaceModal.hide();
           this.workplaceListByManager = [];
-          this.workplaceResponseByManager = new PaginationResponse();
+          this.workplaceResponseByManager = new PlacePagination();
         },
         (error) => {
           console.log(error);

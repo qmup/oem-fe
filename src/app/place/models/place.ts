@@ -8,6 +8,7 @@ export class PlaceModel {
   numberOfReworks: number;
   picture: string;
   zoneId: number;
+  managerId: number;
 
   constructor() {
     this.description = '';
@@ -16,6 +17,7 @@ export class PlaceModel {
     this.numberOfReworks = 0;
     this.picture = '';
     this.zoneId = 0;
+    this.managerId = 0;
   }
 }
 

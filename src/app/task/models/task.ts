@@ -134,27 +134,29 @@ export class TaskResponse {
 
 export class TaskDetail {
   id: number;
+  assignee: Shared;
   title: string;
-  workplaceName: string;
+  workplace: Shared;
   beaconModel: BeaconModel;
   startTime: string;
   endTime: string;
   attendanceStatus: number;
   picture: string;
-  status: string;
+  status: number;
   description: string;
   checkList: TaskBasic[];
 
   constructor() {
     this.id = 0;
+    this.assignee = new Shared();
     this.title = '';
-    this.workplaceName = '';
+    this.workplace = new Shared();
     this.beaconModel = new BeaconModel();
     this.startTime = '';
     this.endTime = '';
     this.attendanceStatus = 0;
     this.picture = '';
-    this.status = '';
+    this.status = 0;
     this.description = '';
     this.checkList = new Array<TaskBasic>();
   }

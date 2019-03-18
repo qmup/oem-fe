@@ -22,7 +22,7 @@ export class EmployeeUpdateComponent implements OnInit {
   optionsSex: { value: number; label: string; }[];
   refresh: EventEmitter<any> = new EventEmitter<any>();
   filesToUpload: FileList;
-  managerList: any[];
+  managerList = [];
   formData: FormData;
   files: UploadFile[];
   uploadInput: EventEmitter<UploadInput>;

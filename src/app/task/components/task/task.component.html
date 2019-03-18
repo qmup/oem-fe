@@ -43,9 +43,9 @@
                     Thời gian
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
-                  <th>
+                  <!-- <th>
                     Thao tác
-                  </th>
+                  </th> -->
                 </tr>
               </thead>
               <tbody>
@@ -55,15 +55,19 @@
                   <td [routerLink]="['/task-detail', task.id]">{{ task.workplace.name }}</td>
                   <td [routerLink]="['/employee-detail', task.assignee.id]" style="color: #007bff; cursor: pointer">{{
                     task.assignee.name }}</td>
-                  <td [routerLink]="['/task-detail', task.id]">{{ task.status === 0 ? 'Chưa bắt đầu' : 'Đang thực hiện' }}</td>
+                  <td [routerLink]="['/task-detail', task.id]">
+                    <span *ngIf="task.status === 0" class="badge badge-light">Chưa bắt đầu</span>
+                    <span *ngIf="task.status === 1" class="badge badge-primary">Đang thực hiện</span>
+                    <span *ngIf="task.status === 2" class="badge badge-success">Hoàn thành</span>
+                  </td>
                   <td [routerLink]="['/task-detail', task.id]">{{ task.startTime | date: 'HH:mm dd-MM-yyyy' }} - {{
                     task.endTime | date: 'HH:mm dd-MM-yyyy' }}</td>
-                  <td>
+                  <!-- <td>
                     <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light col" size="sm"
                       mdbWavesEffect (click)="openDeleteModal(task.id)">
                       <i class="fa fa-ban"></i>
                     </button>
-                  </td>
+                  </td> -->
                 </tr>
               </tbody>
             </table>

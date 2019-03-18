@@ -13,11 +13,11 @@ import { PlaceService } from '../../services/place.service';
 })
 export class PlaceTaskBasicComponent implements OnInit {
 
-  taskBasic: any[];
+  taskBasic = [];
   workplaceId: number;
   refresh: EventEmitter<any> = new EventEmitter<any>();
-  taskBasicList: any[] = [];
-  selectedIds: any[] = [];
+  taskBasicList = [];
+  selectedIds = [];
   taskBasicData: { listTaskID: number[], workplaceID: number};
 
   constructor(

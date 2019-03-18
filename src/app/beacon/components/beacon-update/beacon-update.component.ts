@@ -28,7 +28,7 @@ export class BeaconUpdateComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.getPlace();
+    // this.getWorkplaceWithoutBeacon();
   }
 
   updateBeacon() {
@@ -47,7 +47,7 @@ export class BeaconUpdateComponent implements OnInit {
       );
   }
 
-  // getPlace() {
+  // getWorkplaceWithoutBeacon() {
   //   this.workplaceService.getAll()
   //     .then(
   //       (response: Place[]) => {

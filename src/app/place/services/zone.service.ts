@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { ZoneModel, Zone } from '../models/zone';
+import { ZoneModel, Zone, ZonePagination } from '../models/zone';
 import { PaginationResponse } from 'src/app/core/models/shared';
+import { PlacePagination } from '../models/place';
 
 @Injectable({
   providedIn: 'root'
@@ -16,19 +17,29 @@ export class ZoneService {
       `${environment.endPoint}${environment.apiPaths.zone.create}`, zoneCM
     ).toPromise();
   }
-  // getAll(): Promise<Zone[]> {
-  //   return this.httpClient.get<Zone[]>(
-  //     `${environment.endPoint}${environment.apiPaths.zone.}`
-  //   ).toPromise();
-  // }
-  getByCompany(companyId: number): Promise<Zone[]> {
-    return this.httpClient.get<Zone[]>(
-      `${environment.endPoint}${environment.apiPaths.zone.getByCompany}?companyId=${companyId}`
+  getByCompany(
+    companyId: number,
+    search: string,
+    sort: string,
+    fieldSort: string,
+    page: number,
+    size: number): Promise<ZonePagination> {
+    return this.httpClient.get<ZonePagination>(
+      `${environment.endPoint}${environment.apiPaths.zone.getByCompany}/${companyId}`,
+      {
+        params: {
+          search: `${search}`,
+          sort: `${sort}`,
+          fieldSort: `${fieldSort}`,
+          page: `${page}`,
+          size: `${size}`
+        }
+      }
     ).toPromise();
   }
   remove(id: number): Promise<any> {
     return this.httpClient.delete(
-      `${environment.endPoint}${environment.apiPaths.zone.remove}?zoneId=${id}`
+      `${environment.endPoint}${environment.apiPaths.zone.remove}/${id}`
     ).toPromise();
   }
   update(zoneUM: ZoneModel): Promise<Zone> {
@@ -36,12 +47,19 @@ export class ZoneService {
       `${environment.endPoint}${environment.apiPaths.zone.update}`, zoneUM
     ).toPromise();
   }
-  getZoneByManager(managerId: number, sort: string, fieldSort: string, page: number, size: number ): Promise<PaginationResponse> {
-    return this.httpClient.get<PaginationResponse>(
-      `${environment.endPoint}${environment.apiPaths.workplace.getByManager}`,
+  getAll(
+    managerId: number,
+    companyId: number,
+    search: string,
+    sort: string,
+    fieldSort: string,
+    page: number,
+    size: number): Promise<ZonePagination> {
+    return this.httpClient.get<ZonePagination>(
+      `${environment.endPoint}${environment.apiPaths.zone.getByManager + managerId}/${companyId}`,
       {
         params: {
-          managerID: `${managerId}`,
+          search: `${search}`,
           sort: `${sort}`,
           fieldSort: `${fieldSort}`,
           page: `${page}`,

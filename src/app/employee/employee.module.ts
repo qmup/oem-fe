@@ -12,6 +12,7 @@ import { EmployeeDetailComponent } from './components/employee-detail/employee-d
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap';
 import { EmployeeUpdateComponent } from './components/employee-update/employee-update.component';
+import { CoreModule } from '../core/core.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { EmployeeUpdateComponent } from './components/employee-update/employee-u
   imports: [
     CommonModule,
     FormsModule,
+    CoreModule,
     EmployeeRoutingModule,
     BsDatepickerModule.forRoot(),
     MDBBootstrapModulesPro.forRoot(),

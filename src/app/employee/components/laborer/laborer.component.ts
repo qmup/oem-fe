@@ -34,7 +34,8 @@ export class LaborerComponent implements OnInit {
   url: any;
   filesToUpload: FileList;
   isExist = false;
-  roleList: any[];
+  roleList = [];
+  currentPage = 0;
   userAccount: Employee;
 
   constructor(
@@ -74,7 +75,7 @@ export class LaborerComponent implements OnInit {
   }
 
   getEmployeeByManager() {
-    this.employeeService.getEmployeeByManager(this.userAccount.id, 3, '', 'id', 0, 10)
+    this.employeeService.getEmployeeByManager(this.userAccount.id, 3, '', 'id', this.currentPage, 10)
       .then(
         (response: PaginationResponse) => {
           this.employeeResponse = response;
@@ -309,5 +310,10 @@ export class LaborerComponent implements OnInit {
       this.filesToUpload = event.target.files;
 
     }
+  }
+
+  changePage(event) {
+    this.currentPage = event - 1;
+    this.getEmployee();
   }
 }

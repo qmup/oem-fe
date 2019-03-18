@@ -7,6 +7,7 @@ import { Manager } from 'src/app/manager/models/manager';
 import { humanizeBytes, UploadInput, UploadFile, UploadOutput, ToastService } from 'ng-uikit-pro-standard';
 import { PaginationResponse } from 'src/app/core/models/shared';
 import { ModalDirective } from 'ngx-bootstrap';
+import { GlobalService } from 'src/app/core/services/global.service';
 
 @Component({
   selector: 'app-employee-detail',
@@ -28,14 +29,16 @@ export class EmployeeDetailComponent implements OnInit {
   dragOver: boolean;
   url: any;
   filesToUpload: FileList;
-  managerList: any[];
+  managerList = [];
   selectingManagerId: number;
+  userAccount: Employee;
 
   constructor(
     private route: ActivatedRoute,
     private employeeService: EmployeeService,
     private managerService: ManagerService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private globalService: GlobalService
   ) {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
@@ -43,6 +46,7 @@ export class EmployeeDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.userAccount = this.globalService.getUserAccount();
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
       this.getEmployeeDetail(this.id);
@@ -73,6 +77,8 @@ export class EmployeeDetailComponent implements OnInit {
           });
           if (this.employee.managerId !== 0) {
             this.managerInfo = response.content.find((manager: Manager) => manager.id === this.employee.managerId);
+            console.log(this.managerInfo);
+            console.log(this.managerList);
           }
         }
       );

@@ -12,13 +12,19 @@ export class PlaceService {
 
   constructor(private httpClient: HttpClient) { }
 
-  create(placeCM: PlaceModel): Promise<any> {
+  create(placeCM: PlaceModel, managerId: number): Promise<any> {
     return this.httpClient.post(
-      `${environment.endPoint}${environment.apiPaths.workplace.create}`, placeCM
+      `${environment.endPoint}${environment.apiPaths.workplace.create}/${managerId}`, placeCM
     ).toPromise();
   }
 
-  getAll(zoneId: number, search: string, sort: string, fieldSort: string, page: number, size: number): Promise<PlacePagination> {
+  getAll(
+    zoneId: number,
+    search: string,
+    sort: string,
+    fieldSort: string,
+    page: number,
+    size: number): Promise<PlacePagination> {
     return this.httpClient.get<PlacePagination>(
       `${environment.endPoint}${environment.apiPaths.workplace.getAll}`,
       {
@@ -55,12 +61,18 @@ export class PlaceService {
       `${environment.endPoint}${environment.apiPaths.workplace.addTask}`, taskBasicData
     ).toPromise();
   }
-  getWorkplaceByManager(managerId: number, sort: string, fieldSort: string, page: number, size: number ): Promise<PaginationResponse> {
-    return this.httpClient.get<PaginationResponse>(
-      `${environment.endPoint}${environment.apiPaths.workplace.getByManager}`,
+  getWorkplaceByManager(
+    managerId: number,
+    zoneId,
+    sort: string,
+    fieldSort: string,
+    page: number,
+    size: number ): Promise<PlacePagination> {
+    return this.httpClient.get<PlacePagination>(
+      `${environment.endPoint}${environment.apiPaths.workplace.getByManager + managerId}`,
       {
         params: {
-          managerID: `${managerId}`,
+          zoneId: `${zoneId}`,
           sort: `${sort}`,
           fieldSort: `${fieldSort}`,
           page: `${page}`,

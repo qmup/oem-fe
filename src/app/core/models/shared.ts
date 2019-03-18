@@ -4,7 +4,7 @@ export class Shared {
 }
 
 export class PaginationResponse {
-  content: any[];
+  content = [];
   totalPages: number;
   totalElements: number;
   last: boolean;
