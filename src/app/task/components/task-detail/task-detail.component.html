@@ -107,6 +107,7 @@
             <div class="col-12 mx-0" *ngIf="task.status !== 0">Từ: <span>{{task.startTime | date: 'HH:mm dd-MM-yyyy'}}</span></div>
             <div class="col-12 mx-0" *ngIf="task.status !== 0">Đến: <span>{{task.endTime | date: 'HH:mm dd-MM-yyyy'}}</span></div>
             <div class="row" *ngIf="task.status === 0">
+              <!-- <app-date-picker ngDefaultControl [mode]="'range'" [(ngModel)]="dateRange"></app-date-picker> -->
               <owl-form-field class="w-100 px-3 text-center">
                 <input owlInput [min]="minDate" [(ngModel)]="dateRange" [selectMode]="'range'" [owlDateTimeTrigger]="datepicker"
                   [owlDateTime]="datepicker">

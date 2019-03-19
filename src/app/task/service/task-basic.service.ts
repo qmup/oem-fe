@@ -66,4 +66,10 @@ export class TaskBasicService {
     ).toPromise();
   }
 
+  remove(taskId: number, assignerId: number): Promise<any> {
+    return this.httpClient.delete<PaginationResponse>(
+      `${environment.endPoint}${environment.apiPaths.taskBasic.remove + taskId}/${assignerId}`,
+    ).toPromise();
+  }
+
 }

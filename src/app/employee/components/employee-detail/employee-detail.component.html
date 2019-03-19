@@ -104,7 +104,7 @@
               <span class="text-danger col-12">Không có công việc hôm nay!</span>
             </div>
             <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="!isShowMore && taskList?.length > 3"
-              (click)="toggleTaks()" mdbWavesEffect>
+              (click)="toggleTask()" mdbWavesEffect>
               Hiện thêm
             </button>
             <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="isShowMore" [routerLink]="['/task']"

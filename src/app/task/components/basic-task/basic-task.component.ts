@@ -35,10 +35,11 @@ export class BasicTaskComponent implements OnInit {
   modalRef: BsModalRef;
   currentPage1 = 0;
   currentPage2 = 0;
-  taskBasicManager: TaskBasicManager = new TaskBasicManager();
   userAccount: Employee;
+  taskBasicManager: TaskBasicManager = new TaskBasicManager();
   taskBasicManagerResponse: PaginationResponse;
   taskBasicManagerList: Task[];
+  deletingId = 0;
 
   constructor(
     private renderer: Renderer2,
@@ -89,7 +90,7 @@ export class BasicTaskComponent implements OnInit {
   selectTask(task: Task) {
     const taskBasicManager: TaskBasicManager = new TaskBasicManager();
     taskBasicManager.employeeId = this.userAccount.id;
-    taskBasicManager.editable = true;
+    taskBasicManager.editable = false;
     taskBasicManager.taskBasicId = task.id;
     this.taskBasicService.setToManager(taskBasicManager)
       .then(
@@ -119,10 +120,6 @@ export class BasicTaskComponent implements OnInit {
   }
   openCreateModal() {
     this.createModal.show();
-  }
-  openDeleteModal(id: number) {
-    this.id = id;
-    this.deleteModal.show();
   }
   openUpdateModal(taskBasic: Task) {
     console.log(taskBasic);
@@ -162,7 +159,11 @@ export class BasicTaskComponent implements OnInit {
                     () => {
                       this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
                       this.createModal.hide();
-                      this.taskBasicList = [];
+                      if (this.userAccount.roleId === 1 ) {
+                        this.taskBasicList = [];
+                      } else {
+                        this.taskBasicManagerList = [];
+                      }
                       this.getTaskBasic();
                     },
                     () => {
@@ -187,13 +188,39 @@ export class BasicTaskComponent implements OnInit {
               () => {
                 this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
                 this.createModal.hide();
-                this.taskBasicList = [],
-                this.getTaskBasic();
+                if (this.userAccount.roleId === 1 ) {
+                  this.taskBasicList = [];
+                } else {
+                  this.taskBasicManagerList = [];
+                }
               },
               () => {
                 this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
               }
             );
+        }
+      );
+  }
+
+  openDeleteModal(taskId: number) {
+    this.deletingId = taskId;
+    this.deleteModal.show();
+  }
+
+  removeTaskBasicOfManager() {
+    this.taskBasicService.remove(this.deletingId, this.userAccount.id)
+      .then(
+        (response) => {
+          this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.deleteModal.hide();
+          if (this.userAccount.roleId === 1 ) {
+            this.taskBasicList = [];
+          } else {
+            this.taskBasicManagerList = [];
+          }
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra', '', { positionClass: 'toast-bottom-right'} );
         }
       );
   }

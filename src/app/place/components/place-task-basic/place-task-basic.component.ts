@@ -7,6 +7,8 @@ import { PaginationResponse } from 'src/app/core/models/shared';
 import { PlaceService } from '../../services/place.service';
 import { TaskService } from 'src/app/task/service/task.service';
 import { TaskModel, TaskDetail } from 'src/app/task/models/task';
+import { GlobalService } from 'src/app/core/services/global.service';
+import { Employee } from 'src/app/employee/models/employee';
 
 @Component({
   selector: 'app-place-task-basic',
@@ -17,29 +19,33 @@ export class PlaceTaskBasicComponent implements OnInit {
 
   taskBasic = [];
   taskUM: TaskModel = new TaskModel();
-  task: TaskDetail = new TaskDetail();
+  task: TaskDetail;
   workplaceId: number;
   refresh: EventEmitter<any> = new EventEmitter<any>();
   taskBasicList = [];
   selectedIds = [];
   selectedTaskBasic = [];
   taskBasicData: { listTaskID: number[], workplaceID: number};
+  userAccount: Employee;
 
   constructor(
     public modalRef: BsModalRef,
     private taskBasicService: TaskBasicService,
     private toastService: ToastService,
     private taskService: TaskService,
-    private workplaceService: PlaceService
+    private workplaceService: PlaceService,
+    private globalService: GlobalService
 
   ) { }
 
   ngOnInit() {
-    (this.taskBasic.length !== 0) ? this.getTaskBasic() : this.getAllTaskBasic();
+    this.userAccount = this.globalService.getUserAccount();
+    // (this.taskBasic.length !== 0) ? this.getTaskBasic() : this.getAllTaskBasic();
+    !this.task ? this.getTaskBasicByWorkplace() : this.getTaskBasicByManager();
   }
 
-  getTaskBasic() {
-    this.taskBasicService.getListTaskBasic(1 , '', '', 'id', 0, 99)
+  getTaskBasicByManager() {
+    this.taskBasicService.getListTaskBasic(this.userAccount.id , '', '', 'id', 0, 99)
       .then(
         (response: any) => {
           this.taskBasicList = response.content;
@@ -56,21 +62,41 @@ export class PlaceTaskBasicComponent implements OnInit {
       );
   }
 
-  getAllTaskBasic() {
-    this.taskBasicService.getListTaskBasic(1 , '', '', 'id', 0, 99)
-    .then(
-      (response: any) => {
-        this.taskBasicList = response.content;
-      }
-    );
+  getTaskBasicByWorkplace() {
+    this.getTaskBasicByManager();
+    this.workplaceService.getTaskBasic(this.workplaceId)
+      .then(
+        (response) => {
+          this.taskBasic = response;
+          this.taskBasicList.forEach((element1, i) => {
+            this.taskBasic.forEach((element2, j) => {
+              if (element1.id === element2.id) {
+                this.selectedIds.push(element1.id);
+                element1.checked = true;
+                i++;
+                j = 0;
+              }
+            });
+          });
+        }
+      );
   }
 
   changeCheckbox(id: number, event: any) {
-    if (event.checked) {
-      this.selectedTaskBasic.push(this.taskBasicList.find(task => task.id === id));
+    if (this.task) {
+      if (event.checked) {
+        this.selectedTaskBasic.push(this.taskBasicList.find(task => task.id === id));
+      } else {
+        this.selectedTaskBasic = this.selectedTaskBasic.filter(task => task.id !== id);
+      }
     } else {
-      this.selectedTaskBasic = this.selectedTaskBasic.filter(task => task.id !== id);
+      if (event.checked) {
+        this.selectedIds.push(id);
+      } else {
+        this.selectedIds = this.selectedIds.filter(el => el !== id);
+      }
     }
+    console.log(this.selectedIds);
   }
 
   updateTaskBasic() {

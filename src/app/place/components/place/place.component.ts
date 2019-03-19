@@ -163,7 +163,7 @@ export class PlaceComponent implements OnInit {
 
   getEmployee() {
     // get BY manager not get all
-    this.employeeService.getEmployeeByManager(19, 3, '', 'id', 0, 99)
+    this.employeeService.getEmployeeByManager(this.userAccount.id, 3, '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
           this.employeeList = response.content.map((employee) => {
@@ -257,7 +257,7 @@ export class PlaceComponent implements OnInit {
             .then(
               (response2) => {
                 this.assignTask.assigneeId = this.assigneeId;
-                this.assignTask.assigneeId = 2;
+                this.assignTask.assigneeId = this.userAccount.id;
                 this.assignTask.dateAssign = new Date().toISOString();
                 this.assignTask.taskId = response2;
                 this.globalService.assignTask(this.assignTask)

@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, AfterViewInit } from '@angular/core';
 import { UploadFile, UploadInput, humanizeBytes, UploadOutput, IMyOptions, ToastService } from 'ng-uikit-pro-standard';
 import { TaskService } from '../../service/task.service';
 import { GlobalService } from 'src/app/core/services/global.service';
@@ -225,10 +225,15 @@ export class TaskDetailComponent implements OnInit {
 
   assign(): any {
     this.assignTask.dateAssign = new Date().toISOString();
+    this.assignTask.assignerId = this.userAccount.id;
+    this.assignTask.taskId = this.id;
     this.globalService.assignTask(this.assignTask)
       .then(
         (response) => {
-          console.log(response);
+          this.toastService.success('Assign thành công', '', { positionClass: 'toast-bottom-right'});
+        },
+        (error) => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
         }
       );
   }

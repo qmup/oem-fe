@@ -123,7 +123,7 @@ export class EmployeeDetailComponent implements OnInit {
       );
   }
 
-  toogleTask() {
+  toggleTask() {
     this.placeToggle.toggle();
     this.isShowMore = true;
   }

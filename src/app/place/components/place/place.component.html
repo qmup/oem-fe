@@ -7,7 +7,7 @@
         </div>
       </div>
       <div class="col-xl-6 col-lg-12 px-5 pt-3 text-right">
-        <a class="btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i></a>
+        <a *ngIf="userAccount.roleId === 1" class="btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i></a>
       </div>
       <div class="card-body card-body-cascade pb-0 d-flex flex-wrap">
 
@@ -63,7 +63,7 @@
                   {{ idx + 1 }}. {{ bt.title }}
                 </div>
                 <br>
-                <button title="Thêm xóa sửa công việc" mdbBtn type="button" rounded="true" color="primary" class="waves-light list-btn"
+                <button *ngIf="userAccount.roleId === 2" title="Thêm xóa sửa công việc" mdbBtn type="button" rounded="true" color="primary" class="waves-light list-btn"
                   mdbWavesEffect (click)="openTaskBasicModal(p.basicTaskList, p.id)">
                   <i class="mr-2 fa fa-list-ol"></i>Danh sách công việc
                 </button>
