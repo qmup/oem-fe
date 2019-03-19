@@ -60,6 +60,7 @@
                     <span *ngIf="task.status === 0" class="badge badge-light">Chưa bắt đầu</span>
                     <span *ngIf="task.status === 1" class="badge badge-primary">Đang thực hiện</span>
                     <span *ngIf="task.status === 2" class="badge badge-success">Hoàn thành</span>
+                    <span *ngIf="task.status === 3" class="badge badge-danger">Quá hạn</span>
                   </td>
                   <td [routerLink]="['/task-detail', task.id]">{{ task.startTime | date: 'HH:mm dd-MM-yyyy' }} - {{
                     task.endTime | date: 'HH:mm dd-MM-yyyy' }}</td>
