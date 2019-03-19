@@ -1,10 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit, AfterViewInit } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ToastService } from 'ng-uikit-pro-standard';
+import { AuthService } from 'src/app/authorize/services/auth.service';
+import { GlobalService } from './global.service';
+import { Employee } from 'src/app/employee/models/employee';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +15,15 @@ import { ToastService } from 'ng-uikit-pro-standard';
 export class NotificationService {
 
   currentMessage = new BehaviorSubject(null);
+  userAccount: Employee;
 
   constructor(
     private toastService: ToastService,
     private angularFireDB: AngularFireDatabase,
     private angularFireAuth: AngularFireAuth,
     private angularFireMessaging: AngularFireMessaging,
+    private authService: AuthService,
+    private globalService: GlobalService
   ) {
     this.angularFireMessaging.messaging.subscribe(
       (_messaging) => {
@@ -26,10 +32,6 @@ export class NotificationService {
       }
     );
   }
-
-  // ngAfterViewInit() {
-  //   const pushSocket = new WebSocket('https://');
-  // }
 
   /**
    * update token in firebase database
@@ -43,6 +45,7 @@ export class NotificationService {
       () => {
         const data = {};
         data[userId] = token;
+        this.authService.updateToken(userId, token);
         this.angularFireDB.object('fcmTokens/').update(data);
       });
   }

@@ -3,6 +3,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 import { SummaryTask } from '../../models/summary-task';
 import { DashboardService } from '../../services/dashboard.service';
 import { GlobalService } from 'src/app/core/services/global.service';
+import { Employee } from 'src/app/employee/models/employee';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,6 +15,7 @@ export class DashboardComponent implements OnInit {
   dateRange: Date[];
   charts: string[] = ['pie', 'bar'];
   summaryTask: SummaryTask;
+  userAccount: Employee;
 
   chartDatasets: Array<any> = [
     { data: [1, 5, 3, 7, 2, 4, 1, 2, 0, 4, 4, 5], label: 'Đã hoàn thành' },
@@ -67,10 +69,9 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const userId = 'user001';
-    this.notificationService.requestPermission(userId);
+    this.userAccount = this.globalService.getUserAccount();
+    this.notificationService.requestPermission(this.userAccount.id);
     this.notificationService.receiveMessage();
-    console.log(this.message);
     this.message = this.notificationService.currentMessage;
 
     const today = new Date();
