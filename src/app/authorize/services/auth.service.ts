@@ -20,4 +20,14 @@ export class AuthService {
       }
     ).toPromise();
   }
+
+  updateToken(employeeId: number, tokenValue: number): Promise<any> {
+    return this.httpClient.put<any>(
+      `${environment.endPoint}${environment.apiPaths.authorize.updateField}${employeeId}`,
+      {
+        key: 'tokenFirebase',
+        value: `${tokenValue}`,
+      }
+    ).toPromise();
+  }
 }

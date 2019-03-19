@@ -18,6 +18,7 @@ import { BsDatepickerModule, ModalModule } from 'ngx-bootstrap';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { OwlFormFieldModule, OwlInputModule } from 'owl-ng';
 import { PlaceTaskBasicComponent } from '../place/components/place-task-basic/place-task-basic.component';
+import { TaskSearchComponent } from './components/task-search/task-search.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { PlaceTaskBasicComponent } from '../place/components/place-task-basic/pl
     ScheduleDetailComponent,
     BasicTaskComponent,
     BasicTaskPagesComponent,
-    BasicTaskUpdateComponent
+    BasicTaskUpdateComponent,
+    TaskSearchComponent
   ],
   imports: [
     CommonModule,

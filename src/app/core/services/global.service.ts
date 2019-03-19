@@ -71,6 +71,29 @@ export class GlobalService {
     { id: 6, inputId: 'option6', label: 'Thứ 7' , check: false},
     { id: 7, inputId: 'option7', label: 'Chủ nhật' , check: false},
   ];
+  typeList = [
+    { value: 1, label: 'Task cơ bản' },
+    { value: 2, label: 'Task thông thường'}
+  ];
+  statusList = [
+    { value: 1, label: 'Chưa bắt đầu' },
+    { value: 2, label: 'Đang thực hiện' },
+    { value: 3, label: 'Hoàn thành' },
+    { value: 4, label: 'Quá hạn' },
+  ];
+  attendanceStatusList = [
+    { value: 1, label: 'Chưa điểm danh'},
+    { value: 2, label: 'Đúng giờ'},
+    { value: 3, label: 'Trễ'},
+    { value: 4, label: 'Vắng mặt'},
+  ];
+  moreList = [
+    { value: 1, label: 'Tên' },
+    { value: 2, label: 'Miêu tả' },
+    { value: 3, label: 'Thời gian thực hiện' },
+    { value: 4, label: 'Thời gian tạo' },
+    { value: 5, label: 'Thời gian bắt đầu' },
+  ];
 
   constructor(
     private httpClient: HttpClient,

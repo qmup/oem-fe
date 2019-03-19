@@ -69,9 +69,10 @@ export class NotificationService {
    */
   receiveMessage() {
     this.angularFireMessaging.messages.subscribe(
-      (payload) => {
+      (payload: any) => {
 
-        this.toastService.success(payload.toString(), '', { positionClass: 'toast-bottom-right'} );
+        this.toastService.info(payload.notification.body, payload.notification.title, { positionClass: 'toast-bottom-right'} );
+        // console.log('new message received. ', payload);
         this.currentMessage.next(payload);
       });
   }

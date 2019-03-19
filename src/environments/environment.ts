@@ -21,6 +21,7 @@ export const environment = {
     authorize: {
       login: 'account/login',
       getInformation: 'account/get-info',
+      updateField: 'account/update/'
     },
     assign: {
       assignTask: 'assign-task/',
