@@ -46,7 +46,6 @@ export class NotificationService {
         const data = {};
         data[userId] = token;
         this.authService.updateToken(userId, token);
-        this.angularFireDB.object('fcmTokens/').update(data);
       });
   }
 
