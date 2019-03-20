@@ -130,8 +130,21 @@
         </div>
         
         <div class="md-form mt-1 mb-3 col-md-6">
-          <input type="text" id="employeeId" class="form-control" mdbInput [(ngModel)]="employeeCM.employeeId">
-          <label for="userName">Mã số nhân viên</label>
+          <!-- <input type="text" id="employeeId" class="form-control" mdbInput [(ngModel)]="employeeCM.employeeId">
+          <label for="userName">Mã số nhân viên</label> -->
+          <input
+          type="text"
+          id="employeeId"
+          class="form-control"
+          mdbInput
+          [(ngModel)]="employeeCM.employeeId"
+          (blur)="checkDuplicateId()"
+          #employeeId=ngModel
+          [class.has-error]="isDuplicate">
+          <label for="employeeId">Mã số nhân viên</label>
+          <mdb-error *ngIf="isDuplicate">
+            <p class="font-weight-bold">Mã số nhân viên đã tồn tại</p>
+          </mdb-error>
         </div>
         
         <div class="md-form mt-1 mb-3 col-md-6">

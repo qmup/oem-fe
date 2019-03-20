@@ -7,8 +7,8 @@ export const environment = {
   production: false,
   token: 'OEM_TOKEN',
   account: 'OEM_ACCOUNT',
-  endPoint: 'http://localhost:8080/',
-  // endPoint: 'http://113.161.84.125/',
+  // endPoint: 'http://localhost:8080/',
+  endPoint: 'http://113.161.84.125/',
   apiPaths: {
     firebase: {
       apiKey: 'AIzaSyCv23Kx9Xfh4okq30jtY_QJi2CudhO_7f4',
@@ -51,7 +51,8 @@ export const environment = {
       getEmployeeByManager: 'employee/get-list/by-manager',
       getByRole: 'employee/get-list/by-role',
       getAllRole: `employee/get-all-role`,
-      checkExist: 'account/check-exist-username'
+      checkExist: 'account/check-exist-username',
+      checkDuplicateId: '/employee/check-duplicate-id'
     },
     manager: {
       create: 'employee/create',

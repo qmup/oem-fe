@@ -37,6 +37,7 @@ export class LaborerComponent implements OnInit {
   roleList = [];
   currentPage = 0;
   userAccount: Employee;
+  isDuplicate = false;
 
   constructor(
     private employeeService: EmployeeService,
@@ -312,5 +313,14 @@ export class LaborerComponent implements OnInit {
   changePage(event) {
     this.currentPage = event - 1;
     this.getEmployee();
+  }
+
+  checkDuplicateId() {
+    this.employeeService.checkDuplicateId(this.employeeCM.employeeId)
+      .then(
+        (res) => {
+          this.isDuplicate = res;
+        }
+      )
   }
 }

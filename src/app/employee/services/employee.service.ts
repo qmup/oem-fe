@@ -120,4 +120,15 @@ export class EmployeeService {
         }
       ).toPromise();
   }
+
+  checkDuplicateId(employeeId: string): Promise<any> {
+    return this.httpClient.get<any>(
+      `${environment.endPoint}${environment.apiPaths.employee.checkDuplicateId}`,
+      {
+        params: {
+          employeeId: `${employeeId}`
+        }
+      }
+    ).toPromise();
+  }
 }
