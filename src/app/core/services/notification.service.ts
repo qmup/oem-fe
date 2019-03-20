@@ -23,7 +23,6 @@ export class NotificationService {
     private angularFireAuth: AngularFireAuth,
     private angularFireMessaging: AngularFireMessaging,
     private authService: AuthService,
-    private globalService: GlobalService
   ) {
     this.angularFireMessaging.messaging.subscribe(
       (_messaging) => {
@@ -74,7 +73,7 @@ export class NotificationService {
       (payload: any) => {
 
         this.toastService.info(payload.notification.body, payload.notification.title, { positionClass: 'toast-bottom-right'} );
-        // console.log('new message received. ', payload);
+        console.log('new message received. ', payload);
         this.currentMessage.next(payload);
       });
   }

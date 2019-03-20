@@ -72,7 +72,6 @@ export class TaskSearchComponent implements OnInit {
     this.moreList = this.globalService.moreList;
     this.getEmployeeByManager();
     this.getWorkplaceByManager();
-    console.log((new Date).toISOString());
   }
 
   getEmployeeByManager() {
