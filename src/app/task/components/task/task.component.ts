@@ -17,6 +17,7 @@ import { Company } from 'src/app/place/models/company';
 import { TaskBasicService } from '../../service/task-basic.service';
 import { TaskBasic } from '../../models/task-basic';
 import { Employee } from 'src/app/employee/models/employee';
+import { TaskSearchResponse } from '../../models/task-search';
 
 @Component({
   selector: 'app-task',
@@ -44,7 +45,7 @@ export class TaskComponent implements OnInit {
   assignTask: AssignTask = new AssignTask();
   manageWorkplace: ManageWorkplace = new ManageWorkplace();
   userAccount: Employee;
-  taskListResponse: PaginationResponse;
+  taskListResponse: TaskSearchResponse;
   isSelectZone: boolean;
   isSelectWorkplace: boolean;
   placeList = [];
@@ -55,6 +56,7 @@ export class TaskComponent implements OnInit {
   taskBasicList = [];
   taskBasic = [];
   selectedTaskBasic = [];
+  currentPage = 0;
 
   constructor(
     private taskService: TaskService,
@@ -95,10 +97,20 @@ export class TaskComponent implements OnInit {
     this.sorted = !this.sorted;
   }
 
+  // getTask() {
+  //   this.taskService.getTaskByManager(this.userAccount.id, '', '', 'id', 0, 5)
+  //     .then(
+  //       (response: PaginationResponse) => {
+  //         this.taskListResponse = response;
+  //         this.taskList = response.content;
+  //       }
+  //     );
+  // }
+
   getTask() {
-    this.taskService.getTaskByManager(this.userAccount.id, '', '', 'id', 0, 5)
+    this.taskService.search('', 'title:asc', '', this.userAccount.id, this.currentPage, 10)
       .then(
-        (response: PaginationResponse) => {
+        (response: TaskSearchResponse) => {
           this.taskListResponse = response;
           this.taskList = response.content;
         }
@@ -330,5 +342,15 @@ export class TaskComponent implements OnInit {
   //   this.modalRef.content.refresh.subscribe(() => this.getPlace());
 
   // }
+
+  search(e: any) {
+    this.taskList = e.content;
+    this.taskListResponse = e;
+  }
+
+  changePage1(event) {
+    this.currentPage = event - 1;
+    this.getTask();
+  }
 
 }

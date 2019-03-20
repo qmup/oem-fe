@@ -69,7 +69,7 @@
           <!-- <button *ngIf="!isUpdate" class="btn-edit" mdbBtn type="button" color="primary" rounded="true" mdbWavesEffect
             (click)="isUpdate = true">Chỉnh sửa</button> -->
           <button *ngIf="task.status === 0" class="btn-delete" mdbBtn type="button" color="danger" rounded="true"
-            mdbWavesEffect (click)="removeTask()">Xoá</button>
+            mdbWavesEffect (click)="openDeleteModal()">Xoá</button>
           <!-- <button *ngIf="isUpdate" class="btn-confirm" mdbBtn type="button" color="success" rounded="true"
             mdbWavesEffect (click)="updateTask()">Xác nhận</button>
           <button *ngIf="isUpdate" class="btn-close" mdbBtn type="button" color="light" rounded="true" mdbWavesEffect
@@ -89,16 +89,16 @@
           </div>
 
           <div class="md-form ">
-            <p class="h6 mt-3">Người thực hiện</p>
-            <span *ngIf="task.status !== 0" class="mx-3">{{task.assignee.name}}</span>
-            <mdb-select *ngIf="task.status === 0" [placeholder]="'Người thực hiện'" [options]="employeeList" [filterEnabled]="true"
-              [(ngModel)]="assignTask.assigneeId" (selected)="assign()"></mdb-select>
+            <p class="h6 mt-3">Người thực hiện: {{task.assignee.name}}</p>
+            <!-- <span *ngIf="task.status !== 0" class="mx-3">{{task.assignee.name}}</span> -->
+            <mdb-select *ngIf="task.status === 0" [placeholder]="'Người thực hiện khác'" [options]="employeeList" [filterEnabled]="true"
+              [(ngModel)]="assignTask.assigneeId" (selected)="openAssignModal()"></mdb-select>
           </div>
 
           <div class="md-form ">
-            <p class="h6 mt-3">Nơi làm việc</p>
-            <span class="mx-3" *ngIf="task.status !== 0">{{task.workplace.name}}</span>
-            <mdb-select *ngIf="task.status === 0" [placeholder]="'Nơi làm việc'" [options]="workplaceListByManager"
+            <p class="h6 mt-3">Nơi làm việc: {{task.workplace.name}}</p>
+            <!-- <span class="mx-3" *ngIf="task.status !== 0">{{task.workplace.name}}</span> -->
+            <mdb-select *ngIf="task.status === 0" [placeholder]="'Nơi làm việc khác'" [options]="workplaceListByManager"
               [filterEnabled]="true" [(ngModel)]="manageWorkplace.workplaceId" (selected)="changeWorkplace($event)"></mdb-select>
           </div>
 
@@ -116,6 +116,55 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Xóa công việc này?</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-times fa-4x animated rotateIn"></i>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeTask()">Đồng ý</a>
+        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">Hủy</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+<div mdbModal #assignModal="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Bàn giao công việc</p>
+      </div>
+      <div class="modal-body mx-3">
+
+        <div class="md-form mb-4">
+          <!-- <i class="fa fa-comments prefix grey-text"></i> -->
+          <input type="text" id="description1" class="form-control" mdbInput [(ngModel)]="assignTask.description">
+          <label for="description1">Lý do</label>
+        </div>
+
+      </div>
+      <div class="modal-footer flex-center">
+        <a mdbBtn color="primary" outline="true" class="waves-effect" mdbWavesEffect (click)="assign()">Đồng ý</a>
+        <a type="button" mdbBtn color="primary" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="assignModal.hide()">Hủy</a>
       </div>
     </div>
   </div>

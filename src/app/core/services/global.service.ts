@@ -72,27 +72,26 @@ export class GlobalService {
     { id: 7, inputId: 'option7', label: 'Chủ nhật' , check: false},
   ];
   typeList = [
-    { value: 1, label: 'Task cơ bản' },
-    { value: 2, label: 'Task thông thường'}
+    { value: 1, label: 'Cơ bản' },
+    { value: 2, label: 'Bình thường '}
   ];
   statusList = [
-    { value: 1, label: 'Chưa bắt đầu' },
-    { value: 2, label: 'Đang thực hiện' },
-    { value: 3, label: 'Hoàn thành' },
-    { value: 4, label: 'Quá hạn' },
+    { value: 0, label: 'Chưa bắt đầu' },
+    { value: 1, label: 'Đang thực hiện' },
+    { value: 2, label: 'Hoàn thành' },
+    { value: 3, label: 'Quá hạn' },
   ];
   attendanceStatusList = [
-    { value: 1, label: 'Chưa điểm danh'},
-    { value: 2, label: 'Đúng giờ'},
-    { value: 3, label: 'Trễ'},
-    { value: 4, label: 'Vắng mặt'},
+    { value: 0, label: 'Chưa điểm danh'},
+    { value: 1, label: 'Đúng giờ'},
+    { value: 2, label: 'Trễ'},
+    { value: 3, label: 'Vắng mặt'},
   ];
   moreList = [
-    { value: 1, label: 'Tên' },
-    { value: 2, label: 'Miêu tả' },
-    { value: 3, label: 'Thời gian thực hiện' },
-    { value: 4, label: 'Thời gian tạo' },
-    { value: 5, label: 'Thời gian bắt đầu' },
+    { value: 4, label: 'Thời gian' },
+    { value: 3, label: 'Ngày tạo' },
+    { value: 2, label: 'Thời lượng' },
+    { value: 1, label: 'Ngày cập nhật' },
   ];
 
   constructor(
@@ -129,6 +128,10 @@ export class GlobalService {
       return `${year}-${month}-${day}`;
     }
   }
+
+  // convertDateToFullString(date: Date) {
+
+  // }
 
   uploadFile(formData: FormData, pathPackage: string): Promise<any> {
     const headers: HttpHeaders = new HttpHeaders();

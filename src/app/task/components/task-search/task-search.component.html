@@ -1,20 +1,63 @@
-<div class="d-flex flex-wrap">
-  <div class="col">
+<div class="d-flex flex-wrap" id="task-search">
+  
+  <!-- <div class="col-xl-2 col-md-4 col-xs-6 col-12 md-form my-0">
+    <input mdbInput type="text" id="title" class="form-control">
+    <label for="title" class="">Tên công việc</label>
+  </div> -->
+
+  <div class="col-xl-2 col-md-4 col-xs-6 col-12">
     <mdb-select [filterEnabled]="true" [options]="typeList" placeholder="Loại công việc"></mdb-select>
   </div>
-  <div class="col">
-    <mdb-select [filterEnabled]="true" [options]="statusList" placeholder="Trạng thái"></mdb-select>
+
+  <div class="col-xl-2 col-md-4 col-xs-6 col-12">
+    <mdb-select [filterEnabled]="true" [multiple]="true" [options]="statusList" placeholder="Trạng thái" (selected)="selectStatus($event)" (deselected)="deselectStatus($event)"></mdb-select>
   </div>
-  <div class="col">
-    <mdb-select [filterEnabled]="true" [options]="attendanceStatusList" placeholder="Điểm danh"></mdb-select>
+
+  <div class="col-xl-2 col-md-4 col-xs-6 col-12">
+    <mdb-select [filterEnabled]="true" [multiple]="true" [options]="attendanceStatusList" placeholder="Điểm danh" (selected)="selectAttendance($event)" (deselected)="deselectAttendance($event)"></mdb-select>
   </div>
-  <div class="col">
-    <mdb-select [filterEnabled]="true" [options]="employeeList" placeholder="Người thực hiện"></mdb-select>
+
+  <!-- <div class="col-xl-2 col-md-4 col-xs-6 col-12 md-form mb-0">
+    <input mdbInput type="text" id="description" class="form-control">
+    <label for="description" class="">Miêu tả</label>
+  </div> -->
+
+  <div class="col-xl-2 col-md-4 col-xs-6 col-12">
+    <mdb-select [filterEnabled]="true" [multiple]="true" [options]="employeeList" (selected)="selectEmployee($event)" (deselected)="deselectEmployee($event)" placeholder="Người thực hiện"></mdb-select>
   </div>
-  <div class="col">
-    <mdb-select [filterEnabled]="true" [options]="placeList" placeholder="Nơi làm việc"></mdb-select>
+
+  <div class="col-xl-2 col-md-4 col-xs-6 col-12">
+    <mdb-select [filterEnabled]="true" [multiple]="true" [options]="placeList" (selected)="selectWorkplace($event)" (deselected)="deselectWorkplace($event)" placeholder="Nơi làm việc"></mdb-select>
   </div>
-  <div class="col">
-    <mdb-select [filterEnabled]="true" [options]="moreList" placeholder="Khác"></mdb-select>
+
+  <div class="col-xl-2 col-md-4 col-xs-6 col-12">
+    <mdb-select [filterEnabled]="true" [multiple]="true"[options]="moreList" placeholder="Khác" (selected)="selectMore($event)" (deselected)="deselectMore($event)"></mdb-select>
   </div>
+
+  <div class="col-xl-2 col-md-4 col-xs-6 col-12 mb-0 md-form mt-3" *ngIf="selectDuration">
+    <input mdbInput type="number" id="duration" class="form-control" [(ngModel)]="duration">
+    <label for="duration" class="">Thời lượng (phút)</label>
+  </div>
+
+  <owl-form-field class="col-xl-3 col-md-4 col-xs-6 col-12 mt-3" *ngIf="selectDateCreate">
+    <input owlInput [selectMode]="'range'" [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker" placeholder="Ngày tạo" [(ngModel)]="dateCreate">
+    <owl-date-time [pickerType]="'calendar'" #datepicker></owl-date-time>
+  </owl-form-field>
+
+  <owl-form-field class="col-xl-3 col-md-4 col-xs-6 col-12 mt-3" *ngIf="selectDateUpdate">
+    <input owlInput [selectMode]="'range'" [owlDateTimeTrigger]="datepicker1" [owlDateTime]="datepicker1" placeholder="Ngày cập nhật" [(ngModel)]="dateUpdate">
+    <owl-date-time #datepicker1 [pickerType]="'calendar'"></owl-date-time>
+  </owl-form-field>
+
+  <owl-form-field class="col-xl-3 col-md-4 col-xs-6 col-12 mt-3" *ngIf="selectDateStart">
+    <input owlInput [selectMode]="'range'" [owlDateTimeTrigger]="datepicker2" [owlDateTime]="datepicker2" placeholder="Thời gian công việc" [(ngModel)]="startTime">
+    <owl-date-time #datepicker2></owl-date-time>
+  </owl-form-field>
+
+  <div class="col-1 mt-3 text-right">
+    <button mdbBtn type="button" color="primary" size="sm" rounded="true" mdbWavesEffect>
+      <i class="fa fa-search" (click)="search()"></i>
+    </button>
+  </div>
+
 </div>

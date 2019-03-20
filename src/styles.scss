@@ -21,6 +21,25 @@ nav.navbar.fixed-top.navbar-toggleable-md.navbar-expand-lg.scrolling-navbar.doub
 .card .card-body .card-text {
   font-size: 16px !important;
 }
+#task-search {
+  mdb-select > div > div.single > div.placeholder {
+    left: 0 !important;
+    color: #757575;
+  }
+  .form-control {
+    color: #757575;
+  }
+  .owl-form-field-underline .owl-form-field-underline-graphic {
+    stroke: #ced4da !important;
+  }
+  .dropdown-content.ng-trigger.ng-trigger-dropdownAnimation {
+    width: 300px !important;
+    margin-top: 37px !important;
+  }
+  .md-form label {
+    left: auto;
+  }
+}
 #company, #zone, #basic-task {
   .img-fluid {
     position: absolute !important;
@@ -54,8 +73,11 @@ nav.navbar.fixed-top.navbar-toggleable-md.navbar-expand-lg.scrolling-navbar.doub
 .modal-dialog.modal-notify.modal-primary .fa, .modal-dialog.modal-notify.modal-success .fa  {
   color: white !important;
 }
+.owl-form-field-infix {
+  border-top: 0 !important;
+}
 
-mdb-select > div > div.single > div.placeholder {
+mdb-select > div > div.sintgle > div.placeholder {
   color: #757575 !important;
   font-weight: 300 !important;
   position: absolute;

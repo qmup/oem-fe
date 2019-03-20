@@ -1,8 +1,8 @@
-import { Component, OnInit, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, AfterViewInit, ViewChild } from '@angular/core';
 import { UploadFile, UploadInput, humanizeBytes, UploadOutput, IMyOptions, ToastService } from 'ng-uikit-pro-standard';
 import { TaskService } from '../../service/task.service';
 import { GlobalService } from 'src/app/core/services/global.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TaskDetail, Task, TaskModel } from '../../models/task';
 import { ReportService } from 'src/app/report/services/report.service';
 import { TaskReport } from 'src/app/report/models/report';
@@ -11,7 +11,7 @@ import { PaginationResponse, AssignTask, Shared } from 'src/app/core/models/shar
 import { EmployeeService } from 'src/app/employee/services/employee.service';
 import { ManageWorkplace, PlacePagination } from 'src/app/place/models/place';
 import { PlaceService } from 'src/app/place/services/place.service';
-import { ModalOptions, BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { ModalOptions, BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
 import { PlaceTaskBasicComponent } from 'src/app/place/components/place-task-basic/place-task-basic.component';
 
 @Component({
@@ -21,6 +21,8 @@ import { PlaceTaskBasicComponent } from 'src/app/place/components/place-task-bas
 })
 export class TaskDetailComponent implements OnInit {
 
+  @ViewChild('delete') deleteModal: ModalDirective;
+  @ViewChild('assignModal') assignModal: ModalDirective;
   iconPrioritySelect: Array<any>;
   iconStatusSelect: Array<any>;
   formData: FormData;
@@ -56,7 +58,8 @@ export class TaskDetailComponent implements OnInit {
     private reportService: ReportService,
     private workplaceService: PlaceService,
     private employeeService: EmployeeService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private router: Router,
   ) {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
@@ -111,14 +114,24 @@ export class TaskDetailComponent implements OnInit {
 
   ngOnInit() {
     this.userAccount = this.globalService.getUserAccount();
+    this.getTodayTask();
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
+      // if (this.taskList.filter(t => t.id === this.id).length > 0) {
+      //   alert('ko co');
+      //   if (this.taskList.length === 0) {
+      //     this.router.navigate(['task']);
+      //   } else {
+      //     this.id = this.taskList[0].id;
+      //     console.log(this.id, this.taskList[0]);
+      //   }
+      //   this.getTaskDetail(this.id);
+      // }
     });
+    this.getTaskDetail(this.id);
     this.getEmployeeByManager();
     this.getWorkplaceByManager(this.userAccount.id);
-    this.getTaskDetail(this.id);
     this.getTaskReport(this.id);
-    this.getTodayTask();
     this.iconStatusSelect = this.globalService.iconStatusSelect;
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
   }
@@ -128,7 +141,6 @@ export class TaskDetailComponent implements OnInit {
       .then(
         (response: TaskDetail) => {
           this.task = response;
-          this.manageWorkplace.workplaceId = response.workplace.id;
           this.assignTask.assigneeId = response.assignee.id;
           this.dateRange = [
             new Date(this.task.startTime),
@@ -195,6 +207,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   loadTask(id: number) {
+    console.log(id, this.id);
     this.id = id;
     this.getTaskDetail(id);
     this.getTaskReport(id);
@@ -227,10 +240,13 @@ export class TaskDetailComponent implements OnInit {
     this.assignTask.dateAssign = new Date().toISOString();
     this.assignTask.assignerId = this.userAccount.id;
     this.assignTask.taskId = this.id;
+    this.assignTask.assigneeId = this.task.assignee.id;
     this.globalService.assignTask(this.assignTask)
       .then(
         (response) => {
           this.toastService.success('Assign thành công', '', { positionClass: 'toast-bottom-right'});
+          this.assignModal.hide();
+          this.loadTask(this.assignTask.taskId);
         },
         (error) => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -252,11 +268,20 @@ export class TaskDetailComponent implements OnInit {
     this.modalRef.content.refresh.subscribe(() => this.getTaskDetail(this.id));
   }
 
+  openDeleteModal() {
+    this.deleteModal.show();
+  }
+
+  openAssignModal() {
+    this.assignModal.show();
+  }
+
   removeTask() {
     this.taskService.remove(this.id)
       .then(
         (response) => {
           this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
+          this.router.navigate(['task']);
         },
         (error) => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});

@@ -26,6 +26,9 @@ export const environment = {
     assign: {
       assignTask: 'assign-task/',
     },
+    search: {
+      search: 'search-advance/'
+    },
     beacon: {
       create: 'beacon/create',
       getAll: 'beacon/get-all',

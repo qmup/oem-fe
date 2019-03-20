@@ -94,4 +94,20 @@ export class TaskService {
     ).toPromise();
   }
 
+  search(searchRequest: string, sortRequest: string, filterRequest: string, managerId: number, page: number, size: number): Promise<any> {
+    return this.httpClient.get<any>(
+      `${environment.endPoint}${environment.apiPaths.search.search}`,
+      {
+        params: {
+          managerId: `${managerId}`,
+          searchRequest: `${searchRequest}`,
+          sortRequest: `${sortRequest}`,
+          filterRequest: `${filterRequest}`,
+          page: `${page}`,
+          size: `${size}`,
+        }
+      }
+    ).toPromise();
+  }
+
 }
