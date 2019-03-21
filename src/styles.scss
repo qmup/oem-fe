@@ -89,10 +89,6 @@ mdb-select > div > div.sintgle > div.placeholder {
 .table > thead > tr > th {
   cursor: pointer !important;
 }
-.fa.fa-trash {
-  font-size: 1.5rem;
-  color: #1976d2 !important;
-}
 main#main {
   background-color: #eee;
   height: 100%;
@@ -187,7 +183,7 @@ main#main {
   small {
     color: rgb(137, 147, 164);
   }
-  .fa.fa-trash, .fa.fa-user {
+  .fa.fa-trash {
     font-size: 1.5rem;
     color: #1976d2 !important;
   }

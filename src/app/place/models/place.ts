@@ -21,31 +21,6 @@ export class PlaceModel {
   }
 }
 
-export class Place {
-  id: number;
-  name: string;
-  description: string;
-  numberOfReworks: number;
-  picture: string;
-  setToBeacon: boolean;
-  zone: ZoneDTO;
-  company: CompanyDTO;
-  basicTaskList: TaskBasic[];
-
-  constructor() {
-    this.description = '';
-    this.id = 0;
-    this.name = '';
-    this.picture = '';
-    this.setToBeacon = false;
-    this.description = '';
-    this.zone = new ZoneDTO();
-    this.company = new CompanyDTO();
-    this.numberOfReworks = 0;
-    this.basicTaskList = new Array<TaskBasic>();
-  }
-}
-
 export class ZoneDTO {
   id: number;
   name: string;
@@ -71,6 +46,31 @@ export class CompanyDTO {
     this.name = '';
     this.address = '';
     this.picture = '';
+  }
+}
+
+export class Place {
+  id: number;
+  name: string;
+  description: string;
+  numberOfReworks: number;
+  picture: string;
+  setToBeacon: boolean;
+  zone: ZoneDTO;
+  company: CompanyDTO;
+  basicTaskList: TaskBasic[];
+
+  constructor() {
+    this.description = '';
+    this.id = 0;
+    this.name = '';
+    this.picture = '';
+    this.setToBeacon = false;
+    this.description = '';
+    this.zone = new ZoneDTO();
+    this.company = new CompanyDTO();
+    this.numberOfReworks = 0;
+    this.basicTaskList = new Array<TaskBasic>();
   }
 }
 

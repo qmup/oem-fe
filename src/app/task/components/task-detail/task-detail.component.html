@@ -52,24 +52,27 @@
           <div class="col-md-12 mt-3">
             <h5 class="text-center font-weight-bold">
               Công việc phải làm
-              <a mdbBtn floating="true" size="sm" color="primary" mdbWavesEffect>
+              <!-- <a mdbBtn floating="true" size="sm" color="primary" mdbWavesEffect>
                 <i class="fa fa-pencil" (click)="openEditModal()"></i>
-              </a>
+              </a> -->
               <a mdbBtn floating="true" size="sm" color="success" mdbWavesEffect>
-                <i class="fa fa-plus" (click)="openCreateModal()"></i>
+                <i class="fa fa-plus" (click)="openEditModal()"></i>
+              </a>
+              <a *ngIf="canRemove" mdbBtn floating="true" size="sm" color="danger" mdbWavesEffect>
+                <i class="fa fa-trash" (click)="removeTaskBasic()"></i>
               </a>
             </h5>
-            <div class="d-flex flex-wrap">
-              <div *ngIf="task.status !== 0">
-                <div *ngFor="let ck of task.checkList; let i = index" class="col-6">
-                  <span>{{i+1}}. {{ck.title}}</span>
+            <div style="overflow-y: scroll; height: 160px">
+              <div class="d-flex flex-wrap w-100">
+                <div class="col-6" *ngFor="let ck of task.checkList">
+                    <mdb-checkbox [inline]="true" (change)="changeCheckbox(ck.id, $event)">{{ck.title}}</mdb-checkbox>
                 </div>
               </div>
-              <div *ngIf="task.status === 0" class="d-flex flex-wrap w-100">
+              <!-- <div *ngIf="task.status === 0" class="d-flex flex-wrap w-100">
                 <div class="col-6" *ngFor="let ck of task.checkList">
                   <mdb-checkbox  [inline]="true" [checked]="ck.status">{{ck.title}}</mdb-checkbox>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
           <div class="col-md-12 mt-3" *ngIf="task.status !== 0">
@@ -98,7 +101,10 @@
           <!-- <button *ngIf="!isUpdate" class="btn-edit" mdbBtn type="button" color="primary" rounded="true" mdbWavesEffect
             (click)="isUpdate = true">Chỉnh sửa</button> -->
           <button *ngIf="task.status === 0" class="btn-delete" mdbBtn type="button" color="danger" rounded="true"
-            mdbWavesEffect (click)="openDeleteModal()">Xoá</button>
+            mdbWavesEffect (click)="openDeleteModal()">
+            <i class="fa fa-exclamation-triangle mr-2"></i>
+            Xoá công việc
+          </button>
           <!-- <button *ngIf="isUpdate" class="btn-confirm" mdbBtn type="button" color="success" rounded="true"
             mdbWavesEffect (click)="updateTask()">Xác nhận</button>
           <button *ngIf="isUpdate" class="btn-close" mdbBtn type="button" color="light" rounded="true" mdbWavesEffect
@@ -256,23 +262,28 @@
   <div class="modal-dialog modal-notify modal-primary" role="document">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
-        <p class="heading">Chỉnh sửa danh sách việc phải làm</p>
+        <p class="heading">Thêm danh sách công việc phải làm</p>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="edit.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body mx-3 row">
 
-        <p class="h6">Danh sách công việc đang quản lý</p>
+        <p class="h6">Danh sách công việc gợi ý</p>
 
-        <div *ngFor="let t of taskBasicManagerList; let i of index" class="col-6">
-          <mdb-checkbox name="item-{{i}}" #checkbox (change)="changeCheckbox(t.id, $event)">{{t.title}}</mdb-checkbox>
+        <div class="d-flex flex-wrap w-100">
+          <div *ngFor="let t of taskBasicManagerList; let i of index" class="col-6">
+            <mdb-checkbox name="item-{{i}}" #checkbox (change)="changeCheckboxCreateModal(t.id, $event)">{{t.title}}</mdb-checkbox>
+          </div>
         </div>
 
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="editTaskBasicOfTask()">Chỉnh sửa
+        <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="addTaskBasicToTask()">Thêm vào danh sách
           <i class="fa fa-check ml-1"></i>
+        </button>
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="openCreateModal(); edit.hide()">Tạo mới
+          <i class="fa fa-plus mr-1"></i>
         </button>
       </div>
     </div>

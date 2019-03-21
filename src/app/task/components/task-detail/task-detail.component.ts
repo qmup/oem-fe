@@ -61,6 +61,9 @@ export class TaskDetailComponent implements OnInit {
   taskBasicManagerResponse: PaginationResponse;
   taskBasicManagerList: Task[];
   selectedTaskBasic = [];
+  canRemove = false;
+  selectedModalTaskBasic = [];
+  taskBasicCMList = [];
 
   constructor(
     // public modalRef: BsModalRef,
@@ -146,7 +149,7 @@ export class TaskDetailComponent implements OnInit {
     this.getEmployeeByManager();
     this.getWorkplaceByManager(this.userAccount.id);
     this.getTaskReport(this.id);
-    this.getTaskBasicByManager();
+    // this.getTaskBasicByManager();
     this.iconStatusSelect = this.globalService.iconStatusSelect;
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
   }
@@ -156,7 +159,6 @@ export class TaskDetailComponent implements OnInit {
       .then(
         (response: TaskDetail) => {
           this.task = response;
-          this.assignTask.assigneeId = response.assignee.id;
           this.dateRange = [
             new Date(this.task.startTime),
             new Date(this.task.endTime)
@@ -228,7 +230,7 @@ export class TaskDetailComponent implements OnInit {
           this.taskBasicManagerResponse = response;
           this.taskBasicManagerList = response.content;
           this.task.checkList.forEach(element => {
-            this.taskBasicManagerList = this.taskBasicManagerList.filter(task => task.id !== element.id);
+            this.taskBasicManagerList = this.taskBasicManagerList.filter(task => task.title !== element.title);
           });
         }
       );
@@ -238,24 +240,6 @@ export class TaskDetailComponent implements OnInit {
     this.id = id;
     this.getTaskDetail(id);
     this.getTaskReport(id);
-  }
-
-  updateTask() {
-    this.taskUM.startTime = this.dateRange[0];
-    this.taskUM.endTime = this.dateRange[1];
-    this.taskUM.duration = this.dateRange[1] - this.dateRange[0];
-    this.taskUM.description = this.task.description;
-    this.taskUM.title = this.task.title;
-    this.taskUM.status = this.task.status;
-    this.taskService.update(this.taskUM)
-      .then(
-        (response) => {
-          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
-        },
-        (error) => {
-          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
-        }
-      );
   }
 
   updateTitle() {
@@ -268,6 +252,24 @@ export class TaskDetailComponent implements OnInit {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
         }
       );
+  }
+
+  removeTaskBasic() {
+    const fn = this.selectedTaskBasic.forEach((element, i) => {
+      this.taskService.remove(element.id)
+        .then(
+          (response) => {
+            if (this.selectedTaskBasic.length - 1 === i) {
+              this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
+              this.loadTask(this.id);
+            }
+          },
+          (error) => {
+            this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+          }
+        );
+    });
+
   }
 
   updateDescription() {
@@ -305,7 +307,7 @@ export class TaskDetailComponent implements OnInit {
         (response) => {
           this.toastService.success('Assign thành công', '', { positionClass: 'toast-bottom-right'});
           this.assignModal.hide();
-          this.loadTask(this.assignTask.taskId);
+          this.loadTask(this.id);
         },
         (error) => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -329,6 +331,7 @@ export class TaskDetailComponent implements OnInit {
 
   openEditModal() {
     this.editTaskBasicModal.show();
+    this.getTaskBasicByManager();
   }
 
   openDeleteModal() {
@@ -359,23 +362,29 @@ export class TaskDetailComponent implements OnInit {
           this.taskBasicCM.picture = response;
           this.taskBasicCM.basic = true;
           this.taskBasicService.create(this.taskBasicCM)
-            .then(
-              (response1) => {
-                this.taskBasicCM.id = response1;
-                this.task.checkList.push(this.taskBasicCM);
-                this.taskBasicManager.employeeId = this.userAccount.id;
-                this.taskBasicManager.editable = true;
-                this.taskBasicManager.taskBasicId = response1;
-                this.taskBasicService.setToManager(this.taskBasicManager)
+          .then(
+            (response1) => {
+              this.taskBasicCM.id = response1;
+                this.taskService.addTaskBasic(this.task.id, this.taskBasicCM)
                   .then(
-                    () => {
-                      this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-                      this.createModal.hide();
-                    },
-                    () => {
-                      this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+                    (response2) => {
+                      this.taskBasicManager.employeeId = this.userAccount.id;
+                      this.taskBasicManager.editable = true;
+                      this.taskBasicManager.taskBasicId = response1;
+                      this.taskBasicService.setToManager(this.taskBasicManager)
+                        .then(
+                          () => {
+                            this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+                            this.loadTask(this.id);
+                            this.createModal.hide();
+                          },
+                          () => {
+                            this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+                          }
+                      );
+
                     }
-                );
+                  );
               },
             );
         }
@@ -386,7 +395,6 @@ export class TaskDetailComponent implements OnInit {
     this.taskBasicService.create(this.taskBasicCM)
       .then(
         (response1) => {
-          this.task.checkList.push(this.taskBasicCM);
           this.taskBasicManager.employeeId = this.userAccount.id;
           this.taskBasicManager.editable = true;
           this.taskBasicManager.taskBasicId = response1;
@@ -394,6 +402,7 @@ export class TaskDetailComponent implements OnInit {
             .then(
               () => {
                 this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+                this.loadTask(this.id);
                 this.createModal.hide();
               },
               () => {
@@ -405,14 +414,37 @@ export class TaskDetailComponent implements OnInit {
   }
   changeCheckbox(id: number, event: any) {
     if (event.checked && !this.selectedTaskBasic.includes(el => el.id === id)) {
-      this.selectedTaskBasic.push(this.taskBasicManagerList.find(el => el.id === id));
+      this.selectedTaskBasic.push(this.task.checkList.find(el => el.id === id));
     } else {
       this.selectedTaskBasic = this.selectedTaskBasic.filter(el => el.id !== id);
     }
+    if (this.selectedTaskBasic.length > 0) {
+      this.canRemove = true;
+    } else {
+      this.canRemove = false;
+    }
   }
 
-  editTaskBasicOfTask() {
-    // this.taskService.updateField(this.task.id, 'taskBasics',  )
+  changeCheckboxCreateModal(id: number, event: any) {
+    if (event.checked && !this.selectedModalTaskBasic.includes(el => el.id === id)) {
+      this.selectedModalTaskBasic.push(this.taskBasicManagerList.find(el => el.id === id));
+    } else {
+      this.selectedModalTaskBasic = this.selectedModalTaskBasic.filter(el => el.id !== id);
+    }
+  }
+
+  addTaskBasicToTask() {
+    this.taskService.updateTaskBasicList(this.task.id, this.selectedModalTaskBasic)
+      .then(
+        () => {
+          this.toastService.success('Thêm thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.editTaskBasicModal.hide();
+          this.loadTask(this.id);
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
   }
 
 

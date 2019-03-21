@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Task, TaskModel, TaskResponse, TaskDetail } from '../models/task';
 import { environment } from 'src/environments/environment';
 import { PaginationResponse } from 'src/app/core/models/shared';
+import { TaskBasic } from '../models/task-basic';
 
 @Injectable({
   providedIn: 'root'
@@ -78,9 +79,14 @@ export class TaskService {
     ).toPromise();
   }
 
-  update(taskUM: TaskModel): Promise<TaskModel> {
-    return this.httpClient.put<TaskModel>(
-      `${environment.endPoint}${environment.apiPaths.task.update}`, taskUM
+  update(parentTaskId: number, taskBasic: TaskBasic[]): Promise<boolean> {
+    return this.httpClient.put<boolean>(
+      `${environment.endPoint}${environment.apiPaths.task.update}`, taskBasic ,
+      {
+        params: {
+          parentTaskId: `${parentTaskId}`
+        }
+      }
     ).toPromise();
   }
   updateWorkplace(taskId: number, workplaceId: number): Promise<any> {
@@ -120,4 +126,19 @@ export class TaskService {
       ).toPromise();
   }
 
+  addTaskBasic(taskId: number, taskBasic: TaskBasic): Promise<any> {
+    return this.httpClient.post<any>(
+      `${environment.endPoint}${environment.apiPaths.task.addTaskBasic + taskId}`, taskBasic
+    ).toPromise();
+  }
+  updateTaskBasicList(parentTaskId: number, taskBasic: TaskBasic[]): Promise<boolean> {
+    return this.httpClient.put<boolean>(
+      `${environment.endPoint}${environment.apiPaths.task.updateTaskBasicList}`, taskBasic ,
+      {
+        params: {
+          parentTaskId: `${parentTaskId}`
+        }
+      }
+    ).toPromise();
+  }
 }

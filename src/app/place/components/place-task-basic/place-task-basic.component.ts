@@ -128,17 +128,7 @@ export class PlaceTaskBasicComponent implements OnInit {
   }
 
   selectTaskBasic() {
-    this.taskUM.taskBasics = this.selectedTaskBasic;
-    this.taskUM.title = this.task.title;
-    this.taskUM.attendanceStatus = this.task.attendanceStatus;
-    this.taskUM.description = this.task.description;
-    this.taskUM.id = this.task.id;
-    this.taskUM.endTime = this.task.endTime;
-    this.taskUM.picture = this.task.picture;
-    this.taskUM.startTime = this.task.startTime;
-    this.taskUM.status = this.task.status;
-    this.taskUM.title = this.task.title;
-    this.taskService.update(this.taskUM)
+    this.taskService.update(this.task.id, this.selectedTaskBasic)
       .then(
         () => {
           this.taskService.updateWorkplace(this.task.id, this.workplaceId)

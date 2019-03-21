@@ -60,6 +60,8 @@ export class PlaceComponent implements OnInit {
   managerId = 0;
   beaconId = 0;
   beaconList = [];
+  minDate = new Date();
+  dateRange = [];
 
   constructor(
     public location: Location,

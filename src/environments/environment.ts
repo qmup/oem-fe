@@ -90,6 +90,8 @@ export const environment = {
       update: 'task/update-task',
       updateWorkplace: 'task/update-workplace',
       updateField: 'task/update-task-by-field/',
+      addTaskBasic: 'task/add-task-basic/',
+      updateTaskBasicList: 'task/update-task-basic-list'
     },
     report: {
       delete: 'report/delete-report/',

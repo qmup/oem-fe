@@ -56,17 +56,17 @@ export class BasicTaskUpdateComponent implements OnInit {
           this.taskBasicUM.title = this.taskBasic.title;
           this.taskBasicUM.basic = true;
           this.taskBasicUM.picture = response;
-          this.taskService.update(this.taskBasicUM)
-            .then(
-              () => {
-                this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
-                this.modalRef.hide();
-                this.refresh.emit();
-              },
-              () => {
-                this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
-              }
-            );
+          // this.taskService.update(this.taskBasicUM)
+          //   .then(
+          //     () => {
+          //       this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
+          //       this.modalRef.hide();
+          //       this.refresh.emit();
+          //     },
+          //     () => {
+          //       this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+          //     }
+          //   );
         },
         (error) => {
           console.error(error);
@@ -79,17 +79,17 @@ export class BasicTaskUpdateComponent implements OnInit {
     this.taskBasicUM.picture = this.taskBasicUM.picture;
     this.taskBasicUM.title = this.taskBasic.title;
     this.taskBasicUM.basic = true;
-    this.taskService.update(this.taskBasicUM)
-      .then(
-        () => {
-          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
-          this.modalRef.hide();
-          this.refresh.emit();
-        },
-        () => {
-          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
-        }
-      );
+    // this.taskService.update(this.taskBasicUM)
+    //   .then(
+    //     () => {
+    //       this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
+    //       this.modalRef.hide();
+    //       this.refresh.emit();
+    //     },
+    //     () => {
+    //       this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+    //     }
+    //   );
   }
 
   showFiles() {

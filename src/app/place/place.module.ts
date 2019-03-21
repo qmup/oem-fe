@@ -17,6 +17,8 @@ import { ZonePagesComponent } from './pages/zone-pages/zone-pages.component';
 import { PlaceTaskBasicComponent } from './components/place-task-basic/place-task-basic.component';
 import { PlaceRemoveComponent } from './components/place-remove/place-remove.component';
 import { CoreModule } from '../core/core.module';
+import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
+import { OwlInputModule, OwlFormFieldModule } from 'owl-ng';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,10 @@ import { CoreModule } from '../core/core.module';
       // https://developers.google.com/maps/documentation/javascript/get-api-key?hl=en#key
       apiKey: 'AIzaSyBzi6k4xf4dNTVRofgFajZKQbApQ_hbzzc'
     }),
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    OwlFormFieldModule,
+    OwlInputModule,
   ],
   entryComponents: [
     PlaceUpdateComponent,
@@ -49,6 +55,9 @@ import { CoreModule } from '../core/core.module';
     ZoneUpdateComponent,
     PlaceTaskBasicComponent,
     PlaceRemoveComponent
-  ]
+  ],
+  providers: [{
+    provide: OWL_DATE_TIME_LOCALE, useValue: 'in'
+  }],
 })
 export class PlaceModule { }

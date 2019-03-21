@@ -199,13 +199,16 @@
         <label class="col-md-2 col-xs-12" style="position: relative">
           <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px">Từ</span>
         </label>
+
         <div class="col-md-10 col-xs-12">
-          <mdb-time-picker [buttonLabel]="'Chọn'" [twelvehour]="false" [darktheme]="false" [placeholder]="'Chọn'"
-            [label]="'Giờ'" [(ngModel)]="timeFrom">
-          </mdb-time-picker>
+          <owl-form-field class="w-100 px-3 text-center">
+            <input owlInput [min]="minDate" [(ngModel)]="dateRange" [selectMode]="'rangeFrom'" [owlDateTimeTrigger]="datepicker"
+              [owlDateTime]="datepicker">
+            <owl-date-time #datepicker  ></owl-date-time>
+          </owl-form-field>
         </div>
 
-        <span>Thời gian hoàn thành</span>
+        <span>Thời lượng công việc</span>
         <div class="w-100 d-flex justify-content-center align-items-center my-3">
           <mdb-range-input id="range" [min]="0" [step]="10" [max]="300" name="range" [(ngModel)]="taskCM.duration"
             class="w-100"></mdb-range-input>
