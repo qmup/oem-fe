@@ -40,8 +40,7 @@ export class PlaceTaskBasicComponent implements OnInit {
 
   ngOnInit() {
     this.userAccount = this.globalService.getUserAccount();
-    // (this.taskBasic.length !== 0) ? this.getTaskBasic() : this.getAllTaskBasic();
-    !this.task ? this.getTaskBasicByWorkplace() : this.getTaskBasicByManager();
+    this.task ? this.getTaskBasicFromTaskDetail() : (this.getTaskBasicByWorkplace(), this.getTaskBasicByManager());
   }
 
   getTaskBasicByManager() {
@@ -50,20 +49,22 @@ export class PlaceTaskBasicComponent implements OnInit {
         (response: any) => {
           this.taskBasicList = response.content;
           this.taskBasicList.forEach((element1, i) => {
-            this.taskBasic.forEach((element2, j) => {
-              if (element1.id === element2.id) {
-                element1.checked = true;
-                i++;
-                j = 0;
-              }
-            });
+            if (this.taskBasic.length !== 0) {
+              this.taskBasic.forEach((element2, j) => {
+                if (element1.id === element2.id) {
+                  element1.checked = true;
+                  i++;
+                  j = 0;
+                }
+              });
+
+            }
           });
         }
       );
   }
 
   getTaskBasicByWorkplace() {
-    this.getTaskBasicByManager();
     this.workplaceService.getTaskBasic(this.workplaceId)
       .then(
         (response) => {
@@ -78,6 +79,15 @@ export class PlaceTaskBasicComponent implements OnInit {
               }
             });
           });
+        }
+      );
+  }
+
+  getTaskBasicFromTaskDetail() {
+    this.workplaceService.getTaskBasic(this.workplaceId)
+      .then(
+        (response) => {
+          this.taskBasicList = response;
         }
       );
   }

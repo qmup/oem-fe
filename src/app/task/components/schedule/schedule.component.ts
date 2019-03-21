@@ -88,17 +88,17 @@ export class ScheduleComponent implements OnInit {
   }
 
   getEmployee() {
-    this.employeeService.getAll()
-      .then(
-        (response: Employee[]) => {
-          this.employeeList = response.map((employee) => {
-            return {
-              value: employee.id,
-              label: employee.fullName
-            };
-          });
-        }
-      );
+    // this.employeeService.getAll()
+    //   .then(
+    //     (response: Employee[]) => {
+    //       this.employeeList = response.map((employee) => {
+    //         return {
+    //           value: employee.id,
+    //           label: employee.fullName
+    //         };
+    //       });
+    //     }
+    //   );
   }
 
   // getWorkplace() {

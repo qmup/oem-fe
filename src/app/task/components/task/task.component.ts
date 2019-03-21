@@ -57,6 +57,9 @@ export class TaskComponent implements OnInit {
   taskBasic = [];
   selectedTaskBasic = [];
   currentPage = 0;
+  fieldSort = 'title:asc';
+  sortBoolean = false;
+  sortValue = '';
 
   constructor(
     private taskService: TaskService,
@@ -97,18 +100,19 @@ export class TaskComponent implements OnInit {
     this.sorted = !this.sorted;
   }
 
-  // getTask() {
-  //   this.taskService.getTaskByManager(this.userAccount.id, '', '', 'id', 0, 5)
-  //     .then(
-  //       (response: PaginationResponse) => {
-  //         this.taskListResponse = response;
-  //         this.taskList = response.content;
-  //       }
-  //     );
-  // }
+  sort(field: string) {
+    this.sortBoolean = ! this.sortBoolean;
+    this.fieldSort = field;
+    if (this.sortBoolean) {
+      this.sortValue += 'asc';
+    } else {
+      this.sortValue += 'desc';
+    }
+    this.getTask();
+  }
 
   getTask() {
-    this.taskService.search('', 'title:asc', '', this.userAccount.id, this.currentPage, 10)
+    this.taskService.search('', this.fieldSort, '', this.userAccount.id, this.currentPage, 10)
       .then(
         (response: TaskSearchResponse) => {
           this.taskListResponse = response;

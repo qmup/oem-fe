@@ -38,6 +38,9 @@ export class LaborerComponent implements OnInit {
   currentPage = 0;
   userAccount: Employee;
   isDuplicate = false;
+  fieldSort = 'id';
+  sortBoolean = false;
+  sortValue = '';
 
   constructor(
     private employeeService: EmployeeService,
@@ -64,16 +67,17 @@ export class LaborerComponent implements OnInit {
   }
 
   getEmployeeByAdmin() {
-    this.employeeService.getAll()
+    this.employeeService.getAll(this.sortValue, this.fieldSort, this.currentPage, 10)
       .then(
-        (response: Employee[]) => {
-          this.employeeList = response;
+        (response: PaginationResponse) => {
+          this.employeeList = response.content;
+          this.employeeResponse = response;
         }
       );
   }
 
   getEmployeeByManager() {
-    this.employeeService.getEmployeeByManager(this.userAccount.id, 3, '', 'id', this.currentPage, 10)
+    this.employeeService.getEmployeeByManager(this.userAccount.id, 3, this.sortValue, this.fieldSort, this.currentPage, 10)
       .then(
         (response: PaginationResponse) => {
           this.employeeResponse = response;
@@ -110,6 +114,17 @@ export class LaborerComponent implements OnInit {
           });
         }
       );
+  }
+
+  sort(field: string) {
+    this.sortBoolean = ! this.sortBoolean;
+    if (this.sortBoolean) {
+      this.sortValue = 'asc';
+    } else {
+      this.sortValue = 'desc';
+    }
+    this.fieldSort = field;
+    this.getEmployee();
   }
 
   // getEmployeeByManager() {
@@ -230,16 +245,25 @@ export class LaborerComponent implements OnInit {
   }
 
   removeEmployee() {
-    this.employeeService.remove(this.id)
+    this.employeeService.checkConstraint(this.id)
       .then(
-        () => {
-          this.toastService.success('Xóa nhân viên thành công', '', { positionClass: 'toast-bottom-right'} );
-          this.deleteModal.hide();
-          this.employeeList = [];
-          this.getEmployee();
-        },
-        () => {
-          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        (res) => {
+          if (res.removable) {
+            this.employeeService.remove(this.id)
+              .then(
+                () => {
+                  this.toastService.success('Xóa nhân viên thành công', '', { positionClass: 'toast-bottom-right'} );
+                  this.deleteModal.hide();
+                  this.employeeList = [];
+                  this.getEmployee();
+                },
+                () => {
+                  this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+                }
+              );
+          } else {
+          this.toastService.error(res.message , '', { positionClass: 'toast-bottom-right'});
+          }
         }
       );
   }
@@ -321,6 +345,15 @@ export class LaborerComponent implements OnInit {
         (res) => {
           this.isDuplicate = res;
         }
-      )
+      );
+  }
+
+  checkConstraint() {
+    this.employeeService.checkDuplicateId(this.employeeCM.employeeId)
+      .then(
+        (res) => {
+          this.isDuplicate = res;
+        }
+      );
   }
 }

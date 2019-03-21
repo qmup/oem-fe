@@ -40,7 +40,7 @@ import { CoreModule } from '../core/core.module';
     MDBBootstrapModulesPro.forRoot(),
     AgmCoreModule.forRoot({
       // https://developers.google.com/maps/documentation/javascript/get-api-key?hl=en#key
-      apiKey: 'AIzaSyD02259nRLm-9mjD3-xDD9dsWyDJPv2B8k'
+      apiKey: 'AIzaSyBzi6k4xf4dNTVRofgFajZKQbApQ_hbzzc'
     }),
   ],
   entryComponents: [

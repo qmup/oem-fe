@@ -24,47 +24,76 @@
         <div class="p-5 h-100">
           <div class="mx-auto col-8">
             <div class="view view-cascade gradient-card-header light-blue" style="margin-top: -5.25rem">
-              <h2 class="h2-responsive mb-0">Chi tiết công việc</h2>
+              <h3 class="h3-responsive mb-0">Chi tiết công việc</h3>
             </div>
           </div>
 
-          <p class="h6 col-12 pl-0 mt-4">Tên công việc</p>
-          <p class="h3 mt-3" *ngIf="task.status !== 0">{{task.title}} </p>
-          <div class="md-form" *ngIf="task.status === 0">
-            <input mdbInput type="text" id="form1" class="form-control" [(ngModel)]="task.title">
-          </div>
+          <div class="d-flex flex-wrap">
+            <div class="col-4">
+              <p class="h6 pl-0 mt-4">Tên công việc</p>
+              <p class="h3 mt-3" *ngIf="task.status !== 0">{{task.title}} </p>
 
-          <p class="h6 col-12 pl-0 mt-4">Miêu tả công việc</p>
-          <div class="md-form" *ngIf="task.status === 0">
-            <textarea type="text" id="description" class="md-textarea form-control" mdbInput>{{task.description}}</textarea>
+              <div class="md-form" *ngIf="task.status === 0">
+                <input mdbInput type="text" class="form-control" [(ngModel)]="task.title" (blur)="updateTitle()">
+              </div>
+
+            </div>
+            <div class="col-8">
+              <p class="h6 pl-0 mt-4">Miêu tả công việc</p>
+              <p class="h3 mt-3" *ngIf="task.status !== 0">{{task.description}} </p>
+
+              <div class="md-form" *ngIf="task.status === 0">
+                <input mdbInput type="text" class="form-control" [(ngModel)]="task.description" (blur)="updateDescription()">
+              </div>
+
+            </div>
           </div>
-          <label *ngIf="task.status !== 0">{{task.description}}</label>
 
           <div class="col-md-12 mt-3">
-            <h5 class="text-center">Công việc phải làm </h5>
+            <h5 class="text-center font-weight-bold">
+              Công việc phải làm
+              <a mdbBtn floating="true" size="sm" color="primary" mdbWavesEffect>
+                <i class="fa fa-pencil" (click)="openEditModal()"></i>
+              </a>
+              <a mdbBtn floating="true" size="sm" color="success" mdbWavesEffect>
+                <i class="fa fa-plus" (click)="openCreateModal()"></i>
+              </a>
+            </h5>
             <div class="d-flex flex-wrap">
-              <mdb-checkbox *ngFor="let ck of task.checkList" [inline]="true" class="col-6" [checked]="ck.status">{{ck.title}}</mdb-checkbox>
+              <div *ngIf="task.status !== 0">
+                <div *ngFor="let ck of task.checkList; let i = index" class="col-6">
+                  <span>{{i+1}}. {{ck.title}}</span>
+                </div>
+              </div>
+              <div *ngIf="task.status === 0" class="d-flex flex-wrap w-100">
+                <div class="col-6" *ngFor="let ck of task.checkList">
+                  <mdb-checkbox  [inline]="true" [checked]="ck.status">{{ck.title}}</mdb-checkbox>
+                </div>
+              </div>
             </div>
           </div>
-          <mdb-accordion [multiple]="false" aria-multiselectable="true">
-            <mdb-accordion-item [collapsed]="true" *ngFor="let item of report">
-              <mdb-accordion-item-head> {{ item.dateReport | date: 'hh-mm dd-MM-yyyy' }} </mdb-accordion-item-head>
-              <mdb-accordion-item-body>
-                <p class="h6 mt-4">Hình ảnh</p>
-                <p class="text-danger" *ngIf="picture.length === 0">Không có hình ảnh</p>
-                <div class="col-md-12" *ngIf="picture.length > 0">
-                  <div id="mdb-lightbox-ui"></div>
-                  <div class="mdb-lightbox">
-                    <figure class="col-md-4" *ngFor="let p of picture">
-                      <a [href]="p" data-size="1600x1067">
-                        <img [src]="p" alt="placeholder" class="img-fluid">
-                      </a>
-                    </figure>
+          <div class="col-md-12 mt-3" *ngIf="task.status !== 0">
+            <h5 class="text-center font-weight-bold">Báo cáo</h5>
+            <mdb-accordion [multiple]="false" aria-multiselectable="true">
+              <mdb-accordion-item [collapsed]="true" *ngFor="let item of report">
+                <mdb-accordion-item-head> {{ item.dateReport | date: 'hh-mm dd-MM-yyyy' }} </mdb-accordion-item-head>
+                <mdb-accordion-item-body>
+                  <p class="h6 mt-4">Hình ảnh</p>
+                  <p class="text-danger" *ngIf="picture.length === 0">Không có hình ảnh</p>
+                  <div class="col-md-12" *ngIf="picture.length > 0">
+                    <div id="mdb-lightbox-ui"></div>
+                    <div class="mdb-lightbox">
+                      <figure class="col-md-4" *ngFor="let p of picture">
+                        <a [href]="p" data-size="1600x1067">
+                          <img [src]="p" alt="placeholder" class="img-fluid">
+                        </a>
+                      </figure>
+                    </div>
                   </div>
-                </div>
-              </mdb-accordion-item-body>
-            </mdb-accordion-item>
-          </mdb-accordion>
+                </mdb-accordion-item-body>
+              </mdb-accordion-item>
+            </mdb-accordion>
+          </div>
           <br>
           <!-- <button *ngIf="!isUpdate" class="btn-edit" mdbBtn type="button" color="primary" rounded="true" mdbWavesEffect
             (click)="isUpdate = true">Chỉnh sửa</button> -->
@@ -84,15 +113,24 @@
             <span *ngIf="task.status === 0" style="font-size: 15px" class="badge badge-light">Chưa bắt đầu</span>
             <span *ngIf="task.status === 1" style="font-size: 15px" class="badge badge-primary">Đang thực hiện</span>
             <span *ngIf="task.status === 2" style="font-size: 15px" class="badge badge-success">Hoàn thành</span>
+            <span *ngIf="task.status === 3" style="font-size: 15px" class="badge badge-danger">Quá hạn</span>
             <mdb-select *ngIf="task.status === 1" [options]="iconStatusSelect" [(ngModel)]="task.status" class="select-wrapper mdb-select colorful-select dropdown-info md-form">
             </mdb-select>
+          </div>
+
+          <div class="md-form">
+            <h6 class="font-weight-bold">Điểm danh</h6>
+            <span *ngIf="task.attendanceStatus === 0" style="font-size: 15px" class="badge badge-light">Chưa điểm danh</span>
+            <span *ngIf="task.attendanceStatus === 1" style="font-size: 15px" class="badge badge-success">Đúng giờ</span>
+            <span *ngIf="task.attendanceStatus === 2" style="font-size: 15px" class="badge badge-warning">Trễ</span>
+            <span *ngIf="task.attendanceStatus === 3" style="font-size: 15px" class="badge badge-danger">Vắng mặt</span>
           </div>
 
           <div class="md-form ">
             <p class="h6 mt-3">Người thực hiện: {{task.assignee.name}}</p>
             <!-- <span *ngIf="task.status !== 0" class="mx-3">{{task.assignee.name}}</span> -->
-            <mdb-select *ngIf="task.status === 0" [placeholder]="'Người thực hiện khác'" [options]="employeeList" [filterEnabled]="true"
-              [(ngModel)]="assignTask.assigneeId" (selected)="openAssignModal()"></mdb-select>
+            <mdb-select *ngIf="task.status === 0" [placeholder]="'Người thực hiện khác'" [options]="employeeList"
+              [filterEnabled]="true" [(ngModel)]="assignTask.assigneeId" (selected)="openAssignModal()"></mdb-select>
           </div>
 
           <div class="md-form ">
@@ -165,6 +203,77 @@
       <div class="modal-footer flex-center">
         <a mdbBtn color="primary" outline="true" class="waves-effect" mdbWavesEffect (click)="assign()">Đồng ý</a>
         <a type="button" mdbBtn color="primary" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="assignModal.hide()">Hủy</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div mdbModal id="create" #create="mdbModal" class="modal fade left" tabindex="-1" role="dialog" aria-labelledby="add"
+  aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-success" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Tạo công việc</p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3 row">
+
+        <div class="md-form mt-0 mb-3 col-6 col-md-12">
+          <input type="text" id="title" class="form-control" mdbInput [(ngModel)]="taskBasicCM.title">
+          <label for="title">Tên công việc</label>
+        </div>
+
+        <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
+          <div mdbBtn floating="true" size="md" gradient="aqua" mdbWavesEffect>
+            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+            <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect (uploadOutput)="onUploadOutput($event)"
+              [uploadInput]="uploadInput">
+          </div>
+          <div class="file-path-wrapper mt-3">
+            <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()">
+          </div>
+        </div>
+
+        <div class="col text-center" *ngIf="url">
+          <img [src]="url" height="100">
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createTaskBasic()">Tạo
+          mới
+          <i class="fa fa-check ml-1"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div mdbModal id="edit" #edit="mdbModal" class="modal fade left" tabindex="-1" role="dialog" aria-labelledby="add"
+  aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Chỉnh sửa danh sách việc phải làm</p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="edit.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3 row">
+
+        <p class="h6">Danh sách công việc đang quản lý</p>
+
+        <div *ngFor="let t of taskBasicManagerList; let i of index" class="col-6">
+          <mdb-checkbox name="item-{{i}}" #checkbox (change)="changeCheckbox(t.id, $event)">{{t.title}}</mdb-checkbox>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="editTaskBasicOfTask()">Chỉnh sửa
+          <i class="fa fa-check ml-1"></i>
+        </button>
       </div>
     </div>
   </div>

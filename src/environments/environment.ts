@@ -52,7 +52,8 @@ export const environment = {
       getByRole: 'employee/get-list/by-role',
       getAllRole: `employee/get-all-role`,
       checkExist: 'account/check-exist-username',
-      checkDuplicateId: '/employee/check-duplicate-id'
+      checkDuplicateId: 'employee/check-duplicate-id',
+      checkEmployeeConstraint: 'employee/check-employee-constraint',
     },
     manager: {
       create: 'employee/create',
@@ -88,6 +89,7 @@ export const environment = {
       summaryTaskByEmployee: 'task/summary-task-by-employee',
       update: 'task/update-task',
       updateWorkplace: 'task/update-workplace',
+      updateField: 'task/update-task-by-field/',
     },
     report: {
       delete: 'report/delete-report/',

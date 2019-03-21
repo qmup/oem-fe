@@ -51,10 +51,12 @@ export class TaskSearchComponent implements OnInit {
   dateUpdateString = `"dateUpdate":`;
   durationString = `"duration":`;
   startTimeString = `"startTime":`;
+  titleString = `"title":`;
 
   dateCreate = [];
   dateUpdate = [];
   duration = 0;
+  title = '';
   startTime = [];
 
   constructor(
@@ -210,10 +212,12 @@ export class TaskSearchComponent implements OnInit {
     this.dateUpdateString = `"dateUpdate":`;
     this.durationString = `"duration":`;
     this.startTimeString = `"startTime":`;
+    this.titleString = `"title":`;
 
     this.dateCreate = [];
     this.dateUpdate = [];
     this.duration = 0;
+    this.title = '';
     this.startTime = [];
   }
 
@@ -234,6 +238,11 @@ export class TaskSearchComponent implements OnInit {
       this.durationString += '"' + this.duration;
       this.durationString += '"';
       this.searchRequestArray.push(this.durationString);
+    }
+    if (this.title.length !== 0) {
+      this.titleString += '"' + this.title;
+      this.titleString += '"';
+      this.searchRequestArray.push(this.titleString);
     }
     if (this.selectDateCreate && this.dateCreate.length > 0) {
       this.dateCreateString += '"' + (this.dateCreate[0].toISOString() + ';' + this.dateCreate[1].toISOString());

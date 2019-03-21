@@ -13,6 +13,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap';
 import { EmployeeUpdateComponent } from './components/employee-update/employee-update.component';
 import { CoreModule } from '../core/core.module';
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,9 @@ import { CoreModule } from '../core/core.module';
     FormsModule,
     CoreModule,
     EmployeeRoutingModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyBzi6k4xf4dNTVRofgFajZKQbApQ_hbzzc'
+    }),
     BsDatepickerModule.forRoot(),
     MDBBootstrapModulesPro.forRoot(),
   ],

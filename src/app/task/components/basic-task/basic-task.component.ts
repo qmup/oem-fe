@@ -180,7 +180,7 @@ export class BasicTaskComponent implements OnInit {
     this.taskBasicService.create(this.taskBasicCM)
       .then(
         (response1) => {
-          this.taskBasicManager.employeeId = 1;
+          this.taskBasicManager.employeeId = this.userAccount.id;
           this.taskBasicManager.editable = true;
           this.taskBasicManager.taskBasicId = response1;
           this.taskBasicService.setToManager(this.taskBasicManager)

@@ -12,12 +12,15 @@
      (change)="changeCheckbox(list.id, $event)">{{list.title}}</mdb-checkbox>
     </div>
   </div>
+  <div *ngIf="taskBasicList?.length === 0">
+    <span class="text-danger">Chưa có công việc tại nơi này!</span>
+  </div>
 </div>
 <div class="modal-footer d-flex justify-content-center">
   <button *ngIf="!task" mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="updateTaskBasic()">Cập nhật
     <i class="fa fa-check ml-1"></i>
   </button>
-  <button *ngIf="task" mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="selectTaskBasic()">Chọn
+  <button *ngIf="task && taskBasicList.length !== 0" mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="selectTaskBasic()">Chọn
     <i class="fa fa-check ml-1"></i>
   </button>
 </div>

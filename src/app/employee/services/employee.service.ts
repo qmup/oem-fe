@@ -66,9 +66,17 @@ export class EmployeeService {
     ).toPromise();
   }
 
-  getAll(): Promise<Employee[]> {
-    return this.httpClient.get<Employee[]>(
+  getAll(sort: string, fieldSort: string, page: number, size: number): Promise<PaginationResponse> {
+    return this.httpClient.get<PaginationResponse>(
       `${environment.endPoint}${environment.apiPaths.employee.getAll}`,
+      {
+        params: {
+          fieldSort: `${fieldSort}`,
+          sort: `${sort}`,
+          page: `${page}`,
+          size: `${size}`
+        }
+      }
     ).toPromise();
   }
 
@@ -124,6 +132,17 @@ export class EmployeeService {
   checkDuplicateId(employeeId: string): Promise<any> {
     return this.httpClient.get<any>(
       `${environment.endPoint}${environment.apiPaths.employee.checkDuplicateId}`,
+      {
+        params: {
+          employeeId: `${employeeId}`
+        }
+      }
+    ).toPromise();
+  }
+
+  checkConstraint(employeeId: number): Promise<any> {
+    return this.httpClient.get<any>(
+      `${environment.endPoint}${environment.apiPaths.employee.checkEmployeeConstraint}`,
       {
         params: {
           employeeId: `${employeeId}`

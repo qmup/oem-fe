@@ -13,6 +13,8 @@ import { ManageWorkplace, PlacePagination } from 'src/app/place/models/place';
 import { PlaceService } from 'src/app/place/services/place.service';
 import { ModalOptions, BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
 import { PlaceTaskBasicComponent } from 'src/app/place/components/place-task-basic/place-task-basic.component';
+import { TaskBasicService } from '../../service/task-basic.service';
+import { TaskBasicManager } from '../../models/task-basic';
 
 @Component({
   selector: 'app-task-detail',
@@ -23,6 +25,8 @@ export class TaskDetailComponent implements OnInit {
 
   @ViewChild('delete') deleteModal: ModalDirective;
   @ViewChild('assignModal') assignModal: ModalDirective;
+  @ViewChild('create') createModal: ModalDirective;
+  @ViewChild('edit') editTaskBasicModal: ModalDirective;
   iconPrioritySelect: Array<any>;
   iconStatusSelect: Array<any>;
   formData: FormData;
@@ -48,6 +52,15 @@ export class TaskDetailComponent implements OnInit {
   workplaceResponseByManager: PlacePagination = new PlacePagination();
   minDate = new Date();
   modalRef: BsModalRef;
+  taskBasicCM: Task = new Task();
+  filesToUpload: FileList;
+  taskBasicManager: TaskBasicManager = new TaskBasicManager();
+  url: any;
+  canUpdate = false;
+  currentPage2 = 0;
+  taskBasicManagerResponse: PaginationResponse;
+  taskBasicManagerList: Task[];
+  selectedTaskBasic = [];
 
   constructor(
     // public modalRef: BsModalRef,
@@ -59,6 +72,7 @@ export class TaskDetailComponent implements OnInit {
     private workplaceService: PlaceService,
     private employeeService: EmployeeService,
     private toastService: ToastService,
+    private taskBasicService: TaskBasicService,
     private router: Router,
   ) {
     this.files = [];
@@ -132,6 +146,7 @@ export class TaskDetailComponent implements OnInit {
     this.getEmployeeByManager();
     this.getWorkplaceByManager(this.userAccount.id);
     this.getTaskReport(this.id);
+    this.getTaskBasicByManager();
     this.iconStatusSelect = this.globalService.iconStatusSelect;
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
   }
@@ -206,8 +221,20 @@ export class TaskDetailComponent implements OnInit {
       );
   }
 
+  getTaskBasicByManager() {
+    this.taskBasicService.getListTaskBasic(this.userAccount.id, '', '', 'id', this.currentPage2, 8)
+      .then(
+        (response: any) => {
+          this.taskBasicManagerResponse = response;
+          this.taskBasicManagerList = response.content;
+          this.task.checkList.forEach(element => {
+            this.taskBasicManagerList = this.taskBasicManagerList.filter(task => task.id !== element.id);
+          });
+        }
+      );
+  }
+
   loadTask(id: number) {
-    console.log(id, this.id);
     this.id = id;
     this.getTaskDetail(id);
     this.getTaskReport(id);
@@ -230,17 +257,49 @@ export class TaskDetailComponent implements OnInit {
         }
       );
   }
-  checkWorkplace(): any {
-    // if (this.task.workplace.id !== this.manageWorkplace.companyId) {
-    //   this.workplaceService.
-    // }
+
+  updateTitle() {
+    this.taskService.updateField(this.task.id, 'title', this.task.title)
+      .then(
+        (response) => {
+          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+        },
+        (error) => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
+  }
+
+  updateDescription() {
+    this.taskService.updateField(this.task.id, 'description', this.task.description)
+      .then(
+        (response) => {
+          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+        },
+        (error) => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
+  }
+
+  removeTask() {
+    this.taskService.remove(this.id)
+      .then(
+        (response) => {
+          this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
+          this.router.navigate(['task']);
+        },
+        (error) => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
   }
 
   assign(): any {
     this.assignTask.dateAssign = new Date().toISOString();
     this.assignTask.assignerId = this.userAccount.id;
     this.assignTask.taskId = this.id;
-    this.assignTask.assigneeId = this.task.assignee.id;
+    this.assignTask.assigneeId = this.assignTask.assigneeId;
     this.globalService.assignTask(this.assignTask)
       .then(
         (response) => {
@@ -268,6 +327,10 @@ export class TaskDetailComponent implements OnInit {
     this.modalRef.content.refresh.subscribe(() => this.getTaskDetail(this.id));
   }
 
+  openEditModal() {
+    this.editTaskBasicModal.show();
+  }
+
   openDeleteModal() {
     this.deleteModal.show();
   }
@@ -276,17 +339,100 @@ export class TaskDetailComponent implements OnInit {
     this.assignModal.show();
   }
 
-  removeTask() {
-    this.taskService.remove(this.id)
+  openCreateModal() {
+    this.createModal.show();
+  }
+  createTaskBasic() {
+    this.filesToUpload ? this.createTaskBasicWithImage() : this.createTaskBasicWithoutImage();
+  }
+  createTaskBasicWithImage() {
+    const formData: FormData = new FormData();
+    if (!!this.filesToUpload) {
+      for (let index = 0; index < this.filesToUpload.length; index++) {
+        const file: File = this.filesToUpload[index];
+        formData.append('dataFile', file);
+      }
+    }
+    this.globalService.uploadFile(formData, 'image/task/')
       .then(
         (response) => {
-          this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
-          this.router.navigate(['task']);
-        },
-        (error) => {
-          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+          this.taskBasicCM.picture = response;
+          this.taskBasicCM.basic = true;
+          this.taskBasicService.create(this.taskBasicCM)
+            .then(
+              (response1) => {
+                this.taskBasicCM.id = response1;
+                this.task.checkList.push(this.taskBasicCM);
+                this.taskBasicManager.employeeId = this.userAccount.id;
+                this.taskBasicManager.editable = true;
+                this.taskBasicManager.taskBasicId = response1;
+                this.taskBasicService.setToManager(this.taskBasicManager)
+                  .then(
+                    () => {
+                      this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+                      this.createModal.hide();
+                    },
+                    () => {
+                      this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+                    }
+                );
+              },
+            );
         }
       );
+  }
+  createTaskBasicWithoutImage() {
+    this.taskBasicCM.basic = true;
+    this.taskBasicService.create(this.taskBasicCM)
+      .then(
+        (response1) => {
+          this.task.checkList.push(this.taskBasicCM);
+          this.taskBasicManager.employeeId = this.userAccount.id;
+          this.taskBasicManager.editable = true;
+          this.taskBasicManager.taskBasicId = response1;
+          this.taskBasicService.setToManager(this.taskBasicManager)
+            .then(
+              () => {
+                this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+                this.createModal.hide();
+              },
+              () => {
+                this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+              }
+            );
+        }
+      );
+  }
+  changeCheckbox(id: number, event: any) {
+    if (event.checked && !this.selectedTaskBasic.includes(el => el.id === id)) {
+      this.selectedTaskBasic.push(this.taskBasicManagerList.find(el => el.id === id));
+    } else {
+      this.selectedTaskBasic = this.selectedTaskBasic.filter(el => el.id !== id);
+    }
+  }
+
+  editTaskBasicOfTask() {
+    // this.taskService.updateField(this.task.id, 'taskBasics',  )
+  }
+
+
+  onSelectFile(event: any) { // called each time file input changes
+    if (event.target.files && event.target.files[0]) {
+      const reader = new FileReader();
+
+      reader.readAsDataURL(event.target.files[0]); // read file as data url
+
+      reader.onload = (event1: any) => { // called once readAsDataURL is completed
+
+        this.url = event1.target.result;
+
+        this.taskBasicCM.picture ? this.taskBasicCM.picture = event1.target.result : this.url = event1.target.result;
+
+      };
+
+      this.filesToUpload = event.target.files;
+
+    }
   }
 
 }

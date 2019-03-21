@@ -8,6 +8,7 @@ import { ToastService } from 'ng-uikit-pro-standard';
 import { AuthService } from 'src/app/authorize/services/auth.service';
 import { GlobalService } from './global.service';
 import { Employee } from 'src/app/employee/models/employee';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ export class NotificationService {
     private angularFireAuth: AngularFireAuth,
     private angularFireMessaging: AngularFireMessaging,
     private authService: AuthService,
+    private router: Router
   ) {
     this.angularFireMessaging.messaging.subscribe(
       (_messaging) => {
@@ -72,9 +74,12 @@ export class NotificationService {
     this.angularFireMessaging.messages.subscribe(
       (payload: any) => {
 
-        this.toastService.info(payload.notification.body, payload.notification.title, { positionClass: 'toast-bottom-right'} );
-        console.log('new message received. ', payload);
-        this.currentMessage.next(payload);
+        const alertInstance = this.toastService.info(
+          payload.notification.body, payload.notification.title, { positionClass: 'toast-bottom-right'} );
+          alertInstance.onTap.subscribe(() => {
+            this.router.navigate([`task-detail/${payload.notification.body.taskId}`]);
+          });
+          this.currentMessage.next(payload);
       });
   }
 }

@@ -1,3 +1,22 @@
-<p>
-  saler works!
-</p>
+<div class="container">
+  <div class="row my-5 d-flex flex-center">
+    <div class="col-md-6">
+      <agm-map #map [mapTypeId]="'terrain'" [latitude]="location.lat" [longitude]="location.lng" style="height: 300px">
+        <agm-marker [latitude]="location.lat" [longitude]="location.lng"></agm-marker>
+      </agm-map>
+    </div>
+    <div class="col-md-6">
+      <div class="md-form">
+        <input type="text" [(ngModel)]='location.address_level_1' class="form-control" id="searchField"
+          mdbInput>
+        <label for="searchField">Search location</label>
+
+      </div>
+      <div class="row">
+        <div class="col-md-12 d-flex flex-center">
+          <button mdbBtn color="primary" mdbWavesLight (click)='updateOnMap()' type="submit">Search</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

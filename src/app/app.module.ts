@@ -39,8 +39,7 @@ import { RequestInterceptorService } from './core/services/request-interceptor.s
     FormsModule,
     HttpModule,
     AgmCoreModule.forRoot({
-      // https://developers.google.com/maps/documentation/javascript/get-api-key?hl=en#key
-      apiKey: 'AIzaSyD02259nRLm-9mjD3-xDD9dsWyDJPv2B8k'
+      apiKey: 'AIzaSyBzi6k4xf4dNTVRofgFajZKQbApQ_hbzzc'
     }),
     CoreModule,
     EmployeeModule,
@@ -52,7 +51,9 @@ import { RequestInterceptorService } from './core/services/request-interceptor.s
     AuthorizeModule,
     // CalendarModule,
     DashboardModule,
-    ToastModule.forRoot(),
+    ToastModule.forRoot(
+      { preventDuplicates: true }
+    ),
     MDBBootstrapModulesPro.forRoot(),
     AngularFireAuthModule,
     AngularFireMessagingModule,

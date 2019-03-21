@@ -24,26 +24,31 @@
             <table class="table table-hover table-responsive-md" cellspacing="0" width="100%">
               <thead>
                 <tr>
-                  <th (click)="sortBy('title')">
+                  <th (click)="sort('title')">
                     Công việc
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
-                  <th (click)="sortBy('description')">
+                  <!-- <th (click)="sort('description')">
                     Miêu tả
                     <mdb-icon icon="sort"></mdb-icon>
-                  </th>
-                  <th (click)="sortBy('workplaceName')">
+                  </th> -->
+                  <th (click)="sort('workplaceName')">
                     Địa điểm
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
-                  <th (click)="sortBy('assigneeName')">
+                  <th (click)="sort('assigneeName')">
                     Người thực hiện
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
-                  <th (click)="sortBy('status')">
+                  <th (click)="sort('status')">
                     Trạng thái
+                    <mdb-icon icon="sort"></mdb-icon>
                   </th>
-                  <th (click)="sortBy('startTime')">
+                  <th (click)="sort('attendanceStatus')">
+                    Điểm danh
+                    <mdb-icon icon="sort"></mdb-icon>
+                  </th>
+                  <th (click)="sort('startTime')">
                     Thời gian
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
@@ -54,28 +59,34 @@
               </thead>
               <tbody>
                 <tr *ngFor="let task of taskList" [routerLink]="['/task-detail', task.id]">
-                  <td>{{ task.title }}</td>
-                  <td>{{ task.description }}</td>
-                  <td>{{ task.workplaceName }}</td>
-                  <td style="color: #007bff; cursor: pointer">{{
-                    task.assigneeName }}</td>
-                  <td>
+                  <td (click)="sort('title')">{{ task.title }}</td>
+                  <!-- <td>{{ task.description }}</td> -->
+                  <td (click)="sort('workplaceName')">{{ task.workplaceName }}</td>
+                  <td (click)="sort('assigneeName')">
+                    <img [src]="task.assigneePicture" class="rounded-circle img-responsive list-avatar mr-2">{{ task.assigneeName }}
+                  </td>
+                  <td (click)="sort('status')">
                     <span *ngIf="task.status === 0" class="badge badge-light">Chưa bắt đầu</span>
                     <span *ngIf="task.status === 1" class="badge badge-primary">Đang thực hiện</span>
                     <span *ngIf="task.status === 2" class="badge badge-success">Hoàn thành</span>
                     <span *ngIf="task.status === 3" class="badge badge-danger">Quá hạn</span>
                   </td>
-                  <td>{{ task.startTime | date: 'HH:mm dd-MM-yyyy' }} - {{
-                    task.endTime | date: 'HH:mm dd-MM-yyyy' }}</td>
-                </tr>
-              </tbody>
+                  <td (click)="sort('attendanceStatus')">
+                    <span *ngIf="task.attendanceStatus === 0" class="badge badge-light">Chưa điểm danh</span>
+                    <span *ngIf="task.attendanceStatus === 1" class="badge badge-success">Đúng giờ</span>
+                    <span *ngIf="task.attendanceStatus === 2" class="badge badge-warning">Trễ</span>
+                    <span *ngIf="task.attendanceStatus === 3" class="badge badge-danger">Vắng mặt</span>
+                  </td>
+                  <td (click)="sort('startTime')">{{ task.startTime | date: 'HH:mm aa dd/MM' }} ~ {{
+                    task.endTime | date: 'HH:mm aa dd/MM' }}</td>
+                  </tr>
+                </tbody>
+                <div *ngIf="taskList?.length === 0" class="col-12">
+                  <span class="text-danger">Không tìm thấy kết quả phù hợp</span>
+                </div>
             </table>
-            <app-pagination
-              *ngIf="taskListResponse?.totalPages > 1"
-              [pageSize]="taskListResponse.size"
-              [totalPage]="taskListResponse.totalPages"
-              [currentPage]="taskListResponse.number"
-              (changePage)="changePage1($event)">
+            <app-pagination *ngIf="taskListResponse?.totalPages > 1" [pageSize]="taskListResponse.size" [totalPage]="taskListResponse.totalPages"
+              [currentPage]="taskListResponse.number" (changePage)="changePage1($event)">
             </app-pagination>
           </div>
         </div>
@@ -105,24 +116,22 @@
         </div>
 
         <div class="col-12 md-form my-3">
-          <mdb-select [notFoundMsg]="'Không tìm thấy'"  [filterEnabled]="true" [options]="companyList" (selected)="selectCompany($event)"></mdb-select>
+          <mdb-select [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="companyList" (selected)="selectCompany($event)"></mdb-select>
           <label>Công ty</label>
         </div>
         <div class="col-12 md-form my-3" *ngIf="isSelectCompany">
-          <mdb-select [notFoundMsg]="'Không tìm thấy'"  [filterEnabled]="true" [options]="zoneList" (selected)="selectZone($event)"></mdb-select>
+          <mdb-select [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="zoneList" (selected)="selectZone($event)"></mdb-select>
           <label>Khu vực</label>
         </div>
         <div class="col-12 md-form my-3" *ngIf="isSelectZone">
-          <mdb-select [notFoundMsg]="'Không tìm thấy'"  [filterEnabled]="true" [options]="placeList" (selected)="selectWorkplace($event)"></mdb-select>
+          <mdb-select [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="placeList" (selected)="selectWorkplace($event)"></mdb-select>
           <label>Địa điểm</label>
         </div>
         <div *ngIf="isSelectWorkplace" class="d-flex flex-wrap">
           <div *ngFor="let list of taskBasicList; let i of index" class="col-6">
-            <mdb-checkbox [checked]="list.checked" name="item-{{i}}"
-            #checkbox
-            (change)="changeCheckbox(list.id, $event)">{{list.title}}</mdb-checkbox>
+            <mdb-checkbox [checked]="list.checked" name="item-{{i}}" #checkbox (change)="changeCheckbox(list.id, $event)">{{list.title}}</mdb-checkbox>
           </div>
-        </div>        
+        </div>
 
         <label class="col-md-2 col-xs-12" style="position: relative">
           <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px">Từ</span>
@@ -154,7 +163,8 @@
         </div> -->
         <span>Thời gian hoàn thành</span>
         <div class="w-100 d-flex justify-content-center align-items-center my-3">
-          <mdb-range-input id="range" [min]="0" [step]="10" [max]="300" name="range" [(ngModel)]="taskCM.duration" class="w-100"></mdb-range-input>
+          <mdb-range-input id="range" [min]="0" [step]="10" [max]="300" name="range" [(ngModel)]="taskCM.duration"
+            class="w-100"></mdb-range-input>
           <span class="ml-2">phút</span>
         </div>
         <div class="col-12 md-form mt-0 mb-3">

@@ -110,4 +110,14 @@ export class TaskService {
     ).toPromise();
   }
 
+  updateField(id, key, value): Promise<any> {
+    return this.httpClient.put<any>(
+      `${environment.endPoint}${environment.apiPaths.task.updateField}${id}`,
+        {
+          key: `${key}`,
+          value: `${value}`
+        }
+      ).toPromise();
+  }
+
 }

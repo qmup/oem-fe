@@ -40,13 +40,27 @@
             <!--Table head-->
             <thead>
               <tr>
-                <th>Hình ảnh</th>
-                <th>Họ</th>
-                <th>Tên</th>
-                <!-- <th style="width: 100px; max-width: 100px">Giới tính</th> -->
-                <th style="width: 100px; max-width: 100px">Chức vụ</th>
-                <th style="width: 140px; max-width: 140px">Số điện thoại</th>
-                <th>Địa chỉ</th>
+                <th class="text-center">Hình ảnh</th>
+                <th (click)="sort('firstName')">
+                  Họ
+                  <mdb-icon icon="sort"></mdb-icon>                  
+                </th>
+                <th (click)="sort('lastName')">
+                  Tên
+                  <mdb-icon icon="sort"></mdb-icon>                  
+                </th>
+                <th (click)="sort('roleId')" style="width: 100px; max-width: 100px">
+                  Chức vụ
+                  <mdb-icon icon="sort"></mdb-icon>                  
+                </th>
+                <th (click)="sort('phoneNumber')" style="width: 140px; max-width: 140px">
+                  Số điện thoại
+                  <mdb-icon icon="sort"></mdb-icon>                  
+                </th>
+                <th (click)="sort('address')">
+                  Địa chỉ
+                  <mdb-icon icon="sort"></mdb-icon>                  
+                </th>
                 <th [ngStyle]="userAccount.roleId === 1 && {'width': '300px', 'max-width': '300px'}">Thao tác</th>
               </tr>
             </thead>
@@ -84,15 +98,15 @@
                 </td>
               </tr>
             </tbody>
-            <app-pagination
-              *ngIf="employeeResponse?.totalPages > 1"
-              [pageSize]="employeeResponse.size"
-              [totalPage]="employeeResponse.totalPages"
-              [currentPage]="employeeResponse.number"
-              (changePage)="changePage($event)">
-            </app-pagination>
             <!--Table body-->
           </table>
+          <app-pagination
+            *ngIf="employeeResponse?.totalPages > 1"
+            [pageSize]="employeeResponse.size"
+            [totalPage]="employeeResponse.totalPages"
+            [currentPage]="employeeResponse.number"
+            (changePage)="changePage($event)">
+          </app-pagination>
           <!--Table-->
 
         </div>

@@ -86,6 +86,9 @@ mdb-select > div > div.sintgle > div.placeholder {
 .table > tbody > tr > td, .table > tbody > tr > th {
   vertical-align: middle;
 }
+.table > thead > tr > th {
+  cursor: pointer !important;
+}
 .fa.fa-trash {
   font-size: 1.5rem;
   color: #1976d2 !important;
@@ -161,7 +164,7 @@ main#main {
     background: none;
     border-radius: 3px;
   }
-  .col-4 .md-form {
+  .col-4 .md-form, .col-8 .md-form {
     margin-top: 10px !important;
     margin-bottom: 10px !important;
   }
