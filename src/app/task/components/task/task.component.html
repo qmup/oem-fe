@@ -66,16 +66,16 @@
                     <img [src]="task.assigneePicture" class="rounded-circle img-responsive list-avatar mr-2">{{ task.assigneeName }}
                   </td>
                   <td (click)="sort('status')">
-                    <span *ngIf="task.status === 0" class="badge badge-light">Chưa bắt đầu</span>
-                    <span *ngIf="task.status === 1" class="badge badge-primary">Đang thực hiện</span>
-                    <span *ngIf="task.status === 2" class="badge badge-success">Hoàn thành</span>
-                    <span *ngIf="task.status === 3" class="badge badge-danger">Quá hạn</span>
+                    <span *ngIf="task.status === 0" style="font-size: 13px" class="badge badge-light">Chưa bắt đầu</span>
+                    <span *ngIf="task.status === 1" style="font-size: 13px" class="badge badge-primary">Đang thực hiện</span>
+                    <span *ngIf="task.status === 2" style="font-size: 13px" class="badge badge-success">Hoàn thành</span>
+                    <span *ngIf="task.status === 3" style="font-size: 13px" class="badge badge-danger">Quá hạn</span>
                   </td>
                   <td (click)="sort('attendanceStatus')">
-                    <span *ngIf="task.attendanceStatus === 0" class="badge badge-light">Chưa điểm danh</span>
-                    <span *ngIf="task.attendanceStatus === 1" class="badge badge-success">Đúng giờ</span>
-                    <span *ngIf="task.attendanceStatus === 2" class="badge badge-warning">Trễ</span>
-                    <span *ngIf="task.attendanceStatus === 3" class="badge badge-danger">Vắng mặt</span>
+                    <span *ngIf="task.attendanceStatus === 0" style="font-size: 13px" class="badge badge-light">Chưa điểm danh</span>
+                    <span *ngIf="task.attendanceStatus === 1" style="font-size: 13px" class="badge badge-success">Đúng giờ</span>
+                    <span *ngIf="task.attendanceStatus === 2" style="font-size: 13px" class="badge badge-warning">Trễ</span>
+                    <span *ngIf="task.attendanceStatus === 3" style="font-size: 13px" class="badge badge-danger">Vắng mặt</span>
                   </td>
                   <td (click)="sort('startTime')">{{ task.startTime | date: 'HH:mm aa dd/MM' }} ~ {{
                     task.endTime | date: 'HH:mm aa dd/MM' }}</td>

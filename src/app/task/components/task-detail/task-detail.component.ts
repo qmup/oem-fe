@@ -210,6 +210,18 @@ export class TaskDetailComponent implements OnInit {
       );
   }
 
+  changeStatus(e) {
+    this.taskService.updateField(this.task.id, 'status', this.task.status)
+      .then(
+        (response) => {
+          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+        },
+        (error) => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
+  }
+
   removeTaskBasic() {
     const fn = this.selectedTaskBasic.forEach((element, i) => {
       this.taskService.remove(element.id)
