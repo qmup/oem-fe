@@ -32,3 +32,12 @@ export class AssignTask {
     this.taskId = 0;
   }
 }
+
+export class AssignTaskResponse {
+  assignee: Shared;
+  assigner: Shared;
+  dateAssign: string;
+  description: string;
+  id: number;
+  taskId: number;
+}

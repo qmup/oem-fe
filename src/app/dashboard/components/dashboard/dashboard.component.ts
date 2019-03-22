@@ -70,20 +70,17 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.userAccount = this.globalService.getUserAccount();
-    this.notificationService.requestPermission(this.userAccount.id);
-    this.notificationService.receiveMessage();
-    this.message = this.notificationService.currentMessage;
 
     const today = new Date();
     const lastweek = new Date(today.getTime() - (7 * 24 * 60 * 60 * 1000));
-    this.getSummaryTaskLastWeek(2, this.globalService.convertToYearMonthDay(lastweek), this.globalService.convertToYearMonthDay(today));
+    this.getSummaryTaskLastWeek(this.globalService.convertToYearMonthDay(lastweek), this.globalService.convertToYearMonthDay(today));
   }
 
   search() {
     const startTime = this.dateRange ? this.globalService.convertToYearMonthDay(this.dateRange[0]) : '';
     const endTime = this.dateRange ? this.globalService.convertToYearMonthDay(this.dateRange[1]) : '';
     console.log(this.dateRange);
-    this.dashboardService.summaryManagerTask(2, startTime, endTime)
+    this.dashboardService.summaryManagerTask(this.userAccount.id, startTime, endTime)
       .then(
         (response: SummaryTask) => {
           this.summaryTask = response;
@@ -91,8 +88,8 @@ export class DashboardComponent implements OnInit {
       );
   }
 
-  getSummaryTaskLastWeek(managerId: number, today: string, lastweek: string) {
-    this.dashboardService.summaryManagerTask(2, today, lastweek)
+  getSummaryTaskLastWeek(today: string, lastweek: string) {
+    this.dashboardService.summaryManagerTask(this.userAccount.id, today, lastweek)
       .then(
         (response: SummaryTask) => {
           this.summaryTask = response;

@@ -76,18 +76,18 @@ export class CompanyComponent implements OnInit {
     private toastService: ToastService,
     private globalService: GlobalService,
     public mapsApiLoader: MapsAPILoader
-    ) {
-      if (navigator) {
-        navigator.geolocation.getCurrentPosition( pos => {
-            this.location.lng = +pos.coords.longitude;
-            this.location.lat = +pos.coords.latitude;
-          });
-        }
-      this.mapsApiLoader = mapsApiLoader;
+  ) {
+    if (navigator) {
+      navigator.geolocation.getCurrentPosition( pos => {
+          this.location.lng = +pos.coords.longitude;
+          this.location.lat = +pos.coords.latitude;
+        });
+      }
+    this.mapsApiLoader = mapsApiLoader;
 
-      this.mapsApiLoader.load().then(() => {
-        this.geocoder = new google.maps.Geocoder();
-      });
+    this.mapsApiLoader.load().then(() => {
+      this.geocoder = new google.maps.Geocoder();
+    });
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
     this.humanizeBytes = humanizeBytes;

@@ -112,10 +112,17 @@
         </div>
       </div>
       <div class="col-md-3 mx-auto">
-        <div style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); width: 80%">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%">
 
           <div class="md-form ">
-            <h6 class="font-weight-bold">Trạng thái</h6>
+            <h6 class="font-weight-bold d-flex flex-wrap">
+              <span class="col-6 px-0 mr-auto">Trạng thái</span>
+              <div class="col-6 px-0 ml-auto text-right">
+                <a mdbBtn floating="true" size="sm" color="primary" class="btn-history" mdbWavesEffect>
+                  <i class="fa fa-history" (click)="history.show()"></i>
+                </a>
+              </div>
+            </h6>
             <span *ngIf="task.status === 0" style="font-size: 15px" class="badge badge-light">Chưa bắt đầu</span>
             <span *ngIf="task.status === 1" style="font-size: 15px" class="badge badge-primary">Đang thực hiện</span>
             <span *ngIf="task.status === 2" style="font-size: 15px" class="badge badge-success">Hoàn thành</span>
@@ -285,6 +292,34 @@
         <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="openCreateModal(); edit.hide()">Tạo mới
           <i class="fa fa-plus mr-1"></i>
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div mdbModal id="edit" #history="mdbModal" class="modal fade left" tabindex="-1" role="dialog" aria-labelledby="add"
+  aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Lịch sử bàn giao</p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="history.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3 row">
+
+        <div *ngFor="let el of historyAssign; let i = index">
+
+          <h6 class="font-weight-bold">
+            {{i+1}}. Lúc {{ el.dateAssign | date: 'hh:mm aa' }} ngày {{ el.dateAssign | date: 'dd-MM-yyyy' }}
+          </h6>
+
+          <p *ngIf="!el.description">Không có miêu tả</p>
+          <p *ngIf="el.description">Nguyên nhân: {{ el.description }}</p>
+
+        </div>
+
       </div>
     </div>
   </div>

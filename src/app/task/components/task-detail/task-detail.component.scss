@@ -16,3 +16,12 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+.btn-history {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(0, -50%);
+}
+.col-6.px-0.ml-auto.text-right {
+  position: relative;
+}

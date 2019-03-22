@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Task, TaskModel, TaskResponse, TaskDetail } from '../models/task';
 import { environment } from 'src/environments/environment';
-import { PaginationResponse } from 'src/app/core/models/shared';
+import { PaginationResponse, AssignTask, AssignTaskResponse } from 'src/app/core/models/shared';
 import { TaskBasic } from '../models/task-basic';
 
 @Injectable({
@@ -79,14 +79,9 @@ export class TaskService {
     ).toPromise();
   }
 
-  update(parentTaskId: number, taskBasic: TaskBasic[]): Promise<boolean> {
+  update(taskUM: TaskModel): Promise<boolean> {
     return this.httpClient.put<boolean>(
-      `${environment.endPoint}${environment.apiPaths.task.update}`, taskBasic ,
-      {
-        params: {
-          parentTaskId: `${parentTaskId}`
-        }
-      }
+      `${environment.endPoint}${environment.apiPaths.task.update}`, taskUM,
     ).toPromise();
   }
   updateWorkplace(taskId: number, workplaceId: number): Promise<any> {
@@ -94,7 +89,7 @@ export class TaskService {
       `${environment.endPoint}${environment.apiPaths.task.updateWorkplace}/${taskId}/${workplaceId}`, {}
     ).toPromise();
   }
-  getTodayTaskByEmployee(assignerId: number) {
+  getTodayTaskByEmployee(assignerId: number): Promise<any> {
     return this.httpClient.get<Task[]>(
       `${environment.endPoint}${environment.apiPaths.task.getTodayTask}?assignerId=${assignerId}`
     ).toPromise();
@@ -137,6 +132,16 @@ export class TaskService {
       {
         params: {
           parentTaskId: `${parentTaskId}`
+        }
+      }
+    ).toPromise();
+  }
+  getAssignHistory(taskId: number): Promise<AssignTaskResponse[]> {
+    return this.httpClient.get<AssignTaskResponse[]>(
+      `${environment.endPoint}${environment.apiPaths.task.getAssignHistory}`,
+      {
+        params: {
+          taskId: `${taskId}`,
         }
       }
     ).toPromise();

@@ -7,7 +7,7 @@ import { TaskDetail, Task, TaskModel } from '../../models/task';
 import { ReportService } from 'src/app/report/services/report.service';
 import { TaskReport } from 'src/app/report/models/report';
 import { Employee } from 'src/app/employee/models/employee';
-import { PaginationResponse, AssignTask, Shared } from 'src/app/core/models/shared';
+import { PaginationResponse, AssignTask, Shared, AssignTaskResponse } from 'src/app/core/models/shared';
 import { EmployeeService } from 'src/app/employee/services/employee.service';
 import { ManageWorkplace, PlacePagination } from 'src/app/place/models/place';
 import { PlaceService } from 'src/app/place/services/place.service';
@@ -64,6 +64,7 @@ export class TaskDetailComponent implements OnInit {
   canRemove = false;
   selectedModalTaskBasic = [];
   taskBasicCMList = [];
+  historyAssign: AssignTaskResponse[] = [];
 
   constructor(
     // public modalRef: BsModalRef,
@@ -83,73 +84,17 @@ export class TaskDetailComponent implements OnInit {
     this.humanizeBytes = humanizeBytes;
   }
 
-  showFiles() {
-    let files = '';
-    for (let i = 0; i < this.files.length; i ++) {
-      files += this.files[i].name;
-        if (!(this.files.length - 1 === i)) {
-          files += ',';
-      }
-    }
-    return files;
-  }
-
-  startUpload(): void {
-    const event: UploadInput = {
-    type: 'uploadAll',
-    url: 'your-path-to-backend-endpoint',
-    method: 'POST',
-    data: { foo: 'bar' },
-    };
-    this.files = [];
-    this.uploadInput.emit(event);
-  }
-
-  cancelUpload(id: string): void {
-    this.uploadInput.emit({ type: 'cancel', id: id });
-  }
-
-  onUploadOutput(output: UploadOutput | any): void {
-    if (output.type === 'allAddedToQueue') {
-    } else if (output.type === 'addedToQueue') {
-      this.files.push(output.file); // add file to array when added
-    } else if (output.type === 'uploading') {
-      // update current data in files array for uploading file
-      const index = this.files.findIndex(file => file.id === output.file.id);
-      this.files[index] = output.file;
-    } else if (output.type === 'removed') {
-      // remove file from array when removed
-      this.files = this.files.filter((file: UploadFile) => file !== output.file);
-    } else if (output.type === 'dragOver') {
-      this.dragOver = true;
-    } else if (output.type === 'dragOut') {
-    } else if (output.type === 'drop') {
-      this.dragOver = false;
-    }
-    this.showFiles();
-  }
-
   ngOnInit() {
     this.userAccount = this.globalService.getUserAccount();
     this.getTodayTask();
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
-      // if (this.taskList.filter(t => t.id === this.id).length > 0) {
-      //   alert('ko co');
-      //   if (this.taskList.length === 0) {
-      //     this.router.navigate(['task']);
-      //   } else {
-      //     this.id = this.taskList[0].id;
-      //     console.log(this.id, this.taskList[0]);
-      //   }
-      //   this.getTaskDetail(this.id);
-      // }
     });
     this.getTaskDetail(this.id);
     this.getEmployeeByManager();
     this.getWorkplaceByManager(this.userAccount.id);
     this.getTaskReport(this.id);
-    // this.getTaskBasicByManager();
+    this.getAssignHistory(this.id);
     this.iconStatusSelect = this.globalService.iconStatusSelect;
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
   }
@@ -181,6 +126,15 @@ export class TaskDetailComponent implements OnInit {
               }
             });
           }
+        }
+      );
+  }
+
+  getAssignHistory(id: number) {
+    this.taskService.getAssignHistory(id)
+      .then(
+        (response) => {
+          this.historyAssign = response;
         }
       );
   }
@@ -465,6 +419,52 @@ export class TaskDetailComponent implements OnInit {
       this.filesToUpload = event.target.files;
 
     }
+  }
+
+  showFiles() {
+    let files = '';
+    for (let i = 0; i < this.files.length; i ++) {
+      files += this.files[i].name;
+        if (!(this.files.length - 1 === i)) {
+          files += ',';
+      }
+    }
+    return files;
+  }
+
+  startUpload(): void {
+    const event: UploadInput = {
+    type: 'uploadAll',
+    url: 'your-path-to-backend-endpoint',
+    method: 'POST',
+    data: { foo: 'bar' },
+    };
+    this.files = [];
+    this.uploadInput.emit(event);
+  }
+
+  cancelUpload(id: string): void {
+    this.uploadInput.emit({ type: 'cancel', id: id });
+  }
+
+  onUploadOutput(output: UploadOutput | any): void {
+    if (output.type === 'allAddedToQueue') {
+    } else if (output.type === 'addedToQueue') {
+      this.files.push(output.file); // add file to array when added
+    } else if (output.type === 'uploading') {
+      // update current data in files array for uploading file
+      const index = this.files.findIndex(file => file.id === output.file.id);
+      this.files[index] = output.file;
+    } else if (output.type === 'removed') {
+      // remove file from array when removed
+      this.files = this.files.filter((file: UploadFile) => file !== output.file);
+    } else if (output.type === 'dragOver') {
+      this.dragOver = true;
+    } else if (output.type === 'dragOut') {
+    } else if (output.type === 'drop') {
+      this.dragOver = false;
+    }
+    this.showFiles();
   }
 
 }

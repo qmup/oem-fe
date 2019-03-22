@@ -106,7 +106,6 @@ export class PlaceTaskBasicComponent implements OnInit {
         this.selectedIds = this.selectedIds.filter(el => el !== id);
       }
     }
-    console.log(this.selectedIds);
   }
 
   updateTaskBasic() {
@@ -128,7 +127,7 @@ export class PlaceTaskBasicComponent implements OnInit {
   }
 
   selectTaskBasic() {
-    this.taskService.update(this.task.id, this.selectedTaskBasic)
+    this.taskService.updateTaskBasicList(this.task.id, this.selectedTaskBasic)
       .then(
         () => {
           this.taskService.updateWorkplace(this.task.id, this.workplaceId)

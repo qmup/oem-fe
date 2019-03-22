@@ -7,3 +7,12 @@ button.addNewButton {
 i.fa:not(.fa-4x) {
   font-size: 1rem !important;
 }
+.md-form label {
+  left: auto;
+}
+.form-control.mr-sm-2 {
+  width: 87%;
+}
+mdb-select > div > div.single > div.placeholder {
+  color: #757575 !important;
+}

@@ -91,7 +91,8 @@ export const environment = {
       updateWorkplace: 'task/update-workplace',
       updateField: 'task/update-task-by-field/',
       addTaskBasic: 'task/add-task-basic/',
-      updateTaskBasicList: 'task/update-task-basic-list'
+      updateTaskBasicList: 'task/update-task-basic-list',
+      getAssignHistory: 'assign-task/get-assign-history',
     },
     report: {
       delete: 'report/delete-report/',

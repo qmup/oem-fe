@@ -21,6 +21,9 @@ nav.navbar.fixed-top.navbar-toggleable-md.navbar-expand-lg.scrolling-navbar.doub
 .card .card-body .card-text {
   font-size: 16px !important;
 }
+mdb-select > div > div.single > div.placeholder {
+  color: #757575 !important;
+}
 #task-search {
   mdb-select > div > div.single > div.placeholder {
     left: 0 !important;
@@ -38,6 +41,12 @@ nav.navbar.fixed-top.navbar-toggleable-md.navbar-expand-lg.scrolling-navbar.doub
   }
   .md-form label {
     left: auto;
+  }
+}
+
+#place {
+  .card-wrapper .face .content p {
+    margin-bottom: 15px;
   }
 }
 #company, #zone, #basic-task {
