@@ -24,8 +24,8 @@
             <div [ngClass]="{'col-md-10': userAccount.roleId === 1, 'col-md-12': userAccount.roleId === 2}">
               <!-- Search -->
               <div class="md-form">
-                <input type="search" [(ngModel)]="searchText" id="search" class="form-control" mdbInput>
-                <label for="search">Tìm kiếm</label>
+                <input type="text" [(ngModel)]="searchText" class="form-control" mdbInput placeholder="">
+                <label>Tìm kiếm</label>
               </div>
 
             </div>
@@ -220,7 +220,7 @@
         </div>
         
         <div class="file-field md-form col-12 pl-0 mt-1 mb-3">
-          <div mdbBtn floating="true" size="md" gradient="aqua" mdbWavesEffect>
+          <div mdbBtn floating="true" size="md" color="blue" mdbWavesEffect>
             <i class="fa fa-cloud-upload" aria-hidden="true"></i>
             <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
               (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">

@@ -64,7 +64,8 @@ export class TaskDetailComponent implements OnInit {
   canRemove = false;
   selectedModalTaskBasic = [];
   taskBasicCMList = [];
-  historyAssign: AssignTaskResponse[] = [];
+  historyResponse: PaginationResponse;
+  historyAssign: AssignTaskResponse[];
 
   constructor(
     // public modalRef: BsModalRef,
@@ -131,10 +132,11 @@ export class TaskDetailComponent implements OnInit {
   }
 
   getAssignHistory(id: number) {
-    this.taskService.getAssignHistory(id)
+    this.taskService.getAssignHistory(id, '', 'dateAssign', 0, 5)
       .then(
         (response) => {
-          this.historyAssign = response;
+          this.historyAssign = response.content;
+          this.historyResponse = response;
         }
       );
   }

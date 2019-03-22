@@ -1,12 +1,34 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, ViewChild } from '@angular/core';
 import { Employee } from '../../models/employee';
 import { BsModalRef } from 'ngx-bootstrap';
 import { EmployeeService } from '../../services/employee.service';
 import { ToastService, humanizeBytes, UploadInput, UploadFile, UploadOutput } from 'ng-uikit-pro-standard';
 import { ManagerService } from 'src/app/manager/services/manager.service';
-import { Manager } from 'src/app/manager/models/manager';
 import { GlobalService } from 'src/app/core/services/global.service';
 import { PaginationResponse } from 'src/app/core/models/shared';
+import { AgmMap } from '@agm/core';
+
+declare var google: any;
+
+interface Marker {
+  lat: number;
+  lng: number;
+  label?: string;
+  draggable: boolean;
+}
+
+interface Location {
+  lat: number;
+  lng: number;
+  viewport?: Object;
+  zoom: number;
+  address_level_1?: string;
+  address_level_2?: string;
+  address_country?: string;
+  address_zip?: string;
+  address_state?: string;
+  marker?: Marker;
+}
 
 @Component({
   selector: 'app-employee-update',
@@ -14,6 +36,20 @@ import { PaginationResponse } from 'src/app/core/models/shared';
   styleUrls: ['./employee-update.component.scss']
 })
 export class EmployeeUpdateComponent implements OnInit {
+
+  geocoder: any;
+  public location: Location = {
+    lat: 51.678418,
+    lng: 7.809007,
+    marker: {
+      lat: 51.678418,
+      lng: 7.809007,
+      draggable: true
+    },
+    zoom: 15
+  };
+
+  @ViewChild(AgmMap) map: AgmMap;
 
   gender: number;
   employee: Employee;
@@ -31,6 +67,7 @@ export class EmployeeUpdateComponent implements OnInit {
   url: any;
   isExist: boolean;
   roleList: any;
+  isDuplicate = false;
 
   constructor(
     public modalRef: BsModalRef,
@@ -79,7 +116,7 @@ export class EmployeeUpdateComponent implements OnInit {
           this.roleList = response.map((role) => {
             return {
               value: role.id,
-              label: role.roleName
+              label: (role.id === 2) ? 'Quản lý' : 'Nhân viên',
             };
           });
         }
@@ -112,6 +149,9 @@ export class EmployeeUpdateComponent implements OnInit {
   }
 
   updateEmployee() {
+    this.employee.latitude = this.location.lat;
+    this.employee.longitude = this.location.lng;
+    this.employee.address = this.location.address_level_1;
     this.employee.fullName = `${this.employee.firstName} ${this.employee.lastName}`;
     if (this.employee.roleId === 2) {
       this.employee.managerId = 0;
@@ -149,7 +189,6 @@ export class EmployeeUpdateComponent implements OnInit {
           this.employeeUM.birthDate = this.globalService.convertStringToYearMonthDay(this.employee.birthDate);
           console.log(this.employeeUM.birthDate);
           this.employeeUM.email = this.employee.email;
-          console.log('with', this.employeeUM);
           this.employeeService.update(this.employeeUM)
             .then(
               () => {
@@ -186,7 +225,6 @@ export class EmployeeUpdateComponent implements OnInit {
     this.employeeUM.address = this.employee.address;
     this.employeeUM.birthDate = this.globalService.convertStringToYearMonthDay(this.employee.birthDate);
     this.employeeUM.email = this.employee.email;
-    console.log('without', this.employeeUM);
     this.employeeService.update(this.employeeUM)
       .then(
         () => {
@@ -198,6 +236,10 @@ export class EmployeeUpdateComponent implements OnInit {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
         }
       );
+  }
+
+  changeAddress(e: any) {
+    this.location.address_level_1 = e;
   }
 
   startUpload(): void {
@@ -252,6 +294,117 @@ export class EmployeeUpdateComponent implements OnInit {
 
       this.filesToUpload = event.target.files;
 
+    }
+  }
+
+  checkDuplicateId() {
+    this.employeeService.checkDuplicateId(this.employee.employeeId)
+      .then(
+        (res) => {
+          this.isDuplicate = res;
+        }
+      );
+  }
+
+  checkConstraint() {
+    this.employeeService.checkDuplicateId(this.employee.employeeId)
+      .then(
+        (res) => {
+          this.isDuplicate = res;
+        }
+      );
+  }
+
+  updateOnMap() {
+    let full_address: string = this.location.address_level_1 || '';
+    if (this.location.address_level_2) { full_address = full_address + ' ' + this.location.address_level_2; }
+    if (this.location.address_state) { full_address = full_address + ' ' + this.location.address_state; }
+    if (this.location.address_country) { full_address = full_address + ' ' + this.location.address_country; }
+
+    this.findLocation(full_address);
+  }
+
+  findLocation(address) {
+    if (!this.geocoder) { this.geocoder = new google.maps.Geocoder(); }
+    this.geocoder.geocode({
+      'address': address
+    }, (results, status) => {
+      if (status === google.maps.GeocoderStatus.OK) {
+        for (let i = 0; i < results[0].address_components.length; i++) {
+          const types = results[0].address_components[i].types;
+
+          if (types.indexOf('locality') !== -1) {
+            this.location.address_level_2 = results[0].address_components[i].long_name;
+          }
+          if (types.indexOf('country') !== -1) {
+            this.location.address_country = results[0].address_components[i].long_name;
+          }
+          if (types.indexOf('postal_code') !== -1) {
+            this.location.address_zip = results[0].address_components[i].long_name;
+          }
+          if (types.indexOf('administrative_area_level_1') !== -1) {
+            this.location.address_state = results[0].address_components[i].long_name;
+          }
+        }
+
+        if (results[0].geometry.location) {
+          this.location.lat = results[0].geometry.location.lat();
+          this.location.lng = results[0].geometry.location.lng();
+          this.location.marker.lat = results[0].geometry.location.lat();
+          this.location.marker.lng = results[0].geometry.location.lng();
+          this.location.marker.draggable = true;
+          this.location.viewport = results[0].geometry.viewport;
+        }
+
+        this.map.triggerResize();
+      } else {
+        alert('Sorry, this search produced no results.');
+      }
+    });
+  }
+
+  findAddressByCoordinates() {
+    this.geocoder.geocode({
+      'location': {
+        lat: this.location.marker.lat,
+        lng: this.location.marker.lng
+      }
+    }, (results, status) => {
+      this.decomposeAddressComponents(results);
+    });
+  }
+
+  decomposeAddressComponents(addressArray) {
+    if (addressArray.length === 0) { return false; }
+    const address = addressArray[0].address_components;
+
+    for (const element of address) {
+      if (element.length === 0 && !element['types']) { continue; }
+
+      if (element['types'].indexOf('street_number') > -1) {
+        this.location.address_level_1 = element['long_name'];
+        continue;
+      }
+      if (element['types'].indexOf('route') > -1) {
+        this.location.address_level_1 += ', ' + element['long_name'];
+        continue;
+      }
+      if (element['types'].indexOf('locality') > -1) {
+        this.location.address_level_2 = element['long_name'];
+        continue;
+      }
+      if (element['types'].indexOf('administrative_area_level_1') > -1) {
+        this.location.address_state = element['long_name'];
+        continue;
+      }
+      if (element['types'].indexOf('country') > -1) {
+        this.location.address_country = element['long_name'];
+        continue;
+      }
+      if (element['types'].indexOf('postal_code') > -1) {
+        this.location.address_zip = element['long_name'];
+        continue;
+      }
     }
   }
 

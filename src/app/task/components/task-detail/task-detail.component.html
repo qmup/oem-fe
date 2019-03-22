@@ -239,7 +239,7 @@
         </div>
 
         <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
-          <div mdbBtn floating="true" size="md" gradient="aqua" mdbWavesEffect>
+          <div mdbBtn floating="true" size="md" color="blue" mdbWavesEffect>
             <i class="fa fa-cloud-upload" aria-hidden="true"></i>
             <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect (uploadOutput)="onUploadOutput($event)"
               [uploadInput]="uploadInput">
@@ -314,6 +314,8 @@
           <h6 class="font-weight-bold">
             {{i+1}}. Lúc {{ el.dateAssign | date: 'hh:mm aa' }} ngày {{ el.dateAssign | date: 'dd-MM-yyyy' }}
           </h6>
+
+          <p>Giao cho {{el.assignee.name}}</p>
 
           <p *ngIf="!el.description">Không có miêu tả</p>
           <p *ngIf="el.description">Nguyên nhân: {{ el.description }}</p>

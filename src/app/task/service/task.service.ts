@@ -136,12 +136,17 @@ export class TaskService {
       }
     ).toPromise();
   }
-  getAssignHistory(taskId: number): Promise<AssignTaskResponse[]> {
-    return this.httpClient.get<AssignTaskResponse[]>(
+  getAssignHistory(taskId: number, sort: string, fieldSort: string, page: number, size: number): Promise<PaginationResponse> {
+    return this.httpClient.get<PaginationResponse>(
       `${environment.endPoint}${environment.apiPaths.task.getAssignHistory}`,
       {
         params: {
           taskId: `${taskId}`,
+          sort: `${sort}`,
+          fieldSort: `${fieldSort}`,
+          page: `${page}`,
+          size: `${size}`,
+
         }
       }
     ).toPromise();

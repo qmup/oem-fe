@@ -53,7 +53,7 @@ export class LaborerComponent implements OnInit {
   @ViewChild(AgmMap) map: AgmMap;
 
   id: number;
-  searchText: string;
+  searchText = '';
   employeeList: Employee[];
   employeeResponse: PaginationResponse;
   managerList = new Array<any>();
@@ -241,6 +241,8 @@ export class LaborerComponent implements OnInit {
   createEmployee() {
     this.employeeCM.fullName = `${this.employeeCM.firstName} ${this.employeeCM.lastName}`;
     this.employeeCM.address = this.location.address_level_1;
+    this.employeeCM.longitude = this.location.lng;
+    this.employeeCM.latitude = this.location.lat;
     this.filesToUpload ? this.createEmployeeWithImage() : this.createEmployeeWithoutImage();
   }
 

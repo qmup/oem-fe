@@ -73,11 +73,12 @@ export class NotificationService {
   receiveMessage() {
     this.angularFireMessaging.messages.subscribe(
       (payload: any) => {
-
+        console.log(payload);
         const alertInstance = this.toastService.info(
-          payload.notification.body, payload.notification.title, { positionClass: 'toast-bottom-right'} );
+          `${payload.data.sender + payload.data.gcm.notification.messages}`,
+          payload.notification.title, { positionClass: 'toast-bottom-right'} );
           alertInstance.onTap.subscribe(() => {
-            this.router.navigate([`task-detail/${payload.notification.body.taskId}`]);
+            this.router.navigate([`task-detail/${payload.data.task_id}`]);
           });
           this.currentMessage.next(payload);
       });

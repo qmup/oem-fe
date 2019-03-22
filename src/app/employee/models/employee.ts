@@ -17,6 +17,8 @@ export class Employee {
   resetPasswordToken: string;
   roleId: number;
   sex: boolean;
+  latitude: number;
+  longitude: number;
 
   constructor() {
     this.address = '';
@@ -37,6 +39,8 @@ export class Employee {
     this.resetPasswordToken = '';
     this.roleId = 0;
     this.sex = false;
+    this.latitude = 0;
+    this.longitude = 0;
   }
 }
 
