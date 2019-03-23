@@ -7,6 +7,7 @@ import { BeaconComponent } from './components/beacon/beacon.component';
 import { FormsModule } from '@angular/forms';
 import { MDBBootstrapModulesPro, ToastModule } from 'ng-uikit-pro-standard';
 import { BeaconUpdateComponent } from './components/beacon-update/beacon-update.component';
+import { CoreModule } from '../core/core.module';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { BeaconUpdateComponent } from './components/beacon-update/beacon-update.
   imports: [
     CommonModule,
     FormsModule,
+    CoreModule,
     BeaconRoutingModule,
     MDBBootstrapModulesPro.forRoot(),
   ],

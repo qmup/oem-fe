@@ -5,7 +5,7 @@ export class TaskReport {
   photo: string;
   dateReport: string;
   employeeId: number;
-  type: string;
+  type: number;
 
   constructor() {
     this.id = 0;
@@ -14,7 +14,7 @@ export class TaskReport {
     this.photo = '';
     this.dateReport = '';
     this.employeeId = 0;
-    this.type = '';
+    this.type = 0;
   }
 }
 

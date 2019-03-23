@@ -17,7 +17,9 @@
 
           <div class="col-md-12 mx-auto text-left my-3">
             <div class="row">
-              <h5 style="color: #8993a4" class="text-left col-xl-6 col-lg-12">{{userAccount.fullName}} / Các công việc đang phụ trách</h5>
+              <h5 style="color: #8993a4" class="text-left col-xl-6 col-lg-12">
+                <span class="text-primary">{{userAccount.fullName}}</span>
+                 / Các công việc đang phụ trách</h5>
             </div>
             <app-task-search (searchChanged)="search($event)"></app-task-search>
             <table mdbTable mdbTableHover mdbTableScroll scrollX="true" maxWidth="100%">
@@ -116,51 +118,38 @@
         </button>
       </div>
       <div class="modal-body mx-3 row">
-        <div class="md-form mt-0 mb-3 col-6 col-md-12">
+        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
           <input type="text" id="title" class="form-control" mdbInput [(ngModel)]="taskCM.title">
           <label for="title">Tên công việc</label>
         </div>
 
-        <div class="md-form mt-0 mb-3 col-6 col-md-12">
-          <mdb-select [notFoundMsg]="'Không tìm thấy'" [options]="employeeList" [filterEnabled]="true" (selected)="selectEmployee($event)"></mdb-select>
-          <label>Người thực hiện</label>
+        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
+          <mdb-select placeholder="Nhân viên" [notFoundMsg]="'Không tìm thấy'" [options]="employeeList" [filterEnabled]="true" (selected)="selectEmployee($event)"></mdb-select>
+          <!-- <label>Người thực hiện</label> -->
         </div>
 
-        <div class="col-12 md-form my-3">
-          <mdb-select [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="companyList" (selected)="selectCompany($event)"></mdb-select>
-          <label>Công ty</label>
+        <div class="col-12 md-form my-3 px-0">
+          <mdb-select placeholder="Công ty" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="companyList" (selected)="selectCompany($event)"></mdb-select>
         </div>
         
-        <div class="col-12 md-form my-3" *ngIf="isSelectCompany">
-          <mdb-select [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="zoneList" (selected)="selectZone($event)"></mdb-select>
-          <label>Khu vực</label>
+        <div class="col-12 md-form my-3 px-0" *ngIf="isSelectCompany">
+          <mdb-select placeholder="Khu vực" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="zoneList" (selected)="selectZone($event)"></mdb-select>
         </div>
         
-        <div class="col-12 md-form my-3" *ngIf="isSelectZone">
-          <mdb-select [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="placeList" (selected)="selectWorkplace($event)"></mdb-select>
-          <label>Địa điểm</label>
+        <div class="col-12 md-form my-3 px-0" *ngIf="isSelectZone">
+          <mdb-select placeholder="Địa điểm" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="placeList" (selected)="selectWorkplace($event)"></mdb-select>
         </div>
 
         <div *ngIf="isSelectWorkplace" class="d-flex flex-wrap">
           <div *ngFor="let list of taskBasicList; let i of index" class="col-6">
-            <mdb-checkbox [checked]="list.checked" name="item-{{i}}" #checkbox (change)="changeCheckbox(list.id, $event)">{{list.title}}</mdb-checkbox>
+            <mdb-checkbox name="item-{{i}}" [checked]="list.checked" #checkbox (change)="changeCheckbox(list.id, $event)">{{list.title}}</mdb-checkbox>
           </div>
         </div>
 
-        <label class="col-md-2 col-xs-12" style="position: relative">
-          <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px">Từ</span>
-        </label>
-        <div class="md-form col-md-5 col-xs-6">
-          <div class="form-group">
-            <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
-              [(ngModel)]="dateFrom" [placeholder]="'Ngày'">
-          </div>
-        </div>
-        <div class="col-md-5 col-xs-6">
-          <mdb-time-picker [buttonLabel]="'Chọn'" [twelvehour]="false" [darktheme]="false" [placeholder]="'Chọn'"
-            [label]="'Giờ'" [(ngModel)]="timeFrom">
-          </mdb-time-picker>
-        </div>
+        <owl-form-field class="col-12 mt-3 px-0">
+          <input owlInput [min]="minDate" [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker" placeholder="Ngày tạo" [(ngModel)]="taskCM.startTime">
+          <owl-date-time #datepicker></owl-date-time>
+        </owl-form-field>
 
         <!-- <label class="col-md-2 col-xs-12" style="position: relative">
           <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px">Đến</span>
@@ -181,15 +170,13 @@
             class="w-100"></mdb-range-input>
           <span class="ml-2">phút</span>
         </div>
-        <div class="col-12 md-form mt-0 mb-3">
+        <div class="col-12 md-form mt-0 mb-3 px-0">
           <mdb-select class="select-wrapper mdb-select colorful-select dropdown-success" [options]="iconPrioritySelect"
-            [(ngModel)]="taskCM.priority">
+            [(ngModel)]="taskCM.priority" placeholder="Mức độ ưu tiên">
           </mdb-select>
-          <label>Mức độ ưu tiên</label>
         </div>
-        <div class="col-12 md-form mt-0 mb-3">
-          <textarea type="text" id="description" class="md-textarea form-control" mdbInput [(ngModel)]="taskCM.description"></textarea>
-          <label id="description">Miêu tả công việc</label>
+        <div class="col-12 md-form mt-0 mb-3 px-0">
+          <textarea type="text" id="description" class="md-textarea form-control" mdbInput [(ngModel)]="taskCM.description" placeholder="Chi tiết"></textarea>
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-center">
@@ -234,25 +221,25 @@
   </div>
 </div>
 
-<div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
+<div mdbModal #send="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
   aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+  <div class="modal-dialog modal-sm modal-notify modal-primary" role="document">
     <!--Content-->
     <div class="modal-content text-center">
       <!--Header-->
       <div class="modal-header d-flex justify-content-center">
-        <p class="heading">Xóa công việc này?</p>
+        <p class="heading">Gửi thông báo đến nhân viên?</p>
       </div>
 
       <!--Body-->
       <div class="modal-body">
-        <i class="fa fa-times fa-4x animated rotateIn"></i>
+        <i class="fa fa-paper-plane fa-4x animated rotateIn"></i>
       </div>
 
       <!--Footer-->
       <div class="modal-footer flex-center">
-        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeTask()">Đồng ý</a>
-        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">Hủy</a>
+        <a mdbBtn color="primary" outline="true" class="waves-effect" mdbWavesEffect (click)="sendNoti('true')">Gửi</a>
+        <a type="button" mdbBtn color="primary" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="sendNoti('false')">Không</a>
       </div>
     </div>
     <!--/.Content-->

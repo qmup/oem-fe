@@ -5,7 +5,7 @@ import { GlobalService } from 'src/app/core/services/global.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskDetail, Task, TaskModel } from '../../models/task';
 import { ReportService } from 'src/app/report/services/report.service';
-import { TaskReport } from 'src/app/report/models/report';
+import { TaskReport, TaskModel as ReportModel } from 'src/app/report/models/report';
 import { Employee } from 'src/app/employee/models/employee';
 import { PaginationResponse, AssignTask, Shared, AssignTaskResponse } from 'src/app/core/models/shared';
 import { EmployeeService } from 'src/app/employee/services/employee.service';
@@ -27,6 +27,7 @@ export class TaskDetailComponent implements OnInit {
   @ViewChild('assignModal') assignModal: ModalDirective;
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('edit') editTaskBasicModal: ModalDirective;
+  @ViewChild('reportModal') reportModal: ModalDirective;
   iconPrioritySelect: Array<any>;
   iconStatusSelect: Array<any>;
   formData: FormData;
@@ -39,7 +40,7 @@ export class TaskDetailComponent implements OnInit {
   sub: any;
   task: TaskDetail = new TaskDetail();
   report: TaskReport[] = new Array<TaskReport>();
-  picture: string[] = [];
+  picturesReport = [];
   userAccount: Employee;
   taskList: Task[];
   startTime: Date;
@@ -67,6 +68,7 @@ export class TaskDetailComponent implements OnInit {
   historyResponse: PaginationResponse;
   historyAssign: AssignTaskResponse[];
   searchDateRange = [];
+  managerReport: ReportModel = new ReportModel();
 
   constructor(
     // public modalRef: BsModalRef,
@@ -121,11 +123,21 @@ export class TaskDetailComponent implements OnInit {
         (response) => {
           this.report = response;
           if (this.report.length !== 0) {
-            this.report.forEach(element => {
-              if (element.photo.includes(';')) {
-                this.picture = element.photo.split(';');
-              } else {
-                this.picture[0] = element.photo;
+            this.report.forEach((element, i) => {
+              if (element.photo) {
+                if (element.photo.includes(';')) {
+                  this.picturesReport.push({
+                    img: element.photo.split(';'),
+                    thump: element.photo.split(';'),
+                    description: `Hình ${i + 1}`
+                  });
+                } else {
+                  this.picturesReport.push({
+                    img: element.photo,
+                    thump: element.photo,
+                    description: `Hình`
+                  });
+                }
               }
             });
           }
@@ -161,8 +173,19 @@ export class TaskDetailComponent implements OnInit {
       );
   }
 
+  getTaskByDate(e) {
+    const from = this.globalService.convertToYearMonthDay(e.value[0]);
+    const to = this.globalService.convertToYearMonthDay(e.value[1]);
+    this.taskService.getTaskByDate(this.task.assignee.id, from, to, 0, 5)
+      .then(
+        (response) => {
+          this.taskList = response.content;
+        }
+      );
+  }
+
   getEmployeeByManager() {
-    this.employeeService.getEmployeeByManager(this.userAccount.id, 3, '', 'id', 0, 10)
+    this.employeeService.getEmployeeByManager(this.userAccount.id, 3, '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
           this.employeeList = response.content.map((e: Employee) => {
@@ -205,6 +228,7 @@ export class TaskDetailComponent implements OnInit {
 
   loadTask(id: number) {
     this.id = id;
+    this.picturesReport = [];
     this.getTaskDetail(id);
     this.getTaskReport(id);
   }
@@ -240,6 +264,7 @@ export class TaskDetailComponent implements OnInit {
           (response) => {
             if (this.selectedTaskBasic.length - 1 === i) {
               this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
+              this.canRemove = false;
               this.loadTask(this.id);
             }
           },
@@ -311,6 +336,10 @@ export class TaskDetailComponent implements OnInit {
   openEditModal() {
     this.editTaskBasicModal.show();
     this.getTaskBasicByManager();
+  }
+
+  openReportModal() {
+    this.reportModal.show();
   }
 
   openDeleteModal() {
@@ -391,6 +420,19 @@ export class TaskDetailComponent implements OnInit {
         }
       );
   }
+
+  createReport() {
+    this.managerReport.taskId = this.id;
+    this.managerReport.employeeId = this.userAccount.id;
+    this.managerReport.type = 2;
+    this.reportService.update(this.managerReport)
+      .then(
+        (response) => {
+          console.log(response);
+        }
+      );
+  }
+
   changeCheckbox(id: number, event: any) {
     if (event.checked && !this.selectedTaskBasic.includes(el => el.id === id)) {
       this.selectedTaskBasic.push(this.task.checkList.find(el => el.id === id));

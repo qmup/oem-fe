@@ -134,26 +134,26 @@ main#main {
   }
 }
 #task-detail {
-  .col-md-3 {
-    overflow: scroll;
-    max-height: calc(100vh - 170px);
-    margin-top: 1.25rem !important;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-    border: 0;
-    font-weight: 400;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border-radius: 0.25rem;
-    ul.nav.tabs-white.flex-column.nav-stacked {
-      flex: 1 1 auto;
-      padding: 1.25rem;
-    }
-  }
+  // .col-md-3 {
+  //   overflow: scroll;
+  //   max-height: calc(100vh - 170px);
+  //   margin-top: 1.25rem !important;
+  //   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  //   border: 0;
+  //   font-weight: 400;
+  //   position: relative;
+  //   display: flex;
+  //   flex-direction: column;
+  //   min-width: 0;
+  //   word-wrap: break-word;
+  //   background-color: #fff;
+  //   background-clip: border-box;
+  //   border-radius: 0.25rem;
+  //   ul.nav.tabs-white.flex-column.nav-stacked {
+  //     flex: 1 1 auto;
+  //     padding: 1.25rem;
+  //   }
+  // }
   .list-group-item.active {
     color: #fff !important;
   }
@@ -172,12 +172,6 @@ main#main {
   .col-4 .md-form, .col-8 .md-form {
     margin-top: 10px !important;
     margin-bottom: 10px !important;
-  }
-  input.form-control.mydp-date {
-    margin-top: 18px !important;
-  }
-  .mydp.picker .md-form label {
-    top: -.1rem !important;
   }
 }
 // #employee-detail {
@@ -344,4 +338,25 @@ main#main {
   border-radius: 0px;
   left: 4px;
   top: 4px;
+}
+.cdk-overlay-container {
+  position: fixed;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  position: absolute;
+  z-index: 9999999 !important;
+}
+.cdk-global-overlay-wrapper, .cdk-overlay-container {
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  position: absolute;
+  z-index: 9999999 !important;
 }

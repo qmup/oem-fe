@@ -8,7 +8,7 @@ import { PlaceService } from 'src/app/place/services/place.service';
 import { ScheduleService } from '../../service/schedule.service';
 import { ScheduleModel } from '../../models/schedule';
 import { GlobalService } from 'src/app/core/services/global.service';
-import { PaginationResponse, AssignTask } from 'src/app/core/models/shared';
+import { PaginationResponse, AssignTask, NotificationSendingModel } from 'src/app/core/models/shared';
 import { ManageWorkplace, Place, PlacePagination } from 'src/app/place/models/place';
 import { Zone, ZonePagination } from 'src/app/place/models/zone';
 import { ZoneService } from 'src/app/place/services/zone.service';
@@ -34,6 +34,7 @@ export class TaskComponent implements OnInit {
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('schedule') scheduleModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
+  @ViewChild('send') sendNotiModal: ModalDirective;
   employeeList = [];
   workplaceList = [];
   dateFrom: any;
@@ -60,6 +61,9 @@ export class TaskComponent implements OnInit {
   fieldSort = 'startTime:desc';
   sortBoolean = false;
   sortValue = '';
+  minDate = new Date();
+  notification: NotificationSendingModel;
+  addTaskId: number;
 
   constructor(
     private taskService: TaskService,
@@ -123,8 +127,8 @@ export class TaskComponent implements OnInit {
 
 
   suggestTaskBasic() {
-    // this.taskBasicService.getListTaskBasic(this.userAccount.employeeId, '', '', 'id', 0, 99)
-    this.taskBasicService.getListTaskBasic(1, '', '', 'id', 0, 99)
+    this.taskBasicService.getListTaskBasic(this.userAccount.id, '', '', 'id', 0, 99)
+    // this.taskBasicService.getListTaskBasic(1, '', '', 'id', 0, 99)
       .then(
         (response: any) => {
           this.taskBasicList = response.content;
@@ -189,6 +193,7 @@ export class TaskComponent implements OnInit {
   selectCompany(e: any) {
     this.manageWorkplace.companyId = e.value;
     this.isSelectCompany = true;
+    this.isSelectWorkplace = false;
     this.getZone(e.value);
   }
 
@@ -242,7 +247,6 @@ export class TaskComponent implements OnInit {
     this.taskCM.taskBasics = this.selectedTaskBasic;
     this.taskCM.duration *= 60000;
     this.taskCM.dateCreate = new Date().toISOString();
-    this.taskCM.startTime = this.convertDateTime(this.dateFrom, this.timeFrom);
     this.taskService.create(this.taskCM)
       .then(
         (response2) => {
@@ -257,8 +261,7 @@ export class TaskComponent implements OnInit {
                       this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
                       this.createModal.hide();
                       this.scheduleModal.hide();
-                      this.taskList = [];
-                      this.getTask();
+                      this.sendNotiModal.show();
                     },
                     () => {
                       this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -270,20 +273,13 @@ export class TaskComponent implements OnInit {
       );
   }
 
-  removeTask(id: number) {
-    const options = { positionClass: 'toast-bottom-right' };
-    this.taskService.remove(this.id)
-      .then(
-        () => {
-          this.toastService.success('Xóa công việc thành công', '', options);
-          this.deleteModal.hide();
-          this.taskList = [];
-          this.getTask();
-        },
-        () => {
-          this.toastService.error('Đã có lỗi xảy ra' , '', options);
-        }
-      );
+  sendNoti(confirm: string) {
+    this.notification.fromEmployeeId = this.assignTask.assigneeId;
+    this.notification.toEmployeeId = this.assignTask.assignerId;
+    this.notification.taskId = this.assignTask.taskId;
+    this.notification.type = 0;
+    (confirm === 'true') ? (this.globalService.sendNotification(this.notification), this.sendNotiModal.hide()) : this.sendNotiModal.hide();
+    this.getTask();
   }
 
   createSchedule() {
@@ -300,9 +296,7 @@ export class TaskComponent implements OnInit {
     this.scheduleCM.description = this.taskCM.description;
     this.scheduleCM.title = this.taskCM.title;
     // this.scheduleCM.workplaceId = this.taskCM.workplaceId;
-    console.log(this.dateFrom, this.timeFrom);
     this.scheduleCM.startTime = this.convertDateTime(this.dateFrom, this.timeFrom);
-    console.log(this.scheduleCM.startTime);
     this.scheduleCM.endTime = this.convertDateTime(this.dateTo, this.timeTo);
     this.scheduleService.create(this.scheduleCM)
       .then(

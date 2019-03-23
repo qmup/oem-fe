@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { AssignTask } from '../models/shared';
+import { AssignTask, NotificationSendingModel } from '../models/shared';
 import { AuthGuardService } from './auth-guard.service';
 import { Employee } from 'src/app/employee/models/employee';
 
@@ -41,18 +41,18 @@ export class GlobalService {
     },
   ];
   iconStatusSelect = [
-    {
-      value: 1,
-      label: 'Đang thực hiện'
-    },
+    // {
+    //   value: 1,
+    //   label: 'Đang thực hiện'
+    // },
     {
       value: 2,
       label: 'Hoàn thành'
     },
-    // {
-    //   value: 3,
-    //   label: 'Quá hạn'
-    // }
+    {
+      value: 3,
+      label: 'Quá hạn'
+    }
   ];
   optionsSex = [
     { value: 1, label: 'Nam' },
@@ -143,6 +143,20 @@ export class GlobalService {
   assignTask(assignTask: AssignTask): Promise<any> {
     return this.httpClient.post(
       `${environment.endPoint}${environment.apiPaths.assign.assignTask}`, assignTask
+    ).toPromise();
+  }
+
+  sendNotification(noti: NotificationSendingModel) {
+    return this.httpClient.post(
+    `${environment.endPoint}${environment.apiPaths.notify.send}`, noti,
+    {
+      params: {
+        fromEmployeeId: `${noti.fromEmployeeId}`,
+        toEmployeeId: `${noti.toEmployeeId}`,
+        taskId: `${noti.taskId}`,
+        type: `${noti.type}`,
+      }
+    }
     ).toPromise();
   }
 

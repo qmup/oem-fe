@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { ManagerUpdateComponent } from './components/manager-update/manager-update.component';
 import { ManagerDetailComponent } from './components/manager-detail/manager-detail.component';
 import { BsDatepickerModule } from 'ngx-bootstrap';
+import { CoreModule } from '../core/core.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap';
   imports: [
     CommonModule,
     FormsModule,
+    CoreModule,
     MDBBootstrapModulesPro.forRoot(),
     BsDatepickerModule.forRoot(),
     ManagerRoutingModule

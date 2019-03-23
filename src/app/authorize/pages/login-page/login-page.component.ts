@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { AuthGuardService } from 'src/app/core/services/auth-guard.service';
 import { ToastService } from 'ng-uikit-pro-standard';
 import { Employee } from 'src/app/employee/models/employee';
+import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
   selector: 'app-login-page',
@@ -23,6 +24,7 @@ export class LoginPageComponent implements OnInit {
     private authService: AuthService,
     private authGuardService: AuthGuardService,
     private toastService: ToastService,
+    private notificationService: NotificationService,
     private router: Router
   ) { }
 
@@ -39,8 +41,8 @@ export class LoginPageComponent implements OnInit {
             (response2: Employee) => {
               this.globalService.userAccount = response2;
               this.authGuardService.setUserAccount(this.globalService.userAccount);
-              console.log('login');
               this.globalService.isLogin = true;
+              this.notificationService.requestPermission(response2.id);
               this.toastService.success('Đăng nhập thành công', '', { positionClass: 'toast-bottom-right'} );
               this.router.navigate(['']);
               },

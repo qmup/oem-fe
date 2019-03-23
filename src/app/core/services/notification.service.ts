@@ -58,6 +58,7 @@ export class NotificationService {
   requestPermission(userId) {
     this.angularFireMessaging.requestToken.subscribe(
       (token) => {
+        console.log(token);
         this.updateToken(userId, token);
       },
       (err) => {
@@ -72,14 +73,13 @@ export class NotificationService {
   receiveMessage() {
     this.angularFireMessaging.messages.subscribe(
       (payload: any) => {
-        console.log(payload);
-        // const alertInstance = this.toastService.info(
-        //   `${payload.data.sender + payload.data.gcm.notification.messages}`,
-        //   payload.notification.title, { positionClass: 'toast-bottom-right'} );
-        //   alertInstance.onTap.subscribe(() => {
-        //     this.router.navigate([`task-detail/${payload.data.task_id}`]);
-        //   });
-        this.toastService.info(payload.data.sender, payload.notification.title, { positionClass: 'toast-bottom-right' });
+
+        const alertInstance = this.toastService.info(
+          `${payload.data.sender + ' ' + payload.data['gcm.notification.message']}`,
+          payload.notification.title, { positionClass: 'toast-bottom-right'} );
+          alertInstance.onTap.subscribe(() => {
+            this.router.navigate([`task-detail/${payload.data.task_id}`]);
+          });
           this.currentMessage.next(payload);
       });
   }

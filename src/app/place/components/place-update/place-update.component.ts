@@ -6,6 +6,7 @@ import { Beacon } from 'src/app/beacon/models/beacon';
 import { BeaconService } from 'src/app/beacon/services/beacon.service';
 import { ToastService, UploadFile, UploadInput, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
 import { GlobalService } from 'src/app/core/services/global.service';
+import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Component({
   selector: 'app-place-update',
@@ -104,10 +105,10 @@ export class PlaceUpdateComponent implements OnInit {
   }
 
   getBeacon() {
-    this.beaconService.getAll()
+    this.beaconService.getAll('', 'id', 0, 99)
       .then(
-        (response: Beacon[]) => {
-          this.optionsSelect = response.map((beacon) => {
+        (response: PaginationResponse) => {
+          this.optionsSelect = response.content.map((beacon) => {
             return {
               value: beacon.workplaceId,
               label: beacon.name

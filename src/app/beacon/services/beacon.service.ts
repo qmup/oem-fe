@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Beacon } from '../models/beacon';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +17,17 @@ export class BeaconService {
     ).toPromise();
   }
 
-  getAll(): Promise<Beacon[]> {
-    return this.httpClient.get<Beacon[]>(
+  getAll(sort: string, fieldSort: string, page: number, size: number): Promise<PaginationResponse> {
+    return this.httpClient.get<PaginationResponse>(
       `${environment.endPoint}${environment.apiPaths.beacon.getAll}`,
+      {
+        params: {
+          sort: `${sort}`,
+          fieldSort: `${fieldSort}`,
+          page: `${page}`,
+          size: `${size}`
+        }
+      }
     ).toPromise();
   }
 

@@ -41,3 +41,10 @@ export class AssignTaskResponse {
   id: number;
   taskId: number;
 }
+
+export class NotificationSendingModel {
+  fromEmployeeId: number;
+  toEmployeeId: number;
+  taskId: number;
+  type: number;
+}

@@ -6,6 +6,7 @@ import { BeaconUpdateComponent } from '../beacon-update/beacon-update.component'
 import { PlaceService } from 'src/app/place/services/place.service';
 import { Place } from 'src/app/place/models/place';
 import { ToastService } from 'ng-uikit-pro-standard';
+import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Component({
   selector: 'app-beacon',
@@ -21,10 +22,11 @@ export class BeaconComponent implements OnInit {
   haveWorkplace: boolean;
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
-  asd: any;
+  currentPage = 0;
 
   searchText: string;
   placeList: Place[];
+  beaconResponse: PaginationResponse;
 
   constructor(
     private beaconService: BeaconService,
@@ -34,14 +36,14 @@ export class BeaconComponent implements OnInit {
 
   ngOnInit() {
     this.getBeacon();
-    // this.getPlace();
   }
 
   getBeacon() {
-    this.beaconService.getAll()
+    this.beaconService.getAll('', 'id', 0, 10)
       .then(
-        (response: Beacon[]) => {
-          this.beaconList = response;
+        (response: PaginationResponse) => {
+          this.beaconList = response.content;
+          this.beaconResponse = response;
         }
       );
   }
@@ -136,5 +138,10 @@ export class BeaconComponent implements OnInit {
     if (this.searchText) {
       return this.filterIt(this.beaconList, this.searchText);
     }
+  }
+
+  changePage(event) {
+    this.currentPage = event - 1;
+    this.getBeacon();
   }
 }

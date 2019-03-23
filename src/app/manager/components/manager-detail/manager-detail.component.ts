@@ -47,7 +47,7 @@ export class ManagerDetailComponent implements OnInit {
   employeeListByManager: Employee[] = [];
   employeeResponseByManager: PaginationResponse;
   workplaceListByManager: Place[] = [];
-  workplaceResponseByManager: PlacePagination;
+  workplaceResponseByManager: PaginationResponse;
   companyList = [];
   zoneList = [];
   placeList = [];
@@ -59,6 +59,8 @@ export class ManagerDetailComponent implements OnInit {
   deletingWpId: number;
   manageWorkplace: ManageWorkplace = new ManageWorkplace();
   userAccount: Employee;
+  currentPage1 = 0;
+  currentPage2 = 0;
 
   constructor(
     private taskService: TaskService,
@@ -79,8 +81,8 @@ export class ManagerDetailComponent implements OnInit {
     this.userAccount = this.globalService.getUserAccount();
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
-      this.getEmployeeByManager(this.id);
-      this.getWorkplaceByManager(this.id);
+      this.getEmployeeByManager();
+      this.getWorkplaceByManager();
       this.manageWorkplace.managerId = this.id;
     });
     this.getInfo();
@@ -108,13 +110,12 @@ export class ManagerDetailComponent implements OnInit {
               icon: employee.picture
             };
           });
-          console.log(this.employeeList);
         }
       );
   }
 
-  getEmployeeByManager(managerId: number) {
-    this.employeeService.getEmployeeByManager(managerId, 3, '', 'id', 0, 6)
+  getEmployeeByManager() {
+    this.employeeService.getEmployeeByManager(this.id, 3, '', 'id', this.currentPage1, 3)
       .then(
         (response: PaginationResponse) => {
           this.employeeListByManager = response.content;
@@ -123,12 +124,12 @@ export class ManagerDetailComponent implements OnInit {
       );
   }
 
-  getWorkplaceByManager(managerId: number) {
-    this.workplaceService.getWorkplaceByManager(managerId, '', '', 'id', 0, 6)
+  getWorkplaceByManager() {
+    this.workplaceService.getWorkplaceByManager(this.id, '', '', 'id', this.currentPage2, 3)
       .then(
         (response: PlacePagination) => {
           this.workplaceListByManager = response.listOfWorkplace.content;
-          this.workplaceResponseByManager = response;
+          this.workplaceResponseByManager = response.listOfWorkplace;
         }
       );
   }
@@ -224,7 +225,7 @@ export class ManagerDetailComponent implements OnInit {
           this.createEmployeeModal.hide();
           this.employeeListByManager = [];
           this.employeeResponseByManager = new PaginationResponse();
-          this.getEmployeeByManager(this.id);
+          this.getEmployeeByManager();
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -239,8 +240,8 @@ export class ManagerDetailComponent implements OnInit {
           this.toastService.success('Cập nhật thông tin thành công', '', { positionClass: 'toast-bottom-right'} );
           this.createWorkplaceModal.hide();
           this.workplaceListByManager = [];
-          this.workplaceResponseByManager = new PlacePagination();
-          this.getWorkplaceByManager(this.id);
+          this.workplaceResponseByManager = new PaginationResponse();
+          this.getWorkplaceByManager();
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -254,7 +255,7 @@ export class ManagerDetailComponent implements OnInit {
         (response) => {
           console.log(response);
           this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'} );
-          this.getEmployeeByManager(this.id);
+          this.getEmployeeByManager();
           this.removeEmployeeModal.hide();
           this.employeeListByManager = [];
           this.employeeResponseByManager = new PaginationResponse();
@@ -273,10 +274,10 @@ export class ManagerDetailComponent implements OnInit {
         (response) => {
           console.log(response);
           this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'} );
-          this.getWorkplaceByManager(this.id);
+          this.getWorkplaceByManager();
           this.removeWorkplaceModal.hide();
           this.workplaceListByManager = [];
-          this.workplaceResponseByManager = new PlacePagination();
+          this.workplaceResponseByManager = new PaginationResponse();
         },
         (error) => {
           console.log(error);
@@ -293,6 +294,16 @@ export class ManagerDetailComponent implements OnInit {
   toggleWorkplace() {
     this.workplaceToggle.toggle();
     this.isShowMore2 = true;
+  }
+
+  changePage1(event) {
+    this.currentPage1 = event - 1;
+    this.getEmployeeByManager();
+  }
+
+  changePage2(event) {
+    this.currentPage2 = event - 1;
+    this.getWorkplaceByManager();
   }
 
   showFiles() {

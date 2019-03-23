@@ -14,11 +14,10 @@ export class AppComponent implements OnInit {
 
   isRequesting = false;
   userAccount: Employee;
-  message: any;
 
   constructor(
     public globalService: GlobalService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
   ) { }
 
   ngOnInit() {
@@ -29,8 +28,8 @@ export class AppComponent implements OnInit {
         }, isLoading ? 0 : 500);
     });
     this.userAccount = this.globalService.getUserAccount();
-    this.notificationService.requestPermission(this.userAccount.id);
-    this.message = this.notificationService.currentMessage;
+    this.notificationService.receiveMessage();
+
   }
 
 }

@@ -108,14 +108,10 @@
             <div *ngIf="employeeListByManager.length === 0">
               <span class="text-danger pl-3">Chưa quản lý nhân viên nào</span>
             </div>
-            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="!isShowMore1 && employeeListByManager?.length > 3"
-              (click)="toggleEmp()" mdbWavesEffect>
-              Hiện thêm
-            </button>
-            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="isShowMore1" [routerLink]="['/employee']"
-              mdbWavesEffect>
-              Xem tât cả
-            </button>
+            <app-pagination *ngIf="employeeResponseByManager?.totalPages > 1" [pageSize]="employeeResponseByManager.size"
+              [totalPage]="employeeResponseByManager.totalPages" [currentPage]="employeeResponseByManager.number"
+              (changePage)="changePage1($event)">
+            </app-pagination>
           </div>
         </mdb-card-body>
       </mdb-card>
@@ -131,7 +127,7 @@
             </div>
           </mdb-card-title>
           <div class="list-group">
-            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let wp of workplaceListByManager | slice:0:3">
+            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let wp of workplaceListByManager">
               <div class="avatar">
                 <img [src]="wp.picture" alt="" class="rounded-circle img-responsive list-avatar">
               </div>
@@ -147,7 +143,7 @@
               </div>
             </a>
             <div class="list-group" mdbCollapse #moreWP="bs-collapse" *ngIf="workplaceListByManager?.length > 3">
-              <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let wp of workplaceListByManager | slice:3">
+              <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let wp of workplaceListByManager">
                 <div class="avatar">
                   <img [src]="wp.picture" alt="" class="rounded-circle img-responsive list-avatar">
                 </div>
@@ -162,9 +158,10 @@
                   </button>
                 </div>
               </a>
-              <div *ngIf="workplaceListByManager.length === 0">
-                <span class="text-danger">Chưa quản lý nơi làm việc nào</span>
-              </div>
+              <app-pagination *ngIf="workplaceResponseByManager?.totalPages > 1" [pageSize]="workplaceResponseByManager.size"
+                [totalPage]="workplaceResponseByManager.totalPages" [currentPage]="workplaceResponseByManager.number"
+                (changePage)="changePage2($event)">
+              </app-pagination>
             </div>
             <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="!isShowMore2 && workplaceListByManager?.length > 3"
               (click)="toggleWorkplace()" mdbWavesEffect>
