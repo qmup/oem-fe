@@ -20,6 +20,9 @@ export class Task {
   title: string;
   taskBasics: TaskBasic[];
   editable: boolean;
+  endTime: string;
+  workplaceName: string;
+  companyDTO: CompanyDTO;
 
   constructor() {
     this.attendanceStatus = 0;

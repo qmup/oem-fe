@@ -61,6 +61,7 @@
                   Địa chỉ
                   <mdb-icon icon="sort"></mdb-icon>
                 </th>
+                <th *ngIf="userAccount.roleId === 2">Trạng thái</th>
                 <th [ngStyle]="userAccount.roleId === 1 && {'width': '300px', 'max-width': '300px'}">Thao tác</th>
               </tr>
             </thead>
@@ -78,6 +79,15 @@
                 <!-- <td>{{data.sex ? 'Nam' : 'Nữ'}}</td> -->
                 <td>{{data.phoneNumber}}</td>
                 <td>{{data.address}}</td>
+                <td *ngIf="userAccount.roleId === 2" class="text-nowrap">
+                  <div class="switch rounded blue-white-switch">
+                    <label>
+                      Tạm nghỉ
+                      <input type="checkbox" (change)="switch($event, data.id)" [(ngModel)]="data.status">
+                      <span class="lever"></span> Tiếp tục
+                    </label>
+                  </div>
+                </td>
                 <td class="d-flex justify-content-start">
                   <button *ngIf="data.roleId !== 2" title="Chi tiết" mdbBtn type="button" rounded="true" color="warning"
                     class="waves-light" size="sm" mdbWavesEffect [routerLink]="['/employee-detail', data.id]">

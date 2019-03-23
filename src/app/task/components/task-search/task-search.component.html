@@ -1,8 +1,8 @@
 <div class="d-flex flex-wrap pt-3" id="task-search">
   
   <div class="col-xl-2 col-md-4 col-xs-6 col-12 md-form my-0">
-    <input mdbInput type="text" id="title" class="form-control" [(ngModel)]="title">
-    <label for="title" class="">Tên công việc</label>
+    <input mdbInput type="number" min="1" id="id" class="form-control" [(ngModel)]="taskId">
+    <label for="id" class="">Mã số</label>
   </div>
 
   <!-- <div class="col-xl-2 col-md-4 col-xs-6 col-12">
@@ -39,12 +39,17 @@
     <label for="duration" class="">Thời lượng (phút)</label>
   </div>
 
-  <owl-form-field class="col-xl-3 col-md-4 col-xs-6 col-12 mt-3" *ngIf="selectDateCreate">
+  <div class="col-xl-2 col-md-4 col-xs-6 col-12 mb-0 md-form mt-3" *ngIf="selectTitle">
+    <input mdbInput type="text" id="title" class="form-control" [(ngModel)]="title">
+    <label for="title" class="">Tên công việc</label>
+  </div>
+
+  <owl-form-field class="col-xl-2 col-md-4 col-xs-6 col-12 mt-3" *ngIf="selectDateCreate">
     <input owlInput [selectMode]="'range'" [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker" placeholder="Ngày tạo" [(ngModel)]="dateCreate">
     <owl-date-time [pickerType]="'calendar'" #datepicker></owl-date-time>
   </owl-form-field>
 
-  <owl-form-field class="col-xl-3 col-md-4 col-xs-6 col-12 mt-3" *ngIf="selectDateUpdate">
+  <owl-form-field class="col-xl-2 col-md-4 col-xs-6 col-12 mt-3" *ngIf="selectDateUpdate">
     <input owlInput [selectMode]="'range'" [owlDateTimeTrigger]="datepicker1" [owlDateTime]="datepicker1" placeholder="Ngày cập nhật" [(ngModel)]="dateUpdate">
     <owl-date-time #datepicker1 [pickerType]="'calendar'"></owl-date-time>
   </owl-form-field>

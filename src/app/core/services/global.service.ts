@@ -84,7 +84,8 @@ export class GlobalService {
     { value: 3, label: 'Vắng mặt'},
   ];
   moreList = [
-    { value: 4, label: 'Thời gian' },
+    { value: 4, label: 'Tên công việc' },
+    { value: 5, label: 'Thời gian' },
     { value: 3, label: 'Ngày tạo' },
     { value: 2, label: 'Thời lượng' },
     { value: 1, label: 'Ngày cập nhật' },

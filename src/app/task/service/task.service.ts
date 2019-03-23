@@ -67,7 +67,7 @@ export class TaskService {
       }
     ).toPromise();
   }
-  getTodayTask(assigneeId: number): Promise<Task[]> {
+  getTodayTaskByEmployee(assigneeId: number): Promise<Task[]> {
     return this.httpClient.get<Task[]>(
       `${environment.endPoint}${environment.apiPaths.task.getTodayTask}?assigneeId=${assigneeId}`
     ).toPromise();
@@ -89,7 +89,7 @@ export class TaskService {
       `${environment.endPoint}${environment.apiPaths.task.updateWorkplace}/${taskId}/${workplaceId}`, {}
     ).toPromise();
   }
-  getTodayTaskByEmployee(assignerId: number): Promise<any> {
+  getTodayTaskByManager(assignerId: number): Promise<any> {
     return this.httpClient.get<Task[]>(
       `${environment.endPoint}${environment.apiPaths.task.getTodayTask}?assignerId=${assignerId}`
     ).toPromise();

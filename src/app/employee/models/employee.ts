@@ -19,6 +19,7 @@ export class Employee {
   sex: boolean;
   latitude: number;
   longitude: number;
+  active: number;
 
   constructor() {
     this.address = '';

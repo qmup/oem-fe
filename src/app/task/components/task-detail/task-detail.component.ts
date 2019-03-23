@@ -66,6 +66,7 @@ export class TaskDetailComponent implements OnInit {
   taskBasicCMList = [];
   historyResponse: PaginationResponse;
   historyAssign: AssignTaskResponse[];
+  searchDateRange = [];
 
   constructor(
     // public modalRef: BsModalRef,
@@ -87,7 +88,7 @@ export class TaskDetailComponent implements OnInit {
 
   ngOnInit() {
     this.userAccount = this.globalService.getUserAccount();
-    this.getTodayTask();
+    // this.getTodayTask();
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
     });
@@ -109,6 +110,7 @@ export class TaskDetailComponent implements OnInit {
             new Date(this.task.startTime),
             new Date(this.task.endTime)
           ];
+          this.getTodayTaskByEmployee();
         }
       );
   }
@@ -146,6 +148,15 @@ export class TaskDetailComponent implements OnInit {
       .then(
         (response) => {
           this.taskList = response.content;
+        }
+      );
+  }
+
+  getTodayTaskByEmployee() {
+    this.taskService.getTodayTaskByEmployee(this.task.assignee.id)
+      .then(
+        (response) => {
+          this.taskList = response;
         }
       );
   }

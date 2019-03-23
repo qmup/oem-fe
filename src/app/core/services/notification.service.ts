@@ -73,12 +73,13 @@ export class NotificationService {
     this.angularFireMessaging.messages.subscribe(
       (payload: any) => {
         console.log(payload);
-        const alertInstance = this.toastService.info(
-          `${payload.data.sender + payload.data.gcm.notification.messages}`,
-          payload.notification.title, { positionClass: 'toast-bottom-right'} );
-          alertInstance.onTap.subscribe(() => {
-            this.router.navigate([`task-detail/${payload.data.task_id}`]);
-          });
+        // const alertInstance = this.toastService.info(
+        //   `${payload.data.sender + payload.data.gcm.notification.messages}`,
+        //   payload.notification.title, { positionClass: 'toast-bottom-right'} );
+        //   alertInstance.onTap.subscribe(() => {
+        //     this.router.navigate([`task-detail/${payload.data.task_id}`]);
+        //   });
+        this.toastService.info(payload.data.sender, payload.notification.title, { positionClass: 'toast-bottom-right' });
           this.currentMessage.next(payload);
       });
   }

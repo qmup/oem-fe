@@ -186,6 +186,13 @@ export class LaborerComponent implements OnInit {
   //     );
   // }
 
+  switch(e: any, employeeId) {
+    e.target.checked ?
+      this.employeeService.updateField(employeeId, 'status', 1) :
+      this.employeeService.updateField(employeeId, 'status', 2);
+    this.getEmployee();
+  }
+
   openCreateModal() {
     this.createModal.show();
   }
@@ -243,6 +250,7 @@ export class LaborerComponent implements OnInit {
     this.employeeCM.address = this.location.address_level_1;
     this.employeeCM.longitude = this.location.lng;
     this.employeeCM.latitude = this.location.lat;
+    (this.gender === 0) ? this.employeeCM.sex = false : this.employeeCM.sex = true;
     this.filesToUpload ? this.createEmployeeWithImage() : this.createEmployeeWithoutImage();
   }
 
@@ -257,7 +265,6 @@ export class LaborerComponent implements OnInit {
     this.globalService.uploadFile(formData, 'image/employee/')
       .then(
         (response) => {
-          (this.gender === 0) ? this.employeeCM.sex = false : this.employeeCM.sex = true;
           this.employeeCM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employeeCM.birthDate));
           this.employeeCM.picture = response;
           this.employeeService.create(this.employeeCM)
@@ -280,7 +287,6 @@ export class LaborerComponent implements OnInit {
   }
 
   createEmployeeWithoutImage() {
-    (this.gender === 0) ? this.employeeCM.sex = false : this.employeeCM.sex = true;
     this.employeeCM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employeeCM.birthDate));
     this.employeeService.create(this.employeeCM)
       .then(

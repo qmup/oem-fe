@@ -16,11 +16,11 @@
           <!--Content-->
           <div class="card-body">
             <h4>{{ employee.fullName }}</h4>
-            <p class="text-danger">Chức vụ: Lao công</p>
+            <p class="text-danger font-weight-normal">Chức vụ: Lao công</p>
 
             <!-- Button for manager -->
             <!-- Triggering button-->
-            <a class="rotate-btn" data-card="card-1" (click)="cards.toggle()">Chi tiết </a>
+            <a *ngIf="userAccount.roleId === 2" class="rotate-btn font-weight-normal" data-card="card-1" (click)="cards.toggle()">Chi tiết </a>
           </div>
         </div>
         <!--/.Front Side-->
@@ -66,18 +66,18 @@
               <p class="h5">Công việc trong ngày</p>
             </div>
             <div class="col pl-0">
-              <a [routerLink]="['/task']" class="link">Xem tất cả</a>
+              <!-- <a [routerLink]="['/task']" class="link">Xem tất cả</a> -->
               <!-- <a class="btn-floating btn-md btn-success"><i class="fa fa-plus"></i></a> -->
             </div>
           </mdb-card-title>
 
           <div class="list-group">
-            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let task of taskList | slice:0:3" [routerLink]="['/task-detail', task.id]">
+            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let task of taskList" [routerLink]="['/task-detail', task.id]">
               <i class="fa fa-trash mt-2 col"></i>
               <div class="col-9">
-                {{task.title}}
+                {{task.title}} từ {{ task.startTime | date: 'hh:mm'}} đến {{task.endTime | date: 'hh:mm'}}
                 <br>
-                <small>{{task.description}}</small>
+                <small>Tại {{task.companyDTO.name}} - {{task.workplaceName}}</small>
               </div>
               <div class="col-2">
                 <button mdbBtn type="button" color="danger" size="sm" rounded="true" mdbWavesEffect (click)="openRemoveTaskModal(task.id)">
@@ -85,32 +85,9 @@
                 </button>
               </div>
             </a>
-            <div class="list-group" mdbCollapse #moreTask="bs-collapse" *ngIf="taskList?.length > 3">
-              <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let task of taskList | slice:3">
-                <i class="fa fa-trash mt-2 col"></i>
-                <div class="col-9">
-                  {{task.title}}
-                  <br>
-                  <small>{{task.description}}</small>
-                </div>
-                <div class="col-2">
-                  <button mdbBtn type="button" color="danger" size="sm" rounded="true" mdbWavesEffect (click)="openRemoveTaskModal(task.id)">
-                    <i class="fa fa-ban"></i>
-                  </button>
-                </div>
-              </a>
-            </div>
             <div *ngIf="taskList.length === 0">
               <span class="text-danger col-12">Không có công việc hôm nay!</span>
             </div>
-            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="!isShowMore && taskList?.length > 3"
-              (click)="toggleTask()" mdbWavesEffect>
-              Hiện thêm
-            </button>
-            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="isShowMore" [routerLink]="['/task']"
-              mdbWavesEffect>
-              Xem danh sách công việc
-            </button>
           </div>
         </mdb-card-body>
       </mdb-card>

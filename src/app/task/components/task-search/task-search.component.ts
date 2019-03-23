@@ -26,6 +26,7 @@ export class TaskSearchComponent implements OnInit {
   userAccount: Employee;
   currentPage = 0;
 
+  selectTitle = false;
   selectDateUpdate = false;
   selectDateCreate = false;
   selectDateStart = false;
@@ -33,14 +34,18 @@ export class TaskSearchComponent implements OnInit {
 
   filterRequest = '';
   filterRequestArray = [];
+
   searchRequest = '';
   searchRequestArray = [];
-  sortRequest = 'title:asc';
+
+  sortRequest = 'startTime:desc';
 
   assigneeString = `"ASSIGNEE":`;
   statusString = `"status":`;
   workplaceString = `"WORKPLACE":`;
   attendanceString = `"attendanceStatus":`;
+  titleString = `"title":`;
+  idString = `"id":`;
 
   statusArrayId = [];
   assigneeArrayId = [];
@@ -51,12 +56,12 @@ export class TaskSearchComponent implements OnInit {
   dateUpdateString = `"dateUpdate":`;
   durationString = `"duration":`;
   startTimeString = `"startTime":`;
-  titleString = `"title":`;
 
   dateCreate = [];
   dateUpdate = [];
-  duration = 0;
+  duration: number;
   title = '';
+  taskId: number;
   startTime = [];
 
   constructor(
@@ -113,6 +118,8 @@ export class TaskSearchComponent implements OnInit {
       this.selectDuration = true;
     } else if (e.value === 3) {
       this.selectDateCreate = true;
+    } else if (e.value === 4) {
+      this.selectTitle = true;
     } else {
       this.selectDateStart = true;
     }
@@ -125,6 +132,8 @@ export class TaskSearchComponent implements OnInit {
       this.selectDuration = false;
     } else if (e.value === 3) {
       this.selectDateCreate = false;
+    } else if (e.value === 4) {
+      this.selectTitle = false;
     } else {
       this.selectDateStart = false;
     }
@@ -201,7 +210,7 @@ export class TaskSearchComponent implements OnInit {
     this.filterRequestArray = [];
     this.searchRequest = '';
     this.searchRequestArray = [];
-    this.sortRequest = 'title:asc';
+    this.sortRequest = 'startTime:desc';
 
     this.assigneeString = `"ASSIGNEE":`;
     this.statusString = `"status":`;
@@ -211,14 +220,10 @@ export class TaskSearchComponent implements OnInit {
     this.dateCreateString = `"dateCreate":`;
     this.dateUpdateString = `"dateUpdate":`;
     this.durationString = `"duration":`;
+    this.titleString = `"title":`;
     this.startTimeString = `"startTime":`;
     this.titleString = `"title":`;
 
-    this.dateCreate = [];
-    this.dateUpdate = [];
-    this.duration = 0;
-    this.title = '';
-    this.startTime = [];
   }
 
   search() {
@@ -244,18 +249,35 @@ export class TaskSearchComponent implements OnInit {
       this.titleString += '"';
       this.searchRequestArray.push(this.titleString);
     }
+    if (this.taskId) {
+      this.idString += '"' + this.taskId;
+      this.idString += '"';
+      this.searchRequestArray.push(this.idString);
+    }
     if (this.selectDateCreate && this.dateCreate.length > 0) {
-      this.dateCreateString += '"' + (this.dateCreate[0].toISOString() + ';' + this.dateCreate[1].toISOString());
+      if (this.dateCreate.length === 1) {
+        this.dateCreateString += '"' + (this.dateCreate[0].toISOString());
+      } else {
+        this.dateCreateString += '"' + (this.dateCreate[0].toISOString() + ';' + this.dateCreate[1].toISOString());
+      }
       this.dateCreateString += '"';
       this.searchRequestArray.push(this.dateCreateString);
     }
     if (this.selectDateStart && this.startTime.length > 0) {
-      this.startTimeString += '"' + (this.startTime[0].toISOString() + ';' + this.startTime[1].toISOString());
+      if (this.startTime.length === 1) {
+        this.startTimeString += '"' + (this.startTime[0].toISOString());
+      } else {
+        this.startTimeString += '"' + (this.startTime[0].toISOString() + ';' + this.startTime[1].toISOString());
+      }
       this.startTimeString += '"';
       this.searchRequestArray.push(this.startTimeString);
     }
     if (this.selectDateUpdate && this.dateUpdate.length > 0) {
-      this.dateUpdateString += '"' + (this.dateUpdate[0].toISOString() + ';' + this.dateUpdate[1].toISOString());
+      if (this.dateUpdate.length === 1) {
+        this.dateUpdateString += '"' + (this.dateUpdate[0].toISOString());
+      } else {
+        this.dateUpdateString += '"' + (this.dateUpdate[0].toISOString() + ';' + this.dateUpdate[1].toISOString());
+      }
       this.dateUpdateString += '"';
       this.searchRequestArray.push(this.dateUpdateString);
     }

@@ -57,7 +57,7 @@ export class TaskComponent implements OnInit {
   taskBasic = [];
   selectedTaskBasic = [];
   currentPage = 0;
-  fieldSort = 'title:asc';
+  fieldSort = 'startTime:desc';
   sortBoolean = false;
   sortValue = '';
 
@@ -77,7 +77,7 @@ export class TaskComponent implements OnInit {
     this.userAccount = this.globalService.getUserAccount();
     this.manageWorkplace.managerId = this.userAccount.id;
     this.assignTask.assignerId = this.userAccount.id;
-    this.assignTask.dateAssign = this.globalService.convertToYearMonthDay(new Date());
+    this.assignTask.assigneeId = 0;
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
     this.week = this.globalService.week;
     this.getTask();
@@ -104,9 +104,9 @@ export class TaskComponent implements OnInit {
     this.sortBoolean = ! this.sortBoolean;
     this.fieldSort = field;
     if (this.sortBoolean) {
-      this.sortValue += 'asc';
+      this.fieldSort += ':asc';
     } else {
-      this.sortValue += 'desc';
+      this.fieldSort += ':desc';
     }
     this.getTask();
   }
@@ -190,6 +190,10 @@ export class TaskComponent implements OnInit {
     this.manageWorkplace.companyId = e.value;
     this.isSelectCompany = true;
     this.getZone(e.value);
+  }
+
+  selectEmployee(e: any) {
+    this.assignTask.assigneeId = e.value;
   }
 
   getZone(companyId: number) {
@@ -314,6 +318,7 @@ export class TaskComponent implements OnInit {
 
   openCreateModal() {
     this.createModal.show();
+    this.taskCM.duration = 10;
   }
 
   openDeleteModal(id: number) {

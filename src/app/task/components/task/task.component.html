@@ -17,21 +17,20 @@
 
           <div class="col-md-12 mx-auto text-left my-3">
             <div class="row">
-              <h6 class="text-left col-xl-6 col-lg-12">{{userAccount.fullName}} / Các công việc đang phụ trách</h6>
+              <h5 style="color: #8993a4" class="text-left col-xl-6 col-lg-12">{{userAccount.fullName}} / Các công việc đang phụ trách</h5>
             </div>
             <app-task-search (searchChanged)="search($event)"></app-task-search>
-            <h4 class="text-left pt-3">Công việc</h4>
-            <table class="table table-hover table-responsive-md" cellspacing="0" width="100%">
+            <table mdbTable mdbTableHover mdbTableScroll scrollX="true" maxWidth="100%">
               <thead>
-                <tr>
+                <tr scole="col">
+                  <th (click)="sort('id')">
+                    Mã công việc 
+                    <mdb-icon icon="sort"></mdb-icon>
+                  </th>
                   <th (click)="sort('title')">
                     Công việc
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
-                  <!-- <th (click)="sort('description')">
-                    Miêu tả
-                    <mdb-icon icon="sort"></mdb-icon>
-                  </th> -->
                   <th (click)="sort('workplaceName')">
                     Địa điểm
                     <mdb-icon icon="sort"></mdb-icon>
@@ -52,37 +51,48 @@
                     Thời gian
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
+                  <th (click)="sort('dateUpdate')">
+                    Ngày cập nhật
+                    <mdb-icon icon="sort"></mdb-icon>
+                  </th>
                   <!-- <th>
                     Thao tác
                   </th> -->
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let task of taskList" [routerLink]="['/task-detail', task.id]">
-                  <td (click)="sort('title')">{{ task.title }}</td>
+                <tr mdbTableCol *ngFor="let task of taskList" [routerLink]="['/task-detail', task.id]">                  
+                  <th scope="row">Công việc [{{ task.id }}]</th>
+                  <td>{{ task.title }}</td>
                   <!-- <td>{{ task.description }}</td> -->
-                  <td (click)="sort('workplaceName')">{{ task.workplaceName }}</td>
-                  <td (click)="sort('assigneeName')">
+                  <td>{{ task.workplaceName }}</td>
+                  <td>
                     <img [src]="task.assigneePicture" class="rounded-circle img-responsive list-avatar mr-2">{{ task.assigneeName }}
                   </td>
-                  <td (click)="sort('status')">
+                  <td>
                     <span *ngIf="task.status === 0" style="font-size: 13px" class="badge badge-light">Chưa bắt đầu</span>
                     <span *ngIf="task.status === 1" style="font-size: 13px" class="badge badge-primary">Đang thực hiện</span>
                     <span *ngIf="task.status === 2" style="font-size: 13px" class="badge badge-success">Hoàn thành</span>
                     <span *ngIf="task.status === 3" style="font-size: 13px" class="badge badge-danger">Quá hạn</span>
+                    <span *ngIf="task.status === 4" style="font-size: 13px" class="badge badge-warning">Đang chờ duyệt</span>
                   </td>
-                  <td (click)="sort('attendanceStatus')">
+                  <td>
                     <span *ngIf="task.attendanceStatus === 0" style="font-size: 13px" class="badge badge-light">Chưa điểm danh</span>
                     <span *ngIf="task.attendanceStatus === 1" style="font-size: 13px" class="badge badge-success">Đúng giờ</span>
                     <span *ngIf="task.attendanceStatus === 2" style="font-size: 13px" class="badge badge-warning">Trễ</span>
                     <span *ngIf="task.attendanceStatus === 3" style="font-size: 13px" class="badge badge-danger">Vắng mặt</span>
                   </td>
-                  <td (click)="sort('startTime')">{{ task.startTime | date: 'HH:mm aa dd/MM' }} ~ {{
-                    task.endTime | date: 'HH:mm aa dd/MM' }}</td>
+                  <td>
+                    Ngày {{task.startTime | date: 'dd/MM'}}: {{ task.startTime | date: 'HH:mm' }} ~ {{ task.endTime | date: 'HH:mm' }} 
+                  </td>
+                  <td *ngIf="task.dateUpdate">
+                    Ngày {{task.dateUpdate | date: 'dd/MM'}}: {{ task.dateUpdate | date: 'HH:mm' }} ~ {{ task.dateUpdate | date: 'HH:mm' }} 
+                  </td>
+                  <td *ngIf="!task.dateUpdate"></td>
                   </tr>
                 </tbody>
-                <div *ngIf="taskList?.length === 0" class="col-12">
-                  <span class="text-danger">Không tìm thấy kết quả phù hợp</span>
+                <div *ngIf="taskList?.length === 0" class="col-12 pt-5">
+                  <h6 class="text-danger">Không tìm thấy kết quả phù hợp</h6>
                 </div>
             </table>
             <app-pagination *ngIf="taskListResponse?.totalPages > 1" [pageSize]="taskListResponse.size" [totalPage]="taskListResponse.totalPages"
@@ -112,21 +122,25 @@
         </div>
 
         <div class="md-form mt-0 mb-3 col-6 col-md-12">
-          <mdb-select [placeholder]="'Người thực hiện'" [options]="employeeList" [filterEnabled]="true" [(ngModel)]="assignTask.assigneeId"></mdb-select>
+          <mdb-select [notFoundMsg]="'Không tìm thấy'" [options]="employeeList" [filterEnabled]="true" (selected)="selectEmployee($event)"></mdb-select>
+          <label>Người thực hiện</label>
         </div>
 
         <div class="col-12 md-form my-3">
           <mdb-select [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="companyList" (selected)="selectCompany($event)"></mdb-select>
           <label>Công ty</label>
         </div>
+        
         <div class="col-12 md-form my-3" *ngIf="isSelectCompany">
           <mdb-select [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="zoneList" (selected)="selectZone($event)"></mdb-select>
           <label>Khu vực</label>
         </div>
+        
         <div class="col-12 md-form my-3" *ngIf="isSelectZone">
           <mdb-select [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="placeList" (selected)="selectWorkplace($event)"></mdb-select>
           <label>Địa điểm</label>
         </div>
+
         <div *ngIf="isSelectWorkplace" class="d-flex flex-wrap">
           <div *ngFor="let list of taskBasicList; let i of index" class="col-6">
             <mdb-checkbox [checked]="list.checked" name="item-{{i}}" #checkbox (change)="changeCheckbox(list.id, $event)">{{list.title}}</mdb-checkbox>
@@ -163,7 +177,7 @@
         </div> -->
         <span>Thời gian hoàn thành</span>
         <div class="w-100 d-flex justify-content-center align-items-center my-3">
-          <mdb-range-input id="range" [min]="0" [step]="10" [max]="300" name="range" [(ngModel)]="taskCM.duration"
+          <mdb-range-input id="range" [min]="10" [step]="10" [max]="300" name="range" [(ngModel)]="taskCM.duration"
             class="w-100"></mdb-range-input>
           <span class="ml-2">phút</span>
         </div>

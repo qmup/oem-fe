@@ -84,7 +84,6 @@ export class ManagerDetailComponent implements OnInit {
       this.manageWorkplace.managerId = this.id;
     });
     this.getInfo();
-    this.getEmployeeTask();
     this.getEmployeeWithoutManager();
     this.getCompany();
   }
@@ -94,15 +93,6 @@ export class ManagerDetailComponent implements OnInit {
       .then(
         (response: Manager) => {
           this.manager = response;
-        }
-      );
-  }
-
-  getEmployeeTask() {
-    this.taskService.getTodayTask(1)
-      .then(
-        (response) => {
-          this.taskList = response;
         }
       );
   }

@@ -8,14 +8,24 @@
 
           <!--Title-->
           <h4 class="text-center font-weight-bold">Danh sách công việc</h4>
-
+          <h6 class="text-center">Nhân viên: 
+            <span class="text-primary" style="cursor: pointer; font-size: 18px; font-weight: 500" [routerLink]="['/employee-detail', task.assignee.id]">
+              {{ task.assignee.name }}
+            </span>
+          </h6>
           <hr>
+          <div class="col text-center">
+            <owl-form-field class="w-100 px-3">
+              <input owlInput class="text-center" [(ngModel)]="searchDateRange" [selectMode]="'range'" [owlDateTimeTrigger]="datepicker"
+                [owlDateTime]="datepicker" placeholder="Thời gian công việc">
+              <owl-date-time #datepicker [pickerType]="'calendar'"></owl-date-time>
+            </owl-form-field>
+          </div>
           <!--Text-->
           <ul class="list-group list-group-flush pt-3">
-            <!-- <a class="list-group-item active waves-light">92</a> -->
             <a *ngFor="let task of taskList; let i = index" class="list-group-item list-group-item-action waves-light"
               [ngClass]="{'list-group-item-action': task.id !== id, 'active': task.id === id}" mdbWavesEffect (click)="loadTask(task.id)">{{i+1}}.
-              {{task.title}}</a>
+              {{task.title}} lúc {{task.startTime | date: 'hh:mm aa'}}</a>
           </ul>
 
         </mdb-card-body>
@@ -29,21 +39,23 @@
           </div>
 
           <div class="d-flex flex-wrap">
-            <div class="col-4">
-              <p class="h6 pl-0 mt-4">Tên công việc</p>
-              <p class="h6 mt-3" *ngIf="task.status !== 0">{{task.title}} </p>
+            <div class="col-12 mt-4">
 
-              <div class="md-form" *ngIf="task.status === 0">
-                <input mdbInput type="text" class="form-control" [(ngModel)]="task.title" (blur)="updateTitle()">
+              <p class="h4 pl-0 mt-4" *ngIf="task.status !== 0">Tên công việc: {{task.title}}</p>
+              
+              <div class="md-form my-0" *ngIf="task.status === 0">
+                <input mdbInput type="text" class="form-control" [ngModel]="task.title" (ngModelChange)="updateTitle()">
+                <label>Tên công việc</label>
               </div>
 
             </div>
-            <div class="col-8">
-              <p class="h6 pl-0 mt-4">Miêu tả công việc</p>
-              <p class="h6   mt-3" *ngIf="task.status !== 0">{{task.description}} </p>
 
-              <div class="md-form" *ngIf="task.status === 0">
+            <div class="col-12 mt-4">
+              <p class="h4 pl-0 mt-4" *ngIf="task.status !== 0">Miêu tả công việc</p>
+              
+              <div class="md-form my-0" *ngIf="task.status === 0">
                 <input mdbInput type="text" class="form-control" [(ngModel)]="task.description" (blur)="updateDescription()">
+                <label>Miêu tả công việc</label>
               </div>
 
             </div>

@@ -52,7 +52,7 @@ import { TaskSearchComponent } from './components/task-search/task-search.compon
     PlaceTaskBasicComponent,
   ],
   providers: [
-    {provide: OWL_DATE_TIME_LOCALE, useValue: 'in'},
+    {provide: OWL_DATE_TIME_LOCALE, useValue: 'en-GB'},
   ],
 })
 export class TaskModule { }

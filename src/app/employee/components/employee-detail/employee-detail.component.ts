@@ -58,6 +58,7 @@ export class EmployeeDetailComponent implements OnInit {
       this.id = +params['id'];
       this.getEmployeeDetail(this.id);
     });
+    this.getTodayTaskByEmployee();
     // this.getManager();
   }
 
