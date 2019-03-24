@@ -123,33 +123,43 @@
           <label for="title">Tên công việc</label>
         </div>
 
+        <owl-form-field class="col-12 px-0">
+          <input owlInput [min]="minDate" [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker" placeholder="Thời gian bắt đầu" [(ngModel)]="taskCM.startTime">
+          <owl-date-time #datepicker></owl-date-time>
+        </owl-form-field>
+        
         <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
           <mdb-select placeholder="Nhân viên" [notFoundMsg]="'Không tìm thấy'" [options]="employeeList" [filterEnabled]="true" (selected)="selectEmployee($event)"></mdb-select>
           <!-- <label>Người thực hiện</label> -->
         </div>
 
-        <div class="col-12 md-form my-3 px-0">
+        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
           <mdb-select placeholder="Công ty" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="companyList" (selected)="selectCompany($event)"></mdb-select>
         </div>
         
-        <div class="col-12 md-form my-3 px-0" *ngIf="isSelectCompany">
+        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0" *ngIf="isSelectCompany">
           <mdb-select placeholder="Khu vực" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="zoneList" (selected)="selectZone($event)"></mdb-select>
         </div>
         
-        <div class="col-12 md-form my-3 px-0" *ngIf="isSelectZone">
+        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0" *ngIf="isSelectZone">
           <mdb-select placeholder="Địa điểm" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="placeList" (selected)="selectWorkplace($event)"></mdb-select>
         </div>
 
-        <div *ngIf="isSelectWorkplace" class="d-flex flex-wrap">
+        <hr>
+
+        <div *ngIf="isSelectWorkplace" class="d-flex flex-wrap w-100">
+          <p class="h6 col-12 px-0">Danh sách công việc gợi ý</p>
           <div *ngFor="let list of taskBasicList; let i of index" class="col-6">
             <mdb-checkbox name="item-{{i}}" [checked]="list.checked" #checkbox (change)="changeCheckbox(list.id, $event)">{{list.title}}</mdb-checkbox>
           </div>
         </div>
 
-        <owl-form-field class="col-12 mt-3 px-0">
-          <input owlInput [min]="minDate" [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker" placeholder="Ngày tạo" [(ngModel)]="taskCM.startTime">
-          <owl-date-time #datepicker></owl-date-time>
-        </owl-form-field>
+        <div class="col-12 md-form mt-0 mb-3 px-0">
+          <mdb-select class="select-wrapper mdb-select colorful-select dropdown-success" [options]="iconPrioritySelect"
+            [(ngModel)]="taskCM.priority" placeholder="Mức độ ưu tiên">
+          </mdb-select>
+        </div>
+
 
         <!-- <label class="col-md-2 col-xs-12" style="position: relative">
           <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px">Đến</span>
@@ -171,12 +181,8 @@
           <span class="ml-2">phút</span>
         </div>
         <div class="col-12 md-form mt-0 mb-3 px-0">
-          <mdb-select class="select-wrapper mdb-select colorful-select dropdown-success" [options]="iconPrioritySelect"
-            [(ngModel)]="taskCM.priority" placeholder="Mức độ ưu tiên">
-          </mdb-select>
-        </div>
-        <div class="col-12 md-form mt-0 mb-3 px-0">
-          <textarea type="text" id="description" class="md-textarea form-control" mdbInput [(ngModel)]="taskCM.description" placeholder="Chi tiết"></textarea>
+          <textarea type="text" id="description" class="md-textarea form-control" mdbInput [(ngModel)]="taskCM.description" placeholder="Chi tiết công việc"></textarea>
+          <label>Chi tiết</label>
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-center">
@@ -221,7 +227,7 @@
   </div>
 </div>
 
-<div mdbModal #send="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
+<div mdbModal id="notification" #send="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
   aria-hidden="true">
   <div class="modal-dialog modal-sm modal-notify modal-primary" role="document">
     <!--Content-->
@@ -233,7 +239,7 @@
 
       <!--Body-->
       <div class="modal-body">
-        <i class="fa fa-paper-plane fa-4x animated rotateIn"></i>
+        <i class="fa fa-bell fa-4x animated shake" style="color: #007bff !important"></i>
       </div>
 
       <!--Footer-->

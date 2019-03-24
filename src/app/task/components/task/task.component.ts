@@ -62,7 +62,7 @@ export class TaskComponent implements OnInit {
   sortBoolean = false;
   sortValue = '';
   minDate = new Date();
-  notification: NotificationSendingModel;
+  notification: NotificationSendingModel = new NotificationSendingModel();
   addTaskId: number;
 
   constructor(
@@ -161,7 +161,7 @@ export class TaskComponent implements OnInit {
   }
 
   getEmployee() {
-    this.employeeService.getEmployeeByManager(this.userAccount.id, '', 'id', 0, 99)
+    this.employeeService.getAvailableEmployee(this.userAccount.id, '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
           this.employeeList = response.content.map((employee) => {
@@ -274,6 +274,7 @@ export class TaskComponent implements OnInit {
   }
 
   sendNoti(confirm: string) {
+    console.log(this.assignTask);
     this.notification.fromEmployeeId = this.assignTask.assigneeId;
     this.notification.toEmployeeId = this.assignTask.assignerId;
     this.notification.taskId = this.assignTask.taskId;

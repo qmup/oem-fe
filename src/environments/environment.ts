@@ -52,6 +52,7 @@ export const environment = {
       getById: 'employee/get-info',
       getByEmail: 'employee/get-info/email',
       getEmployeeByManager: 'employee/get-list-by-manager',
+      getAvailableEmployee: 'employee/get-available-employee',
       getByRole: 'employee/get-list/by-role',
       getAllRole: `employee/get-all-role`,
       checkExist: 'account/check-exist-username',

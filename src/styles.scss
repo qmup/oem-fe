@@ -24,6 +24,11 @@ nav.navbar.fixed-top.navbar-toggleable-md.navbar-expand-lg.scrolling-navbar.doub
 mdb-select > div > div.single > div.placeholder {
   color: #757575 !important;
 }
+.owl-form-field-underline .owl-form-field-underline-graphic {
+  stroke: #757575 !important;
+  opacity: 0.5 !important;
+  stroke-width: 1px !important;
+}
 #task-search {
   mdb-select > div > div.single > div.placeholder {
     left: 0 !important;

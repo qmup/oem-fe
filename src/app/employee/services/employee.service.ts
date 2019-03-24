@@ -39,6 +39,28 @@ export class EmployeeService {
     ).toPromise();
   }
 
+  getAvailableEmployee(
+    managerId: number,
+    // roleId: number,
+    sort: string,
+    fieldSort: string,
+    page: number,
+    size: number): Promise<PaginationResponse> {
+    return this.httpClient.get<PaginationResponse>(
+      `${environment.endPoint}${environment.apiPaths.employee.getAvailableEmployee}`,
+      {
+        params: {
+          managerId: `${managerId}`,
+          // roleID: `${roleId}`,
+          sort: `${sort}`,
+          fieldSort: `${fieldSort}`,
+          page: `${page}`,
+          size: `${size}`
+        }
+      }
+    ).toPromise();
+  }
+
   getRole(): Promise<any> {
     return this.httpClient.get<any>(
       `${environment.endPoint}${environment.apiPaths.employee.getAllRole}`,

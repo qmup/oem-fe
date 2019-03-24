@@ -47,4 +47,11 @@ export class NotificationSendingModel {
   toEmployeeId: number;
   taskId: number;
   type: number;
+
+  constructor() {
+    this.fromEmployeeId = 0;
+    this.toEmployeeId = 0;
+    this.taskId = 0;
+    this.type = 0;
+  }
 }

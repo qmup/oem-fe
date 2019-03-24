@@ -25,7 +25,8 @@
               </owl-form-field>
             </div>
             <!--Text-->
-            <p class="text-danger text-center" *ngIf="taskList?.length === 0">Không có công việc hôm nay</p>
+            <p class="text-danger text-center mt-3" *ngIf="taskList?.length === 0">Không có công việc hôm nay</p>
+            <h5 class="text-center mt-3 font-weight-bold" *ngIf="taskList?.length !== 0">Công việc trong ngày</h5>
             <ul class="list-group list-group-flush pt-3">
               <a *ngFor="let task of taskList; let i = index" mdbWavesEffect
                 class="list-group-item list-group-item-action waves-light"
@@ -44,7 +45,7 @@
       <div class="card card-cascade narrower mb-3 col-md-8 mr-auto waves-light h-100">
         <div class="p-3 row">
 
-          <div class="col-7">
+          <div class="col-md-7 col-12">
 
             <div class="d-flex flex-wrap">
               <div class="col-12 mt-3">
@@ -108,13 +109,13 @@
             </div>
             <div class="col-md-12 mt-3" *ngIf="task.status !== 0 && task.status !== 1">
               <h5 class="text-center font-weight-bold">Báo cáo
-                <a *ngIf="task.status !== 0 && task.status !== 1" mdbBtn floating="true" size="sm" color="success" mdbWavesEffect>
+                <a *ngIf="task.status !== 0 && task.status !== 1 && report.length === 0" mdbBtn floating="true" size="sm" color="success" mdbWavesEffect>
                   <i class="fa fa-plus" (click)="openReportModal()"></i>
                 </a>
               </h5>
               <mdb-accordion [multiple]="false" aria-multiselectable="true">
                 <mdb-accordion-item [collapsed]="true" *ngFor="let item of report">
-                  <mdb-accordion-item-head>Báo cáo lúc {{ item.dateReport | date: 'hh:mm' }} - Nội dung: {{ item.description }} </mdb-accordion-item-head>
+                  <mdb-accordion-item-head>Báo cáo lúc {{ item.dateReport | date: 'hh:mm' }} <br> <small>Nội dung: {{ item.description }}</small> </mdb-accordion-item-head>
                   <mdb-accordion-item-body>
                     <p class="h6 mt-4">Hình ảnh</p>
                     <p class="text-danger" *ngIf="picturesReport.length === 0">Không có hình ảnh</p>
@@ -144,7 +145,7 @@
 
           </div>
 
-          <div class="col-5">
+          <div class="col-md-5 col-12">
             <div class="md-form ">
               <h6 class="font-weight-bold d-flex flex-wrap">
                 <span class="col-6 px-0 mr-auto">Trạng thái</span>
@@ -203,7 +204,7 @@
                 <!-- <app-date-picker ngDefaultControl [mode]="'range'" [(ngModel)]="dateRange"></app-date-picker> -->
                 <owl-form-field class="w-100 px-3 text-center">
                   <input owlInput [min]="minDate" [(ngModel)]="dateRange" [selectMode]="'range'"
-                    [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker">
+                    [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker" (dateTimeChange)="changeStartTime($event)">
                   <owl-date-time #datepicker></owl-date-time>
                 </owl-form-field>
               </div>
@@ -349,7 +350,7 @@
   </div>
 </div>
 
-<div mdbModal id="edit" #history="mdbModal" class="modal fade left" tabindex="-1" role="dialog" aria-labelledby="add"
+<div mdbModal id="history" #history="mdbModal" class="modal fade left" tabindex="-1" role="dialog" aria-labelledby="add"
   aria-hidden="true">
   <div class="modal-dialog modal-notify modal-primary" role="document">
     <div class="modal-content">

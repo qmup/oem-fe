@@ -176,16 +176,6 @@ export class LaborerComponent implements OnInit {
     this.getEmployee();
   }
 
-  // getEmployeeByManager() {
-  //   this.employeeService.getEmployeeByManager(2, 'asc', 1, 5)
-  //     .then(
-  //       (response: PaginationResponse) => {
-  //         console.log(response);
-  //         this.employeeList = response.content;
-  //       }
-  //     );
-  // }
-
   switch(e: any, employeeId: number) {
     e.target.checked ?
       this.employeeService.updateField(employeeId, 'status', 1)

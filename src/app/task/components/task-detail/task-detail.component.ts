@@ -185,7 +185,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   getEmployeeByManager() {
-    this.employeeService.getEmployeeByManager(this.userAccount.id, '', 'id', 0, 99)
+    this.employeeService.getAvailableEmployee(this.userAccount.id, '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
           this.employeeList = response.content.map((e: Employee) => {
@@ -321,6 +321,37 @@ export class TaskDetailComponent implements OnInit {
 
   changeWorkplace(event: any) {
     this.openTaskBasicModal(event.value, this.task);
+  }
+
+  changeStartTime(e: any) {
+    const from: Date = e.value[0];
+    const to: Date = e.value[1];
+    const duration = to.getMilliseconds() - from.getMilliseconds();
+    this.taskService.updateField(this.task.id, 'startTime', from.toISOString())
+      .then(
+        () => {
+          this.taskService.updateField(this.task.id, 'endTime', to.toISOString())
+          .then(
+            () => {
+              this.taskService.updateField(this.task.id, 'duration', duration)
+                .then(
+                  () => {
+                    this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+                  },
+                  () => {
+                    this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+                  }
+                );
+            },
+            () => {
+              this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+            }
+          );
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
   }
 
   openTaskBasicModal(workplaceId: number, task: TaskDetail) {
