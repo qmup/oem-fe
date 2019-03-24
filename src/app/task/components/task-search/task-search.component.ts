@@ -82,7 +82,7 @@ export class TaskSearchComponent implements OnInit {
   }
 
   getEmployeeByManager() {
-    this.employeeService.getEmployeeByManager(this.userAccount.id, 3, '', 'id', this.currentPage, 99)
+    this.employeeService.getEmployeeByManager(this.userAccount.id, '', 'id', this.currentPage, 99)
       .then(
         (response: PaginationResponse) => {
           this.employeeList = response.content.map(e => {

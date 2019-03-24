@@ -100,7 +100,7 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   getEmployeeWithoutManager() {
-    this.employeeService.getEmployeeByManager(0, 3, '', 'id', 0, 99)
+    this.employeeService.getEmployeeByManager(0, '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
           this.employeeList = response.content.map((employee) => {
@@ -115,7 +115,7 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   getEmployeeByManager() {
-    this.employeeService.getEmployeeByManager(this.id, 3, '', 'id', this.currentPage1, 3)
+    this.employeeService.getEmployeeByManager(this.id, '', 'id', this.currentPage1, 3)
       .then(
         (response: PaginationResponse) => {
           this.employeeListByManager = response.content;

@@ -19,7 +19,7 @@ export class EmployeeService {
 
   getEmployeeByManager(
     managerId: number,
-    roleId: number,
+    // roleId: number,
     sort: string,
     fieldSort: string,
     page: number,
@@ -28,8 +28,8 @@ export class EmployeeService {
       `${environment.endPoint}${environment.apiPaths.employee.getEmployeeByManager}`,
       {
         params: {
-          managerID: `${managerId}`,
-          roleID: `${roleId}`,
+          managerId: `${managerId}`,
+          // roleID: `${roleId}`,
           sort: `${sort}`,
           fieldSort: `${fieldSort}`,
           page: `${page}`,

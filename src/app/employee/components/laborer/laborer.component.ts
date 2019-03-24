@@ -126,7 +126,7 @@ export class LaborerComponent implements OnInit {
   }
 
   getEmployeeByManager() {
-    this.employeeService.getEmployeeByManager(this.userAccount.id, 3, this.sortValue, this.fieldSort, this.currentPage, 10)
+    this.employeeService.getEmployeeByManager(this.userAccount.id, this.sortValue, this.fieldSort, this.currentPage, 10)
       .then(
         (response: PaginationResponse) => {
           this.employeeResponse = response;
@@ -186,11 +186,16 @@ export class LaborerComponent implements OnInit {
   //     );
   // }
 
-  switch(e: any, employeeId) {
+  switch(e: any, employeeId: number) {
     e.target.checked ?
-      this.employeeService.updateField(employeeId, 'status', 1) :
-      this.employeeService.updateField(employeeId, 'status', 2);
-    this.getEmployee();
+      this.employeeService.updateField(employeeId, 'status', 1)
+        .then(
+          () => this.getEmployee()
+        ) :
+      this.employeeService.updateField(employeeId, 'status', 2)
+        .then(
+          () => this.getEmployee()
+        );
   }
 
   openCreateModal() {

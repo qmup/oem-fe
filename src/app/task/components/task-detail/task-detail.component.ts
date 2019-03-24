@@ -185,7 +185,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   getEmployeeByManager() {
-    this.employeeService.getEmployeeByManager(this.userAccount.id, 3, '', 'id', 0, 99)
+    this.employeeService.getEmployeeByManager(this.userAccount.id, '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
           this.employeeList = response.content.map((e: Employee) => {
