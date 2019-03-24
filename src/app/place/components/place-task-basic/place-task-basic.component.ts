@@ -26,6 +26,7 @@ export class PlaceTaskBasicComponent implements OnInit {
   selectedIds = [];
   selectedTaskBasic = [];
   taskBasicData: { listTaskID: number[], workplaceID: number};
+  taskBasicResponse: PaginationResponse = new PaginationResponse();
   userAccount: Employee;
 
   constructor(
@@ -47,6 +48,7 @@ export class PlaceTaskBasicComponent implements OnInit {
     this.taskBasicService.getListTaskBasic(this.userAccount.id , '', '', 'id', 0, 99)
       .then(
         (response: any) => {
+          this.taskBasicResponse = response;
           this.taskBasicList = response.content;
           this.taskBasicList.forEach((element1, i) => {
             if (this.taskBasic.length !== 0) {

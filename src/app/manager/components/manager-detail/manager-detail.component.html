@@ -63,13 +63,15 @@
             </div>
             <div class="col pl-0">
               <a [routerLink]="['/employee']" class="link">Xem tất cả</a>
-              <a class="btn-floating btn-md btn-success" (click)="openCreateEmployeeModal()"><i class="fa fa-plus"></i></a>
+              <a class="btn-floating btn-md btn-success" (click)="openCreateEmployeeModal()"><i
+                  class="fa fa-plus"></i></a>
             </div>
           </mdb-card-title>
 
           <!--Text-->
           <div class="list-group">
-            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let e of employeeListByManager | slice:0:3">
+            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect
+              *ngFor="let e of employeeListByManager">
               <div class="avatar" [routerLink]="['/employee-detail', e.id]">
                 <img [src]="e.picture" alt="" class="rounded-circle img-responsive list-avatar">
               </div>
@@ -81,36 +83,18 @@
                 <small>Số điện thoại: {{e.phoneNumber}}</small>
               </div>
               <div class="col-2">
-                <button mdbBtn type="button" color="danger" size="sm" rounded="true"  mdbWavesEffect (click)="openRemoveEmployeeModal(e.id)">
+                <button mdbBtn type="button" color="danger" size="sm" rounded="true" mdbWavesEffect
+                  (click)="openRemoveEmployeeModal(e.id)">
                   <i class="fa fa-ban"></i>
                 </button>
               </div>
             </a>
-            <div class="list-group" mdbCollapse #moreEmp="bs-collapse" *ngIf="employeeListByManager?.length > 3">
-              <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let e of employeeListByManager | slice:3">
-                <div class="avatar" [routerLink]="['/employee-detail', e.id]">
-                  <img [src]="e.picture" alt="" class="rounded-circle img-responsive list-avatar">
-                </div>
-                <div class="col-9" [routerLink]="['/employee-detail', e.id]">
-                  {{e.firstName}} {{e.lastName}}
-                  <br>
-                  <small>Địa chỉ: {{e.address}}</small>
-                  <br>
-                  <small>Số điện thoại: {{e.phoneNumber}}</small>
-                </div>
-                <div class="col-2">
-                  <button mdbBtn type="button" color="danger" size="sm" rounded="true" mdbWavesEffect (click)="openRemoveEmployeeModal(e.id)">
-                    <i class="fa fa-ban"></i>
-                  </button>
-                </div>
-              </a>
-            </div>
-            <div *ngIf="employeeListByManager.length === 0">
+            <div *ngIf="employeeResponseByManager?.numberOfElements === 0">
               <span class="text-danger pl-3">Chưa quản lý nhân viên nào</span>
             </div>
-            <app-pagination *ngIf="employeeResponseByManager?.totalPages > 1" [pageSize]="employeeResponseByManager.size"
-              [totalPage]="employeeResponseByManager.totalPages" [currentPage]="employeeResponseByManager.number"
-              (changePage)="changePage1($event)">
+            <app-pagination *ngIf="employeeResponseByManager?.totalPages > 1"
+              [pageSize]="employeeResponseByManager.size" [totalPage]="employeeResponseByManager.totalPages"
+              [currentPage]="employeeResponseByManager.number" (changePage)="changePage1($event)">
             </app-pagination>
           </div>
         </mdb-card-body>
@@ -123,11 +107,13 @@
             </div>
             <div class="col pl-0">
               <a [routerLink]="['/company']" class="link">Xem tất cả</a>
-              <a class="btn-floating btn-md btn-success" (click)="openCreateWorkplaceModal()"><i class="fa fa-plus"></i></a>
+              <a class="btn-floating btn-md btn-success" (click)="openCreateWorkplaceModal()"><i
+                  class="fa fa-plus"></i></a>
             </div>
           </mdb-card-title>
           <div class="list-group">
-            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let wp of workplaceListByManager">
+            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect
+              *ngFor="let wp of workplaceListByManager">
               <div class="avatar">
                 <img [src]="wp.picture" alt="" class="rounded-circle img-responsive list-avatar">
               </div>
@@ -137,42 +123,18 @@
                 <small>{{wp.description}}</small>
               </div>
               <div class="col-2">
-                <button mdbBtn type="button" color="danger" size="sm" rounded="true" mdbWavesEffect (click)="openRemoveWorkplaceModal(wp.id)">
+                <button mdbBtn type="button" color="danger" size="sm" rounded="true" mdbWavesEffect
+                  (click)="openRemoveWorkplaceModal(wp.id)">
                   <i class="fa fa-ban"></i>
                 </button>
               </div>
             </a>
-            <div class="list-group" mdbCollapse #moreWP="bs-collapse" *ngIf="workplaceListByManager?.length > 3">
-              <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let wp of workplaceListByManager">
-                <div class="avatar">
-                  <img [src]="wp.picture" alt="" class="rounded-circle img-responsive list-avatar">
-                </div>
-                <div class="col-9">
-                  {{wp.name}}
-                  <br>
-                  <small>{{wp.description}}</small>
-                </div>
-                <div class="col-2">
-                  <button mdbBtn type="button" color="danger" size="sm" rounded="true" mdbWavesEffect (click)="openRemoveWorkplaceModal(wp.id)">
-                    <i class="fa fa-ban"></i>
-                  </button>
-                </div>
-              </a>
-              <app-pagination *ngIf="workplaceResponseByManager?.totalPages > 1" [pageSize]="workplaceResponseByManager.size"
-                [totalPage]="workplaceResponseByManager.totalPages" [currentPage]="workplaceResponseByManager.number"
-                (changePage)="changePage2($event)">
-              </app-pagination>
-            </div>
-            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="!isShowMore2 && workplaceListByManager?.length > 3"
-              (click)="toggleWorkplace()" mdbWavesEffect>
-              Hiện thêm
-            </button>
-            <button mdbBtn color="primary" class="waves-light btn-sm" type="button" *ngIf="isShowMore2" [routerLink]="['/company']"
-              mdbWavesEffect>
-              Xem tât cả
-            </button>
+            <app-pagination *ngIf="workplaceResponseByManager?.totalPages > 1"
+              [pageSize]="workplaceResponseByManager.size" [totalPage]="workplaceResponseByManager.totalPages"
+              [currentPage]="workplaceResponseByManager.number" (changePage)="changePage2($event)">
+            </app-pagination>
           </div>
-          <div *ngIf="workplaceListByManager.length === 0">
+          <div *ngIf="workplaceResponseByManager.numberOfElements === 0">
             <span class="text-danger pl-3">Chưa quản lý nơi làm việc nào</span>
           </div>
         </mdb-card-body>
@@ -187,14 +149,16 @@
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
         <p class="heading">Thêm nhân viên cho người quản lý</p>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="createEmployeeModal.hide()">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          (click)="createEmployeeModal.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body mx-3 row">
         <div class="col-12">
           <div class="md-form my-3">
-            <mdb-select [notFoundMsg]="'Không tìm thấy'"  [filterEnabled]="true" [options]="employeeList" (selected)="selectEmployee($event)"></mdb-select>
+            <mdb-select [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="employeeList"
+              (selected)="selectEmployee($event)"></mdb-select>
             <label>Nhân viên</label>
           </div>
         </div>
@@ -214,21 +178,25 @@
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
         <p class="heading">Thêm khu vực cho người quản lý</p>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="createWorkplaceModal.hide()">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          (click)="createWorkplaceModal.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body mx-3 row">
         <div class="col-12 md-form my-3">
-          <mdb-select [notFoundMsg]="'Không tìm thấy'"  [filterEnabled]="true" [options]="companyList" (selected)="selectCompany($event)"></mdb-select>
+          <mdb-select [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="companyList"
+            (selected)="selectCompany($event)"></mdb-select>
           <label>Công ty</label>
         </div>
         <div class="col-12 md-form my-3" *ngIf="isSelectCompany">
-          <mdb-select [notFoundMsg]="'Không tìm thấy'"  [filterEnabled]="true" [options]="zoneList" (selected)="selectZone($event)"></mdb-select>
+          <mdb-select [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="zoneList"
+            (selected)="selectZone($event)"></mdb-select>
           <label>Khu vực</label>
         </div>
         <div class="col-12 md-form my-3" *ngIf="isSelectZone">
-          <mdb-select [notFoundMsg]="'Không tìm thấy'"  [filterEnabled]="true" [options]="placeList" (selected)="selectWorkplace($event)"></mdb-select>
+          <mdb-select [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="placeList"
+            (selected)="selectWorkplace($event)"></mdb-select>
           <label>Địa điểm</label>
         </div>
       </div>
@@ -241,8 +209,8 @@
   </div>
 </div>
 
-<div mdbModal #removeEmp="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
-  aria-hidden="true">
+<div mdbModal #removeEmp="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="delete" aria-hidden="true">
   <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
     <!--Content-->
     <div class="modal-content text-center">
@@ -258,16 +226,18 @@
 
       <!--Footer-->
       <div class="modal-footer flex-center">
-        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeEmployeeByManager()">Đồng ý</a>
-        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="removeEmp.hide()">Hủy</a>
+        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect
+          (click)="removeEmployeeByManager()">Đồng ý</a>
+        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+          (click)="removeEmp.hide()">Hủy</a>
       </div>
     </div>
     <!--/.Content-->
   </div>
 </div>
 
-<div mdbModal #removeWp="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
-  aria-hidden="true">
+<div mdbModal #removeWp="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="delete" aria-hidden="true">
   <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
     <!--Content-->
     <div class="modal-content text-center">
@@ -283,8 +253,10 @@
 
       <!--Footer-->
       <div class="modal-footer flex-center">
-        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeWorkplaceByManager()">Đồng ý</a>
-        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="removeWp.hide()">Hủy</a>
+        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect
+          (click)="removeWorkplaceByManager()">Đồng ý</a>
+        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+          (click)="removeWp.hide()">Hủy</a>
       </div>
     </div>
     <!--/.Content-->

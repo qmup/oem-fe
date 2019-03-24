@@ -29,6 +29,9 @@ mdb-select > div > div.single > div.placeholder {
   opacity: 0.5 !important;
   stroke-width: 1px !important;
 }
+.md-form label {
+  left: auto;
+}
 #task-search {
   mdb-select > div > div.single > div.placeholder {
     left: 0 !important;
@@ -43,9 +46,6 @@ mdb-select > div > div.single > div.placeholder {
   .dropdown-content.ng-trigger.ng-trigger-dropdownAnimation {
     width: 300px !important;
     margin-top: 37px !important;
-  }
-  .md-form label {
-    left: auto;
   }
 }
 

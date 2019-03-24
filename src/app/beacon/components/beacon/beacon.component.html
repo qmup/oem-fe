@@ -13,7 +13,7 @@
           <!-- Grid column -->
           <div class="col-md-2">
             <!-- Add button -->
-            <button title="Tạo mới nhân viên" mdbBtn type="button" color="success" rounded="true" size="sm" class="addNewButton w-75"
+            <button title="Tạo mới beacon" mdbBtn type="button" color="success" rounded="true" size="sm" class="addNewButton w-75"
               mdbWavesEffect (click)="openCreateModal()">
               <i class="fa fa-plus"></i>
             </button>
@@ -37,7 +37,6 @@
             <!--Table head-->
             <thead>
               <tr>
-                <th>#</th>
                 <th>Tên</th>
                 <th>UUID</th>
                 <th>Minor</th>
@@ -52,7 +51,6 @@
             <!--Table body-->
             <tbody>
               <tr *ngFor="let data of search()">
-                <th scope="row">{{ data.id }}</th>
                 <td>{{ data.name }}</td>
                 <td>{{ data.uuid }}</td>
                 <td>{{ data.minor }}</td>
@@ -73,13 +71,13 @@
             </tbody>
             <!--Table body-->
           </table>
-          <div *ngIf="beaconList?.length === 0" class="col-12 pt-5">
-            <h6 class="text-danger">Không tìm thấy kết quả phù hợp</h6>
-          </div>
           <app-pagination *ngIf="beaconResponse?.totalPages > 1" [pageSize]="beaconResponse.size"
             [totalPage]="beaconResponse.totalPages" [currentPage]="beaconResponse.number"
             (changePage)="changePage($event)">
           </app-pagination>
+          <div *ngIf="beaconResponse.totalElements === 0" class="col-12 pt-5">
+            <h6 class="text-danger">Không tìm thấy kết quả phù hợp</h6>
+          </div>
           <!--Table-->
         </div>
       </div>

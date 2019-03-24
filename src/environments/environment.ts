@@ -70,6 +70,7 @@ export const environment = {
       getAll: 'workplace/get-all',
       remove: 'workplace/remove/',
       update: 'workplace/update-dto/',
+      updateField: 'workplace/update/',
       addTask: 'workplace/add-task/',
       addManager: 'workplace/add-manager',
       getTaskBasic: 'workplace/get-task-basic/',

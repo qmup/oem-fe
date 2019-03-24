@@ -12,7 +12,7 @@
      (change)="changeCheckbox(list.id, $event)">{{list.title}}</mdb-checkbox>
     </div>
   </div>
-  <div *ngIf="taskBasicList?.length === 0">
+  <div *ngIf="taskBasicResponse.numberOfElements === 0">
     <span class="text-danger">Chưa có công việc tại nơi này!</span>
   </div>
 </div>

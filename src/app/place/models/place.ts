@@ -6,19 +6,30 @@ export class PlaceModel {
   id: number;
   name: string;
   numberOfReworks: number;
+  taskList: TaskList[];
   picture: string;
   zoneId: number;
   managerId: number;
+  status: number;
 
   constructor() {
     this.description = '';
     this.id = 0;
     this.name = '';
     this.numberOfReworks = 0;
+    this.taskList = new Array<TaskList>();
     this.picture = '';
     this.zoneId = 0;
     this.managerId = 0;
+    this.status = 0;
   }
+}
+
+class TaskList {
+  taskName: string;
+  startTime: string;
+  endTime: string;
+  assignee: string;
 }
 
 export class ZoneDTO {
@@ -56,6 +67,8 @@ export class Place {
   numberOfReworks: number;
   picture: string;
   setToBeacon: boolean;
+  status: number;
+  taskList: TaskList[];
   zone: ZoneDTO;
   company: CompanyDTO;
   basicTaskList: TaskBasic[];
@@ -67,8 +80,10 @@ export class Place {
     this.picture = '';
     this.setToBeacon = false;
     this.description = '';
+    this.taskList = new Array<TaskList>();
     this.zone = new ZoneDTO();
     this.company = new CompanyDTO();
+    this.status = 0;
     this.numberOfReworks = 0;
     this.basicTaskList = new Array<TaskBasic>();
   }

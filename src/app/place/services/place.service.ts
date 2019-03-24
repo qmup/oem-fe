@@ -102,4 +102,14 @@ export class PlaceService {
       `${environment.endPoint}${environment.apiPaths.workplace.addTaskToWorkplace}/${taskId}/${workplaceId}`, {}
     ).toPromise();
   }
+
+  updateField(id, key, value): Promise<any> {
+    return this.httpClient.put<any>(
+      `${environment.endPoint}${environment.apiPaths.workplace.updateField + id}`,
+        {
+          key: `${key}`,
+          value: `${value}`
+        }
+      ).toPromise();
+  }
 }

@@ -75,7 +75,7 @@
             <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let task of taskList" [routerLink]="['/task-detail', task.id]">
               <i class="fa fa-trash mt-2 col"></i>
               <div class="col-9">
-                {{task.title}} từ {{ task.startTime | date: 'hh:mm'}} đến {{task.endTime | date: 'hh:mm'}}
+                {{task.title}} từ {{ task.startTime | date: 'HH:mm'}} đến {{task.endTime | date: 'HH:mm'}}
                 <br>
                 <small>Tại {{task.companyDTO.name}} - {{task.workplaceName}}</small>
               </div>

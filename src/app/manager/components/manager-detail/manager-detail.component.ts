@@ -47,7 +47,7 @@ export class ManagerDetailComponent implements OnInit {
   employeeListByManager: Employee[] = [];
   employeeResponseByManager: PaginationResponse;
   workplaceListByManager: Place[] = [];
-  workplaceResponseByManager: PaginationResponse;
+  workplaceResponseByManager: PaginationResponse = new PaginationResponse();
   companyList = [];
   zoneList = [];
   placeList = [];
@@ -63,7 +63,6 @@ export class ManagerDetailComponent implements OnInit {
   currentPage2 = 0;
 
   constructor(
-    private taskService: TaskService,
     private employeeService: EmployeeService,
     private route: ActivatedRoute,
     private companyService: CompanyService,
@@ -81,10 +80,13 @@ export class ManagerDetailComponent implements OnInit {
     this.userAccount = this.globalService.getUserAccount();
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
-      this.getEmployeeByManager();
-      this.getWorkplaceByManager();
       this.manageWorkplace.managerId = this.id;
     });
+    this.getWorkplaceByManager();
+  }
+
+  getOnInit() {
+    this.getEmployeeByManager();
     this.getInfo();
     this.getEmployeeWithoutManager();
     this.getCompany();
@@ -131,6 +133,8 @@ export class ManagerDetailComponent implements OnInit {
           this.workplaceListByManager = response.listOfWorkplace.content;
           this.workplaceResponseByManager = response.listOfWorkplace;
         }
+      ).then(
+        () => this.getOnInit()
       );
   }
 

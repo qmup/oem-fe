@@ -7,6 +7,7 @@ import { BeaconService } from 'src/app/beacon/services/beacon.service';
 import { ToastService, UploadFile, UploadInput, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
 import { GlobalService } from 'src/app/core/services/global.service';
 import { PaginationResponse } from 'src/app/core/models/shared';
+import { Employee } from 'src/app/employee/models/employee';
 
 @Component({
   selector: 'app-place-update',
@@ -27,6 +28,7 @@ export class PlaceUpdateComponent implements OnInit {
   dragOver: boolean;
   url: any;
   filesToUpload: FileList;
+  userAccount: Employee;
 
   constructor(
     public modalRef: BsModalRef,
@@ -41,19 +43,32 @@ export class PlaceUpdateComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.userAccount = this.globalService.getUserAccount();
     this.getBeacon();
-    console.log(this.place);
   }
 
   updatePlace() {
     this.filesToUpload ? this.updatePlaceWithImage() : this.updatePlaceWithoutImage();
   }
 
+  updateNoOfRwk() {
+    this.placeService.updateField(this.place.id, 'numberOfReworks', this.place.numberOfReworks)
+      .then(
+        response => {
+          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.modalRef.hide();
+          this.refresh.emit();
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
+  }
+
   updatePlaceWithoutImage() {
     this.placeUM.id = this.place.id;
     this.placeUM.description = this.place.description;
     this.placeUM.name = this.place.name;
-    this.placeUM.numberOfReworks = this.place.numberOfReworks;
     this.placeUM.picture = this.place.picture;
     this.placeUM.zoneId = this.zoneId;
     this.placeService.update(this.placeUM)

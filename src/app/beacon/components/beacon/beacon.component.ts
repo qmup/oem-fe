@@ -39,7 +39,7 @@ export class BeaconComponent implements OnInit {
   }
 
   getBeacon() {
-    this.beaconService.getAll('', 'id', 0, 10)
+    this.beaconService.getAll('', 'id', this.currentPage, 10)
       .then(
         (response: PaginationResponse) => {
           this.beaconList = response.content;
@@ -65,10 +65,7 @@ export class BeaconComponent implements OnInit {
 
   createBeacon() {
     const options = { positionClass: 'toast-bottom-right' };
-    if (!this.haveWorkplace) {
-      this.beaconCM.workplace = null;
-      this.beaconCM.workplaceId = null;
-    }
+    this.beaconCM.workplaceId = 0;
     this.beaconService.create(this.beaconCM)
       .then(
         () => {

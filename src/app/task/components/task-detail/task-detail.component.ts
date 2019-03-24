@@ -71,7 +71,6 @@ export class TaskDetailComponent implements OnInit {
   managerReport: ReportModel = new ReportModel();
 
   constructor(
-    // public modalRef: BsModalRef,
     private taskService: TaskService,
     private modalService: BsModalService,
     private globalService: GlobalService,
@@ -90,7 +89,6 @@ export class TaskDetailComponent implements OnInit {
 
   ngOnInit() {
     this.userAccount = this.globalService.getUserAccount();
-    // this.getTodayTask();
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
     });
@@ -112,7 +110,7 @@ export class TaskDetailComponent implements OnInit {
             new Date(this.task.startTime),
             new Date(this.task.endTime)
           ];
-          this.getTodayTaskByEmployee();
+          this.sub === id ? this.getTodayTaskByEmployee() : console.log();
         }
       );
   }

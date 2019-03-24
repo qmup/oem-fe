@@ -32,7 +32,7 @@
                 class="list-group-item list-group-item-action waves-light"
                 [ngClass]="{'list-group-item-action': task.id !== id, 'active': task.id === id}"
                 (click)="loadTask(task.id)">
-                {{i+1}}. {{task.title}} lúc {{task.startTime | date: 'hh:mm aa'}}
+                {{i+1}}. {{task.title}} lúc {{task.startTime | date: 'HH:mm'}}
                 <br>
                 <small>Tại {{task.workplaceName}} - {{task.companyDTO.name}}</small>
               </a>
@@ -115,7 +115,7 @@
               </h5>
               <mdb-accordion [multiple]="false" aria-multiselectable="true">
                 <mdb-accordion-item [collapsed]="true" *ngFor="let item of report">
-                  <mdb-accordion-item-head>Báo cáo lúc {{ item.dateReport | date: 'hh:mm' }} <br> <small>Nội dung: {{ item.description }}</small> </mdb-accordion-item-head>
+                  <mdb-accordion-item-head>Báo cáo lúc {{ item.dateReport | date: 'HH:mm' }} <br> <small>Nội dung: {{ item.description }}</small> </mdb-accordion-item-head>
                   <mdb-accordion-item-body>
                     <p class="h6 mt-4">Hình ảnh</p>
                     <p class="text-danger" *ngIf="picturesReport.length === 0">Không có hình ảnh</p>
@@ -365,7 +365,7 @@
         <div *ngFor="let el of historyAssign; let i = index">
 
           <h6 class="font-weight-bold">
-            {{i+1}}. Lúc {{ el.dateAssign | date: 'hh:mm aa' }} ngày {{ el.dateAssign | date: 'dd-MM-yyyy' }}
+            {{i+1}}. Lúc {{ el.dateAssign | date: 'HH:mm' }} ngày {{ el.dateAssign | date: 'dd-MM-yyyy' }}
           </h6>
 
           <p>Giao cho {{el.assignee.name}}</p>

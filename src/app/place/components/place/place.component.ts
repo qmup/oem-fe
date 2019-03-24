@@ -62,6 +62,7 @@ export class PlaceComponent implements OnInit {
   beaconList = [];
   minDate = new Date();
   dateRange = [];
+  dateSearch: Date;
 
   constructor(
     public location: Location,
@@ -235,11 +236,16 @@ export class PlaceComponent implements OnInit {
   removePlace() {
     this.placeService.remove(this.id)
       .then(
-        () => {
-          this.toastService.success('Xóa nơi làm việc thành công', '', { positionClass: 'toast-bottom-right'} );
-          this.deleteModal.hide();
-          this.placeList = [];
-          this.getPlace();
+        (response) => {
+          (response) ? (
+              this.toastService.success('Xóa nơi làm việc thành công', '', { positionClass: 'toast-bottom-right'} ),
+              this.deleteModal.hide(),
+              this.placeList = [],
+              this.getPlace()
+              ) : (
+              this.toastService.error('Đang có công việc tại nơi này' , '', { positionClass: 'toast-bottom-right'}),
+              this.deleteModal.hide()
+              );
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -254,7 +260,6 @@ export class PlaceComponent implements OnInit {
           this.taskCM.taskBasics = response;
           this.taskCM.duration *= 60000;
           this.taskCM.dateCreate = new Date().toISOString();
-          this.taskCM.startTime = this.convertTime(this.timeFrom);
           this.taskService.create(this.taskCM)
             .then(
               (response2) => {
@@ -302,6 +307,24 @@ export class PlaceComponent implements OnInit {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
         }
       );
+  }
+
+  switch(e: any, workplaceId: number) {
+    e.target.checked ?
+      this.placeService.updateField(workplaceId, 'status', 1)
+        .then(
+          () => {
+            this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
+          }
+        )
+        :
+      this.placeService.updateField(workplaceId, 'status', 0)
+        .then(
+          () => {
+            this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
+          }
+        );
+    this.getPlace();
   }
 
   openCreateTaskModal(id: number) {
