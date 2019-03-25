@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ToastService } from 'ng-uikit-pro-standard';
 import { TaskService } from '../../service/task.service';
 import { Task, TaskModel } from '../../models/task';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective, ModalOptions, BsModalService, BsModalRef } from 'ngx-bootstrap';
 import { EmployeeService } from 'src/app/employee/services/employee.service';
 import { PlaceService } from 'src/app/place/services/place.service';
 import { ScheduleService } from '../../service/schedule.service';
@@ -16,6 +16,7 @@ import { CompanyService } from 'src/app/place/services/company.service';
 import { TaskBasicService } from '../../service/task-basic.service';
 import { Employee } from 'src/app/employee/models/employee';
 import { TaskSearchResponse } from '../../models/task-search';
+import { TaskSuggestionComponent } from '../task-suggestion/task-suggestion.component';
 
 @Component({
   selector: 'app-task',
@@ -62,6 +63,11 @@ export class TaskComponent implements OnInit {
   minDate = new Date();
   notification: NotificationSendingModel = new NotificationSendingModel();
   addTaskId: number;
+  modalRef: BsModalRef;
+  firstStep = false;
+  isSelectRange = false;
+  currentWorkplace: any;
+  currentCompany: any;
 
   constructor(
     private taskService: TaskService,
@@ -72,14 +78,14 @@ export class TaskComponent implements OnInit {
     private globalService: GlobalService,
     private taskBasicService: TaskBasicService,
     private zoneService: ZoneService,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private modalService: BsModalService
   ) {}
 
   ngOnInit() {
     this.userAccount = this.globalService.getUserAccount();
     this.manageWorkplace.managerId = this.userAccount.id;
     this.assignTask.assignerId = this.userAccount.id;
-    this.assignTask.assigneeId = 0;
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
     this.week = this.globalService.week;
     this.getTask();
@@ -192,6 +198,7 @@ export class TaskComponent implements OnInit {
     this.manageWorkplace.companyId = e.value;
     this.isSelectCompany = true;
     this.isSelectWorkplace = false;
+    this.currentCompany = e;
     this.getZone(e.value);
   }
 
@@ -238,6 +245,7 @@ export class TaskComponent implements OnInit {
   selectWorkplace(e: any) {
     this.isSelectWorkplace = true;
     this.manageWorkplace.workplaceId = e.value;
+    this.currentWorkplace = e;
     this.suggestTaskBasic();
   }
 
@@ -329,21 +337,24 @@ export class TaskComponent implements OnInit {
     return new Date(+year, +month, +day, +hour, +min, 0).toISOString();
   }
 
-  // openDeleteModal(id: number) {
-  //   this.id = id;
-  //   this.deleteModal.show();
-  // }
+  openSuggestionModal(taskCM: TaskModel) {
+    this.createModal.hide();
+    const workplace = this.currentWorkplace;
+    const company = this.currentCompany;
+    const modalOptions: ModalOptions = {
+      animated: true,
+      class: 'modal-notify modal-primary modal-xl',
+      initialState: { taskCM, workplace, company }
+    };
+    this.modalRef = this.modalService.show(TaskSuggestionComponent, modalOptions);
+    this.modalRef.content.refresh.subscribe((result) => {
+      this.createModal.show();
+      this.firstStep = true;
+      this.assignTask.assigneeId = result;
+      // this.getPlace()
+    });
 
-  // openUpdateModal(place: Place) {
-  //   const modalOptions: ModalOptions = {
-  //     animated: true,
-  //     class: 'modal-notify modal-primary',
-  //     initialState: { place }
-  //   };
-  //   this.modalRef = this.modalService.show(PlaceUpdateComponent, modalOptions);
-  //   this.modalRef.content.refresh.subscribe(() => this.getPlace());
-
-  // }
+  }
 
   search(e: any) {
     this.taskList = e.content;

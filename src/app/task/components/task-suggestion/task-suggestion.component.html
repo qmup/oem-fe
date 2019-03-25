@@ -1,0 +1,66 @@
+<div class="modal-header d-flex justify-content-center">
+  <p class="heading">Gợi ý nhân viên phù hợp</p>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body mx-3 row">
+  <div class="col-12 text-center">
+    <p class="h6">
+      Công việc sắp tạo tại {{company.label}}
+      <br>
+      Thời gian: {{taskCM.startTime | date: 'HH:mm'}} - {{taskCM.endTime | date: 'HH:mm'}}
+    </p>
+  </div>
+  <div class="md-form mt-0 mb-3 col-6 col-md-12">
+    <table class="table table-hover table-bordered">
+      <thead>
+        <tr class="text-nowrap">
+          <th>Tên nhân viên</th>
+          <th>Danh sách công việc</th>
+          <th>Kết thúc công việc 1</th>
+          <th>Quãng đường 1</th>
+          <th>Bắt đầu công việc 2</th>
+          <th>Quãng đường 2</th>
+          <th>Chọn</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of taskSuggestion; let i = index">
+          <td>{{ item?.employeeName }}</td>
+          <td>
+            <p *ngFor="let task of taskSuggestion[i].taskSuggestionModels; let idx = index">
+              <span>{{ idx + 1 }}. {{ task?.companyName }} từ {{ task?.startTime | date:'HH:mm' }} đến
+                {{ task?.endTime | date:'HH:mm' }}</span>
+            </p>
+          </td>
+          <td>
+            {{ item?.endTimePreviousTask | date: 'HH:mm' }}
+          </td>
+          <td>
+            Quãng đường {{ item?.dataTravelFromCpAtoCpc?.distance / 1000 }} Km
+            <br>
+            Thời gian {{ item?.dataTravelFromCpAtoCpc?.duration / 60000 | number: '1.0-1' }} phút
+          </td>
+          <td>
+            {{ item?.startTimeNextTask | date: 'HH:mm' }}
+          </td>
+          <td>
+            Quãng đường {{ item?.dataTravelFromCpCtoCpB?.distance / 1000 }} Km
+            <br>
+            Thời gian {{ item?.dataTravelFromCpCtoCpB?.duration / 60000 | number: '1.0-1' }} phút
+          </td>
+          <td>
+            <button mdbBtn type="button" color="primary" mdbWavesEffect (click)="selectEmployee(item.employeeId)">
+              <i class="fa fa-check"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+<div class="modal-footer d-flex justify-content-center">
+  <button type="button" mdbBtn color="light" class="waves-light" aria-label="Close" (click)="cancel()" mdbWavesEffect>Quay lại</button>
+</div>

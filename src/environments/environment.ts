@@ -58,6 +58,7 @@ export const environment = {
       checkExist: 'account/check-exist-username',
       checkDuplicateId: 'employee/check-duplicate-id',
       checkEmployeeConstraint: 'employee/check-employee-constraint',
+      suggestion: 'suggestion/employee',
     },
     manager: {
       create: 'employee/create',

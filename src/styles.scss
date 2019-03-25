@@ -33,6 +33,11 @@ mdb-select > div > div.single > div.placeholder {
 .md-form label {
   left: auto;
 }
+@media (min-width: 992px) {
+  .modal-xl {
+      max-width: 1250px;
+  }
+}
 #task-search {
   mdb-select > div > div.single > div.placeholder {
     left: 0 !important;
@@ -40,9 +45,6 @@ mdb-select > div > div.single > div.placeholder {
   }
   .form-control {
     color: #757575;
-  }
-  .owl-form-field-underline .owl-form-field-underline-graphic {
-    stroke: #ced4da !important;
   }
   .dropdown-content.ng-trigger.ng-trigger-dropdownAnimation {
     width: 300px !important;

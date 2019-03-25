@@ -19,6 +19,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE } from
 import { OwlFormFieldModule, OwlInputModule, OwlRatingModule } from 'owl-ng';
 import { PlaceTaskBasicComponent } from '../place/components/place-task-basic/place-task-basic.component';
 import { TaskSearchComponent } from './components/task-search/task-search.component';
+import { TaskSuggestionComponent } from './components/task-suggestion/task-suggestion.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { TaskSearchComponent } from './components/task-search/task-search.compon
     BasicTaskComponent,
     BasicTaskPagesComponent,
     BasicTaskUpdateComponent,
-    TaskSearchComponent
+    TaskSearchComponent,
+    TaskSuggestionComponent
   ],
   imports: [
     CommonModule,
@@ -51,6 +53,7 @@ import { TaskSearchComponent } from './components/task-search/task-search.compon
     ScheduleDetailComponent,
     BasicTaskUpdateComponent,
     PlaceTaskBasicComponent,
+    TaskSuggestionComponent,
   ],
   providers: [
     {provide: OWL_DATE_TIME_LOCALE, useValue: 'en-GB'},

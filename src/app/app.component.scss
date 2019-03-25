@@ -1,6 +1,5 @@
 
 div.overlay {
-  // position: absolute;
   top: 0;
   left: 0;
   position: fixed;
@@ -9,7 +8,7 @@ div.overlay {
   background: rgba(0, 0, 0, 0.5);
   z-index: 10000000;
 }
-div.overlay mdb-spinner {
+div.overlay mdb-spinner, div.overlay img {
   position: absolute;
   top: 50%;
   left: 50%;

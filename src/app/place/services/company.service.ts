@@ -38,7 +38,7 @@ export class CompanyService {
   }
   getCompanyByManager(managerId: number, sort: string, fieldSort: string, page: number, size: number ): Promise<PaginationResponse> {
     return this.httpClient.get<PaginationResponse>(
-      `${environment.endPoint}${environment.apiPaths.company.getByManager}/${managerId}`,
+      `${environment.endPoint}${environment.apiPaths.company.getByManager + managerId}`,
       {
         params: {
           sort: `${sort}`,

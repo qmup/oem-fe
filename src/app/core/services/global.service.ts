@@ -13,6 +13,7 @@ export class GlobalService {
   isLogin: boolean;
   userAccount: Employee;
   isRequesting: EventEmitter<boolean> = new EventEmitter<boolean>();
+  isRequestingGoogleMap: EventEmitter<boolean> = new EventEmitter<boolean>();
   iconPrioritySelect = [
     {
       value: '1',

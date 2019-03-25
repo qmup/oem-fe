@@ -23,19 +23,18 @@
           </owl-form-field>
         </div>
         <!--Text-->
-        <p class="text-danger text-center mt-3" *ngIf="taskList?.length === 0">Không có công việc hôm nay</p>
         <h5 class="text-center mt-3 font-weight-bold" *ngIf="taskList?.length !== 0">Công việc trong ngày</h5>
         <ul class="list-group list-group-flush pt-3">
           <a *ngFor="let task of taskList; let i = index" mdbWavesEffect
             class="list-group-item list-group-item-action waves-light"
-            [ngClass]="{'list-group-item-action': task.id !== selectingId, 'active': task.id === selectingId}"
+            [ngClass]="{'list-group-item-action': task.id !== selectingId, 'active': (task.id === selectingId)}"
             (click)="loadTask(task.id)">
             {{task.title}} lúc {{task.startTime | date: 'HH:mm'}}
             <br>
             <small>Tại {{task.workplaceName}} - {{task.companyDTO.name}}</small>
           </a>
-          <div *ngIf="taskListResponse?.numberOfElements === 0">
-            <span class="text-danger pl-3">Không có công việc trong ngày</span>
+          <div *ngIf="taskListResponse?.numberOfElements === 0" class="text-center">
+            <span class="text-danger">Không có công việc trong ngày</span>
           </div>
           <app-pagination *ngIf="taskListResponse?.totalPages > 1" [pageSize]="taskListResponse.size"
             [totalPage]="taskListResponse.totalPages" [currentPage]="taskListResponse.number"

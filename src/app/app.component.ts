@@ -13,6 +13,7 @@ import { Employee } from './employee/models/employee';
 export class AppComponent implements OnInit {
 
   isRequesting = false;
+  isRequestingGoogleMap = false;
   userAccount: Employee;
 
   constructor(
@@ -25,6 +26,12 @@ export class AppComponent implements OnInit {
       (isLoading) => {
         setTimeout(() => {
           this.isRequesting = isLoading;
+        }, isLoading ? 0 : 500);
+    });
+    this.globalService.isRequestingGoogleMap.subscribe(
+      (isLoading) => {
+        setTimeout(() => {
+          this.isRequestingGoogleMap = isLoading;
         }, isLoading ? 0 : 500);
     });
     this.userAccount = this.globalService.getUserAccount();

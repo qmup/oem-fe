@@ -333,10 +333,10 @@ export class TaskDetailComponent implements OnInit {
     const from: Date = e.value[0];
     const to: Date = e.value[1];
     const duration = to.getMilliseconds() - from.getMilliseconds();
-    this.taskService.updateField(this.task.id, 'startTime', from.toISOString())
+    this.taskService.updateField(this.task.id, 'startTime', from)
       .then(
         () => {
-          this.taskService.updateField(this.task.id, 'endTime', to.toISOString())
+          this.taskService.updateField(this.task.id, 'endTime', to)
           .then(
             () => {
               this.taskService.updateField(this.task.id, 'duration', duration)

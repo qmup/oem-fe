@@ -19,14 +19,14 @@
             <div class="row">
               <h5 style="color: #8993a4" class="text-left col-xl-6 col-lg-12">
                 <span class="text-primary">{{userAccount.fullName}}</span>
-                 / Các công việc đang phụ trách</h5>
+                / Các công việc đang phụ trách</h5>
             </div>
             <app-task-search (searchChanged)="search($event)"></app-task-search>
             <table mdbTable mdbTableHover mdbTableScroll scrollX="true" maxWidth="100%">
               <thead>
                 <tr scole="col">
                   <th (click)="sort('id')">
-                    Mã công việc 
+                    Mã công việc
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
                   <th (click)="sort('title')">
@@ -63,42 +63,54 @@
                 </tr>
               </thead>
               <tbody>
-                <tr mdbTableCol *ngFor="let task of taskList" [routerLink]="['/task-detail', task.id]">                  
+                <tr mdbTableCol *ngFor="let task of taskList" [routerLink]="['/task-detail', task.id]">
                   <th scope="row">Công việc [{{ task.id }}]</th>
                   <td>{{ task.title }}</td>
                   <!-- <td>{{ task.description }}</td> -->
                   <td>{{ task.workplaceName }}</td>
                   <td>
-                    <img [src]="task.assigneePicture" class="rounded-circle img-responsive list-avatar mr-2">{{ task.assigneeName }}
+                    <img [src]="task.assigneePicture"
+                      class="rounded-circle img-responsive list-avatar mr-2">{{ task.assigneeName }}
                   </td>
                   <td>
-                    <span *ngIf="task.status === 0" style="font-size: 13px" class="badge badge-light">Chưa bắt đầu</span>
-                    <span *ngIf="task.status === 1" style="font-size: 13px" class="badge badge-primary">Đang thực hiện</span>
-                    <span *ngIf="task.status === 2" style="font-size: 13px" class="badge badge-success">Hoàn thành</span>
+                    <span *ngIf="task.status === 0" style="font-size: 13px" class="badge badge-light">Chưa bắt
+                      đầu</span>
+                    <span *ngIf="task.status === 1" style="font-size: 13px" class="badge badge-primary">Đang thực
+                      hiện</span>
+                    <span *ngIf="task.status === 2" style="font-size: 13px" class="badge badge-success">Hoàn
+                      thành</span>
                     <span *ngIf="task.status === 3" style="font-size: 13px" class="badge badge-danger">Quá hạn</span>
-                    <span *ngIf="task.status === 4" style="font-size: 13px" class="badge badge-warning">Đang chờ duyệt</span>
+                    <span *ngIf="task.status === 4" style="font-size: 13px" class="badge badge-warning">Đang chờ
+                      duyệt</span>
                   </td>
                   <td>
-                    <span *ngIf="task.attendanceStatus === 0" style="font-size: 13px" class="badge badge-light">Chưa điểm danh</span>
-                    <span *ngIf="task.attendanceStatus === 1" style="font-size: 13px" class="badge badge-success">Đúng giờ</span>
-                    <span *ngIf="task.attendanceStatus === 2" style="font-size: 13px" class="badge badge-warning">Trễ</span>
-                    <span *ngIf="task.attendanceStatus === 3" style="font-size: 13px" class="badge badge-danger">Vắng mặt</span>
+                    <span *ngIf="task.attendanceStatus === 0" style="font-size: 13px" class="badge badge-light">Chưa
+                      điểm danh</span>
+                    <span *ngIf="task.attendanceStatus === 1" style="font-size: 13px" class="badge badge-success">Đúng
+                      giờ</span>
+                    <span *ngIf="task.attendanceStatus === 2" style="font-size: 13px"
+                      class="badge badge-warning">Trễ</span>
+                    <span *ngIf="task.attendanceStatus === 3" style="font-size: 13px" class="badge badge-danger">Vắng
+                      mặt</span>
                   </td>
                   <td>
-                    Ngày {{task.startTime | date: 'dd/MM'}}: {{ task.startTime | date: 'HH:mm' }} ~ {{ task.endTime | date: 'HH:mm' }} 
+                    Ngày {{task.startTime | date: 'dd/MM'}}: {{ task.startTime | date: 'HH:mm' }} ~
+                    {{ task.endTime | date: 'HH:mm' }}
                   </td>
                   <td *ngIf="task.dateUpdate">
-                    Ngày {{task.dateUpdate | date: 'dd/MM'}}: {{ task.dateUpdate | date: 'HH:mm' }} ~ {{ task.dateUpdate | date: 'HH:mm' }} 
+                    Ngày {{task.dateUpdate | date: 'dd/MM'}}: {{ task.dateUpdate | date: 'HH:mm' }} ~
+                    {{ task.dateUpdate | date: 'HH:mm' }}
                   </td>
                   <td *ngIf="!task.dateUpdate"></td>
-                  </tr>
-                </tbody>
-                <div *ngIf="taskList?.length === 0" class="col-12 pt-5">
-                  <h6 class="text-danger">Không tìm thấy kết quả phù hợp</h6>
-                </div>
+                </tr>
+              </tbody>
+              <div *ngIf="taskList?.length === 0" class="col-12 pt-5">
+                <h6 class="text-danger">Không tìm thấy kết quả phù hợp</h6>
+              </div>
             </table>
-            <app-pagination *ngIf="taskListResponse?.totalPages > 1" [pageSize]="taskListResponse.size" [totalPage]="taskListResponse.totalPages"
-              [currentPage]="taskListResponse.number" (changePage)="changePage1($event)">
+            <app-pagination *ngIf="taskListResponse?.totalPages > 1" [pageSize]="taskListResponse.size"
+              [totalPage]="taskListResponse.totalPages" [currentPage]="taskListResponse.number"
+              (changePage)="changePage1($event)">
             </app-pagination>
           </div>
         </div>
@@ -123,70 +135,69 @@
           <label for="title">Tên công việc</label>
         </div>
 
-        <owl-form-field class="col-12 px-0">
-          <input owlInput [min]="minDate" [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker" placeholder="Thời gian bắt đầu" [(ngModel)]="taskCM.startTime">
+        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
+          <mdb-select placeholder="Công ty" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true"
+            [options]="companyList" (selected)="selectCompany($event)"></mdb-select>
+        </div>
+
+        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0" *ngIf="isSelectCompany">
+          <mdb-select placeholder="Khu vực" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="zoneList"
+            (selected)="selectZone($event)"></mdb-select>
+        </div>
+
+        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0" *ngIf="isSelectZone">
+          <mdb-select placeholder="Địa điểm" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true"
+            [options]="placeList" (selected)="selectWorkplace($event)"></mdb-select>
+        </div>
+
+        <owl-form-field class="col-12 px-0" *ngIf="isSelectWorkplace">
+          <input owlInput [min]="minDate" [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker"
+            placeholder="Thời gian bắt đầu" [(ngModel)]="taskCM.startTime">
           <owl-date-time #datepicker></owl-date-time>
         </owl-form-field>
-        
-        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
-          <mdb-select placeholder="Nhân viên" [notFoundMsg]="'Không tìm thấy'" [options]="employeeList" [filterEnabled]="true" (selected)="selectEmployee($event)"></mdb-select>
-          <!-- <label>Người thực hiện</label> -->
+
+        <span *ngIf="isSelectWorkplace">Thời gian hoàn thành</span>
+        <div class="w-100 d-flex justify-content-center align-items-center my-3" *ngIf="isSelectWorkplace">
+          <mdb-range-input id="range" [min]="10" [step]="10" [max]="300" name="range" (rangeValueChange)="isSelectRange = true" [(ngModel)]="taskCM.duration"
+            class="w-100"></mdb-range-input>
+          <span class="ml-2">phút</span>
         </div>
 
-        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
-          <mdb-select placeholder="Công ty" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="companyList" (selected)="selectCompany($event)"></mdb-select>
-        </div>
-        
-        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0" *ngIf="isSelectCompany">
-          <mdb-select placeholder="Khu vực" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="zoneList" (selected)="selectZone($event)"></mdb-select>
-        </div>
-        
-        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0" *ngIf="isSelectZone">
-          <mdb-select placeholder="Địa điểm" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="placeList" (selected)="selectWorkplace($event)"></mdb-select>
-        </div>
-
-        <hr>
-
-        <div *ngIf="isSelectWorkplace" class="d-flex flex-wrap w-100">
-          <p class="h6 col-12 px-0">Danh sách công việc gợi ý</p>
-          <div *ngFor="let list of taskBasicList; let i of index" class="col-6">
-            <mdb-checkbox name="item-{{i}}" [checked]="list.checked" #checkbox (change)="changeCheckbox(list.id, $event)">{{list.title}}</mdb-checkbox>
+        <div class="d-flex flex-wrap w-100 justify-content-center" *ngIf="isSelectRange && taskCM.startTime">
+          <div class="md-form mt-2 mb-3 col-md-10 px-0" *ngIf="isSelectRange && taskCM.startTime">
+            <mdb-select placeholder="Nhân viên" [notFoundMsg]="'Không tìm thấy'" [options]="employeeList"
+              [filterEnabled]="true" (selected)="selectEmployee($event)" [(ngModel)]="assignTask.assigneeId"></mdb-select>
+          </div>
+          <div class="col-md-2 px-0 text-right">
+            <a class="btn-floating btn-md btn-primary" (click)="openSuggestionModal(taskCM)"><i class="fa fa-lightbulb-o"></i></a>
           </div>
         </div>
 
-        <div class="col-12 md-form mt-0 mb-3 px-0">
+
+        <hr>
+
+        <div *ngIf="isSelectRange && taskCM.startTime" class="d-flex flex-wrap w-100">
+          <p class="h6 col-12 px-0">Danh sách công việc gợi ý</p>
+          <div *ngFor="let list of taskBasicList; let i of index" class="col-6">
+            <mdb-checkbox name="item-{{i}}" [checked]="list.checked" #checkbox
+              (change)="changeCheckbox(list.id, $event)">{{list.title}}</mdb-checkbox>
+          </div>
+        </div>
+
+        <div *ngIf="isSelectRange && taskCM.startTime" class="col-12 md-form mt-0 mb-3 px-0">
           <mdb-select class="select-wrapper mdb-select colorful-select dropdown-success" [options]="iconPrioritySelect"
             [(ngModel)]="taskCM.priority" placeholder="Mức độ ưu tiên">
           </mdb-select>
         </div>
 
-
-        <!-- <label class="col-md-2 col-xs-12" style="position: relative">
-          <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px">Đến</span>
-        </label> -->
-        <!-- <div class="col-md-5 col-xs-6">
-          <mdb-date-picker name="dateT" [options]="myDatePickerOptions" [placeholder]="'Chọn'" [(ngModel)]="dateTo"
-            [label]="'Ngày'">
-          </mdb-date-picker>
-        </div>
-        <div class="col-md-5 col-xs-6">
-          <mdb-time-picker [buttonLabel]="'Chọn'" [twelvehour]="false" [darktheme]="false" [placeholder]="'Chọn'"
-            [label]="'Giờ'" [(ngModel)]="timeTo">
-          </mdb-time-picker>
-        </div> -->
-        <span>Thời gian hoàn thành</span>
-        <div class="w-100 d-flex justify-content-center align-items-center my-3">
-          <mdb-range-input id="range" [min]="10" [step]="10" [max]="300" name="range" [(ngModel)]="taskCM.duration"
-            class="w-100"></mdb-range-input>
-          <span class="ml-2">phút</span>
-        </div>
-        <div class="col-12 md-form mt-0 mb-3 px-0">
-          <textarea type="text" id="description" class="md-textarea form-control" mdbInput [(ngModel)]="taskCM.description" placeholder="Chi tiết công việc"></textarea>
+        <div class="col-12 md-form mt-0 mb-3 px-0" *ngIf="isSelectRange && taskCM.startTime">
+          <textarea type="text" id="description" class="md-textarea form-control" mdbInput
+            [(ngModel)]="taskCM.description" placeholder="Chi tiết công việc"></textarea>
           <label>Chi tiết</label>
         </div>
       </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="schedule.show(); create.hide()">Tạo
+      <div class="modal-footer d-flex justify-content-center" *ngIf="isSelectRange && taskCM.startTime">
+        <button *ngIf="firstStep" mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="schedule.show(); create.hide()">Tạo
           mới
           <i class="fa fa-check ml-1"></i>
         </button>
@@ -220,15 +231,16 @@
           schedule</a>
         <a type="button" mdbBtn color="info" class="waves-effect col-12" mdbWavesEffect (click)="createTask()">Tạo task
           thông thường</a>
-        <a type="button" mdbBtn color="light" class="waves-effect col-12" mdbWavesEffect data-dismiss="modal" (click)="schedule.hide(); create.show()">Đóng</a>
+        <a type="button" mdbBtn color="light" class="waves-effect col-12" mdbWavesEffect data-dismiss="modal"
+          (click)="schedule.hide(); create.show()">Đóng</a>
       </div>
     </div>
     <!--/.Content-->
   </div>
 </div>
 
-<div mdbModal id="notification" #send="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
-  aria-hidden="true">
+<div mdbModal id="notification" #send="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="delete" aria-hidden="true">
   <div class="modal-dialog modal-sm modal-notify modal-primary" role="document">
     <!--Content-->
     <div class="modal-content text-center">
@@ -245,7 +257,8 @@
       <!--Footer-->
       <div class="modal-footer flex-center">
         <a mdbBtn color="primary" outline="true" class="waves-effect" mdbWavesEffect (click)="sendNoti('true')">Gửi</a>
-        <a type="button" mdbBtn color="primary" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="sendNoti('false')">Không</a>
+        <a type="button" mdbBtn color="primary" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+          (click)="sendNoti('false')">Không</a>
       </div>
     </div>
     <!--/.Content-->

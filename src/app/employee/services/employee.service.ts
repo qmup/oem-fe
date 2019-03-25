@@ -172,4 +172,19 @@ export class EmployeeService {
       }
     ).toPromise();
   }
+
+  suggest(managerId: number, workplaceId: number, date: string, startTime: string, duration: number) {
+    return this.httpClient.get<any>(
+      `${environment.endPoint}${environment.apiPaths.employee.suggestion}`,
+      {
+        params: {
+          managerId: `${managerId}`,
+          workplaceId: `${workplaceId}`,
+          date: `${date}`,
+          startTime: `${startTime}`,
+          duration: `${duration}`,
+        }
+      }
+    ).toPromise();
+  }
 }

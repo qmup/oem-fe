@@ -16,7 +16,11 @@ export class RequestInterceptorService implements HttpInterceptor {
   ) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.globalService.isRequesting.emit(true);
+    if (request.url.includes('suggestion')) {
+      this.globalService.isRequestingGoogleMap.emit(true);
+    } else {
+      this.globalService.isRequesting.emit(true);
+    }
     const token = this.authGuardService.getToken();
     if (token != null) {
       request = request.clone({
@@ -31,6 +35,8 @@ export class RequestInterceptorService implements HttpInterceptor {
         return event;
       }),
       finalize(() => {
+        request.url.includes('suggestion') ?
+        this.globalService.isRequestingGoogleMap.emit(false) :
         this.globalService.isRequesting.emit(false);
       })
     );

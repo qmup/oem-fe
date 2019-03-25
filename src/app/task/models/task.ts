@@ -57,15 +57,15 @@ export class TaskDaily {
   title: string;
   workplace: {
     beaconDTO: {
-      description: string,
-      id: number,
-      major: number,
-      minor: number,
-      name: string,
-      uuid: string,
+      description: string;
+      id: number;
+      major: number;
+      minor: number;
+      name: string;
+      uuid: string;
       workplace: PlaceModel;
       workplaceId: number;
-    },
+    };
     companyDTO: CompanyDTO;
     description: string;
     id: number;
@@ -166,5 +166,73 @@ export class TaskDetail {
     this.status = 0;
     this.description = '';
     this.checkList = new Array<TaskBasic>();
+  }
+}
+
+class DataTravel {
+  distance: number;
+  duration: number;
+
+  constructor() {
+    this.distance = 0;
+    this.duration = 0;
+  }
+}
+
+class TaskSuggestionModel {
+  companyAddress: string;
+  companyName: string;
+  endTime: string;
+  latitudeCompany: number;
+  longitudeCompany: number;
+  startTime: string;
+  taskId: number;
+
+  constructor() {
+    this.companyAddress = '';
+    this.companyName = '';
+    this.endTime = '';
+    this.latitudeCompany = 0;
+    this.longitudeCompany = 0;
+    this.startTime = '';
+    this.taskId = 0;
+  }
+}
+
+export class TaskSuggestion {
+  caseCpaToCpcAvailable: boolean;
+  caseCpcToCpbAvailable: boolean;
+  cpaAddress: string;
+  cpbAddress: string;
+  dataTravelFromCpAtoCpc: DataTravel;
+  dataTravelFromCpCtoCpB: DataTravel;
+  employeeId: number;
+  employeeName: string;
+  endTimePreviousTask: string;
+  moveFromHome: boolean;
+  startTimeNextTask: string;
+  taskSuggestionModels: TaskSuggestionModel[];
+  timeAllowedCpaToCpc: number;
+  timeAllowedCpcToCpB: number;
+  totalPoint: number;
+  typeCase: number;
+
+  constructor() {
+    this.caseCpaToCpcAvailable = false;
+    this.caseCpcToCpbAvailable = false;
+    this.cpaAddress = '';
+    this.cpbAddress = '';
+    this.dataTravelFromCpAtoCpc = new DataTravel();
+    this.dataTravelFromCpCtoCpB = new DataTravel();
+    this.employeeId = 0;
+    this.employeeName = '';
+    this.endTimePreviousTask = '';
+    this.moveFromHome = false;
+    this.startTimeNextTask = '';
+    this.taskSuggestionModels = new Array<TaskSuggestionModel>();
+    this.timeAllowedCpaToCpc = 0;
+    this.timeAllowedCpcToCpB = 0;
+    this.totalPoint = 0;
+    this.typeCase = 0;
   }
 }
