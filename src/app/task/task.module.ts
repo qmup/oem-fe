@@ -16,7 +16,7 @@ import { BasicTaskPagesComponent } from './pages/basic-task-pages/basic-task-pag
 import { BasicTaskUpdateComponent } from './components/basic-task-update/basic-task-update.component';
 import { BsDatepickerModule, ModalModule } from 'ngx-bootstrap';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
-import { OwlFormFieldModule, OwlInputModule } from 'owl-ng';
+import { OwlFormFieldModule, OwlInputModule, OwlRatingModule } from 'owl-ng';
 import { PlaceTaskBasicComponent } from '../place/components/place-task-basic/place-task-basic.component';
 import { TaskSearchComponent } from './components/task-search/task-search.component';
 
@@ -37,12 +37,13 @@ import { TaskSearchComponent } from './components/task-search/task-search.compon
   imports: [
     CommonModule,
     FormsModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
     TaskRoutingModule,
     CoreModule,
-    OwlFormFieldModule,
     OwlInputModule,
+    OwlDateTimeModule,
+    OwlFormFieldModule,
+    OwlRatingModule,
+    OwlNativeDateTimeModule,
     BsDatepickerModule.forRoot(),
     MDBBootstrapModulesPro.forRoot(),
   ],

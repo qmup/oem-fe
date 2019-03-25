@@ -107,7 +107,7 @@
 
           <!--Text-->
           <div class="list-group" *ngIf="employee.managerId !== 0">
-            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect>
+            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect [routerLink]="['/manager-detail', managerInfo.id]">
               <div class="avatar">
                 <img [src]="managerInfo.picture" alt="" class="rounded-circle img-responsive list-avatar">
               </div>
@@ -131,6 +131,9 @@
           <mdb-card-title class="d-flex flex-wrap">
             <div class="col pr-0">
               <p class="h5">Hồ sơ nhân viên</p>
+            </div>
+            <div class="col pr-0">
+              <a class="btn-floating btn-md btn-primary"><i class="fa fa-pencil" (click)="openUpdateEmployeeModal(employee)"></i></a>
             </div>
           </mdb-card-title>
 

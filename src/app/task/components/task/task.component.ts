@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ToastService, IMyOptions } from 'ng-uikit-pro-standard';
+import { ToastService } from 'ng-uikit-pro-standard';
 import { TaskService } from '../../service/task.service';
 import { Task, TaskModel } from '../../models/task';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -9,13 +9,11 @@ import { ScheduleService } from '../../service/schedule.service';
 import { ScheduleModel } from '../../models/schedule';
 import { GlobalService } from 'src/app/core/services/global.service';
 import { PaginationResponse, AssignTask, NotificationSendingModel } from 'src/app/core/models/shared';
-import { ManageWorkplace, Place, PlacePagination } from 'src/app/place/models/place';
-import { Zone, ZonePagination } from 'src/app/place/models/zone';
+import { ManageWorkplace, PlacePagination } from 'src/app/place/models/place';
+import { ZonePagination } from 'src/app/place/models/zone';
 import { ZoneService } from 'src/app/place/services/zone.service';
 import { CompanyService } from 'src/app/place/services/company.service';
-import { Company } from 'src/app/place/models/company';
 import { TaskBasicService } from '../../service/task-basic.service';
-import { TaskBasic } from '../../models/task-basic';
 import { Employee } from 'src/app/employee/models/employee';
 import { TaskSearchResponse } from '../../models/task-search';
 

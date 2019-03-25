@@ -150,6 +150,7 @@ export class TaskDetail {
   picture: string;
   status: number;
   description: string;
+  rating: number;
   checkList: TaskBasic[];
 
   constructor() {

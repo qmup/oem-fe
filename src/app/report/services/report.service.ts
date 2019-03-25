@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { TaskReport, TaskModel } from '../models/report';
+import { TaskReport, TaskModel, ReportList } from '../models/report';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +15,8 @@ export class ReportService {
       `${environment.endPoint}${environment.apiPaths.report.delete + id}`
     ).toPromise();
   }
-  getByTaskId(taskId: number): Promise<TaskReport[]> {
-    return this.httpClient.get<TaskReport[]>(
+  getByTaskId(taskId: number): Promise<ReportList> {
+    return this.httpClient.get<ReportList>(
       `${environment.endPoint}${environment.apiPaths.report.getByTaskId + taskId}`,
     ).toPromise();
   }

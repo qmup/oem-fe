@@ -45,6 +45,7 @@
               <!--Content-->
               <div class="content">
                 <h4 style="cursor: pointer; color: #007bff">{{p.name}}</h4>
+                <h6>Miêu tả: {{[p.description ? p.description : 'Chưa có']}}</h6>
                 <hr>
                 <div *ngIf="userAccount.roleId === 2">
                   <p>Số lần vệ sinh:
@@ -72,7 +73,7 @@
                     <i class="fa fa-trash fa-1x"></i>
                   </button>
                   <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect
-                    (click)="openCreateTaskModal(p.id)"
+                    (click)="openCreateTaskModal(p.id, i)"
                     *ngIf="userAccount.roleId === 2 && (p.taskList.length < p.numberOfReworks)">Tạo công việc</button>
                   <div class="col-12 text-center">
                     <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect
@@ -220,7 +221,13 @@
         </button>
       </div>
       <div class="modal-body mx-3 row">
-        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
+        <h6 class="font-weight-bold">Các công việc trong ngày tại đây: </h6>
+        <div *ngFor="let t of placeList[currentIndex]?.taskList; let idx2 = index" class="col-12">
+          {{ idx2 + 1 }}. {{ t.assignee }} - từ {{ t.startTime | date: 'HH:mm' }} đến
+          {{ t.endTime | date: 'HH:mm' }}
+        </div>
+
+        <div class="md-form mt-3 mb-3 col-6 col-md-12 px-0">
           <input type="text" id="title" class="form-control" mdbInput [(ngModel)]="taskCM.title">
           <label for="title">Tên công việc</label>
         </div>

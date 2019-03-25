@@ -1,3 +1,5 @@
+import { Task } from 'src/app/task/models/task';
+
 export class TaskReport {
   id: number;
   taskId: number;
@@ -6,6 +8,8 @@ export class TaskReport {
   dateReport: string;
   employeeId: number;
   type: number;
+  evaluation: string;
+  pictures: any[];
 
   constructor() {
     this.id = 0;
@@ -15,6 +19,7 @@ export class TaskReport {
     this.dateReport = '';
     this.employeeId = 0;
     this.type = 0;
+    this.pictures = [];
   }
 }
 
@@ -35,5 +40,14 @@ export class TaskModel {
     this.photo = '';
     this.taskId = 0;
     this.type = 0;
+  }
+}
+
+export class ReportList {
+  reportList: TaskReport[];
+  taskList: Task[];
+
+  constructor() {
+    this.reportList = new Array<TaskReport>();
   }
 }

@@ -40,7 +40,6 @@ export class TaskDetailComponent implements OnInit {
   sub: any;
   task: TaskDetail = new TaskDetail();
   report: TaskReport[] = new Array<TaskReport>();
-  picturesReport = [];
   userAccount: Employee;
   taskList: Task[];
   startTime: Date;
@@ -57,6 +56,8 @@ export class TaskDetailComponent implements OnInit {
   filesToUpload: FileList;
   taskBasicManager: TaskBasicManager = new TaskBasicManager();
   url: any;
+  dateFrom: string;
+  dateTo: string;
   canUpdate = false;
   currentPage2 = 0;
   taskBasicManagerResponse: PaginationResponse;
@@ -69,6 +70,11 @@ export class TaskDetailComponent implements OnInit {
   historyAssign: AssignTaskResponse[];
   searchDateRange = [];
   managerReport: ReportModel = new ReportModel();
+  selectingId: number;
+  searchByDate = false;
+  taskListResponse: PaginationResponse;
+  currentPage = 0;
+  taskBasicList: Task[];
 
   constructor(
     private taskService: TaskService,
@@ -110,8 +116,11 @@ export class TaskDetailComponent implements OnInit {
             new Date(this.task.startTime),
             new Date(this.task.endTime)
           ];
-          this.sub === id ? this.getTodayTaskByEmployee() : console.log();
         }
+      ).then(
+        () => {
+          !this.searchByDate ? this.getTodayTaskByEmployee() : console.log();
+        },
       );
   }
 
@@ -119,24 +128,29 @@ export class TaskDetailComponent implements OnInit {
     this.reportService.getByTaskId(id)
       .then(
         (response) => {
-          this.report = response;
+          this.report = response.reportList;
+          this.taskBasicList = response.taskList;
           if (this.report.length !== 0) {
             this.report.forEach((element, i) => {
+              element.pictures = [];
               if (element.photo) {
                 if (element.photo.includes(';')) {
-                  this.picturesReport.push({
-                    img: element.photo.split(';'),
-                    thump: element.photo.split(';'),
-                    description: `Hình ${i + 1}`
+                  element.photo.split('; ').forEach(element1 => {
+                    element.pictures.push({
+                      img: element1,
+                      thump: element1,
+                      description: `Hình ${i + 1}`
+                    });
                   });
                 } else {
-                  this.picturesReport.push({
+                  element.pictures.push({
                     img: element.photo,
                     thump: element.photo,
                     description: `Hình`
                   });
                 }
               }
+              console.log(element.pictures);
             });
           }
         }
@@ -153,15 +167,6 @@ export class TaskDetailComponent implements OnInit {
       );
   }
 
-  getTodayTask() {
-    this.taskService.getTaskByManager(this.userAccount.id, '', '', 'id', 0, 99)
-      .then(
-        (response) => {
-          this.taskList = response.content;
-        }
-      );
-  }
-
   getTodayTaskByEmployee() {
     this.taskService.getTodayTaskByEmployee(this.task.assignee.id)
       .then(
@@ -172,11 +177,15 @@ export class TaskDetailComponent implements OnInit {
   }
 
   getTaskByDate(e) {
-    const from = this.globalService.convertToYearMonthDay(e.value[0]);
-    const to = this.globalService.convertToYearMonthDay(e.value[1]);
-    this.taskService.getTaskByDate(this.task.assignee.id, from, to, 0, 5)
+    if (e) {
+      this.dateFrom = this.globalService.convertToYearMonthDay(e.value[0]);
+      this.dateTo = this.globalService.convertToYearMonthDay(e.value[1]);
+    }
+    this.taskService.getTaskByDate(this.task.assignee.id, this.dateFrom, this.dateTo, this.currentPage, 5)
       .then(
         (response) => {
+          this.searchByDate = true;
+          this.taskListResponse = response;
           this.taskList = response.content;
         }
       );
@@ -225,8 +234,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   loadTask(id: number) {
-    this.id = id;
-    this.picturesReport = [];
+    this.selectingId = id;
     this.getTaskDetail(id);
     this.getTaskReport(id);
   }
@@ -263,7 +271,7 @@ export class TaskDetailComponent implements OnInit {
             if (this.selectedTaskBasic.length - 1 === i) {
               this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
               this.canRemove = false;
-              this.loadTask(this.id);
+              this.loadTask(this.selectingId);
             }
           },
           (error) => {
@@ -287,7 +295,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   removeTask() {
-    this.taskService.remove(this.id)
+    this.taskService.remove(this.selectingId)
       .then(
         (response) => {
           this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
@@ -302,14 +310,14 @@ export class TaskDetailComponent implements OnInit {
   assign(): any {
     this.assignTask.dateAssign = new Date().toISOString();
     this.assignTask.assignerId = this.userAccount.id;
-    this.assignTask.taskId = this.id;
+    this.assignTask.taskId = this.selectingId;
     this.assignTask.assigneeId = this.assignTask.assigneeId;
     this.globalService.assignTask(this.assignTask)
       .then(
         (response) => {
           this.toastService.success('Assign thành công', '', { positionClass: 'toast-bottom-right'});
           this.assignModal.hide();
-          this.loadTask(this.id);
+          this.loadTask(this.selectingId);
         },
         (error) => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -359,7 +367,7 @@ export class TaskDetailComponent implements OnInit {
       initialState: { workplaceId, task }
     };
     this.modalRef = this.modalService.show(PlaceTaskBasicComponent, modalOptions);
-    this.modalRef.content.refresh.subscribe(() => this.getTaskDetail(this.id));
+    this.modalRef.content.refresh.subscribe(() => this.getTaskDetail(this.selectingId));
   }
 
   openEditModal() {
@@ -412,7 +420,7 @@ export class TaskDetailComponent implements OnInit {
                         .then(
                           () => {
                             this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-                            this.loadTask(this.id);
+                            this.loadTask(this.selectingId);
                             this.createModal.hide();
                           },
                           () => {
@@ -439,7 +447,7 @@ export class TaskDetailComponent implements OnInit {
             .then(
               () => {
                 this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-                this.loadTask(this.id);
+                this.loadTask(this.selectingId);
                 this.createModal.hide();
               },
               () => {
@@ -451,7 +459,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   createReport() {
-    this.managerReport.taskId = this.id;
+    this.managerReport.taskId = this.selectingId;
     this.managerReport.employeeId = this.userAccount.id;
     this.managerReport.type = 2;
     this.reportService.update(this.managerReport)
@@ -489,7 +497,7 @@ export class TaskDetailComponent implements OnInit {
         () => {
           this.toastService.success('Thêm thành công', '', { positionClass: 'toast-bottom-right'} );
           this.editTaskBasicModal.hide();
-          this.loadTask(this.id);
+          this.loadTask(this.selectingId);
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -561,6 +569,11 @@ export class TaskDetailComponent implements OnInit {
       this.dragOver = false;
     }
     this.showFiles();
+  }
+
+  changePage1(event) {
+    this.currentPage = event - 1;
+    this.getTaskByDate('');
   }
 
 }

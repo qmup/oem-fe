@@ -6,10 +6,11 @@ import { ManagerService } from 'src/app/manager/services/manager.service';
 import { Manager } from 'src/app/manager/models/manager';
 import { humanizeBytes, UploadInput, UploadFile, UploadOutput, ToastService } from 'ng-uikit-pro-standard';
 import { PaginationResponse } from 'src/app/core/models/shared';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective, ModalOptions, BsModalService, BsModalRef } from 'ngx-bootstrap';
 import { GlobalService } from 'src/app/core/services/global.service';
 import { TaskService } from 'src/app/task/service/task.service';
 import { Task } from 'src/app/task/models/task';
+import { EmployeeUpdateComponent } from '../employee-update/employee-update.component';
 
 @Component({
   selector: 'app-employee-detail',
@@ -38,6 +39,7 @@ export class EmployeeDetailComponent implements OnInit {
   userAccount: Employee;
   taskList: Task[] = new Array<Task>();
   deletingId = 0;
+  modalRef: BsModalRef;
 
   constructor(
     private route: ActivatedRoute,
@@ -46,6 +48,7 @@ export class EmployeeDetailComponent implements OnInit {
     private toastService: ToastService,
     private globalService: GlobalService,
     private taskService: TaskService,
+    private modalService: BsModalService,
   ) {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
@@ -99,6 +102,19 @@ export class EmployeeDetailComponent implements OnInit {
   openRemoveTaskModal(id: number) {
     this.deletingId = id;
     this.deleteModal.show();
+  }
+
+  openUpdateEmployeeModal(employee: Employee) {
+    const modalOptions: ModalOptions = {
+      animated: true,
+      class: 'modal-lg modal-notify modal-primary',
+      initialState: { employee }
+    };
+    this.modalRef = this.modalService.show(EmployeeUpdateComponent, modalOptions);
+    this.modalRef.content.refresh.subscribe(
+      () => this.getEmployeeDetail(this.id)
+    );
+
   }
 
   selectManager(e: any) {

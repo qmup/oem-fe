@@ -62,7 +62,8 @@ export class PlaceComponent implements OnInit {
   beaconList = [];
   minDate = new Date();
   dateRange = [];
-  dateSearch: Date;
+  dateSearch: any;
+  currentIndex = 0;
 
   constructor(
     public location: Location,
@@ -317,18 +318,24 @@ export class PlaceComponent implements OnInit {
             this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
           }
         )
+        .then(
+          () => this.getPlace()
+        )
         :
       this.placeService.updateField(workplaceId, 'status', 0)
         .then(
           () => {
             this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
           }
+        )
+        .then (
+          () => this.getPlace()
         );
-    this.getPlace();
   }
 
-  openCreateTaskModal(id: number) {
+  openCreateTaskModal(id: number, index) {
     this.currentWorkplaceId = id;
+    this.currentIndex = index;
     this.createTaskModal.show();
   }
   openCreateModal() {
