@@ -132,6 +132,9 @@ export class TaskDetailComponent implements OnInit {
           this.taskBasicList = response.taskList;
           if (this.report.length !== 0) {
             this.report.forEach((element, i) => {
+              if (element.evaluation) {
+                element.evaluated = true;
+              }
               element.pictures = [];
               if (element.photo) {
                 if (element.photo.includes(';')) {
@@ -150,7 +153,6 @@ export class TaskDetailComponent implements OnInit {
                   });
                 }
               }
-              console.log(element.pictures);
             });
           }
         }
@@ -574,6 +576,33 @@ export class TaskDetailComponent implements OnInit {
   changePage1(event) {
     this.currentPage = event - 1;
     this.getTaskByDate('');
+  }
+
+  approve(report: ReportModel, type: number) {
+    this.reportService.update(report)
+      .then(
+        () => {
+          if (type === 1) {
+            this.taskService.updateField(report.taskId, 'rating', this.task.rating)
+              .then(
+                () => {
+                  this.toastService.success('Đã duyệt', '', { positionClass: 'toast-bottom-right'} );
+                  this.selectingId ? this.loadTask(this.selectingId) : this.loadTask(this.id);
+                }
+              );
+          } else {
+            this.toastService.success('Đã đề xuất cách giải quyết', '', { positionClass: 'toast-bottom-right'} );
+            this.selectingId ? this.loadTask(this.selectingId) : this.loadTask(this.id);
+          }
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xày ra', '', { positionClass: 'toast-bottom-right'} );
+        }
+      );
+  }
+
+  solveProblem(report: ReportModel) {
+
   }
 
 }

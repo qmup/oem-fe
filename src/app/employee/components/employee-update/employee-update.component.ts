@@ -93,10 +93,13 @@ export class EmployeeUpdateComponent implements OnInit {
     } else {
       this.gender = 1;
     }
-    const year = this.employee.birthDate.split('-', 3)[0];
-    const month = this.employee.birthDate.split('-', 3)[1];
-    const day = this.employee.birthDate.split('-', 3)[2];
-    this.employee.birthDate = `${day}-${month}-${year}`;
+    this.location.address_level_1 = this.employee.address;
+    this.location.lat = this.employee.latitude;
+    this.location.lng = this.employee.longitude;
+    // const year = this.employee.birthDate.split('-', 3)[0];
+    // const month = this.employee.birthDate.split('-', 3)[1];
+    // const day = this.employee.birthDate.split('-', 3)[2];
+    // this.employee.birthDate = `${day}-${month}-${year}`;
   }
 
   checkEmailExist() {
@@ -149,10 +152,27 @@ export class EmployeeUpdateComponent implements OnInit {
   }
 
   updateEmployee() {
-    this.employee.latitude = this.location.lat;
-    this.employee.longitude = this.location.lng;
-    this.employee.address = this.location.address_level_1;
+    this.employeeUM.latitude = this.location.lat;
+    this.employeeUM.longitude = this.location.lng;
+    this.employeeUM.address = this.location.address_level_1;
     this.employee.fullName = `${this.employee.firstName} ${this.employee.lastName}`;
+    this.employeeUM.id = this.employee.id;
+    this.employeeUM.employeeId = this.employee.employeeId;
+    this.employeeUM.firstName = this.employee.firstName;
+    this.employeeUM.fullName = this.employee.fullName;
+    this.employeeUM.picture = this.employee.picture;
+    this.employeeUM.lastName = this.employee.lastName;
+    this.employeeUM.password = this.employee.password;
+    this.employeeUM.managerId = this.employee.managerId;
+    this.employeeUM.phoneMacAddress = this.employee.phoneMacAddress;
+    this.employeeUM.phoneNumber = this.employee.phoneNumber;
+    this.employeeUM.resetPasswordToken = this.employee.resetPasswordToken;
+    this.employeeUM.roleId = this.employee.roleId;
+    this.employeeUM.sex = this.employee.sex;
+    (this.gender === 0) ? this.employeeUM.sex = true : this.employeeUM.sex = false;
+    this.employeeUM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employee.birthDate));
+    this.employeeUM.address = this.employee.address;
+    this.employeeUM.email = this.employee.email;
     if (this.employee.roleId === 2) {
       this.employee.managerId = 0;
     }
@@ -170,25 +190,7 @@ export class EmployeeUpdateComponent implements OnInit {
     this.globalService.uploadFile(formData, 'image/employee/')
       .then(
         (response) => {
-          this.employeeUM.id = this.employee.id;
-          this.employeeUM.employeeId = this.employee.employeeId;
-          this.employeeUM.firstName = this.employee.firstName;
-          this.employeeUM.fullName = this.employee.fullName;
-          this.employeeUM.lastName = this.employee.lastName;
-          this.employeeUM.password = this.employee.password;
-          this.employeeUM.managerId = this.employee.managerId;
-          this.employeeUM.phoneMacAddress = this.employee.phoneMacAddress;
-          this.employeeUM.phoneNumber = this.employee.phoneNumber;
           this.employeeUM.picture = response;
-          this.employeeUM.resetPasswordToken = this.employee.resetPasswordToken;
-          this.employeeUM.roleId = this.employee.roleId;
-          this.employeeUM.sex = this.employee.sex;
-          (this.gender === 0) ? this.employeeUM.sex = true : this.employeeUM.sex = false;
-          this.employeeUM.address = this.employee.address;
-          console.log(this.employeeUM.birthDate);
-          this.employeeUM.birthDate = this.globalService.convertStringToYearMonthDay(this.employee.birthDate);
-          console.log(this.employeeUM.birthDate);
-          this.employeeUM.email = this.employee.email;
           this.employeeService.update(this.employeeUM)
             .then(
               () => {
@@ -208,23 +210,6 @@ export class EmployeeUpdateComponent implements OnInit {
   }
 
   updateEmployeeWithoutImage() {
-    this.employeeUM.id = this.employee.id;
-    this.employeeUM.employeeId = this.employee.employeeId;
-    this.employeeUM.firstName = this.employee.firstName;
-    this.employeeUM.fullName = this.employee.fullName;
-    this.employeeUM.lastName = this.employee.lastName;
-    this.employeeUM.password = this.employee.password;
-    this.employeeUM.phoneMacAddress = this.employee.phoneMacAddress;
-    this.employeeUM.phoneNumber = this.employee.phoneNumber;
-    this.employeeUM.picture = this.employee.picture;
-    this.employeeUM.managerId = this.employee.managerId;
-    this.employeeUM.resetPasswordToken = this.employee.resetPasswordToken;
-    this.employeeUM.roleId = this.employee.roleId;
-    this.employeeUM.sex = this.employee.sex;
-    (this.gender === 0) ? this.employeeUM.sex = true : this.employeeUM.sex = false;
-    this.employeeUM.address = this.employee.address;
-    this.employeeUM.birthDate = this.globalService.convertStringToYearMonthDay(this.employee.birthDate);
-    this.employeeUM.email = this.employee.email;
     this.employeeService.update(this.employeeUM)
       .then(
         () => {

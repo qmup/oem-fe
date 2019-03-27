@@ -246,6 +246,8 @@ export class LaborerComponent implements OnInit {
     this.employeeCM.longitude = this.location.lng;
     this.employeeCM.latitude = this.location.lat;
     (this.gender === 0) ? this.employeeCM.sex = false : this.employeeCM.sex = true;
+    console.log(this.employeeCM.birthDate);
+    this.employeeCM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employeeCM.birthDate));
     this.filesToUpload ? this.createEmployeeWithImage() : this.createEmployeeWithoutImage();
   }
 
@@ -260,7 +262,6 @@ export class LaborerComponent implements OnInit {
     this.globalService.uploadFile(formData, 'image/employee/')
       .then(
         (response) => {
-          this.employeeCM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employeeCM.birthDate));
           this.employeeCM.picture = response;
           this.employeeService.create(this.employeeCM)
             .then(
@@ -282,7 +283,6 @@ export class LaborerComponent implements OnInit {
   }
 
   createEmployeeWithoutImage() {
-    this.employeeCM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employeeCM.birthDate));
     this.employeeService.create(this.employeeCM)
       .then(
         () => {
@@ -302,7 +302,7 @@ export class LaborerComponent implements OnInit {
       .then(
         (res) => {
           if (res.removable) {
-            this.employeeService.remove(this.id)
+            this.employeeService.updateField(this.id, 'status', 0)
               .then(
                 () => {
                   this.toastService.success('Xóa nhân viên thành công', '', { positionClass: 'toast-bottom-right'} );
@@ -315,7 +315,7 @@ export class LaborerComponent implements OnInit {
                 }
               );
           } else {
-          this.toastService.error(res.message , '', { positionClass: 'toast-bottom-right'});
+            this.toastService.error(res.message , '', { positionClass: 'toast-bottom-right'});
           }
         }
       );

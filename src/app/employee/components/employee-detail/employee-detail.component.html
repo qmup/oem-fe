@@ -176,8 +176,7 @@
       <div class="modal-body mx-3 row">
         <div class="col-12">
           <div class="md-form my-3">
-            <mdb-select [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="managerList" (selected)="selectManager($event)"></mdb-select>
-            <label>Quản lý</label>
+            <mdb-select [label]="'Quản lý'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="managerList" (selected)="selectManager($event)"></mdb-select>
           </div>
         </div>
       </div>

@@ -207,11 +207,11 @@ export class BasicTaskComponent implements OnInit {
     this.deleteModal.show();
   }
 
-  removeTaskBasicOfManager() {
+  removeTaskBasic() {
     this.taskBasicService.remove(this.deletingId, this.userAccount.id)
       .then(
         (response) => {
-          this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'} );
           this.deleteModal.hide();
           if (this.userAccount.roleId === 1 ) {
             this.taskBasicList = [];

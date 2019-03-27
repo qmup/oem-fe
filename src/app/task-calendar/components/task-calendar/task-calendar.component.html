@@ -8,6 +8,7 @@
             mwlCalendarPreviousView
             [view]="'day'"
             [(viewDate)]="viewDate"
+            (click)="getCalendarEvent()"
           >
             Trước
           </div>
@@ -15,6 +16,7 @@
             class="btn btn-outline-primary"
             mwlCalendarToday
             [(viewDate)]="viewDate"
+            (click)="getCalendarEvent()"
           >
             Hôm nay
           </div>
@@ -23,6 +25,7 @@
             mwlCalendarNextView
             [view]="'day'"
             [(viewDate)]="viewDate"
+            (click)="getCalendarEvent()"
           >
             Sau
           </div>

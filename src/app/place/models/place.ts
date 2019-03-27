@@ -25,7 +25,7 @@ export class PlaceModel {
   }
 }
 
-class TaskList {
+export class TaskList {
   taskName: string;
   startTime: string;
   endTime: string;

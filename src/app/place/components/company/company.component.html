@@ -35,7 +35,9 @@
               <!--Text-->
 
               <mdb-card-text>
-                {{c.address}}
+                <i class="fa fa-map-marker mr-2"></i>{{c.address}}
+                <br>
+                <i class="fa fa-phone mr-2"></i>{{c.phone}}
               </mdb-card-text>
 
               <agm-map [latitude]="c.latitude" [longitude]="c.longitude" [zoom]="location.zoom" style="height: 200px">
@@ -43,8 +45,8 @@
               </agm-map>
 
 
-              <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light" *ngIf="userAccount.roleId === 1"
-                mdbWavesEffect (click)="openUpdateModal(c)">
+              <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light"
+                *ngIf="userAccount.roleId === 1" mdbWavesEffect (click)="openUpdateModal(c)">
                 <i class="fa fa-pencil"></i>
               </button>
               <button title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light" mdbWavesEffect
@@ -59,16 +61,17 @@
           <!--/.Card-->
         </div>
       </div>
-      <app-pagination *ngIf="companyResponse?.totalPages > 1" [pageSize]="companyResponse.size" [totalPage]="companyResponse.totalPages"
-        [currentPage]="companyResponse.number" (changePage)="changePage($event)">
+      <app-pagination *ngIf="companyResponse?.totalPages > 1" [pageSize]="companyResponse.size"
+        [totalPage]="companyResponse.totalPages" [currentPage]="companyResponse.number"
+        (changePage)="changePage($event)">
       </app-pagination>
     </div>
   </section>
 </div>
 <!--/.Card-->
 
-<div mdbModal #create="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="add"
-  aria-hidden="true">
+<div mdbModal #create="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="add" aria-hidden="true">
   <div class="modal-dialog modal-notify modal-success" role="document">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
@@ -87,6 +90,14 @@
 
         <div class="col-md-12">
           <div class="md-form mt-0 mb-3">
+            <input type="text" id="phone" class="form-control" mdbInput [(ngModel)]="companyCM.phone">
+            <label for="phone">Số điện thoại</label>
+          </div>
+        </div>
+
+
+        <div class="col-md-12">
+          <div class="md-form mt-0 mb-3">
             <input type="text" [(ngModel)]='location.address_level_1' class="form-control" id="searchField" mdbInput>
             <label for="searchField">Địa chỉ công ty</label>
 
@@ -102,8 +113,8 @@
         </div>
 
         <div class="col-md-12">
-          <agm-map #map [mapTypeId]="'terrain'" [latitude]="location.lat" [longitude]="location.lng" [zoom]="location.zoom"
-            style="height: 300px">
+          <agm-map #map [mapTypeId]="'terrain'" [latitude]="location.lat" [longitude]="location.lng"
+            [zoom]="location.zoom" style="height: 300px">
             <agm-marker [latitude]="location.lat" [longitude]="location.lng"></agm-marker>
           </agm-map>
         </div>
@@ -111,8 +122,8 @@
         <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
           <div mdbBtn floating="true" size="md" color="blue" mdbWavesEffect>
             <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-            <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect (uploadOutput)="onUploadOutput($event)"
-              [uploadInput]="uploadInput">
+            <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
+              (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
           </div>
           <div class="file-path-wrapper mt-3">
             <input class="file-path" type="text" placeholder="Chọn hình ảnh tải lên" [value]="showFiles()">
@@ -133,14 +144,14 @@
 </div>
 
 
-<div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
-  aria-hidden="true">
+<div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="delete" aria-hidden="true">
   <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
     <!--Content-->
     <div class="modal-content text-center">
       <!--Header-->
       <div class="modal-header d-flex justify-content-center">
-        Xóa công ty này?
+        <p class="heading">Xóa công ty này?</p>
       </div>
 
       <!--Body-->
@@ -151,7 +162,8 @@
       <!--Footer-->
       <div class="modal-footer flex-center">
         <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeCompany()">Đồng ý</a>
-        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">Hủy</a>
+        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+          (click)="delete.hide()">Hủy</a>
       </div>
     </div>
     <!--/.Content-->

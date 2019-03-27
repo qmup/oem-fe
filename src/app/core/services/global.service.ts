@@ -56,17 +56,17 @@ export class GlobalService {
     }
   ];
   optionsSex = [
-    { value: 1, label: 'Nam' },
-    { value: 2, label: 'Nữ' },
+    { value: 0, label: 'Nam' },
+    { value: 1, label: 'Nữ' },
   ];
   week = [
-    { id: 1, inputId: 'option1', label: 'Thứ 2' , check: false},
-    { id: 2, inputId: 'option2', label: 'Thứ 3' , check: false},
-    { id: 3, inputId: 'option3', label: 'Thứ 4' , check: false},
-    { id: 4, inputId: 'option4', label: 'Thứ 5' , check: false},
-    { id: 5, inputId: 'option5', label: 'Thứ 6' , check: false},
-    { id: 6, inputId: 'option6', label: 'Thứ 7' , check: false},
-    { id: 7, inputId: 'option7', label: 'Chủ nhật' , check: false},
+    { id: 2, inputId: 'option1', label: 'Thứ 2' , check: false},
+    { id: 3, inputId: 'option2', label: 'Thứ 3' , check: false},
+    { id: 4, inputId: 'option3', label: 'Thứ 4' , check: false},
+    { id: 5, inputId: 'option4', label: 'Thứ 5' , check: false},
+    { id: 6, inputId: 'option5', label: 'Thứ 6' , check: false},
+    { id: 7, inputId: 'option6', label: 'Thứ 7' , check: false},
+    { id: 1, inputId: 'option7', label: 'Chủ nhật' , check: false},
   ];
   typeList = [
     { value: 1, label: 'Cơ bản' },

@@ -22,7 +22,7 @@ export class ReportService {
   }
   update(reportUM: TaskModel) {
     return this.httpClient.put<TaskModel>(
-      `${environment.endPoint}${environment.apiPaths.workplace.update}`, reportUM,
+      `${environment.endPoint}${environment.apiPaths.report.update}`, reportUM,
     ).toPromise();
   }
 }

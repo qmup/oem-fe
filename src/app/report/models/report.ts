@@ -9,10 +9,12 @@ export class TaskReport {
   employeeId: number;
   type: number;
   evaluation: string;
+  evaluated: boolean;
   pictures: any[];
 
   constructor() {
     this.id = 0;
+    this.evaluated = false;
     this.taskId = 0;
     this.description = '';
     this.photo = '';
@@ -24,6 +26,7 @@ export class TaskReport {
 }
 
 export class TaskModel {
+  evaluation: string;
   dateReport: string;
   description: string;
   employeeId: number;
@@ -33,6 +36,7 @@ export class TaskModel {
   type: number;
 
   constructor() {
+    this.evaluation = '';
     this.dateReport = '';
     this.description = '';
     this.employeeId = 0;

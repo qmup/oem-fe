@@ -112,4 +112,22 @@ export class PlaceService {
         }
       ).toPromise();
   }
+
+  getAvailableByDate(
+    managerId: number, zoneId: number, date: string, sort: string, fieldSort: string, page: number, size: number
+  ): Promise<any> {
+    return this.httpClient.get<any>(
+      `${environment.endPoint}${environment.apiPaths.workplace.getAvailableByDate + managerId}`,
+      {
+        params: {
+          zoneId: `${zoneId}`,
+          date: `${date}`,
+          sort: `${sort}`,
+          fieldSort: `${fieldSort}`,
+          page: `${page}`,
+          size: `${size}`
+        }
+      }
+    ).toPromise();
+  }
 }

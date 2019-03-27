@@ -14,6 +14,8 @@ import { ModalModule } from 'ngx-bootstrap';
 import { EmployeeUpdateComponent } from './components/employee-update/employee-update.component';
 import { CoreModule } from '../core/core.module';
 import { AgmCoreModule } from '@agm/core';
+import { OwlInputModule, OwlFormFieldModule } from 'owl-ng';
+import { OwlNativeDateTimeModule, OwlDateTimeModule } from 'ng-pick-datetime';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,10 @@ import { AgmCoreModule } from '@agm/core';
     CommonModule,
     FormsModule,
     CoreModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    OwlFormFieldModule,
+    OwlInputModule,
     EmployeeRoutingModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBzi6k4xf4dNTVRofgFajZKQbApQ_hbzzc'

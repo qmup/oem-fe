@@ -5,6 +5,7 @@ export class Company {
   picture: string;
   latitude: number;
   longitude: number;
+  phone: string;
 
   constructor() {
     this.address = '';
@@ -13,5 +14,6 @@ export class Company {
     this.picture = '';
     this.latitude = 0;
     this.longitude = 0;
+    this.phone = '';
   }
 }

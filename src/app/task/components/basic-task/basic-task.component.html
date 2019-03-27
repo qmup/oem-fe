@@ -48,6 +48,10 @@
                       <i class="fa fa-pencil"></i>
                     </a>
 
+                    <a *ngIf="userAccount.roleId === 1" type="button" class="btn-floating btn-small btn-danger waves-light" mdbWavesEffect (click)="openDeleteModal(t.id)">
+                      <i class="fa fa-close"></i>
+                    </a>
+
                   </mdb-card-body>
                   <!--/.Card content-->
 
@@ -180,7 +184,9 @@
     <div class="modal-content text-center">
       <!--Header-->
       <div class="modal-header d-flex justify-content-center">
-        Xóa công việc này?
+        <p class="heading">
+          Xóa công việc này?
+        </p>
       </div>
 
       <!--Body-->
@@ -190,7 +196,7 @@
 
       <!--Footer-->
       <div class="modal-footer flex-center">
-        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeTaskBasicOfManager()">Đồng ý</a>
+        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeTaskBasic()">Đồng ý</a>
         <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">Hủy</a>
       </div>
     </div>

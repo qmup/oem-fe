@@ -155,7 +155,7 @@
         </div>
 
         <div class="md-form mt-0 mb-3 col-md-12">
-          <mdb-select [notFoundMsg]="'Không tìm thấy'" [options]="managerList" placeholder="Người quản lý"
+          <mdb-select [label]="'Người quản lý'" [notFoundMsg]="'Không tìm thấy'" [options]="managerList" placeholder="Người quản lý"
             [(ngModel)]="managerId"></mdb-select>
         </div>
 
@@ -196,7 +196,7 @@
       <div class="modal-body mx-3 row">
 
         <div class="md-form mt-0 mb-3 col-md-12">
-          <mdb-select [notFoundMsg]="'Không tìm thấy'" [options]="beaconList" placeholder="Beacon"
+          <mdb-select [label]="'Beacon'" [notFoundMsg]="'Không tìm thấy'" [options]="beaconList" placeholder="Beacon"
             [(ngModel)]="beaconId"></mdb-select>
         </div>
 
@@ -233,7 +233,7 @@
         </div>
 
         <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
-          <mdb-select placeholder="Nhân viên" [notFoundMsg]="'Không tìm thấy'" [options]="employeeList"
+          <mdb-select [label]="'Nhân viên'" placeholder="Nhân viên" [notFoundMsg]="'Không tìm thấy'" [options]="employeeList"
             [filterEnabled]="true" [(ngModel)]="assigneeId"></mdb-select>
           <!-- <label>Người thực hiện</label> -->
         </div>
@@ -252,7 +252,7 @@
         </div>
 
         <div class="col-12 md-form mt-0 mb-3 px-0">
-          <mdb-select class="select-wrapper mdb-select colorful-select dropdown-success" [options]="iconPrioritySelect"
+          <mdb-select [label]="'Mức độ ưu tiên'" class="select-wrapper mdb-select colorful-select dropdown-success" [options]="iconPrioritySelect"
             [(ngModel)]="taskCM.priority" placeholder="Chọn">
           </mdb-select>
           <label>Mức độ ưu tiên</label>

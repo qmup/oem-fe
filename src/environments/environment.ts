@@ -78,6 +78,7 @@ export const environment = {
       getByManager: 'workplace/get-list-by-manager/',
       removeFromManager: 'workplace/remove-workplace-from-manager',
       addTaskToWorkplace: 'workplace/add-task-to-workplace',
+      getAvailableByDate: 'workplace/get-available-workplace-and-task-by-date/',
     },
     task: {
       checkAttendance: 'task/check-attendance',
@@ -135,6 +136,9 @@ export const environment = {
       update: 'zone/update-zone-information',
       getByManager: 'zone/get-all-zone-by-manager/'
     },
+    calendar: {
+      get: 'task/get-task-by-date-and-manager-id/'
+    }
   }
 };
 

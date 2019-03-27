@@ -128,13 +128,13 @@
                   <mdb-image-modal [modalImages]="item.pictures" type="margin"></mdb-image-modal>
                 </div>
                 <div class="md-form" *ngIf="item.type !== 1">
-                  <input mdbInput type="text" name="text" [(ngModel)]="item.evaluation" id="form5" class="form-control">
+                  <input mdbInput type="text" name="text" [disabled]="item.evaluated" [(ngModel)]="item.evaluation" id="form5" class="form-control">
                   <label for="form5" class="">Giải quyết vấn đề</label>
                 </div>
                 <hr *ngIf="item.type === 1">
                 <h6 class="pt-3 font-weight-bold" *ngIf="item.type === 1">Đánh giá mức độ công việc</h6>
                 <owl-rating class="justify-content-center w-100" style="font-size: 25px" *ngIf="item.type === 1"
-                  [(ngModel)]="task.rating">
+                  [(ngModel)]="task.rating" [disabled]="item.evaluated">
                   <owl-rating-button value="1">
                     1 Star
                   </owl-rating-button>
@@ -152,14 +152,14 @@
                   </owl-rating-button>
                 </owl-rating>
                 <div class="md-form" *ngIf="item.type === 1">
-                  <input mdbInput type="text" name="text" [(ngModel)]="item.evaluation" id="form5" class="form-control">
+                  <input mdbInput type="text" name="text" [disabled]="item.evaluated" [(ngModel)]="item.evaluation" id="form5" class="form-control">
                   <label for="form5" class="">Đánh giá chi tiết</label>
                 </div>
                 <div class="d-flex flex-wrap w-100 justify-content-center">
-                  <button *ngIf="item.type !== 1" mdbBtn rounded="true" type="button" color="primary"
-                    mdbWavesEffect>Gửi</button>
-                  <button *ngIf="item.type === 1" mdbBtn rounded="true" type="button" color="success"
-                    mdbWavesEffect>Duyệt</button>
+                  <button *ngIf="item.type !== 1 && !item.evaluated" mdbBtn rounded="true" type="button" color="primary"
+                    mdbWavesEffect (click)="approve(item, 0)">Giải quyết</button>
+                  <button *ngIf="item.type === 1 && !item.evaluated" mdbBtn rounded="true" type="button" color="success"
+                    mdbWavesEffect (click)="approve(item, 1)">Duyệt</button>
                 </div>
               </mdb-accordion-item-body>
             </mdb-accordion-item>
@@ -211,7 +211,7 @@
         <div class="md-form ">
           <p class="h6 mt-3">Người thực hiện: {{task.assignee.name}}</p>
           <!-- <span *ngIf="task.status !== 0" class="mx-3">{{task.assignee.name}}</span> -->
-          <mdb-select *ngIf="task.status === 0" [placeholder]="'Người thực hiện khác'" [options]="employeeList"
+          <mdb-select [label]="'Người thực hiện khác'" *ngIf="task.status === 0" [placeholder]="'Người thực hiện khác'" [options]="employeeList"
             [filterEnabled]="true" [(ngModel)]="assignTask.assigneeId" (selected)="openAssignModal()">
           </mdb-select>
         </div>
@@ -219,7 +219,7 @@
         <div class="md-form ">
           <p class="h6 mt-3">Nơi làm việc: {{task.workplace.name}}</p>
           <!-- <span class="mx-3" *ngIf="task.status !== 0">{{task.workplace.name}}</span> -->
-          <mdb-select *ngIf="task.status === 0" [placeholder]="'Nơi làm việc khác'" [options]="workplaceListByManager"
+          <mdb-select [label]="'Nơi làm việc khác'" *ngIf="task.status === 0" [placeholder]="'Nơi làm việc khác'" [options]="workplaceListByManager"
             [filterEnabled]="true" [(ngModel)]="manageWorkplace.workplaceId" (selected)="changeWorkplace($event)">
           </mdb-select>
         </div>

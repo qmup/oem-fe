@@ -66,8 +66,9 @@ export class TaskComponent implements OnInit {
   modalRef: BsModalRef;
   firstStep = false;
   isSelectRange = false;
-  currentWorkplace: any;
   currentCompany: any;
+  currentZone: any;
+  currentWorkplace: any;
 
   constructor(
     private taskService: TaskService,
@@ -129,6 +130,17 @@ export class TaskComponent implements OnInit {
       );
   }
 
+
+  getTaskOfWorkplaceByDate() {
+    const date = this.globalService.convertToYearMonthDay(this.taskCM.startTime);
+    this.workplaceService.getAvailableByDate(
+      this.userAccount.id, this.manageWorkplace.zoneId, date, '', 'id', 0, 99
+    ).then(
+      (response) => {
+        console.log(response);
+      }
+    );
+  }
 
   suggestTaskBasic() {
     this.taskBasicService.getListTaskBasic(this.userAccount.id, '', '', 'id', 0, 99)
@@ -223,6 +235,7 @@ export class TaskComponent implements OnInit {
 
   selectZone(e: any) {
     this.manageWorkplace.zoneId = e.value;
+    this.currentZone = e;
     this.isSelectZone = true;
     this.getWorkplace(e.value);
   }
@@ -337,20 +350,23 @@ export class TaskComponent implements OnInit {
     return new Date(+year, +month, +day, +hour, +min, 0).toISOString();
   }
 
-  openSuggestionModal(taskCM: TaskModel) {
+  openSuggestionModal() {
     this.createModal.hide();
     const workplace = this.currentWorkplace;
+    const zone = this.currentZone;
     const company = this.currentCompany;
     const modalOptions: ModalOptions = {
       animated: true,
       class: 'modal-notify modal-primary modal-xl',
-      initialState: { taskCM, workplace, company }
+      initialState: { workplace, company, zone }
     };
     this.modalRef = this.modalService.show(TaskSuggestionComponent, modalOptions);
     this.modalRef.content.refresh.subscribe((result) => {
       this.createModal.show();
       this.firstStep = true;
-      this.assignTask.assigneeId = result;
+      this.assignTask.assigneeId = result.id;
+      this.taskCM.duration = result.duration;
+      this.taskCM.startTime = result.startTime;
       // this.getPlace()
     });
 

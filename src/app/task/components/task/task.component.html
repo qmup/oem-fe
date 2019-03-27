@@ -136,18 +136,28 @@
         </div>
 
         <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
-          <mdb-select placeholder="Công ty" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true"
+          <mdb-select [label]="'Công ty'" placeholder="Công ty" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true"
             [options]="companyList" (selected)="selectCompany($event)"></mdb-select>
         </div>
 
         <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0" *ngIf="isSelectCompany">
-          <mdb-select placeholder="Khu vực" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="zoneList"
+          <mdb-select [label]="'Khu vực'" placeholder="Khu vực" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="zoneList"
             (selected)="selectZone($event)"></mdb-select>
         </div>
 
         <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0" *ngIf="isSelectZone">
-          <mdb-select placeholder="Địa điểm" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true"
+          <mdb-select [label]="'Địa điểm'" placeholder="Địa điểm" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true"
             [options]="placeList" (selected)="selectWorkplace($event)"></mdb-select>
+        </div>
+
+        <div class="d-flex flex-wrap w-100 justify-content-center" *ngIf="isSelectWorkplace">
+          <div class="md-form mt-2 mb-3 col-md-10 px-0">
+            <mdb-select [label]="'Nhân viên'" placeholder="Nhân viên" [notFoundMsg]="'Không tìm thấy'" [options]="employeeList"
+              [filterEnabled]="true" (selected)="selectEmployee($event)" [(ngModel)]="assignTask.assigneeId"></mdb-select>
+          </div>
+          <div class="col-md-2 px-0 text-right">
+            <a class="btn-floating btn-md btn-primary" (click)="openSuggestionModal()"><i class="fa fa-lightbulb-o"></i></a>
+          </div>
         </div>
 
         <owl-form-field class="col-12 px-0" *ngIf="isSelectWorkplace">
@@ -163,20 +173,9 @@
           <span class="ml-2">phút</span>
         </div>
 
-        <div class="d-flex flex-wrap w-100 justify-content-center" *ngIf="isSelectRange && taskCM.startTime">
-          <div class="md-form mt-2 mb-3 col-md-10 px-0" *ngIf="isSelectRange && taskCM.startTime">
-            <mdb-select placeholder="Nhân viên" [notFoundMsg]="'Không tìm thấy'" [options]="employeeList"
-              [filterEnabled]="true" (selected)="selectEmployee($event)" [(ngModel)]="assignTask.assigneeId"></mdb-select>
-          </div>
-          <div class="col-md-2 px-0 text-right">
-            <a class="btn-floating btn-md btn-primary" (click)="openSuggestionModal(taskCM)"><i class="fa fa-lightbulb-o"></i></a>
-          </div>
-        </div>
-
-
         <hr>
 
-        <div *ngIf="isSelectRange && taskCM.startTime" class="d-flex flex-wrap w-100">
+        <div *ngIf="isSelectWorkplace" class="d-flex flex-wrap w-100">
           <p class="h6 col-12 px-0">Danh sách công việc gợi ý</p>
           <div *ngFor="let list of taskBasicList; let i of index" class="col-6">
             <mdb-checkbox name="item-{{i}}" [checked]="list.checked" #checkbox
@@ -184,20 +183,20 @@
           </div>
         </div>
 
-        <div *ngIf="isSelectRange && taskCM.startTime" class="col-12 md-form mt-0 mb-3 px-0">
-          <mdb-select class="select-wrapper mdb-select colorful-select dropdown-success" [options]="iconPrioritySelect"
+        <div *ngIf="isSelectWorkplace" class="col-12 md-form mt-0 mb-3 px-0">
+          <mdb-select  [label]="'Mức độ ưu tiên'" class="select-wrapper mdb-select colorful-select dropdown-success" [options]="iconPrioritySelect"
             [(ngModel)]="taskCM.priority" placeholder="Mức độ ưu tiên">
           </mdb-select>
         </div>
 
-        <div class="col-12 md-form mt-0 mb-3 px-0" *ngIf="isSelectRange && taskCM.startTime">
+        <div class="col-12 md-form mt-0 mb-3 px-0" *ngIf="isSelectWorkplace">
           <textarea type="text" id="description" class="md-textarea form-control" mdbInput
             [(ngModel)]="taskCM.description" placeholder="Chi tiết công việc"></textarea>
           <label>Chi tiết</label>
         </div>
       </div>
-      <div class="modal-footer d-flex justify-content-center" *ngIf="isSelectRange && taskCM.startTime">
-        <button *ngIf="firstStep" mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="schedule.show(); create.hide()">Tạo
+      <div class="modal-footer d-flex justify-content-center" *ngIf="isSelectWorkplace">
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="schedule.show(); create.hide()">Tạo
           mới
           <i class="fa fa-check ml-1"></i>
         </button>
