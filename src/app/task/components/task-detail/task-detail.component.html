@@ -211,7 +211,7 @@
         <div class="md-form ">
           <p class="h6 mt-3">Người thực hiện: {{task.assignee.name}}</p>
           <!-- <span *ngIf="task.status !== 0" class="mx-3">{{task.assignee.name}}</span> -->
-          <mdb-select [label]="'Người thực hiện khác'" *ngIf="task.status === 0" [placeholder]="'Người thực hiện khác'" [options]="employeeList"
+          <mdb-select [label]="'Người thực hiện khác'" *ngIf="task.status === 0" [options]="employeeList"
             [filterEnabled]="true" [(ngModel)]="assignTask.assigneeId" (selected)="openAssignModal()">
           </mdb-select>
         </div>
@@ -219,7 +219,7 @@
         <div class="md-form ">
           <p class="h6 mt-3">Nơi làm việc: {{task.workplace.name}}</p>
           <!-- <span class="mx-3" *ngIf="task.status !== 0">{{task.workplace.name}}</span> -->
-          <mdb-select [label]="'Nơi làm việc khác'" *ngIf="task.status === 0" [placeholder]="'Nơi làm việc khác'" [options]="workplaceListByManager"
+          <mdb-select [label]="'Nơi làm việc khác'" *ngIf="task.status === 0" [options]="workplaceListByManager"
             [filterEnabled]="true" [(ngModel)]="manageWorkplace.workplaceId" (selected)="changeWorkplace($event)">
           </mdb-select>
         </div>

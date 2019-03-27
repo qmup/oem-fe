@@ -12,8 +12,8 @@
         </a>
         <owl-form-field class="col-12 px-0" *ngIf="userAccount.roleId === 2">
           <input owlInput [owlDateTimeTrigger]="dateSearchInput" [owlDateTime]="dateSearchInput" placeholder="Ngày"
-            [(ngModel)]="dateSearch">
-          <owl-date-time #dateSearchInput [pickerType]="'calendar'"></owl-date-time>
+            [(ngModel)]="dateSearch" (dateTimeChange)="getPlace()">
+          <owl-date-time #dateSearchInput [pickerType]="'calendar'" ></owl-date-time>
         </owl-form-field>
       </div>
       <div class="card-body card-body-cascade pb-0 d-flex flex-wrap">
@@ -96,8 +96,7 @@
                 </div>
                 <p class="h5 pt-3">Công việc trong ngày</p>
                 <div *ngFor="let t of placeList[i].taskList; let idx2 = index" class="col-12">
-                  {{ idx2 + 1 }}. {{ t.assignee }} - từ {{ t.startTime | date: 'HH:mm' }} đến
-                  {{ t.endTime | date: 'HH:mm' }}
+                  {{ idx2 + 1 }}. {{ t.assignee }}: {{ t.startTime | date: 'HH:mm' }} ~ {{ t.endTime | date: 'HH:mm' }}
                 </div>
                 <button *ngIf="userAccount.roleId === 2" title="Thêm xóa sửa công việc" mdbBtn type="button"
                   rounded="true" color="primary" class="waves-light list-btn" mdbWavesEffect
@@ -155,7 +154,7 @@
         </div>
 
         <div class="md-form mt-0 mb-3 col-md-12">
-          <mdb-select [label]="'Người quản lý'" [notFoundMsg]="'Không tìm thấy'" [options]="managerList" placeholder="Người quản lý"
+          <mdb-select [label]="'Người quản lý'" [notFoundMsg]="'Không tìm thấy'" [options]="managerList"
             [(ngModel)]="managerId"></mdb-select>
         </div>
 
@@ -196,7 +195,7 @@
       <div class="modal-body mx-3 row">
 
         <div class="md-form mt-0 mb-3 col-md-12">
-          <mdb-select [label]="'Beacon'" [notFoundMsg]="'Không tìm thấy'" [options]="beaconList" placeholder="Beacon"
+          <mdb-select [label]="'Beacon'" [notFoundMsg]="'Không tìm thấy'" [options]="beaconList"
             [(ngModel)]="beaconId"></mdb-select>
         </div>
 
@@ -233,7 +232,7 @@
         </div>
 
         <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
-          <mdb-select [label]="'Nhân viên'" placeholder="Nhân viên" [notFoundMsg]="'Không tìm thấy'" [options]="employeeList"
+          <mdb-select [label]="'Nhân viên'" [notFoundMsg]="'Không tìm thấy'" [options]="employeeList"
             [filterEnabled]="true" [(ngModel)]="assigneeId"></mdb-select>
           <!-- <label>Người thực hiện</label> -->
         </div>
@@ -253,7 +252,7 @@
 
         <div class="col-12 md-form mt-0 mb-3 px-0">
           <mdb-select [label]="'Mức độ ưu tiên'" class="select-wrapper mdb-select colorful-select dropdown-success" [options]="iconPrioritySelect"
-            [(ngModel)]="taskCM.priority" placeholder="Chọn">
+            [(ngModel)]="taskCM.priority">
           </mdb-select>
           <label>Mức độ ưu tiên</label>
         </div>

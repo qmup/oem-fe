@@ -8,12 +8,12 @@
 
   <div class="md-form mt-1 mb-3 col-md-12">
     <mdb-select [label]="'Chức vụ'" [notFoundMsg]="'Không tìm thấy'" [label]="'Chức vụ'" [options]="roleList"
-      placeholder="Chức vụ" [(ngModel)]="employee.roleId"></mdb-select>
+      [(ngModel)]="employee.roleId"></mdb-select>
   </div>
 
   <div class="md-form mt-1 mb-3 col-md-12" *ngIf="employee.roleId === 3">
     <mdb-select [label]="'Người quản lý'" [notFoundMsg]="'Không tìm thấy'" [label]="'Người quản lý'"
-      [options]="managerList" placeholder="Người quản lý" [(ngModel)]="employee.managerId"></mdb-select>
+      [options]="managerList" [(ngModel)]="employee.managerId"></mdb-select>
   </div>
 
   <div class="md-form mt-1 mb-3 col-md-12" *ngIf="employee.roleId === 2">
@@ -41,7 +41,7 @@
   </div>
 
   <div class="md-form mt-1 mb-3 col-md-6 ">
-    <mdb-select [label]="'Giới tính'" [options]="optionsSex" id="gender" placeholder="Giới tính" [(ngModel)]="gender">
+    <mdb-select [label]="'Giới tính'" [options]="optionsSex" id="gender" [(ngModel)]="gender">
     </mdb-select>
   </div>
 

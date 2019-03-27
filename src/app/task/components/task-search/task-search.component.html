@@ -10,11 +10,11 @@
   </div> -->
 
   <div class="col-xl-2 col-md-4 col-xs-6 col-12">
-    <mdb-select [label]="'Trạng thái'" [filterEnabled]="true" [multiple]="true" [options]="statusList" placeholder="Trạng thái" (selected)="selectStatus($event)" (deselected)="deselectStatus($event)"></mdb-select>
+    <mdb-select [label]="'Trạng thái'" [filterEnabled]="true" [multiple]="true" [options]="statusList" (selected)="selectStatus($event)" (deselected)="deselectStatus($event)"></mdb-select>
   </div>
 
   <div class="col-xl-2 col-md-4 col-xs-6 col-12">
-    <mdb-select [label]="'Điểm danh'" [filterEnabled]="true" [multiple]="true" [options]="attendanceStatusList" placeholder="Điểm danh" (selected)="selectAttendance($event)" (deselected)="deselectAttendance($event)"></mdb-select>
+    <mdb-select [label]="'Điểm danh'" [filterEnabled]="true" [multiple]="true" [options]="attendanceStatusList" (selected)="selectAttendance($event)" (deselected)="deselectAttendance($event)"></mdb-select>
   </div>
 
   <!-- <div class="col-xl-2 col-md-4 col-xs-6 col-12 md-form mb-0">
@@ -23,15 +23,15 @@
   </div> -->
 
   <div class="col-xl-2 col-md-4 col-xs-6 col-12">
-    <mdb-select [label]="'Nhân viên'" [filterEnabled]="true" [multiple]="true" [options]="employeeList" (selected)="selectEmployee($event)" (deselected)="deselectEmployee($event)" placeholder="Người thực hiện"></mdb-select>
+    <mdb-select [label]="'Nhân viên'" [filterEnabled]="true" [multiple]="true" [options]="employeeList" (selected)="selectEmployee($event)" (deselected)="deselectEmployee($event)"></mdb-select>
   </div>
 
   <div class="col-xl-2 col-md-4 col-xs-6 col-12">
-    <mdb-select [label]="'Nơi làm việc'" [filterEnabled]="true" [multiple]="true" [options]="placeList" (selected)="selectWorkplace($event)" (deselected)="deselectWorkplace($event)" placeholder="Nơi làm việc"></mdb-select>
+    <mdb-select [label]="'Nơi làm việc'" [filterEnabled]="true" [multiple]="true" [options]="placeList" (selected)="selectWorkplace($event)" (deselected)="deselectWorkplace($event)"></mdb-select>
   </div>
 
   <div class="col-xl-2 col-md-4 col-xs-6 col-12">
-    <mdb-select [label]="'Khác'" [filterEnabled]="true" [multiple]="true"[options]="moreList" placeholder="Khác" (selected)="selectMore($event)" (deselected)="deselectMore($event)"></mdb-select>
+    <mdb-select [label]="'Khác'" [filterEnabled]="true" [multiple]="true"[options]="moreList" (selected)="selectMore($event)" (deselected)="deselectMore($event)"></mdb-select>
   </div>
 
   <div class="col-xl-2 col-md-4 col-xs-6 col-12 mb-0 md-form mt-3" *ngIf="selectDuration">

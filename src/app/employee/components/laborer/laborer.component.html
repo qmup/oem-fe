@@ -137,7 +137,7 @@
       <div class="modal-body mx-3 row">
 
         <div class="md-form mt-1 mb-3 col-md-12 ">
-          <mdb-select [label]="'Chức vụ'" [notFoundMsg]="'Không tìm thấy'" [options]="roleList" placeholder="Chức vụ"
+          <mdb-select [label]="'Chức vụ'" [notFoundMsg]="'Không tìm thấy'" [options]="roleList"
             [(ngModel)]="employeeCM.roleId"></mdb-select>
         </div>
 
@@ -152,7 +152,7 @@
 
         <div class="md-form mt-1 mb-3 col-md-12" *ngIf="employeeCM.roleId === 3">
           <mdb-select [label]="'Người quản lý'" [notFoundMsg]="'Không tìm thấy'" [options]="managerList"
-            placeholder="Người quản lý" [(ngModel)]="employeeCM.managerId"></mdb-select>
+            [(ngModel)]="employeeCM.managerId"></mdb-select>
         </div>
 
         <div class="md-form mt-1 mb-3 col-md-6">

@@ -62,7 +62,7 @@ export class PlaceComponent implements OnInit {
   beaconList = [];
   minDate = new Date();
   dateRange = [];
-  dateSearch: any;
+  dateSearch = new Date();
   currentIndex = 0;
 
   constructor(
@@ -116,7 +116,8 @@ export class PlaceComponent implements OnInit {
   }
 
   getWorkplaceByManager() {
-    this.placeService.getWorkplaceByManager(this.userAccount.id, this.zoneId, '', 'id', 0, 99)
+    this.placeService.getAvailableByDate(
+      this.userAccount.id, this.zoneId, this.dateSearch.toISOString(), '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content;
@@ -362,25 +363,6 @@ export class PlaceComponent implements OnInit {
     this.modalRef = this.modalService.show(PlaceUpdateComponent, modalOptions);
     this.modalRef.content.refresh.subscribe(() => this.getPlace());
 
-  }
-
-  convertTime(time: string) {
-    const h = time.split(':')[0];
-    const mm = time.split(':')[1];
-    const today = new Date();
-    let d: any = today.getDate();
-    let m: any = today.getMonth();
-    const y = today.getFullYear();
-
-    if (d < 10) {
-      d = '0' + d;
-    }
-
-    if (m < 10) {
-      m = '0' + m;
-    }
-    const day = new Date(y, m, d, +h, +mm, 0, 0).toISOString();
-    return day;
   }
 
   openTaskBasicModal(taskBasic: TaskBasic[], workplaceId: number) {
