@@ -8,6 +8,7 @@ import { Task } from '../../models/task';
 import { PaginationResponse } from 'src/app/core/models/shared';
 import { BasicTaskUpdateComponent } from '../basic-task-update/basic-task-update.component';
 import { Employee } from 'src/app/employee/models/employee';
+import { TaskService } from '../../service/task.service';
 
 @Component({
   selector: 'app-basic-task',
@@ -40,12 +41,14 @@ export class BasicTaskComponent implements OnInit {
   taskBasicManagerResponse: PaginationResponse;
   taskBasicManagerList: Task[];
   deletingId = 0;
+  warningMessage: string[] = [];
 
   constructor(
     private renderer: Renderer2,
     private taskBasicService: TaskBasicService,
     private toastService: ToastService,
     private globalService: GlobalService,
+    private taskService: TaskService,
     private modalService: BsModalService,
   ) { }
 
@@ -221,6 +224,19 @@ export class BasicTaskComponent implements OnInit {
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra', '', { positionClass: 'toast-bottom-right'} );
+        }
+      );
+  }
+
+  checkRemovable(id: number) {
+    this.taskService.checkRemove(id)
+      .then(
+        (response) => {
+          this.warningMessage = response.message.split(';');
+          if (this.userAccount.roleId === 2) {
+            this.warningMessage = this.warningMessage.filter((m, index) => index !== 2);
+          }
+          this.openDeleteModal(id);
         }
       );
   }

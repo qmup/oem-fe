@@ -8,6 +8,8 @@ import { Employee } from 'src/app/employee/models/employee';
 import { Place } from 'src/app/place/models/place';
 import { ToastService } from 'ng-uikit-pro-standard';
 import { ScheduleDetailComponent } from '../schedule-detail/schedule-detail.component';
+import { PaginationResponse } from 'src/app/core/models/shared';
+import { GlobalService } from 'src/app/core/services/global.service';
 
 @Component({
   selector: 'app-schedule',
@@ -20,20 +22,8 @@ export class ScheduleComponent implements OnInit {
   sorted = false;
   timeTo: any;
   timeFrom: any;
-  scheduleList: Schedule[] = [
-    {
-      id: 1, assignee: { id: 1, name: 'Nguyễn Sinh Cung' }, assigner: { id: 2, name: 'Bùi Hoàng Thông' },
-      daysOfWeek: '1, 2, 3', description: 'Dọn vệ sinh toilet tầng 3',
-      endTime: '2019-02-17T17:00:56.000+0000', startTime: '2019-02-17T17:00:56.000+0000',
-      status: 'Chưa bắt đầu', title: 'Dọn vệ sinh', workplace: {id: 1, name: 'NVS tầng 3'}
-    },
-    {
-      id: 2, assignee: { id: 1, name: 'Nguyễn Hoàng Vũ' }, assigner: { id: 2, name: 'Bùi Hoàng Thông' },
-      daysOfWeek: '1, 2, 3', description: 'Dọn vệ sinh phòng 211',
-      endTime: '2019-02-17T17:00:56.000+0000', startTime: '2019-02-17T17:00:56.000+0000',
-      status: 'Chưa bắt đầu', title: 'Dọn vệ sinh', workplace: {id: 1, name: 'Phòng 211'}
-    },
-  ];
+  scheduleList: Schedule[] = [];
+  scheduleResponse: PaginationResponse = new PaginationResponse();
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
   scheduleCM: ScheduleModel = new ScheduleModel();
@@ -41,6 +31,11 @@ export class ScheduleComponent implements OnInit {
   workplaceList = [];
   employeeList = [];
   modalRef: BsModalRef;
+  userAccount: Employee;
+  fieldSort = 'id';
+  sortBoolean = false;
+  sortValue = '';
+  searchValue = '';
 
   constructor(
     private scheduleService: ScheduleService,
@@ -48,41 +43,37 @@ export class ScheduleComponent implements OnInit {
     private workplaceService: PlaceService,
     private toastService: ToastService,
     private modalService: BsModalService,
+    private globalService: GlobalService,
   ) { }
 
   ngOnInit() {
-    // this.getSchedule();
-    this.week = [
-      { id: 1, inputId: 'option1', label: 'Thứ 2' , check: false},
-      { id: 2, inputId: 'option2', label: 'Thứ 3' , check: false},
-      { id: 3, inputId: 'option3', label: 'Thứ 4' , check: false},
-      { id: 4, inputId: 'option4', label: 'Thứ 5' , check: false},
-      { id: 5, inputId: 'option5', label: 'Thứ 6' , check: false},
-      { id: 6, inputId: 'option6', label: 'Thứ 7' , check: false},
-      { id: 7, inputId: 'option7', label: 'Chủ nhật' , check: false},
-    ];
+    this.userAccount = this.globalService.getUserAccount();
+    this.getSchedule();
   }
 
-  sortBy(by: string | any): void {
-
-    this.scheduleList.sort((a: any, b: any) => {
-      if (a[by] < b[by]) {
-        return this.sorted ? 1 : -1;
-      }
-      if (a[by] > b[by]) {
-        return this.sorted ? -1 : 1;
-      }
-      return 0;
-    });
-
-    this.sorted = !this.sorted;
+  sort(field: string) {
+    this.sortBoolean = ! this.sortBoolean;
+    if (this.sortBoolean) {
+      this.sortValue = 'asc';
+    } else {
+      this.sortValue = 'desc';
+    }
+    this.fieldSort = field;
+    this.getSchedule();
   }
 
   getSchedule() {
-    this.scheduleService.getAll()
+    this.scheduleService.getAll(this.searchValue, this.userAccount.id, this.sortValue, this.fieldSort, 0, 10)
       .then(
-        (response: Schedule[]) => {
-          this.scheduleList = response;
+        (response: PaginationResponse) => {
+          this.scheduleList = response.content;
+          this.scheduleList.forEach((element: any) => {
+            element.endTime = new Date(element.startTime).getTime() + element.duration;
+          });
+          this.scheduleResponse = response;
+          this.scheduleList.forEach(element => {
+            element.dayList = element.daysOfWeek.split(',');
+          });
         }
       );
   }

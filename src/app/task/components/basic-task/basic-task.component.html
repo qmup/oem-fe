@@ -10,7 +10,8 @@
         <div class="col-xl-6 col-lg-12 px-5 pt-3 text-right">
           <a class="btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i></a>
         </div>
-        <div [ngClass]="{'col-12': userAccount.roleId === 1, 'col-6': userAccount.roleId === 2}" class="card-body card-body-cascade pb-0 px-5 border-right">
+        <div [ngClass]="{'col-12': userAccount.roleId === 1, 'col-6': userAccount.roleId === 2}"
+          class="card-body card-body-cascade pb-0 px-5 border-right">
 
           <div class="col-md-12 mx-auto text-left my-3">
             <div class="d-flex flex-wrap">
@@ -19,7 +20,8 @@
               </div>
             </div>
             <div class="row pt-5">
-              <div [ngClass]="{'col-md-3': userAccount.roleId === 1, 'col-md-6': userAccount.roleId === 2}" class="mb-4" *ngFor="let t of taskBasicList">
+              <div [ngClass]="{'col-md-3': userAccount.roleId === 1, 'col-md-6': userAccount.roleId === 2}" class="mb-4"
+                *ngFor="let t of taskBasicList">
 
                 <mdb-card cascade="true">
 
@@ -40,15 +42,19 @@
                     <!-- <h5>{{t.duration}} phút</h5> -->
 
                     <!--Edit button-->
-                    <a *ngIf="userAccount.roleId === 2" type="button" class="btn-floating btn-small btn-success waves-light" mdbWavesEffect (click)="selectTask(t)">
+                    <a *ngIf="userAccount.roleId === 2" type="button"
+                      class="btn-floating btn-small btn-success waves-light" mdbWavesEffect (click)="selectTask(t)">
                       <i class="fa fa-plus"></i>
                     </a>
-                    
-                    <a *ngIf="t.editable" type="button" class="btn-floating btn-small btn-primary waves-light" mdbWavesEffect (click)="openUpdateModal(t)">
+
+                    <a *ngIf="t.editable" type="button" class="btn-floating btn-small btn-primary waves-light"
+                      mdbWavesEffect (click)="openUpdateModal(t)">
                       <i class="fa fa-pencil"></i>
                     </a>
 
-                    <a *ngIf="userAccount.roleId === 1" type="button" class="btn-floating btn-small btn-danger waves-light" mdbWavesEffect (click)="openDeleteModal(t.id)">
+                    <a *ngIf="userAccount.roleId === 1" type="button"
+                      class="btn-floating btn-small btn-danger waves-light" mdbWavesEffect
+                      (click)="checkRemovable(t.id)">
                       <i class="fa fa-close"></i>
                     </a>
 
@@ -58,11 +64,8 @@
                 </mdb-card>
               </div>
             </div>
-            <app-pagination
-              *ngIf="taskBasicResponse?.totalPages > 1"
-              [pageSize]="taskBasicResponse.size"
-              [totalPage]="taskBasicResponse.totalPages"
-              [currentPage]="taskBasicResponse.number"
+            <app-pagination *ngIf="taskBasicResponse?.totalPages > 1" [pageSize]="taskBasicResponse.size"
+              [totalPage]="taskBasicResponse.totalPages" [currentPage]="taskBasicResponse.number"
               (changePage)="changePage1($event)">
             </app-pagination>
           </div>
@@ -76,7 +79,7 @@
               </div>
             </div>
             <div class="row pt-5">
-                <div class="col-md-6 mb-4" *ngFor="let t of taskBasicManagerList">
+              <div class="col-md-6 mb-4" *ngFor="let t of taskBasicManagerList">
 
                 <mdb-card cascade="true">
 
@@ -97,11 +100,13 @@
                     <!-- <h5>{{t.duration}} phút</h5> -->
 
                     <!--Edit button-->
-                    <a *ngIf="t.editable" type="button" class="btn-floating btn-small btn-primary waves-light" mdbWavesEffect (click)="openUpdateModal(t)">
+                    <a *ngIf="t.editable" type="button" class="btn-floating btn-small btn-primary waves-light"
+                      mdbWavesEffect (click)="openUpdateModal(t)">
                       <i class="fa fa-pencil"></i>
                     </a>
 
-                    <a type="button" class="btn-floating btn-small btn-danger waves-light" mdbWavesEffect (click)="openDeleteModal(t.id)">
+                    <a type="button" class="btn-floating btn-small btn-danger waves-light" mdbWavesEffect
+                      (click)="checkRemovable(t.id)">
                       <i class="fa fa-close"></i>
                     </a>
 
@@ -111,11 +116,8 @@
                 </mdb-card>
               </div>
             </div>
-            <app-pagination
-              *ngIf="taskBasicManagerResponse?.totalPages > 1"
-              [pageSize]="taskBasicManagerResponse.size"
-              [totalPage]="taskBasicManagerResponse.totalPages"
-              [currentPage]="taskBasicManagerResponse.number"
+            <app-pagination *ngIf="taskBasicManagerResponse?.totalPages > 1" [pageSize]="taskBasicManagerResponse.size"
+              [totalPage]="taskBasicManagerResponse.totalPages" [currentPage]="taskBasicManagerResponse.number"
               (changePage)="changePage2($event)">
             </app-pagination>
           </div>
@@ -155,8 +157,8 @@
         <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
           <div mdbBtn floating="true" size="md" color="blue" mdbWavesEffect>
             <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-            <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect (uploadOutput)="onUploadOutput($event)"
-              [uploadInput]="uploadInput">
+            <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
+              (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
           </div>
           <div class="file-path-wrapper mt-3">
             <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()">
@@ -177,8 +179,8 @@
   </div>
 </div>
 
-<div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
-  aria-hidden="true">
+<div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="delete" aria-hidden="true">
   <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
     <!--Content-->
     <div class="modal-content text-center">
@@ -192,12 +194,22 @@
       <!--Body-->
       <div class="modal-body">
         <i class="fa fa-times fa-4x animated rotateIn"></i>
+        <div *ngFor="let m of warningMessage">
+          <p class="h6 font-weight-bold">
+            {{m}}
+          </p>
+        </div>
+        <p class="h6 font-weight-bold">
+          Bạn có muốn tiếp tục xóa?
+        </p>
       </div>
 
       <!--Footer-->
       <div class="modal-footer flex-center">
-        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeTaskBasic()">Đồng ý</a>
-        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">Hủy</a>
+        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeTaskBasic()">Đồng
+          ý</a>
+        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+          (click)="delete.hide()">Hủy</a>
       </div>
     </div>
     <!--/.Content-->

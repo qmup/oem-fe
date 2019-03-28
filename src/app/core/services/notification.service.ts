@@ -1,4 +1,4 @@
-import { Injectable, OnInit, AfterViewInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireMessaging } from '@angular/fire/messaging';
@@ -6,9 +6,12 @@ import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ToastService } from 'ng-uikit-pro-standard';
 import { AuthService } from 'src/app/authorize/services/auth.service';
-import { GlobalService } from './global.service';
 import { Employee } from 'src/app/employee/models/employee';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Notification } from '../models/notification';
+import { environment } from 'src/environments/environment';
+import { PaginationResponse } from '../models/shared';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +23,10 @@ export class NotificationService {
 
   constructor(
     private toastService: ToastService,
-    private angularFireDB: AngularFireDatabase,
     private angularFireAuth: AngularFireAuth,
     private angularFireMessaging: AngularFireMessaging,
     private authService: AuthService,
+    private httpClient: HttpClient,
     private router: Router
   ) {
     this.angularFireMessaging.messaging.subscribe(
@@ -82,5 +85,29 @@ export class NotificationService {
           });
           this.currentMessage.next(payload);
       });
+  }
+
+  getAll(managerId: number, sort: string, fieldSort: string, page: number, size: number): Promise<PaginationResponse> {
+    return this.httpClient.get<PaginationResponse>(
+      `${environment.endPoint}${environment.apiPaths.notify.getAll + managerId}`,
+      {
+        params: {
+          sort: `${sort}`,
+          fieldSort: `${fieldSort}`,
+          page: `${page}`,
+          size: `${size}`,
+        }
+      }
+    ).toPromise();
+  }
+
+  toggleSeen(id, key, value): Promise<any> {
+    return this.httpClient.put<any>(
+      `${environment.endPoint}${environment.apiPaths.notify.update + id}`,
+      {
+        key: `${key}`,
+        value: `${value}`,
+      }
+    ).toPromise();
   }
 }

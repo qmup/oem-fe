@@ -146,17 +146,19 @@
         </div>
 
         <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0" *ngIf="isSelectZone">
-          <mdb-select [label]="'Địa điểm'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true"
-            [options]="placeList" (selected)="selectWorkplace($event)"></mdb-select>
+          <mdb-select [label]="'Địa điểm'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="placeList"
+            (selected)="selectWorkplace($event)"></mdb-select>
         </div>
 
         <div class="d-flex flex-wrap w-100 justify-content-center" *ngIf="isSelectWorkplace">
-          <div class="md-form mt-2 mb-3 col-md-10 px-0">
+          <div class="md-form mt-2 mb-3 col-md-7 px-0">
             <mdb-select [label]="'Nhân viên'" [notFoundMsg]="'Không tìm thấy'" [options]="employeeList"
-              [filterEnabled]="true" (selected)="selectEmployee($event)" [(ngModel)]="assignTask.assigneeId"></mdb-select>
+              [filterEnabled]="true" (selected)="selectEmployee($event)" [(ngModel)]="assignTask.assigneeId">
+            </mdb-select>
           </div>
-          <div class="col-md-2 px-0 text-right">
-            <a class="btn-floating btn-md btn-primary" (click)="openSuggestionModal()"><i class="fa fa-lightbulb-o"></i></a>
+          <div class="col-md-5 px-0 text-center">
+            <button rounded="true" type="button" mdbBtn color="primary" class="waves-light"
+              (click)="openSuggestionModal()" mdbWavesEffect>Nhận gợi ý</button>
           </div>
         </div>
 
@@ -168,8 +170,8 @@
 
         <span *ngIf="isSelectWorkplace">Thời gian hoàn thành</span>
         <div class="w-100 d-flex justify-content-center align-items-center my-3" *ngIf="isSelectWorkplace">
-          <mdb-range-input id="range" [min]="10" [step]="10" [max]="300" name="range" (rangeValueChange)="isSelectRange = true" [(ngModel)]="taskCM.duration"
-            class="w-100"></mdb-range-input>
+          <mdb-range-input id="range" [min]="10" [step]="10" [max]="300" name="range"
+            (rangeValueChange)="isSelectRange = true" [(ngModel)]="taskCM.duration" class="w-100"></mdb-range-input>
           <span class="ml-2">phút</span>
         </div>
 
@@ -184,8 +186,8 @@
         </div>
 
         <div *ngIf="isSelectWorkplace" class="col-12 md-form mt-0 mb-3 px-0">
-          <mdb-select  [label]="'Mức độ ưu tiên'" class="select-wrapper mdb-select colorful-select dropdown-success" [options]="iconPrioritySelect"
-            [(ngModel)]="taskCM.priority">
+          <mdb-select [label]="'Mức độ ưu tiên'" class="select-wrapper mdb-select colorful-select dropdown-success"
+            [options]="iconPrioritySelect" [(ngModel)]="taskCM.priority">
           </mdb-select>
         </div>
 

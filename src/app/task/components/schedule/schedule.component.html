@@ -11,7 +11,7 @@
 
           <div class="col-md-12 mx-auto text-left my-3">
             <div class="d-flex flex-wrap">
-              <h6 class="text-left col-xl-6 col-lg-12">Nguyễn Minh Quân / Các công việc đang phụ trách</h6>
+              <h6 class="text-left col-xl-6 col-lg-12">{{userAccount.fullName}} / Các công việc đang phụ trách</h6>
               <div class="col-xl-6 col-lg-12 mr-0 text-right pr-0">
                 <a class="btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i></a>
               </div>
@@ -20,27 +20,27 @@
             <table class="table table-hover table-responsive-md" cellspacing="0" width="100%">
               <thead>
                 <tr>
-                  <th (click)="sortBy('title')">
+                  <th (click)="sort('title')">
                     Công việc
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
-                  <th (click)="sortBy('description')">
-                    Miêu tả
-                    <mdb-icon icon="sort"></mdb-icon>
-                  </th>
-                  <th (click)="sortBy('workplace.name')">
+                  <th (click)="sort('workplace.name')">
                     Địa điểm
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
-                  <th (click)="sortBy('employee.name')">
+                  <th (click)="sort('employee.name')">
                     Người thực hiện
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
-                  <th (click)="sortBy('status')">
+                  <th (click)="sort('status')">
                     Trạng thái
                   </th>
-                  <th (click)="sortBy('startTime')">
+                  <th (click)="sort('startTime')">
                     Thời gian
+                    <mdb-icon icon="sort"></mdb-icon>
+                  </th>
+                  <th (click)="sort('daysOfWeek')">
+                    Các ngày trong tuần
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
                   <th>
@@ -49,15 +49,29 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let sch of scheduleList">
-                  <td (click)="openDetailModal(sch)">{{ sch.title }}</td>
-                  <td (click)="openDetailModal(sch)">{{ sch.description }}</td>
-                  <td (click)="openDetailModal(sch)">{{ sch.workplace.name }}</td>
-                  <td [routerLink]="['/employee-detail', sch.assignee.id]" style="color: #007bff; cursor: pointer">{{
-                    sch.assignee.name }}</td>
-                  <td (click)="openDetailModal(sch)">{{ sch.status }}</td>
-                  <td (click)="openDetailModal(sch)">{{ sch.startTime | date: 'HH:mm' }} - {{ sch.endTime | date:
-                    'HH:mm' }}</td>
+                <tr *ngFor="let sch of scheduleList" (click)="openDetailModal(sch)">
+                  <td>
+                    {{ sch.title }}
+                  </td>
+                  <td>
+                    {{ sch.workplace.name }}
+                  </td>
+                  <td>
+                    {{ sch.assignee.name }}
+                  </td>
+                  <td>
+                    {{ sch.status }}
+                  </td>
+                  <td>
+                    {{ sch.startTime | date: 'HH:mm' }} - {{ sch.endTime | date: 'HH:mm' }}
+                  </td>
+                  <td>
+                    <span *ngFor="let day of sch.dayList; let i = index">
+                      <span class="text-danger" *ngIf="day == 1">Chủ nhật</span>
+                      <span *ngIf="day != 1" [ngClass]="{'text-danger': day == 7}">Thứ {{day}}</span>
+                      <span *ngIf="i !== sch.dayList.length - 1">, </span>
+                    </span>
+                  </td>
                   <td>
                     <div class="switch primary-switch">
                       <label>

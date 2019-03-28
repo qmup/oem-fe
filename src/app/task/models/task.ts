@@ -203,10 +203,13 @@ export class TaskSuggestion {
   caseCpaToCpcAvailable: boolean;
   caseCpcToCpbAvailable: boolean;
   cpaAddress: string;
+  cpaName: string;
   cpbAddress: string;
+  cpbName: string;
   dataTravelFromCpAtoCpc: DataTravel;
   dataTravelFromCpCtoCpB: DataTravel;
   employeeId: number;
+  employeePicture: string;
   employeeName: string;
   endTimePreviousTask: string;
   moveFromHome: boolean;
@@ -221,10 +224,13 @@ export class TaskSuggestion {
     this.caseCpaToCpcAvailable = false;
     this.caseCpcToCpbAvailable = false;
     this.cpaAddress = '';
+    this.cpaName = '';
     this.cpbAddress = '';
+    this.cpbName = '';
     this.dataTravelFromCpAtoCpc = new DataTravel();
     this.dataTravelFromCpCtoCpB = new DataTravel();
     this.employeeId = 0;
+    this.employeePicture = '';
     this.employeeName = '';
     this.endTimePreviousTask = '';
     this.moveFromHome = false;

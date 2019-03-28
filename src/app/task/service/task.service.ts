@@ -151,4 +151,15 @@ export class TaskService {
       }
     ).toPromise();
   }
+
+  checkRemove(taskId: number): Promise<any> {
+    return this.httpClient.get<any>(
+      `${environment.endPoint}${environment.apiPaths.task.checkRemove}`,
+      {
+        params: {
+          taskId: `${taskId}`,
+        }
+      }
+    ).toPromise();
+  }
 }

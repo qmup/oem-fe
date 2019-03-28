@@ -41,6 +41,7 @@ export const environment = {
     notify: {
       getAll: 'notify/get-all/',
       send: 'notify/send',
+      update: 'notify/update/'
     },
     employee: {
       create: 'employee/create',
@@ -100,6 +101,7 @@ export const environment = {
       addTaskBasic: 'task/add-task-basic/',
       updateTaskBasicList: 'task/update-task-basic-list',
       getAssignHistory: 'assign-task/get-assign-history',
+      checkRemove: 'task/check-task-basic',
     },
     report: {
       delete: 'report/delete-report/',
@@ -114,8 +116,10 @@ export const environment = {
       remove: 'task-basic/remove-from-manager/',
     },
     schedule: {
-      create: 'schedule/create',
+      create: 'schedule/create/',
       getAll: 'schedule/get-all',
+      getDetail: 'schedule/get-detail/{scheduleId}',
+      update: 'schedule/update/{id}',
     },
     upload: {
       handlerUpload: 'upload/handler-upload',

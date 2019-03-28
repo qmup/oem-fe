@@ -246,7 +246,6 @@ export class LaborerComponent implements OnInit {
     this.employeeCM.longitude = this.location.lng;
     this.employeeCM.latitude = this.location.lat;
     (this.gender === 0) ? this.employeeCM.sex = false : this.employeeCM.sex = true;
-    console.log(this.employeeCM.birthDate);
     this.employeeCM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employeeCM.birthDate));
     this.filesToUpload ? this.createEmployeeWithImage() : this.createEmployeeWithoutImage();
   }

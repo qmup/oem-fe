@@ -21,6 +21,7 @@ export class TaskSuggestionComponent implements OnInit {
   zone: any;
   minDate = new Date();
   startTime: any;
+  startHour: any;
   endTime: any;
   isSelectRange = false;
   duration: number;
@@ -36,11 +37,30 @@ export class TaskSuggestionComponent implements OnInit {
 
   ngOnInit() {
     this.userAccount = this.globalService.getUserAccount();
+    this.getTaskOfWorkplaceByDate();
   }
 
   getTaskOfWorkplaceByDate() {
+    let d: number;
+    let m: number;
+    let y: number;
+    let from: string;
+    let to: string;
+
+    if (this.startTime) {
+      d = this.startTime.getDate();
+      m = this.startTime.getMonth();
+      y = this.startTime.getFullYear();
+    } else {
+      d = this.minDate.getDate();
+      m = this.minDate.getMonth();
+      y = this.minDate.getFullYear();
+    }
+    from = new Date(y, m, d, 0, 0, 0, 0).toISOString();
+    to = new Date(y, m, d, 23, 59, 0, 0).toISOString();
+
     this.workplaceService.getAvailableByDate(
-      this.userAccount.id, this.zone.value, this.startTime.toISOString(), '', '', 0, 99
+      this.userAccount.id, this.zone.value, `${from};${to}`, '', '', 0, 99
     ).then(
       (response) => {
         this.taskList = response.listOfWorkplace.content.find(t => t.id === this.workplace.value).taskList;
@@ -49,7 +69,6 @@ export class TaskSuggestionComponent implements OnInit {
   }
 
   changeStartTime() {
-    alert();
     this.duration = 0;
     this.getTaskOfWorkplaceByDate();
   }

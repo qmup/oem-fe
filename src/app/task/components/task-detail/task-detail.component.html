@@ -117,6 +117,8 @@
               <mdb-accordion-item-head>
                 <div [ngClass]="item.type === 1 ? 'text-success' : 'text-danger'">
                   Báo cáo lúc {{ item.dateReport | date: 'HH:mm' }}
+                  <span *ngIf="item.evaluated" style="font-size: 15px; float: right" class="badge badge-success"> ĐÃ DUYỆT</span>
+                  <span *ngIf="!item.evaluated" style="font-size: 15px; float: right" class="badge badge-warning"> CHƯA DUYỆT</span>
                   <br>
                   <small>Nội dung: {{ item.description }}</small>
                 </div>

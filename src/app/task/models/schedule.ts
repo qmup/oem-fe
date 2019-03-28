@@ -8,6 +8,7 @@ export class ScheduleModel {
   endTime: string;
   id: number;
   startTime: string;
+  duration: number;
   status: number;
   title: string;
   workplaceId: number;
@@ -23,6 +24,7 @@ export class ScheduleModel {
     this.status = 0;
     this.title = '';
     this.workplaceId = 0;
+    this.duration = 0;
   }
 }
 
@@ -36,7 +38,9 @@ export class Schedule {
   startTime: string;
   status: string;
   title: string;
+  duration: number;
   workplace: Shared;
+  dayList: string[];
 
   constructor() {
     this.assignee = new Shared();
@@ -49,5 +53,7 @@ export class Schedule {
     this.status = '';
     this.title = '';
     this.workplace = new Shared();
+    this.dayList = [];
+    this.duration = 0;
   }
 }

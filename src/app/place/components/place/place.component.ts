@@ -116,8 +116,13 @@ export class PlaceComponent implements OnInit {
   }
 
   getWorkplaceByManager() {
+    const d = this.dateSearch.getDate();
+    const m = this.dateSearch.getMonth();
+    const y = this.dateSearch.getFullYear();
+    const from = new Date(y, m, d, 0, 0, 0, 0).toISOString();
+    const to = new Date(y, m, d, 23, 59, 0, 0).toISOString();
     this.placeService.getAvailableByDate(
-      this.userAccount.id, this.zoneId, this.dateSearch.toISOString(), '', 'id', 0, 99)
+      this.userAccount.id, this.zoneId, `${from};${to}`, '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content;

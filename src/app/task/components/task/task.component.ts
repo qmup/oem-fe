@@ -241,13 +241,22 @@ export class TaskComponent implements OnInit {
   }
 
   getWorkplace(zoneId: number) {
-    this.workplaceService.getWorkplaceByManager(this.userAccount.id, zoneId, '', 'id', 0, 99)
+    const d = this.minDate.getDate();
+    const m = this.minDate.getMonth();
+    const y = this.minDate.getFullYear();
+    const from = new Date(y, m, d, 0, 0, 0, 0).toISOString();
+    const to = new Date(y, m, d, 23, 59, 0, 0).toISOString();
+    this.workplaceService.getAvailableByDate(this.userAccount.id, zoneId, `${from};${to}`, '', 'numberOfReworks', 0, 99)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content.map((place) => {
+            const numberOfReworks = place.numberOfReworks;
+            const taskAssigned = place.taskList.length;
+            let taskMissing = numberOfReworks - taskAssigned;
+            taskMissing = Math.max(0, taskMissing);
             return {
               value: place.id,
-              label: place.name,
+              label: `${place.name} | Số việc chưa được giao: ${taskMissing}`,
               icon: place.picture
             };
           });
@@ -367,7 +376,6 @@ export class TaskComponent implements OnInit {
       this.assignTask.assigneeId = result.id;
       this.taskCM.duration = result.duration;
       this.taskCM.startTime = result.startTime;
-      // this.getPlace()
     });
 
   }

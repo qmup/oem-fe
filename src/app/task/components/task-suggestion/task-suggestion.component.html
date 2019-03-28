@@ -19,71 +19,79 @@
       <span class="ml-2">phút</span>
     </div>
   </div>
-  <div class="col-3">
-    <h6 class="font-weight-bold" *ngIf="startTime">Công việc sắp tạo tại {{company.label}}
+  <div class="col-4">
+    <h6 class="font-weight-bold">Công việc sắp tạo tại <span class="text-danger">{{company.label}}</span>
     </h6>
-    <div class="col-12" *ngIf="startTime">
+    <div class="col-12 font-weight-normal" style="font-size: 17px">
       <span class="pt-3">Ngày: {{startTime | date: 'dd-MM-yyyy'}}</span>
       <br>
-      <span class="pt-3">Từ: {{startTime | date: 'HH:mm'}}</span>
-      <br>
-      <span class="pt-3">Đến: {{endTime | date: 'HH:mm'}}</span>
+      <span class="pt-3">Thời gian: {{startTime | date: 'HH:mm'}} <span *ngIf="startTime">~</span> {{endTime | date: 'HH:mm'}}</span>
     </div>  
   </div>
   <div class="col-4">
-    <h6 *ngIf="startTime" class="font-weight-bold">Các công việc trong ngày tại đây: </h6>
-    <div *ngIf="startTime">
+    <h6 class="font-weight-bold">Các công việc đã giao trong ngày {{(startTime || minDate) | date: 'dd-MM-yyyy'}}</h6>
+    <div>
       <div *ngFor="let t of taskList; let i = index" class="col-12">
         {{ i + 1 }}. {{ t.assignee }} - từ {{ t.startTime | date: 'HH:mm' }} đến
         {{ t.endTime | date: 'HH:mm' }}
       </div>
     </div>
   </div>
-  <div class="col-2">
-    <button rounded="true" *ngIf="startTime && duration" type="button" mdbBtn color="primary" class="waves-light"
-      (click)="suggest()" mdbWavesEffect>Nhận gợi ý</button>
+  <div class="col" *ngIf="startTime && duration">
+    <a class="btn-floating btn-md btn-primary" (click)="suggest()"><i class="fa fa-lightbulb-o"></i></a>
   </div>
 
   <div class="md-form mt-0 mb-3 col-6 col-md-12" *ngIf="taskSuggestion.length > 0">
     <table class="table table-hover table-bordered">
       <thead>
-        <tr class="text-nowrap">
+        <tr class="text-center">
           <th>Nhân viên</th>
-          <th>Danh sách công việc hôm nay</th>
-          <th>Kết thúc công việc cũ</th>
+          <th>Danh sách công việc đã giao hôm nay</th>
+          <th>Kết thúc công việc gần nhất tại</th>
           <th>Quãng đường - thời gian 1</th>
-          <th>Bắt đầu công việc mới</th>
+          <th>Bắt đầu công việc mới tại</th>
           <th>Quãng đường - thời gian 2</th>
           <th>Chọn</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of taskSuggestion; let i = index">
-          <td>{{ item?.employeeName }}</td>
+          <td class="text-center">
+            <img [src]="item.employeePicture"
+                class="rounded-circle img-responsive list-avatar mr-2">
+            <br>
+            <span class="font-weight-bold">{{ item.employeeName }}</span>
+          </td>
           <td>
             <p *ngFor="let task of taskSuggestion[i].taskSuggestionModels; let idx = index">
               <span>{{ idx + 1 }}. {{ task?.companyName }} từ {{ task?.startTime | date:'HH:mm' }} đến
                 {{ task?.endTime | date:'HH:mm' }}</span>
             </p>
           </td>
-          <td>
-            {{ item?.endTimePreviousTask | date: 'HH:mm' }}
+          <td class="text-center">
+            <span *ngIf="item.cpaName"><span class="font-weight-bold">{{item?.cpaName}}</span> lúc {{ item?.endTimePreviousTask | date: 'HH:mm' }}</span>
           </td>
           <td>
-            Quãng đường {{ item?.dataTravelFromCpAtoCpc?.distance / 1000 }} Km
+            <p>
+              <span class="font-weight-bold">{{item.moveFromHome ? 'Từ nhà' : item?.cpaName}} đến {{ company.label }}</span>
+              <br>
+              Quãng đường {{ item?.dataTravelFromCpAtoCpc?.distance / 1000 | number: '1.0-1' }} Km
+              <br>
+              Thời gian {{ item?.dataTravelFromCpAtoCpc?.duration / 60000 | number: '1.0-1' }} phút
+            </p>
+          </td>
+          <td class="text-center">
+            <span *ngIf="item.cpbName"><span class="font-weight-bold">{{item?.cpbName}}</span> lúc {{ item?.startTimeNextTask | date: 'HH:mm' }}</span>
+          </td>
+          <td>
+            <span class="font-weight-bold">Từ {{ company.label }} <span *ngIf="item.cpbName">đến {{ item?.cpbName }}</span> </span>
             <br>
-            Thời gian {{ item?.dataTravelFromCpAtoCpc?.duration / 60000 | number: '1.0-1' }} phút
-          </td>
-          <td>
-            {{ item?.startTimeNextTask | date: 'HH:mm' }}
-          </td>
-          <td>
-            Quãng đường {{ item?.dataTravelFromCpCtoCpB?.distance / 1000 }} Km
+            Quãng đường {{ item?.dataTravelFromCpCtoCpB?.distance / 1000 | number: '1.0-1' }} Km
             <br>
             Thời gian {{ item?.dataTravelFromCpCtoCpB?.duration / 60000 | number: '1.0-1' }} phút
           </td>
           <td>
-            <button mdbBtn type="button" color="primary" mdbWavesEffect (click)="selectEmployee(item.employeeId)">
+            <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect (click)="selectEmployee(item.employeeId)">
               <i class="fa fa-check"></i>
             </button>
           </td>
@@ -95,5 +103,7 @@
 </div>
 <div class="modal-footer d-flex justify-content-center">
   <button type="button" mdbBtn color="light" class="waves-light" aria-label="Close" (click)="cancel()"
-    mdbWavesEffect>Quay lại</button>
+    mdbWavesEffect>
+    <i class="fa fa-undo"></i>
+  </button>
 </div>

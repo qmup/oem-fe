@@ -586,8 +586,13 @@ export class TaskDetailComponent implements OnInit {
             this.taskService.updateField(report.taskId, 'rating', this.task.rating)
               .then(
                 () => {
-                  this.toastService.success('Đã duyệt', '', { positionClass: 'toast-bottom-right'} );
-                  this.selectingId ? this.loadTask(this.selectingId) : this.loadTask(this.id);
+                  this.taskService.updateField(report.taskId, 'status', 2)
+                  .then(
+                    () => {
+                      this.toastService.success('Đã duyệt', '', { positionClass: 'toast-bottom-right'} );
+                      this.selectingId ? this.loadTask(this.selectingId) : this.loadTask(this.id);
+                      }
+                    );
                 }
               );
           } else {
@@ -599,10 +604,6 @@ export class TaskDetailComponent implements OnInit {
           this.toastService.error('Đã có lỗi xày ra', '', { positionClass: 'toast-bottom-right'} );
         }
       );
-  }
-
-  solveProblem(report: ReportModel) {
-
   }
 
 }
