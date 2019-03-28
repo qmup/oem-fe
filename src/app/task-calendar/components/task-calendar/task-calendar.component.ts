@@ -1,63 +1,53 @@
-import { colors } from '../../models/colors';
+import {
+  colors
+} from '../../models/colors';
 import {
   Component,
   ChangeDetectionStrategy,
-  ViewChild,
-  TemplateRef,
   OnInit,
-  OnChanges
 } from '@angular/core';
 import {
   startOfDay,
-  endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
   addHours
 } from 'date-fns';
-import { Subject } from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   CalendarEvent,
-  CalendarEventAction,
   CalendarEventTimesChangedEvent,
-  CalendarView
 } from 'angular-calendar';
-import { TaskCalendarService } from '../../services/task-calendar.service';
-import { GlobalService } from 'src/app/core/services/global.service';
-import { Employee } from 'src/app/employee/models/employee';
-import { TaskCalendar } from '../../models/task-calendar';
 
-const users = [
-  {
-    id: 0,
-    name: 'Hoàng Vũ',
-    color: colors.yellow
-  },
-  {
-    id: 1,
-    name: 'Hoàng Thông',
-    color: colors.blue
-  }
-];
+import {
+  TaskCalendarService
+} from '../../services/task-calendar.service';
+import {
+  GlobalService
+} from 'src/app/core/services/global.service';
+import {
+  Employee
+} from 'src/app/employee/models/employee';
 
 @Component({
-    selector: 'app-task-calendar',
-    templateUrl: './task-calendar.component.html',
-    styleUrls: ['./task-calendar.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-  })
-  export class TaskCalendarComponent {
+  selector: 'app-task-calendar',
+  templateUrl: './task-calendar.component.html',
+  styleUrls: ['./task-calendar.component.scss'],
+})
+export class TaskCalendarComponent implements OnInit {
 
-  viewDate: Date = new Date();
+  userAccount: Employee;
 
-  userAccount: Employee = this.globalService.getUserAccount();
+  users = [];
 
-  events: CalendarEvent[] = this.getCalendarEvent();
+  viewDate = new Date();
 
-  taskCalendar: TaskCalendar[];
+  events: CalendarEvent[] = [];
+  constructor(
+    private calendarService: TaskCalendarService,
+    private globalService: GlobalService,
+  ) {}
+
+  ngOnInit() {
+    this.userAccount = this.globalService.getUserAccount();
+    this.getCalendarEvent();
+  }
 
   eventTimesChanged({
     event,
@@ -69,29 +59,37 @@ const users = [
     this.events = [...this.events];
   }
 
-  userChanged({ event, newUser }) {
+  userChanged({
+    event,
+    newUser
+  }) {
     event.color = newUser.color;
     event.meta.user = newUser;
     this.events = [...this.events];
   }
 
-  constructor(
-    private calendarService: TaskCalendarService,
-    private globalService: GlobalService,
-  ) {}
-
-  getCalendarEvent(): CalendarEvent[] {
+  getCalendarEvent() {
     this.calendarService.get(this.userAccount.id, this.globalService.convertToYearMonthDay(this.viewDate))
       .then(
-        (response: any) => {
-          this.taskCalendar = response;
-            this.events = response.map(e => {
+        (response) => {
+          this.users = [];
+          const arr1 = response.filter((e, i, self) =>
+            i === self.findIndex((t) => (
+              t.meta.id === e.meta.id
+            ))
+          );
+          arr1.forEach(element => {
+            this.users.push(element.meta);
+          });
+
+          this.events = response.map(e => {
+            const user = this.users.find(u => u.id === e.meta.id);
             return {
               title: e.title,
-              start: addHours(startOfDay(e.start), 5),
-              end: addHours(startOfDay(e.end), 3),
+              start: new Date(e.start),
+              end: new Date(e.end),
               meta: {
-                user: e.meta
+                user: user
               },
               resizable: {
                 beforeStart: true,
@@ -100,10 +98,8 @@ const users = [
               draggable: true
             };
           });
+          console.log(this.events);
         }
-        );
-    console.log(this.events);
-    return this.events;
+      );
   }
-
 }

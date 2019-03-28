@@ -142,7 +142,7 @@ export class ZoneComponent implements OnInit {
     const modalOptions: ModalOptions = {
       animated: true,
       class: 'modal-notify modal-primary',
-      initialState: { zone }
+      initialState: { zone, companyId: this.companyId }
     };
     this.modalRef = this.modalService.show(ZoneUpdateComponent, modalOptions);
     this.modalRef.content.refresh.subscribe(() => this.getZone());

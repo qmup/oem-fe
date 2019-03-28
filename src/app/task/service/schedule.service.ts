@@ -11,9 +11,14 @@ export class ScheduleService {
 
   constructor(private httpClient: HttpClient) { }
 
-  create(scheduleCM: ScheduleModel): Promise<ScheduleModel> {
+  create(scheduleCM: ScheduleModel, option: number): Promise<ScheduleModel> {
     return this.httpClient.post<ScheduleModel>(
-      `${environment.endPoint}${environment.apiPaths.schedule.create}`, scheduleCM
+      `${environment.endPoint}${environment.apiPaths.schedule.create}`, scheduleCM,
+      {
+        params: {
+          option: `${option}`,
+        }
+      }
     ).toPromise();
   }
   getAll(search: string, managerId: number, sort: string, fieldSort: string, page: number, size: number): Promise<PaginationResponse> {

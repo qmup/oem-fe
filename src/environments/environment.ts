@@ -116,10 +116,10 @@ export const environment = {
       remove: 'task-basic/remove-from-manager/',
     },
     schedule: {
-      create: 'schedule/create/',
+      create: 'schedule/create',
       getAll: 'schedule/get-all',
-      getDetail: 'schedule/get-detail/{scheduleId}',
-      update: 'schedule/update/{id}',
+      getDetail: 'schedule/get-detail/',
+      update: 'schedule/update/',
     },
     upload: {
       handlerUpload: 'upload/handler-upload',

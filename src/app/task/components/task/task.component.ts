@@ -94,21 +94,6 @@ export class TaskComponent implements OnInit {
     this.getCompany();
   }
 
-  sortBy(by: string | any): void {
-
-    this.taskList.sort((a: any, b: any) => {
-      if (a[by] < b[by]) {
-        return this.sorted ? 1 : -1;
-      }
-      if (a[by] > b[by]) {
-        return this.sorted ? -1 : 1;
-      }
-      return 0;
-    });
-
-    this.sorted = !this.sorted;
-  }
-
   sort(field: string) {
     this.sortBoolean = ! this.sortBoolean;
     this.fieldSort = field;
@@ -312,6 +297,7 @@ export class TaskComponent implements OnInit {
   }
 
   createSchedule() {
+    const option = 1;
     this.scheduleCM.daysOfWeek = [];
     for (let index = 0; index < this.week.length; index++) {
       const element = this.week[index];
@@ -327,7 +313,7 @@ export class TaskComponent implements OnInit {
     // this.scheduleCM.workplaceId = this.taskCM.workplaceId;
     this.scheduleCM.startTime = this.convertDateTime(this.dateFrom, this.timeFrom);
     this.scheduleCM.endTime = this.convertDateTime(this.dateTo, this.timeTo);
-    this.scheduleService.create(this.scheduleCM)
+    this.scheduleService.create(this.scheduleCM, option)
       .then(
         (response) => {
           this.toastService.success('Tạo công việc thường nhật thành công', '', { positionClass: 'toast-bottom-right'} );

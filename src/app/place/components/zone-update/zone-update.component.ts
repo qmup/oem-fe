@@ -13,6 +13,7 @@ import { Zone, ZoneModel } from '../../models/zone';
 })
 export class ZoneUpdateComponent implements OnInit {
 
+  companyId: number;
   zone: Zone;
   zoneUM: ZoneModel = new ZoneModel();
   optionsSelect = [];
@@ -45,7 +46,7 @@ export class ZoneUpdateComponent implements OnInit {
     this.zoneUM.id = this.zone.id;
     this.zoneUM.name = this.zone.name;
     this.zoneUM.picture = this.zone.picture;
-    this.zoneUM.companyId = this.zone.companyModel.id;
+    this.zoneUM.companyId = this.companyId;
     this.filesToUpload ? this.updateWithImage() : this.updateWithoutImage();
   }
 

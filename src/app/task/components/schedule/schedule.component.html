@@ -2,22 +2,26 @@
   <div class="card card-cascade narrower">
     <section>
       <div class="row">
-        <div class="col-xl-6 col-lg-12 mr-0">
+        <div class="col-xl-6 col-9 mr-0">
           <div class="view view-cascade gradient-card-header light-blue lighten-1">
-            <h2 class="h2-responsive mb-0">Quản lý công việc thường nhật</h2>
+            <h2 class="h2-responsive mb-0">Quản lý công việc</h2>
           </div>
+        </div>
+        <div class="col-xl-6 col-2 mr-0 text-right">
+          <!-- <button mdbBtn type="button" color="primary" rounded="true" mdbWavesEffect>
+                <i class="fa fa-search"></i>
+              </button> -->
+          <a class="btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i></a>
         </div>
         <div class="card-body card-body-cascade pb-0 px-5 col-12">
 
           <div class="col-md-12 mx-auto text-left my-3">
             <div class="d-flex flex-wrap">
-              <h6 class="text-left col-xl-6 col-lg-12">{{userAccount.fullName}} / Các công việc đang phụ trách</h6>
-              <div class="col-xl-6 col-lg-12 mr-0 text-right pr-0">
-                <a class="btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i></a>
-              </div>
+              <h5 style="color: #8993a4" class="text-left col-xl-8 col-lg-12">
+                <span class="text-primary">{{userAccount.fullName}}</span>
+                / Các công việc thường nhật đang phụ trách</h5>
             </div>
-            <h4 class="text-left pt-3">Công việc thường nhật</h4>
-            <table class="table table-hover table-responsive-md" cellspacing="0" width="100%">
+            <table class="table table-hover" cellspacing="0" width="100%">
               <thead>
                 <tr>
                   <th (click)="sort('title')">
@@ -31,9 +35,6 @@
                   <th (click)="sort('employee.name')">
                     Người thực hiện
                     <mdb-icon icon="sort"></mdb-icon>
-                  </th>
-                  <th (click)="sort('status')">
-                    Trạng thái
                   </th>
                   <th (click)="sort('startTime')">
                     Thời gian
@@ -49,34 +50,31 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let sch of scheduleList" (click)="openDetailModal(sch)">
-                  <td>
-                    {{ sch.title }}
+                <tr *ngFor="let item of scheduleList" style="cursor: pointer">
+                  <td (click)="openDetailModal(item)">
+                    {{ item.title }}
                   </td>
-                  <td>
-                    {{ sch.workplace.name }}
+                  <td (click)="openDetailModal(item)">
+                    {{ item.workplaceName }}
                   </td>
-                  <td>
-                    {{ sch.assignee.name }}
+                  <td (click)="openDetailModal(item)">
+                    {{ item.assignee.name }}
                   </td>
-                  <td>
-                    {{ sch.status }}
+                  <td (click)="openDetailModal(item)">
+                    {{ item.startTime | date: 'HH:mm' }} - {{ item.endTime | date: 'HH:mm' }}
                   </td>
-                  <td>
-                    {{ sch.startTime | date: 'HH:mm' }} - {{ sch.endTime | date: 'HH:mm' }}
-                  </td>
-                  <td>
-                    <span *ngFor="let day of sch.dayList; let i = index">
-                      <span class="text-danger" *ngIf="day == 1">Chủ nhật</span>
-                      <span *ngIf="day != 1" [ngClass]="{'text-danger': day == 7}">Thứ {{day}}</span>
-                      <span *ngIf="i !== sch.dayList.length - 1">, </span>
+                  <td (click)="openDetailModal(item)">
+                    <span *ngFor="let day of item.dayList; let i = index">
+                      <span *ngIf="day == 1">Chủ nhật</span>
+                      <span *ngIf="day != 1">Thứ {{day}}</span>
+                      <span *ngIf="i !== item.dayList.length - 1">, </span>
                     </span>
                   </td>
                   <td>
-                    <div class="switch primary-switch">
+                    <div class="switch rounded blue-white-switch">
                       <label>
-                        Dừng
-                        <input type="checkbox" (change)="switch('sch.id')">
+                        Tạm dừng
+                        <input type="checkbox" (change)="switch($event, item.id)" [checked]="item.status === 1">
                         <span class="lever"></span> Tiếp tục
                       </label>
                     </div>
@@ -96,61 +94,79 @@
   <div class="modal-dialog modal-notify modal-success" role="document">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
-        <p class="heading">Tạo công việc</p>
+        <p class="heading">Tạo công việc thường nhật</p>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body mx-3 row">
-        <div class="md-form mt-0 mb-3 col-6 col-md-12">
+        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
           <input type="text" id="title" class="form-control" mdbInput [(ngModel)]="scheduleCM.title">
           <label for="title">Tên công việc</label>
         </div>
 
-        <div class="md-form mt-0 mb-3 col-6 col-md-12">
-          <mdb-select [label]="'Người thực hiện'" [notFoundMsg]="'Không tìm thấy'" [options]="employeeList" [filterEnabled]="true" [(ngModel)]="scheduleCM.assigneeId"></mdb-select>
+        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
+          <mdb-select [label]="'Công ty'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true"
+            [options]="companyList" (selected)="selectCompany($event)"></mdb-select>
         </div>
 
-        <div class="md-form mt-0 mb-3 col-6 col-md-12">
-          <mdb-select [label]="'Địa điểm'" [notFoundMsg]="'Không tìm thấy'" [options]="workplaceList" [filterEnabled]="true" [(ngModel)]="scheduleCM.workplaceId"></mdb-select>
+        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0" *ngIf="isSelectCompany">
+          <mdb-select [label]="'Khu vực'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="zoneList"
+            (selected)="selectZone($event)"></mdb-select>
         </div>
 
-        <label class="col-md-2 col-xs-12" style="position: relative">
-          <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px">Từ</span>
-        </label>
-        <div class="col-md-10 col-xs-12">
-          <mdb-time-picker [buttonLabel]="'Chọn'" [twelvehour]="false" [darktheme]="false" [placeholder]="'Chọn'"
-            [label]="'Giờ'" [(ngModel)]="timeFrom">
-          </mdb-time-picker>
+        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0" *ngIf="isSelectZone">
+          <mdb-select [label]="'Địa điểm'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="placeList"
+            (selected)="selectWorkplace($event)"></mdb-select>
         </div>
-        <label class="col-md-2 col-xs-12" style="position: relative">
-          <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px">Đến</span>
-        </label>
-        <div class="col-md-10 col-xs-12">
-          <mdb-time-picker [buttonLabel]="'Chọn'" [twelvehour]="false" [darktheme]="false" [placeholder]="'Chọn'"
-            [label]="'Giờ'" [(ngModel)]="timeTo">
-          </mdb-time-picker>
+
+        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
+          <mdb-select [label]="'Người thực hiện'" [notFoundMsg]="'Không tìm thấy'" [options]="employeeList"
+            [filterEnabled]="true" [(ngModel)]="scheduleCM.assigneeId"></mdb-select>
         </div>
-        <div class="form-check form-check-inline col-5 text-center" *ngFor="let day of week">
-          <input type="checkbox" class="form-check-input" [id]="day.inputId" [(ngModel)]="day.check">
-          <label class="form-check-label" [for]="day.inputId">{{ day.label }} </label>
+
+        <owl-form-field class="col-12 px-0" *ngIf="isSelectWorkplace">
+          <input owlInput [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker" placeholder="Giờ bắt đầu"
+            [(ngModel)]="scheduleCM.startTime">
+          <owl-date-time #datepicker [pickerType]="'timer'"></owl-date-time>
+        </owl-form-field>
+
+        <span *ngIf="isSelectWorkplace">Thời lượng:
+          <span class="font-weight-bold">{{scheduleCM?.duration}} phút</span>
+        </span>
+        <div class="w-100 d-flex justify-content-center align-items-center my-3" *ngIf="isSelectWorkplace">
+          <mdb-range-input id="range" [min]="10" [step]="10" [max]="300" name="range"
+            (rangeValueChange)="isSelectRange = true" [(ngModel)]="scheduleCM.duration" class="w-100"></mdb-range-input>
+          <span class="ml-2">phút</span>
         </div>
-        <!-- <div class="col-12 md-form mt-0 mb-3">
-          <mdb-select
-            class="select-wrapper mdb-select colorful-select dropdown-success"
-            [options]="iconPrioritySelect"
-            [(ngModel)]="scheduleCM.priority"
-            placeholder="Chọn">
-          </mdb-select>
-          <label>Mức độ ưu tiên</label>
-        </div> -->
-        <div class="col-12 md-form mt-0 mb-3">
-          <textarea type="text" id="description" class="md-textarea form-control" mdbInput [(ngModel)]="scheduleCM.description"></textarea>
-          <label id="description">Miêu tả công việc</label>
+
+        <h6 class="font-weight-bold col-12 px-0">Các ngày lặp lại trong tuần</h6>
+        <div class="form-check form-check-inline d-flex flex-wrap w-100">
+          <div class="col-6" *ngFor="let day of week">
+            <input type="checkbox" class="form-check-input" [id]="day.inputId" [(ngModel)]="day.check">
+            <label class="form-check-label" [for]="day.inputId">{{ day.label }} </label>
+          </div>
         </div>
+
+        <hr>
+
+        <div *ngIf="isSelectWorkplace" class="d-flex flex-wrap w-100 pt-3">
+          <p class="h6 col-12 px-0">Danh sách công việc gợi ý</p>
+          <div *ngFor="let list of taskBasicList; let i of index" class="col-6">
+            <mdb-checkbox name="item-{{i}}" [checked]="list.checked" #checkbox
+              (change)="changeCheckbox(list.id, $event)">{{list.title}}</mdb-checkbox>
+          </div>
+        </div>
+
+        <div class="col-12 md-form my-3 px-0" *ngIf="isSelectWorkplace">
+          <textarea type="text" id="description" class="md-textarea form-control" mdbInput
+            [(ngModel)]="scheduleCM.description"></textarea>
+          <label>Miêu tả chi tiết</label>
+        </div>
+
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="create.hide()">Tạo mới
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createSchedule()">Tạo mới
           <i class="fa fa-check ml-1"></i>
         </button>
       </div>

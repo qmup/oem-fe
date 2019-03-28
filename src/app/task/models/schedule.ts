@@ -1,26 +1,32 @@
 import { Shared } from 'src/app/core/models/shared';
+import { TaskBasic } from './task-basic';
 
 export class ScheduleModel {
   assigneeId: number;
   assignerId: number;
   daysOfWeek: number[];
   description: string;
+  dateCreate: string;
   endTime: string;
   id: number;
+  taskBasics: TaskBasic[];
   startTime: string;
   duration: number;
   status: number;
   title: string;
   workplaceId: number;
+  workplaceName: string;
 
   constructor() {
     this.assigneeId = 0;
     this.assignerId = 0;
     this.daysOfWeek = [];
+    this.dateCreate = new Date().toISOString();
     this.description = '';
     this.endTime = '';
     this.id = 0;
     this.startTime = '';
+    this.taskBasics = new Array<TaskBasic>();
     this.status = 0;
     this.title = '';
     this.workplaceId = 0;
@@ -36,10 +42,12 @@ export class Schedule {
   endTime: string;
   id: number;
   startTime: string;
-  status: string;
+  taskBasics: TaskBasic[];
+  status: number;
   title: string;
   duration: number;
-  workplace: Shared;
+  workplaceId: number;
+  workplaceName: string;
   dayList: string[];
 
   constructor() {
@@ -50,9 +58,11 @@ export class Schedule {
     this.endTime = '';
     this.id = 0;
     this.startTime = '';
-    this.status = '';
+    this.status = 0;
+    this.taskBasics = new Array<TaskBasic>();
     this.title = '';
-    this.workplace = new Shared();
+    this.workplaceId = 0;
+    this.workplaceName = '';
     this.dayList = [];
     this.duration = 0;
   }
