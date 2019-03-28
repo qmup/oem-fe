@@ -7,7 +7,7 @@ import { TaskDetail, Task, TaskModel } from '../../models/task';
 import { ReportService } from 'src/app/report/services/report.service';
 import { TaskReport, TaskModel as ReportModel } from 'src/app/report/models/report';
 import { Employee } from 'src/app/employee/models/employee';
-import { PaginationResponse, AssignTask, Shared, AssignTaskResponse } from 'src/app/core/models/shared';
+import { PaginationResponse, AssignTask, Shared, AssignTaskResponse, NotificationSendingModel } from 'src/app/core/models/shared';
 import { EmployeeService } from 'src/app/employee/services/employee.service';
 import { ManageWorkplace, PlacePagination } from 'src/app/place/models/place';
 import { PlaceService } from 'src/app/place/services/place.service';
@@ -579,6 +579,11 @@ export class TaskDetailComponent implements OnInit {
   }
 
   approve(report: ReportModel, type: number) {
+    const notification: NotificationSendingModel = new NotificationSendingModel();
+    notification.fromEmployeeId = this.userAccount.id;
+    notification.toEmployeeId = this.task.assignee.id;
+    notification.type = 1;
+    notification.taskId = report.taskId;
     this.reportService.update(report)
       .then(
         () => {
@@ -589,8 +594,13 @@ export class TaskDetailComponent implements OnInit {
                   this.taskService.updateField(report.taskId, 'status', 2)
                   .then(
                     () => {
-                      this.toastService.success('Đã duyệt', '', { positionClass: 'toast-bottom-right'} );
-                      this.selectingId ? this.loadTask(this.selectingId) : this.loadTask(this.id);
+                      this.globalService.sendNotification(notification)
+                        .then(
+                          () => {
+                            this.toastService.success('Đã duyệt', '', { positionClass: 'toast-bottom-right'} );
+                            this.selectingId ? this.loadTask(this.selectingId) : this.loadTask(this.id);
+                          }
+                        );
                       }
                     );
                 }
@@ -599,8 +609,14 @@ export class TaskDetailComponent implements OnInit {
             this.taskService.updateField(report.taskId, 'status', 2)
             .then(
               () => {
-                this.toastService.success('Đã đề xuất cách giải quyết', '', { positionClass: 'toast-bottom-right'} );
-                this.selectingId ? this.loadTask(this.selectingId) : this.loadTask(this.id);
+                this.globalService.sendNotification(notification)
+                  .then(
+                    () => {
+                      this.toastService.success('Đã đề xuất cách giải quyết', '', { positionClass: 'toast-bottom-right'} );
+                      this.selectingId ? this.loadTask(this.selectingId) : this.loadTask(this.id);
+
+                    }
+                  );
                 }
               );
           }

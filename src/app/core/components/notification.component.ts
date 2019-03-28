@@ -32,7 +32,8 @@ import { Notification } from '../models/notification';
               class="rounded-circle img-responsive list-avatar mr-2">
             </div>
             <div class="col-10">
-              <h6 class="font-weight-bold mb-0">{{noti.sender}}</h6> đã {{noti.title | lowercase}}.
+              <span class="font-weight-bold mb-0">{{noti.sender}}</span> đã {{noti.title | lowercase}}.
+              <br>
               <small>{{noti.timeStatus}}</small>
               <!-- <p class="font-weight-bold mb-0">Người gửi vừa báo cáo công việc</p>
               <small>2 phút trước</small> -->
@@ -93,6 +94,9 @@ import { Notification } from '../models/notification';
       height: calc(400px - 106px);
       overflow-y: scroll;
       cursor: pointer;
+    }
+    .col-10 span {
+      font-size: 16px;
     }
   `],
   animations: [

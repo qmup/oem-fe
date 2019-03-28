@@ -40,6 +40,9 @@
   <div class="col" *ngIf="startTime && duration">
     <a class="btn-floating btn-md btn-primary" (click)="suggest()"><i class="fa fa-lightbulb-o"></i></a>
   </div>
+  <div class="col-12 text-danger text-right font-weight-normal" *ngIf="taskSuggestion.length > 0">
+    * Thời gian giữa mỗi công việc trừ hao 10 phút
+  </div>
 
   <div class="md-form mt-0 mb-3 col-6 col-md-12" *ngIf="taskSuggestion.length > 0">
     <table class="table table-hover table-bordered">
@@ -55,7 +58,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of taskSuggestion; let i = index">
+        <tr *ngFor="let item of taskSuggestion; let i = index" [ngClass]="{'border-danger': item.typeCase === 0}">
           <td class="text-center">
             <img [src]="item.employeePicture"
                 class="rounded-circle img-responsive list-avatar mr-2">
@@ -66,34 +69,71 @@
             <p *ngFor="let task of taskSuggestion[i].taskSuggestionModels; let idx = index">
               <span>{{ idx + 1 }}. {{ task?.companyName }} từ {{ task?.startTime | date:'HH:mm' }} đến
                 {{ task?.endTime | date:'HH:mm' }}</span>
+              <br>
             </p>
+            <span *ngIf="item.typeCase === 0" class="text-danger font-weight-normal">Không có thời gian phù hợp</span>
           </td>
           <td class="text-center">
-            <span *ngIf="item.cpaName"><span class="font-weight-bold">{{item?.cpaName}}</span> lúc {{ item?.endTimePreviousTask | date: 'HH:mm' }}</span>
+            <div *ngIf="item.typeCase !== 0">
+              <span *ngIf="item.cpaName">
+                <span class="font-weight-bold">{{item?.cpaName}}</span>
+                <br>
+                Lúc {{ item?.endTimePreviousTask | date: 'HH:mm' }}
+                <br>
+                Khoảng thời gian đến công việc sắp tạo {{item?.endTimePreviousTask | date: 'HH:mm'}} - {{startTime | date: 'HH:mm'}} là
+                <span class="font-weight-normal text-danger">{{item?.timeAllowedCpaToCpc/60000 | number: '1.0-0'}} phút</span>
+              </span>
+            </div>
           </td>
           <td>
-            <p>
+            <p *ngIf="item.typeCase !== 0">
               <span class="font-weight-bold">{{item.moveFromHome ? 'Từ nhà' : item?.cpaName}} đến {{ company.label }}</span>
               <br>
               Quãng đường {{ item?.dataTravelFromCpAtoCpc?.distance / 1000 | number: '1.0-1' }} Km
               <br>
-              Thời gian {{ item?.dataTravelFromCpAtoCpc?.duration / 60000 | number: '1.0-1' }} phút
+              Thời gian {{ item?.dataTravelFromCpAtoCpc?.duration / 60000 | number: '1.0-0' }} phút
+              <br>
+              <span *ngIf="!item.caseCpaToCpcAvailable" class="text-danger font-weight-normal">
+                Thời gian không phù hợp
+                <br>
+                ({{item?.dataTravelFromCpAtoCpc?.duration/60000 | number: '1.0-0'}} + 10) phút > {{item?.timeAllowedCpaToCpc/60000 | number: '1.0-0'}} phút
+              </span>
             </p>
           </td>
           <td class="text-center">
-            <span *ngIf="item.cpbName"><span class="font-weight-bold">{{item?.cpbName}}</span> lúc {{ item?.startTimeNextTask | date: 'HH:mm' }}</span>
+            <div *ngIf="item.typeCase !== 0">
+              <span *ngIf="item.cpbName">
+                <span class="font-weight-bold">{{item?.cpbName}}</span>
+                <br>
+                Lúc {{ item?.startTimeNextTask | date: 'HH:mm' }}
+                <br>
+                Khoảng thời gian đến công việc sắp tạo {{startTime | date: 'HH:mm'}} - {{item?.startTimeNextTask | date: 'HH:mm'}} là
+                <span class="font-weight-normal text-danger">{{item?.timeAllowedCpcToCpB/60000 | number: '1.0-0'}} phút</span>
+              </span>
+            </div>
           </td>
           <td>
-            <span class="font-weight-bold">Từ {{ company.label }} <span *ngIf="item.cpbName">đến {{ item?.cpbName }}</span> </span>
-            <br>
-            Quãng đường {{ item?.dataTravelFromCpCtoCpB?.distance / 1000 | number: '1.0-1' }} Km
-            <br>
-            Thời gian {{ item?.dataTravelFromCpCtoCpB?.duration / 60000 | number: '1.0-1' }} phút
+            <div *ngIf="item.typeCase !== 0">
+              <span class="font-weight-bold">Từ {{ company.label }} <span *ngIf="item.cpbName">đến {{ item?.cpbName }}</span> </span>
+              <br>
+              Quãng đường {{ item?.dataTravelFromCpCtoCpB?.distance / 1000 | number: '1.0-1' }} Km
+              <br>
+              Thời gian {{ item?.dataTravelFromCpCtoCpB?.duration / 60000 | number: '1.0-0' }} phút
+              <br>
+              <span *ngIf="!item.caseCpcToCpbAvailable" class="text-danger font-weight-normal">
+                Thời gian không phù hợp 
+                <br>
+                ({{item?.dataTravelFromCpCtoCpB?.duration/60000 | number: '1.0-0'}} + 10) phút > {{item?.timeAllowedCpcToCpB/60000 | number: '1.0-0'}} phút
+              </span>
+            </div>
           </td>
           <td>
-            <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect (click)="selectEmployee(item.employeeId)">
-              <i class="fa fa-check"></i>
-            </button>
+            <div *ngIf="item.typeCase !== 0">
+              <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect (click)="selectEmployee(item.employeeId)">
+                <i class="fa fa-check"></i>
+              </button>
+            </div>
+
           </td>
         </tr>
       </tbody>

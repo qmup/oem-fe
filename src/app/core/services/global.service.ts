@@ -75,6 +75,7 @@ export class GlobalService {
   statusList = [
     { value: 0, label: 'Chưa bắt đầu' },
     { value: 1, label: 'Đang thực hiện' },
+    { value: 4, label: 'Đang chờ duyệt' },
     { value: 2, label: 'Hoàn thành' },
     { value: 3, label: 'Quá hạn' },
   ];
