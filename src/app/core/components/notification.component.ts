@@ -14,7 +14,7 @@ import { Notification } from '../models/notification';
       <button type="button" class="btn btn-sm btn-notification" (click)="toggleShowDiv()">
         <i class="fa fa-bell"></i>
       </button>
-      <span class="counter">22</span>
+      <span class="counter">{{countUnread}}</span>
 
       <div [@slideInOut]="animationState" class="card-notification">
         <h6 class="p-3 font-weight-bold">Thông báo</h6>
@@ -28,11 +28,11 @@ import { Notification } from '../models/notification';
           [routerLink]="['/task-detail', noti.taskId]"
           >
             <div class="col-2">
-              <img src="https://cdn1.iconfinder.com/data/icons/user-pictures/101/malecostume-512.png"
+              <img [src]="noti.pictureSender"
               class="rounded-circle img-responsive list-avatar mr-2">
             </div>
             <div class="col-10">
-              <p class="font-weight-bold mb-0">{{noti.sender}} đã {{noti.title | lowercase}}</p>
+              <h6 class="font-weight-bold mb-0">{{noti.sender}}</h6> đã {{noti.title | lowercase}}.
               <small>{{noti.timeStatus}}</small>
               <!-- <p class="font-weight-bold mb-0">Người gửi vừa báo cáo công việc</p>
               <small>2 phút trước</small> -->
@@ -138,6 +138,7 @@ export class NotificationComponent implements AfterViewChecked {
   size = 10;
   disableScrollDown = false;
   animationState = 'out';
+  countUnread = 0;
   // @ViewChild('scroll') private scrollContainer: ElementRef;
 
   constructor(
@@ -149,7 +150,6 @@ export class NotificationComponent implements AfterViewChecked {
   }
 
   ngAfterViewChecked() {
-    // this.scrollToBottom();
   }
 
   toggleShowDiv() {
@@ -160,7 +160,10 @@ export class NotificationComponent implements AfterViewChecked {
     this.notificationService.getAll(this.userAccount.id, '', 'dateCreate', 0, this.size)
       .then(
         (response) => {
-          this.notificationList = response.content;
+          console.log(this.notificationList);
+          console.log(response);
+          this.countUnread = response.totalNotSeen;
+          this.notificationList = response.notificationModels.content;
           for (let i = 0; i < this.notificationList.length; i++) {
             Notification.calculateTimeStatus(this.notificationList[i]);
           }
@@ -196,7 +199,8 @@ export class NotificationComponent implements AfterViewChecked {
     this.notificationService.toggleSeen(id, 'seen', 'true')
       .then(
         () => {
-          this.getNotifications();
+          this.notificationList.find(noti => noti.id === id).seen = true;
+          this.countUnread--;
         }
       );
   }

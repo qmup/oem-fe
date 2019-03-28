@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/authorize/services/auth.service';
 import { Employee } from 'src/app/employee/models/employee';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Notification } from '../models/notification';
+import { Notification, NotificationResponse } from '../models/notification';
 import { environment } from 'src/environments/environment';
 import { PaginationResponse } from '../models/shared';
 
@@ -87,8 +87,8 @@ export class NotificationService {
       });
   }
 
-  getAll(managerId: number, sort: string, fieldSort: string, page: number, size: number): Promise<PaginationResponse> {
-    return this.httpClient.get<PaginationResponse>(
+  getAll(managerId: number, sort: string, fieldSort: string, page: number, size: number): Promise<NotificationResponse> {
+    return this.httpClient.get<NotificationResponse>(
       `${environment.endPoint}${environment.apiPaths.notify.getAll + managerId}`,
       {
         params: {

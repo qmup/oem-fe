@@ -596,8 +596,13 @@ export class TaskDetailComponent implements OnInit {
                 }
               );
           } else {
-            this.toastService.success('Đã đề xuất cách giải quyết', '', { positionClass: 'toast-bottom-right'} );
-            this.selectingId ? this.loadTask(this.selectingId) : this.loadTask(this.id);
+            this.taskService.updateField(report.taskId, 'status', 2)
+            .then(
+              () => {
+                this.toastService.success('Đã đề xuất cách giải quyết', '', { positionClass: 'toast-bottom-right'} );
+                this.selectingId ? this.loadTask(this.selectingId) : this.loadTask(this.id);
+                }
+              );
           }
         },
         () => {

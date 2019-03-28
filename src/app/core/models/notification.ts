@@ -1,6 +1,9 @@
+import { PaginationResponse } from './shared';
+
 export class Notification {
   id: number;
   sender: string;
+  pictureSender: string;
   receiveDeviceToken: string;
   taskId: number;
   title: string;
@@ -14,6 +17,7 @@ export class Notification {
   constructor() {
     this.id = 0;
     this.sender = '';
+    this.pictureSender = '';
     this.receiveDeviceToken = '';
     this.taskId = 0;
     this.title = '';
@@ -91,4 +95,9 @@ export class Notification {
     }
     notification.timeStatus = result;
   }
+}
+
+export class NotificationResponse {
+  totalNotSeen: number;
+  notificationModels: PaginationResponse;
 }

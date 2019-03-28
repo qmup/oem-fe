@@ -303,8 +303,8 @@ export class TaskComponent implements OnInit {
 
   sendNoti(confirm: string) {
     console.log(this.assignTask);
-    this.notification.fromEmployeeId = this.assignTask.assigneeId;
-    this.notification.toEmployeeId = this.assignTask.assignerId;
+    this.notification.fromEmployeeId = this.assignTask.assignerId;
+    this.notification.toEmployeeId = this.assignTask.assigneeId;
     this.notification.taskId = this.assignTask.taskId;
     this.notification.type = 0;
     (confirm === 'true') ? (this.globalService.sendNotification(this.notification), this.sendNotiModal.hide()) : this.sendNotiModal.hide();
