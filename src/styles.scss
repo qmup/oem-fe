@@ -33,6 +33,9 @@ mdb-select > div > div.single > div.placeholder {
 .md-form label {
   left: auto;
 }
+input.owl-input-element {
+  font-weight: 400 !important;
+}
 @media (min-width: 992px) {
   .modal-xl {
       max-width: 1250px;
@@ -56,6 +59,12 @@ mdb-select > div > div.single > div.placeholder {
   .card-wrapper .face .content p {
     margin-bottom: 15px;
   }
+}
+#task-calendar {
+  .cal-event-title {
+    white-space: normal;
+    font-size: 13px;
+  }  
 }
 #company, #zone, #basic-task {
   .img-fluid {

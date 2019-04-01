@@ -1,78 +1,106 @@
+<div class="modal-header d-flex justify-content-center">
+  <p class="heading">Chi tiết công việc</p>
+</div>
+<div class="modal-body mx-3 row px-0">
+  <div class="md-form mt-0 mb-3 col-6 col-md-12">
+    <input type="text" id="title" class="form-control" mdbInput [(ngModel)]="schedule.title">
+    <label for="title">Tên công việc</label>
+  </div>
+
+  <div class="md-form mt-0 mb-3 col-6 col-md-12">
+    <mdb-select [label]="'Nơi làm việc'" [notFoundMsg]="'Địa điểm'" [options]="placeList" [filterEnabled]="true"
+      [(ngModel)]="schedule.workplaceId"></mdb-select>
+  </div>
+
+  <div class="md-form mt-0 mb-3 col-6 col-md-12">
+    <mdb-select [label]="'Người thực hiện'" [notFoundMsg]="'Người thực hiện'" [options]="employeeList"
+      [filterEnabled]="true" [(ngModel)]="schedule.assignee.id"></mdb-select>
+  </div>
+
+  <owl-form-field class="col-12">
+    <input owlInput [owlDateTimeTrigger]="datepicker" [(ngModel)]="startTime" [owlDateTime]="datepicker"
+      placeholder="Giờ bắt đầu">
+    <owl-date-time #datepicker [pickerType]="'timer'"></owl-date-time>
+  </owl-form-field>
+
+  <div class="col-12">
+    <span>Thời lượng:
+      <span class="font-weight-bold">{{schedule.duration}} phút</span>
+    </span>
+    <div class="w-100 d-flex justify-content-center align-items-center my-3">
+      <mdb-range-input id="range" [min]="10" [step]="10" [max]="300" name="range"
+        (rangeValueChange)="isSelectRange = true" [(ngModel)]="schedule.duration" class="w-100"></mdb-range-input>
+      <span class="ml-2">phút</span>
+    </div>
+  </div>
+
+  <h6 class="font-weight-bold col-12">Các ngày lặp lại trong tuần</h6>
+  <div class="form-check form-check-inline d-flex flex-wrap w-100">
+    <div class="col-6" *ngFor="let day of week">
+      <mdb-checkbox [inline]="true" (change)="changeDayCheckbox(day.id, $event)" [checked]="day.check">{{day.label}}
+      </mdb-checkbox>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="col-md-12 mt-3 px-0">
+    <h5 class="text-center font-weight-bold">
+      Công việc phải làm
+      <a mdbBtn floating="true" size="sm" color="success" mdbWavesEffect>
+        <i class="fa fa-plus" (click)="openModal(edit, 2)"></i>
+      </a>
+      <a *ngIf="canRemove" mdbBtn floating="true" size="sm" color="danger" mdbWavesEffect>
+        <i class="fa fa-trash" (click)="removeTaskBasic()"></i>
+      </a>
+    </h5>
+    <div class="d-flex flex-wrap w-100">
+      <div class="col-6" *ngFor="let item of schedule.taskBasics">
+        <mdb-checkbox [inline]="true" (change)="changeTaskCheckbox(item.id, $event)">{{item.title}}</mdb-checkbox>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 md-form my-3">
+    <textarea type="text" id="description" class="md-textarea form-control" mdbInput
+      [(ngModel)]="schedule.description"></textarea>
+    <label>Miêu tả chi tiết</label>
+  </div>
+</div>
+<div class="modal-footer d-flex justify-content-center">
+  <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="updateSchedule()">
+    Cập nhật <i class="ml-2 fa fa-pencil"></i>
+  </button>
+</div>
+
+<ng-template #edit>
 
   <div class="modal-header d-flex justify-content-center">
-    <p class="heading">Chi tiết công việc</p>
+    <p class="heading">Thêm danh sách công việc phải làm</p>
   </div>
   <div class="modal-body mx-3 row">
-    <div class="md-form mt-0 mb-3 col-6 col-md-12">
-      <input type="text" id="title" class="form-control" mdbInput [(ngModel)]="schedule.title" [disabled]="!isUpdate">
-      <label for="title">Tên công việc</label>
+
+    <p class="h6">Danh sách công việc gợi ý</p>
+
+    <div class="d-flex flex-wrap w-100">
+      <div *ngFor="let t of taskBasicManagerList; let i of index" class="col-6">
+        <mdb-checkbox name="item-{{i}}" #checkbox (change)="changeCheckboxCreateModal(t.id, $event)">{{t.title}}
+        </mdb-checkbox>
+      </div>
     </div>
-  
-    <div class="md-form mt-0 mb-3 col-6 col-md-12">
-      <mdb-select [notFoundMsg]="'Người thực hiện'" [options]="employeeList" [filterEnabled]="true" [(ngModel)]="schedule.assignee.id"></mdb-select>
-    </div>
-  
-    <div class="md-form mt-0 mb-3 col-6 col-md-12">
-      <mdb-select [notFoundMsg]="'Địa điểm'" [options]="workplaceList" [filterEnabled]="true" [(ngModel)]="schedule.workplaceId"></mdb-select>
-    </div>
-  
-    <label class="col-md-2 col-xs-12" style="position: relative">
-      <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px">Từ</span>
-    </label>
-    <div class="col-md-10 col-xs-12">
-      <mdb-time-picker [buttonLabel]="'Chọn'" [twelvehour]="false" [darktheme]="false" [placeholder]="'Chọn'" [label]="'Giờ'"
-        [(ngModel)]="timeFrom" [disabled]="!isUpdate">
-      </mdb-time-picker>
-    </div>
-    <label class="col-md-2 col-xs-12" style="position: relative">
-      <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px">Đến</span>
-    </label>
-    <div class="col-md-10 col-xs-12">
-      <mdb-time-picker [buttonLabel]="'Chọn'" [twelvehour]="false" [darktheme]="false" [placeholder]="'Chọn'" [label]="'Giờ'"
-        [(ngModel)]="timeTo" [disabled]="!isUpdate">
-      </mdb-time-picker>
-    </div>
-    <div class="form-check form-check-inline col-5 text-center" *ngFor="let day of week">
-      <input type="checkbox" class="form-check-input" [id]="day.inputId" [(ngModel)]="day.check" [disabled]="!isUpdate">
-      <label class="form-check-label" [for]="day.inputId">{{ day.label }} </label>
-    </div>
-    <!-- <div class="col-12 md-form mt-0 mb-3">
-                <mdb-select
-                  class="select-wrapper mdb-select colorful-select dropdown-success"
-                  [options]="iconPrioritySelect"
-                  [(ngModel)]="schedule.priority"
-                  placeholder="Chọn">
-                </mdb-select>
-                <label>Mức độ ưu tiên</label>
-              </div> -->
-    <div class="col-12 md-form mt-0 my-3">
-      <textarea type="text" id="description" class="md-textarea form-control" mdbInput [(ngModel)]="schedule.description"
-        [disabled]="!isUpdate"></textarea>
-      <label id="description">Miêu tả công việc</label>
-    </div>
+
   </div>
   <div class="modal-footer d-flex justify-content-center">
-    <button *ngIf="!isUpdate" mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="isUpdate = true">
-      <i class="fa fa-pencil mr-2"></i>
-      <span>Sửa</span>
+    <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="addTaskBasicToSchedule()">Thêm vào danh
+      sách
+      <i class="fa fa-check ml-1"></i>
     </button>
-    <button *ngIf="!isUpdpate" mdbBtn color="danger" class="waves-light" mdbWavesEffect (click)="openModal2(delete)">
-      <i class="fa fa-ban mr-2"></i>
-      <span>Xóa</span>
+    <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="openCreateModal()">Tạo
+      mới
+      <i class="fa fa-plus mr-1"></i>
     </button>
-    <button *ngIf="isUpdate" mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="updateSchedule()">
-      <i class="fa fa-pencil mr-2"></i>
-      <span>Xác nhận</span>
-    </button>
-    <button *ngIf="isUpdate" mdbBtn color="blue-grey" class="waves-light" mdbWavesEffect (click)="isUpdate = false">
-      <i class="fa fa-ban mr-2"></i>
-      <span>Huỷ</span>
-    </button>
-    <!-- <button mdbBtn color="blue-grey" class="waves-light" mdbWavesEffect (click)="closeModal1(edit)" data-dismiss="modal">
-          <i class="fa fa-times mr-2"></i>
-          <span>Đóng</span>
-        </button> -->
   </div>
+</ng-template>
 
 <ng-template #delete>
   <div class="modal-content text-center">
@@ -88,8 +116,46 @@
 
     <!--Footer-->
     <div class="modal-footer flex-center">
-      <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeSchedule()">Đồng ý</a>
-      <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="closeModal2(delete)">Hủy</a>
+      <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect>Đồng ý</a>
+      <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+        (click)="closeModal2(delete)">Hủy</a>
     </div>
   </div>
+</ng-template>
+
+<ng-template #create>
+
+  <div class="modal-header d-flex justify-content-center">
+    <p class="heading">Tạo công việc</p>
+  </div>
+  <div class="modal-body mx-3 row">
+
+    <div class="md-form mt-0 mb-3 col-6 col-md-12">
+      <input type="text" id="title" class="form-control" mdbInput [(ngModel)]="taskBasicCM.title">
+      <label for="title">Tên công việc</label>
+    </div>
+
+    <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
+      <div mdbBtn floating="true" size="md" color="blue" mdbWavesEffect>
+        <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+        <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
+          (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+      </div>
+      <div class="file-path-wrapper mt-3">
+        <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()">
+      </div>
+    </div>
+
+    <div class="col text-center" *ngIf="url">
+      <img [src]="url" height="100">
+    </div>
+
+  </div>
+  <div class="modal-footer d-flex justify-content-center">
+    <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createTaskBasic()">
+      Tạo mới
+      <i class="fa fa-check ml-1"></i>
+    </button>
+  </div>
+
 </ng-template>

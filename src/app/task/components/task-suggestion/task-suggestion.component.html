@@ -51,9 +51,9 @@
           <th>Nhân viên</th>
           <th>Danh sách công việc đã giao hôm nay</th>
           <th>Kết thúc công việc gần nhất tại</th>
-          <th>Quãng đường - thời gian 1</th>
+          <th>Quãng đường - thời gian đến {{ company.label }}</th>
           <th>Bắt đầu công việc mới tại</th>
-          <th>Quãng đường - thời gian 2</th>
+          <th>Quãng đường - thời gian từ {{company.label}}</th>
           <th>Chọn</th>
         </tr>
       </thead>
@@ -80,18 +80,24 @@
                 <br>
                 Lúc {{ item?.endTimePreviousTask | date: 'HH:mm' }}
                 <br>
-                Khoảng thời gian đến công việc sắp tạo {{item?.endTimePreviousTask | date: 'HH:mm'}} - {{startTime | date: 'HH:mm'}} là
-                <span class="font-weight-normal text-danger">{{item?.timeAllowedCpaToCpc/60000 | number: '1.0-0'}} phút</span>
+                <!-- Khoảng thời gian đến công việc sắp tạo {{item?.endTimePreviousTask | date: 'HH:mm'}} - {{startTime | date: 'HH:mm'}} là -->
+                Thời gian dự kiến đến nơi đang làm việc đang tạo là
+                <span class="font-weight-normal text-danger" *ngIf="item?.timeAllowedCpaToCpc/60000 < 60">
+                  {{item?.timeAllowedCpaToCpc/60000 | number: '1.0-0'}} phút
+                </span>
+                <span class="font-weight-normal text-danger" *ngIf="item?.timeAllowedCpaToCpc/60000 >= 60">
+                  {{item?.timeAllowedCpaToCpc/60000/60 | number: '1.0-0'}} giờ
+                </span>
               </span>
             </div>
           </td>
           <td>
             <p *ngIf="item.typeCase !== 0">
-              <span class="font-weight-bold">{{item.moveFromHome ? 'Từ nhà' : item?.cpaName}} đến {{ company.label }}</span>
+              <span class="font-weight-bold">Điểm xuất phát: {{item.moveFromHome ? 'Nhà' : item?.cpaName}}</span>
               <br>
-              Quãng đường {{ item?.dataTravelFromCpAtoCpc?.distance / 1000 | number: '1.0-1' }} Km
+              Quãng đường dự kiến {{ item?.dataTravelFromCpAtoCpc?.distance / 1000 | number: '1.0-1' }} Km
               <br>
-              Thời gian {{ item?.dataTravelFromCpAtoCpc?.duration / 60000 | number: '1.0-0' }} phút
+              Thời gian dự kiến {{ item?.dataTravelFromCpAtoCpc?.duration / 60000 | number: '1.0-0' }} phút
               <br>
               <span *ngIf="!item.caseCpaToCpcAvailable" class="text-danger font-weight-normal">
                 Thời gian không phù hợp
@@ -107,24 +113,31 @@
                 <br>
                 Lúc {{ item?.startTimeNextTask | date: 'HH:mm' }}
                 <br>
-                Khoảng thời gian đến công việc sắp tạo {{startTime | date: 'HH:mm'}} - {{item?.startTimeNextTask | date: 'HH:mm'}} là
-                <span class="font-weight-normal text-danger">{{item?.timeAllowedCpcToCpB/60000 | number: '1.0-0'}} phút</span>
+                Thời gian dự kiến đến nơi đang làm việc đang tạo là
+                <span class="font-weight-normal text-danger" *ngIf="item?.timeAllowedCpcToCpB/60000 < 60">
+                  {{item?.timeAllowedCpcToCpB/60000 | number: '1.0-0'}} phút
+                </span>
+                <span class="font-weight-normal text-danger" *ngIf="item?.timeAllowedCpcToCpB/60000 >= 60">
+                  {{item?.timeAllowedCpcToCpB/60000/60 | number: '1.0-0'}} giờ
+                </span>
               </span>
             </div>
           </td>
           <td>
             <div *ngIf="item.typeCase !== 0">
-              <span class="font-weight-bold">Từ {{ company.label }} <span *ngIf="item.cpbName">đến {{ item?.cpbName }}</span> </span>
+              <span class="font-weight-bold">Điểm đến: {{ item.cpbName ? item?.cpbName : 'Nhà' }}</span>
               <br>
-              Quãng đường {{ item?.dataTravelFromCpCtoCpB?.distance / 1000 | number: '1.0-1' }} Km
-              <br>
-              Thời gian {{ item?.dataTravelFromCpCtoCpB?.duration / 60000 | number: '1.0-0' }} phút
-              <br>
-              <span *ngIf="!item.caseCpcToCpbAvailable" class="text-danger font-weight-normal">
-                Thời gian không phù hợp 
+              <div *ngIf="!item.cpbName">
+                Quãng đường dự kiến {{ item?.dataTravelFromCpCtoCpB?.distance / 1000 | number: '1.0-1' }} Km
                 <br>
-                ({{item?.dataTravelFromCpCtoCpB?.duration/60000 | number: '1.0-0'}} + 10) phút > {{item?.timeAllowedCpcToCpB/60000 | number: '1.0-0'}} phút
-              </span>
+                Thời gian dự kiến {{ item?.dataTravelFromCpCtoCpB?.duration / 60000 | number: '1.0-0' }} phút
+                <br>
+                <span *ngIf="!item.caseCpcToCpbAvailable" class="text-danger font-weight-normal">
+                  Thời gian không phù hợp 
+                  <br>
+                  ({{item?.dataTravelFromCpCtoCpB?.duration/60000 | number: '1.0-0'}} + 10) phút > {{item?.timeAllowedCpcToCpB/60000 | number: '1.0-0'}} phút
+                </span>
+              </div>
             </div>
           </td>
           <td>

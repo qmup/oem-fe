@@ -7,6 +7,7 @@ export class Employee {
   employeeId: string;
   firstName: string;
   fullName: string;
+  coordinateId: number;
   id: number;
   lastName: string;
   managerId: number;
@@ -27,6 +28,7 @@ export class Employee {
     this.dateCreate = '';
     this.deviceToken = '';
     this.email = '';
+    this.coordinateId = 0;
     this.employeeId = '';
     this.firstName = '';
     this.fullName = '';
@@ -44,4 +46,3 @@ export class Employee {
     this.longitude = 0;
   }
 }
-

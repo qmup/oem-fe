@@ -1,10 +1,37 @@
-import { Component, HostListener, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
-import { trigger, transition, animate, style, state, group } from '@angular/animations';
-import { NotificationService } from '../services/notification.service';
-import { Employee } from 'src/app/employee/models/employee';
-import { GlobalService } from '../services/global.service';
-import { PaginationResponse } from '../models/shared';
-import { Notification } from '../models/notification';
+import {
+  Component,
+  HostListener,
+  ViewChild,
+  ElementRef,
+  AfterViewChecked,
+  OnInit
+} from '@angular/core';
+import {
+  trigger,
+  transition,
+  animate,
+  style,
+  state,
+  group
+} from '@angular/animations';
+import {
+  NotificationService
+} from '../services/notification.service';
+import {
+  Employee
+} from 'src/app/employee/models/employee';
+import {
+  GlobalService
+} from '../services/global.service';
+import {
+  PaginationResponse
+} from '../models/shared';
+import {
+  Notification
+} from '../models/notification';
+import {
+  Router
+} from '@angular/router';
 
 @Component({
   selector: 'app-notification',
@@ -14,7 +41,7 @@ import { Notification } from '../models/notification';
       <button type="button" class="btn btn-sm btn-notification" (click)="toggleShowDiv()">
         <i class="fa fa-bell"></i>
       </button>
-      <span class="counter">{{countUnread}}</span>
+      <span class="counter" *ngIf="countUnread !== 0">{{countUnread}}<span *ngIf="countUnread > 99">+</span></span>
 
       <div [@slideInOut]="animationState" class="card-notification">
         <h6 class="p-3 font-weight-bold">Thông báo</h6>
@@ -24,19 +51,16 @@ import { Notification } from '../models/notification';
           class="d-flex flex-wrap w-100 py-3"
           (mouseenter)="noti.hover=true"
           (mouseleave)="noti.hover=false"
-          (click)="toggleSeen(noti.id)"
-          [routerLink]="['/task-detail', noti.taskId]"
+          (click)="toggleSeen(noti.id, noti.taskId)"
           >
-            <div class="col-2">
+            <div class="col-2 my-auto">
               <img [src]="noti.pictureSender"
               class="rounded-circle img-responsive list-avatar mr-2">
             </div>
             <div class="col-10">
-              <span class="font-weight-bold mb-0">{{noti.sender}}</span> đã {{noti.title | lowercase}}.
+              <span class="font-weight-bold mb-0">{{noti.sender}}</span> đã {{noti.title | lowercase}} với ID {{noti.taskId}}
               <br>
               <small>{{noti.timeStatus}}</small>
-              <!-- <p class="font-weight-bold mb-0">Người gửi vừa báo cáo công việc</p>
-              <small>2 phút trước</small> -->
             </div>
           </div>
         </div>
@@ -102,39 +126,41 @@ import { Notification } from '../models/notification';
   animations: [
     trigger('slideInOut', [
       state('in', style({
-          'max-height': '500px', 'opacity': '1', 'visibility': 'visible'
+        'max-height': '500px',
+        'opacity': '1',
+        'visibility': 'visible'
       })),
       state('out', style({
-          'max-height': '0px', 'opacity': '0', 'visibility': 'hidden'
+        'max-height': '0px',
+        'opacity': '0',
+        'visibility': 'hidden'
       })),
       transition('in => out', [group([
-          animate('200ms ease-in-out', style({
-              'opacity': '0'
-          })),
-          animate('300ms ease-in-out', style({
-              'max-height': '0px'
-          })),
-          animate('350ms ease-in-out', style({
-              'visibility': 'hidden'
-          }))
-      ]
-      )]),
+        animate('200ms ease-in-out', style({
+          'opacity': '0'
+        })),
+        animate('300ms ease-in-out', style({
+          'max-height': '0px'
+        })),
+        animate('350ms ease-in-out', style({
+          'visibility': 'hidden'
+        }))
+      ])]),
       transition('out => in', [group([
-          animate('1ms ease-in-out', style({
-              'visibility': 'visible'
-          })),
-          animate('20ms ease-in-out', style({
-              'max-height': '500px'
-          })),
-          animate('300ms ease-in-out', style({
-              'opacity': '1'
-          }))
-      ]
-      )])
-  ]),
+        animate('1ms ease-in-out', style({
+          'visibility': 'visible'
+        })),
+        animate('20ms ease-in-out', style({
+          'max-height': '500px'
+        })),
+        animate('300ms ease-in-out', style({
+          'opacity': '1'
+        }))
+      ])])
+    ]),
   ]
 })
-export class NotificationComponent implements AfterViewChecked {
+export class NotificationComponent implements OnInit {
 
   userAccount: Employee;
   notificationResponse: PaginationResponse = new PaginationResponse();
@@ -142,18 +168,19 @@ export class NotificationComponent implements AfterViewChecked {
   size = 10;
   disableScrollDown = false;
   animationState = 'out';
-  countUnread = 0;
+  countUnread: number;
   // @ViewChild('scroll') private scrollContainer: ElementRef;
 
   constructor(
     private notificationService: NotificationService,
-    private globalService: GlobalService
-  ) {
-    this.userAccount = this.globalService.getUserAccount();
-    this.getNotifications();
-  }
+    private globalService: GlobalService,
+    private router: Router,
+  ) {}
 
-  ngAfterViewChecked() {
+  ngOnInit() {
+    this.userAccount = this.globalService.getUserAccount();
+    this.countUnread = this.globalService.countUnread;
+    this.getNotifications();
   }
 
   toggleShowDiv() {
@@ -164,7 +191,6 @@ export class NotificationComponent implements AfterViewChecked {
     this.notificationService.getAll(this.userAccount.id, '', 'dateCreate', 0, this.size)
       .then(
         (response) => {
-          console.log(this.notificationList);
           console.log(response);
           this.countUnread = response.totalNotSeen;
           this.notificationList = response.notificationModels.content;
@@ -199,14 +225,18 @@ export class NotificationComponent implements AfterViewChecked {
     }
   }
 
-  toggleSeen(id: number) {
-    this.notificationService.toggleSeen(id, 'seen', 'true')
-      .then(
-        () => {
-          this.notificationList.find(noti => noti.id === id).seen = true;
-          this.countUnread--;
+  toggleSeen(notiId: number, taskId: number) {
+    if (!this.notificationList.find(noti => noti.id === notiId).seen) {
+      this.notificationService.toggleSeen(notiId, 'seen', 'true')
+        .then(
+          () => {
+            this.notificationList.find(noti => noti.id === notiId).seen = true;
+            this.countUnread--;
+          }
+          );
         }
-      );
+    this.animationState = 'out';
+    this.router.navigate(['/task-detail', taskId]);
   }
 
   showMore() {

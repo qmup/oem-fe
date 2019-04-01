@@ -92,6 +92,7 @@ export class GlobalService {
     { value: 2, label: 'Thời lượng' },
     { value: 1, label: 'Ngày cập nhật' },
   ];
+  countUnread = 0;
 
   constructor(
     private httpClient: HttpClient,

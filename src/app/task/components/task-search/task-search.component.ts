@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, OnChanges } from '@angular/core';
 import { Employee } from 'src/app/employee/models/employee';
 import { GlobalService } from 'src/app/core/services/global.service';
 import { EmployeeService } from 'src/app/employee/services/employee.service';
@@ -12,8 +12,11 @@ import { TaskService } from '../../service/task.service';
   templateUrl: './task-search.component.html',
   styleUrls: ['./task-search.component.scss']
 })
-export class TaskSearchComponent implements OnInit {
+export class TaskSearchComponent implements OnChanges {
 
+  @Input() sortRequest: string;
+  @Input() page: number;
+  @Input() size: number;
   @Output() searchChanged: EventEmitter<any> = new EventEmitter();
 
   typeList = [];
@@ -37,8 +40,6 @@ export class TaskSearchComponent implements OnInit {
 
   searchRequest = '';
   searchRequestArray = [];
-
-  sortRequest = 'startTime:desc';
 
   assigneeString = `"ASSIGNEE":`;
   statusString = `"status":`;
@@ -71,7 +72,7 @@ export class TaskSearchComponent implements OnInit {
     private taskService: TaskService,
   ) { }
 
-  ngOnInit() {
+  ngOnChanges() {
     this.userAccount = this.globalService.getUserAccount();
     this.typeList = this.globalService.typeList;
     this.statusList = this.globalService.statusList;
@@ -79,6 +80,7 @@ export class TaskSearchComponent implements OnInit {
     this.moreList = this.globalService.moreList;
     this.getEmployeeByManager();
     this.getWorkplaceByManager();
+    this.search();
   }
 
   getEmployeeByManager() {
@@ -210,19 +212,20 @@ export class TaskSearchComponent implements OnInit {
     this.filterRequestArray = [];
     this.searchRequest = '';
     this.searchRequestArray = [];
+
     this.sortRequest = 'startTime:desc';
 
     this.assigneeString = `"ASSIGNEE":`;
     this.statusString = `"status":`;
     this.workplaceString = `"WORKPLACE":`;
     this.attendanceString = `"attendanceStatus":`;
+    this.idString = `"id":`;
+    this.titleString = `"title":`;
 
     this.dateCreateString = `"dateCreate":`;
     this.dateUpdateString = `"dateUpdate":`;
     this.durationString = `"duration":`;
-    this.titleString = `"title":`;
     this.startTimeString = `"startTime":`;
-    this.titleString = `"title":`;
 
   }
 
@@ -307,7 +310,8 @@ export class TaskSearchComponent implements OnInit {
         this.sortRequest,
         this.filterRequest,
         this.userAccount.id,
-        0, 10
+        this.page,
+        this.size
       )
       .then(
         (response) => {

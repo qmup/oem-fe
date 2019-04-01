@@ -262,6 +262,12 @@ export class LaborerComponent implements OnInit {
       .then(
         (response) => {
           this.employeeCM.picture = response;
+        },
+        (error) => {
+          console.error(error);
+        }
+      ).then(
+        () => {
           this.employeeService.create(this.employeeCM)
             .then(
               () => {
@@ -274,9 +280,6 @@ export class LaborerComponent implements OnInit {
                 this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
               }
             );
-        },
-        (error) => {
-          console.error(error);
         }
       );
   }

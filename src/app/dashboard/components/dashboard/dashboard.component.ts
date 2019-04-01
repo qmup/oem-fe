@@ -4,6 +4,7 @@ import { SummaryTask } from '../../models/summary-task';
 import { DashboardService } from '../../services/dashboard.service';
 import { GlobalService } from 'src/app/core/services/global.service';
 import { Employee } from 'src/app/employee/models/employee';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -62,21 +63,26 @@ export class DashboardComponent implements OnInit {
 
   message: any;
 
+  startTime = new Date();
+  endTime = new Date(this.startTime.getTime() - (7 * 24 * 60 * 60 * 1000));
+
   constructor(
     private dashboardService: DashboardService,
-    private notificationService: NotificationService,
-    private globalService: GlobalService
+    private globalService: GlobalService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.userAccount = this.globalService.getUserAccount();
-
-    const today = new Date();
-    const lastweek = new Date(today.getTime() - (7 * 24 * 60 * 60 * 1000));
-    this.getSummaryTaskLastWeek(this.globalService.convertToYearMonthDay(lastweek), this.globalService.convertToYearMonthDay(today));
+    if (this.userAccount.roleId === 1) {
+      this.router.navigate([`employee/`]);
+    }
+    this.getSummaryTaskLastWeek();
   }
 
   search() {
+    this.startTime = this.dateRange[1];
+    this.endTime = this.dateRange[0];
     const startTime = this.dateRange ? this.globalService.convertToYearMonthDay(this.dateRange[0]) : '';
     const endTime = this.dateRange ? this.globalService.convertToYearMonthDay(this.dateRange[1]) : '';
     console.log(this.dateRange);
@@ -88,8 +94,12 @@ export class DashboardComponent implements OnInit {
       );
   }
 
-  getSummaryTaskLastWeek(today: string, lastweek: string) {
-    this.dashboardService.summaryManagerTask(this.userAccount.id, today, lastweek)
+  getSummaryTaskLastWeek() {
+    this.dashboardService.summaryManagerTask(
+      this.userAccount.id,
+      this.globalService.convertToYearMonthDay(this.startTime),
+      this.globalService.convertToYearMonthDay(this.endTime)
+      )
       .then(
         (response: SummaryTask) => {
           this.summaryTask = response;

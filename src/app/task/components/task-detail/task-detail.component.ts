@@ -91,6 +91,7 @@ export class TaskDetailComponent implements OnInit {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
     this.humanizeBytes = humanizeBytes;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   ngOnInit() {
@@ -236,6 +237,8 @@ export class TaskDetailComponent implements OnInit {
   }
 
   loadTask(id: number) {
+    this.selectedModalTaskBasic = [];
+    this.selectedTaskBasic = [];
     this.selectingId = id;
     this.getTaskDetail(id);
     this.getTaskReport(id);
@@ -266,14 +269,14 @@ export class TaskDetailComponent implements OnInit {
   }
 
   removeTaskBasic() {
-    const fn = this.selectedTaskBasic.forEach((element, i) => {
+    this.selectedTaskBasic.forEach((element, i) => {
       this.taskService.remove(element.id)
         .then(
           (response) => {
             if (this.selectedTaskBasic.length - 1 === i) {
               this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
               this.canRemove = false;
-              this.loadTask(this.selectingId);
+              this.loadTask(this.selectingId || this.id);
             }
           },
           (error) => {
@@ -319,7 +322,7 @@ export class TaskDetailComponent implements OnInit {
         (response) => {
           this.toastService.success('Assign thành công', '', { positionClass: 'toast-bottom-right'});
           this.assignModal.hide();
-          this.loadTask(this.selectingId);
+          this.loadTask(this.selectingId || this.id);
         },
         (error) => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -422,7 +425,7 @@ export class TaskDetailComponent implements OnInit {
                         .then(
                           () => {
                             this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-                            this.loadTask(this.selectingId);
+                            this.loadTask(this.selectingId || this.id);
                             this.createModal.hide();
                           },
                           () => {
@@ -449,7 +452,7 @@ export class TaskDetailComponent implements OnInit {
             .then(
               () => {
                 this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-                this.loadTask(this.selectingId);
+                this.loadTask(this.selectingId || this.id);
                 this.createModal.hide();
               },
               () => {
@@ -464,10 +467,13 @@ export class TaskDetailComponent implements OnInit {
     this.managerReport.taskId = this.selectingId;
     this.managerReport.employeeId = this.userAccount.id;
     this.managerReport.type = 2;
-    this.reportService.update(this.managerReport)
+    this.reportService.submitReport(this.managerReport)
       .then(
         (response) => {
-          console.log(response);
+          this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+        },
+        (error) => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
         }
       );
   }
@@ -494,12 +500,15 @@ export class TaskDetailComponent implements OnInit {
   }
 
   addTaskBasicToTask() {
+    this.task.checkList.forEach(element => {
+      this.selectedModalTaskBasic.push(element);
+    });
     this.taskService.updateTaskBasicList(this.task.id, this.selectedModalTaskBasic)
       .then(
         () => {
           this.toastService.success('Thêm thành công', '', { positionClass: 'toast-bottom-right'} );
           this.editTaskBasicModal.hide();
-          this.loadTask(this.selectingId);
+          this.loadTask(this.selectingId || this.id);
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});

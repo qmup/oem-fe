@@ -1,47 +1,35 @@
-<mdb-card>
+<mdb-card id="task-calendar">
   <mdb-card-body>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <div class="btn-group">
-          <div
-            class="btn btn-primary"
-            mwlCalendarPreviousView
-            [view]="'day'"
-            [(viewDate)]="viewDate"
-            (click)="getCalendarEvent()"
-          >
+          <div class="btn btn-primary" mwlCalendarPreviousView [view]="'day'" [(viewDate)]="viewDate"
+            (click)="getCalendarEvent()">
             Trước
           </div>
-          <div
-            class="btn btn-outline-primary"
-            mwlCalendarToday
-            [(viewDate)]="viewDate"
-            (click)="getCalendarEvent()"
-          >
+          <div class="btn btn-outline-primary" mwlCalendarToday [(viewDate)]="viewDate" (click)="getCalendarEvent()">
             Hôm nay
           </div>
-          <div
-            class="btn btn-primary"
-            mwlCalendarNextView
-            [view]="'day'"
-            [(viewDate)]="viewDate"
-            (click)="getCalendarEvent()"
-          >
+          <div class="btn btn-primary" mwlCalendarNextView [view]="'day'" [(viewDate)]="viewDate"
+            (click)="getCalendarEvent()">
             Sau
           </div>
         </div>
       </div>
-      <div class="col-md-6 text-right">
-        <h3>{{ viewDate | calendarDate:('dayViewTitle') }}</h3>
+      <div class="col-md-4 text-center">
+        <h4>Ngày {{ viewDate | date: 'dd' }} tháng {{ viewDate | date: 'MM' }} năm {{ viewDate | date: 'yyyy' }} </h4>
+      </div>
+      <div class="col-md-4 text-right">
+        <owl-form-field class="w-100 px-3">
+          <input owlInput class="text-center" [(ngModel)]="viewDate"
+            [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker" placeholder="Thời gian công việc"
+            (dateTimeChange)="getCalendarEvent()">
+          <owl-date-time #datepicker [pickerType]="'calendar'"></owl-date-time>
+        </owl-form-field>
       </div>
     </div>
     <br />
-    <app-day-view-scheduler
-      [viewDate]="viewDate"
-      [events]="events"
-      (eventTimesChanged)="eventTimesChanged($event)"
-      (userChanged)="userChanged($event)"
-    >
+    <app-day-view-scheduler [viewDate]="viewDate" [events]="events">
     </app-day-view-scheduler>
 
   </mdb-card-body>

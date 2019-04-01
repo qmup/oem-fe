@@ -4,7 +4,7 @@ import { TaskBasic } from './task-basic';
 export class ScheduleModel {
   assigneeId: number;
   assignerId: number;
-  daysOfWeek: number[];
+  daysOfWeek: string;
   description: string;
   dateCreate: string;
   endTime: string;
@@ -20,7 +20,7 @@ export class ScheduleModel {
   constructor() {
     this.assigneeId = 0;
     this.assignerId = 0;
-    this.daysOfWeek = [];
+    this.daysOfWeek = '';
     this.dateCreate = new Date().toISOString();
     this.description = '';
     this.endTime = '';

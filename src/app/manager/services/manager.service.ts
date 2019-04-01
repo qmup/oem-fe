@@ -17,21 +17,6 @@ export class ManagerService {
     ).toPromise();
   }
 
-  getAll(managerId: number, sort: string, fieldSort: string, page: number, size: number ): Promise<PaginationResponse> {
-    return this.httpClient.get<PaginationResponse>(
-      `${environment.endPoint}${environment.apiPaths.manager.getAll}`,
-      {
-        params: {
-          managerID: `${managerId}`,
-          sort: `${sort}`,
-          fieldSort: `${fieldSort}`,
-          page: `${page}`,
-          size: `${size}`
-        }
-      }
-    ).toPromise();
-  }
-
   remove(id: number): Promise<any> {
     return this.httpClient.delete(
       `${environment.endPoint}${environment.apiPaths.manager.remove + id}`

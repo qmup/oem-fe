@@ -69,6 +69,7 @@ export class TaskComponent implements OnInit {
   currentCompany: any;
   currentZone: any;
   currentWorkplace: any;
+  currentSize = 10;
 
   constructor(
     private taskService: TaskService,
@@ -102,7 +103,6 @@ export class TaskComponent implements OnInit {
     } else {
       this.fieldSort += ':desc';
     }
-    this.getTask();
   }
 
   getTask() {
@@ -298,11 +298,11 @@ export class TaskComponent implements OnInit {
 
   createSchedule() {
     const option = 1;
-    this.scheduleCM.daysOfWeek = [];
     for (let index = 0; index < this.week.length; index++) {
       const element = this.week[index];
       if (element.check) {
-        this.scheduleCM.daysOfWeek.push(element.id);
+        this.scheduleCM.daysOfWeek += element.id;
+        this.scheduleCM.daysOfWeek += ',';
       }
     }
     // this.scheduleCM.assigneeId = this.taskCM.assigneeId;
@@ -373,7 +373,10 @@ export class TaskComponent implements OnInit {
 
   changePage1(event) {
     this.currentPage = event - 1;
-    this.getTask();
+  }
+
+  changeSize(event) {
+    this.currentSize = event;
   }
 
 }

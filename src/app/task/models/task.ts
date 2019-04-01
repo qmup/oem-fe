@@ -145,6 +145,7 @@ export class TaskDetail {
   workplace: Shared;
   beaconModel: BeaconModel;
   startTime: string;
+  checkInTime: string;
   endTime: string;
   attendanceStatus: number;
   picture: string;
@@ -161,6 +162,7 @@ export class TaskDetail {
     this.beaconModel = new BeaconModel();
     this.startTime = '';
     this.endTime = '';
+    this.checkInTime = '';
     this.attendanceStatus = 0;
     this.picture = '';
     this.status = 0;

@@ -71,11 +71,11 @@
             </tbody>
             <!--Table body-->
           </table>
-          <app-pagination *ngIf="beaconResponse?.totalPages > 1" [pageSize]="beaconResponse.size"
+          <app-pagination class="w-100" *ngIf="beaconResponse?.totalPages > 1" [pageSize]="beaconResponse.size"
             [totalPage]="beaconResponse.totalPages" [currentPage]="beaconResponse.number"
             (changePage)="changePage($event)">
           </app-pagination>
-          <div *ngIf="beaconResponse.totalElements === 0" class="col-12 pt-5">
+          <div *ngIf="beaconResponse?.totalElements === 0" class="col-12 pt-5">
             <h6 class="text-danger">Không tìm thấy kết quả phù hợp</h6>
           </div>
           <!--Table-->

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { TaskReport, TaskModel, ReportList } from '../models/report';
+import { TaskModel, ReportList } from '../models/report';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +23,11 @@ export class ReportService {
   update(reportUM: TaskModel) {
     return this.httpClient.put<TaskModel>(
       `${environment.endPoint}${environment.apiPaths.report.update}`, reportUM,
+    ).toPromise();
+  }
+  submitReport(report: TaskModel) {
+    return this.httpClient.post<TaskModel>(
+      `${environment.endPoint}${environment.apiPaths.report.submit}`, report,
     ).toPromise();
   }
 }

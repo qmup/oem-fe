@@ -27,7 +27,7 @@
         <ul class="list-group list-group-flush pt-3">
           <a *ngFor="let task of taskList; let i = index" mdbWavesEffect
             class="list-group-item list-group-item-action waves-light"
-            [ngClass]="{'list-group-item-action': task.id !== selectingId, 'active': (task.id === selectingId)}"
+            [ngClass]="{'list-group-item-action': task.id !== selectingId, 'active': task.id === selectingId}"
             (click)="loadTask(task.id)">
             {{task.title}} lúc {{task.startTime | date: 'HH:mm'}}
             <br>
@@ -59,7 +59,7 @@
             </p>
 
             <div class="md-form my-0" *ngIf="task.status === 0">
-              <input mdbInput type="text" class="form-control" [ngModel]="task.title" (ngModelChange)="updateTitle()">
+              <input mdbInput type="text" class="form-control" [(ngModel)]="task.title" (blur)="updateTitle()">
               <label>Tên công việc</label>
             </div>
 
@@ -82,9 +82,6 @@
         <div class="col-md-12 mt-3">
           <h5 class="text-center font-weight-bold">
             Công việc phải làm
-            <!-- <a mdbBtn floating="true" size="sm" color="primary" mdbWavesEffect>
-              <i class="fa fa-pencil" (click)="openEditModal()"></i>
-            </a> -->
             <a *ngIf="task.status === 0" mdbBtn floating="true" size="sm" color="success" mdbWavesEffect>
               <i class="fa fa-plus" (click)="openEditModal()"></i>
             </a>
@@ -105,10 +102,10 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12 mt-3" *ngIf="task.status !== 0 && task.status !== 1">
+        <div class="col-md-12 mt-3" *ngIf="task.status !== 0">
           <h5 class="text-center font-weight-bold">Báo cáo công việc
-            <a *ngIf="task.status !== 0 && task.status !== 1 && report.length === 0" mdbBtn floating="true" size="sm"
-              color="success" mdbWavesEffect>
+            <a *ngIf="task.status !== 0 && report.length === 0" mdbBtn floating="true" size="sm" color="success"
+              mdbWavesEffect>
               <i class="fa fa-plus" (click)="openReportModal()"></i>
             </a>
           </h5>
@@ -117,8 +114,10 @@
               <mdb-accordion-item-head>
                 <div [ngClass]="item.type === 1 ? 'text-success' : 'text-danger'">
                   Báo cáo lúc {{ item.dateReport | date: 'HH:mm' }}
-                  <span *ngIf="item.evaluated" style="font-size: 15px; float: right" class="badge badge-success"> ĐÃ DUYỆT</span>
-                  <span *ngIf="!item.evaluated" style="font-size: 15px; float: right" class="badge badge-warning"> CHƯA DUYỆT</span>
+                  <span *ngIf="item.evaluated" style="font-size: 15px; float: right" class="badge badge-success"> ĐÃ
+                    DUYỆT</span>
+                  <span *ngIf="!item.evaluated" style="font-size: 15px; float: right" class="badge badge-warning"> CHƯA
+                    DUYỆT</span>
                   <br>
                   <small>Nội dung: {{ item.description }}</small>
                 </div>
@@ -130,7 +129,8 @@
                   <mdb-image-modal [modalImages]="item.pictures" type="margin"></mdb-image-modal>
                 </div>
                 <div class="md-form" *ngIf="item.type !== 1">
-                  <input mdbInput type="text" name="text" [disabled]="item.evaluated" [(ngModel)]="item.evaluation" id="form5" class="form-control">
+                  <input mdbInput type="text" name="text" [disabled]="item.evaluated" [(ngModel)]="item.evaluation"
+                    id="form5" class="form-control">
                   <label for="form5" class="">Giải quyết vấn đề</label>
                 </div>
                 <hr *ngIf="item.type === 1">
@@ -154,7 +154,8 @@
                   </owl-rating-button>
                 </owl-rating>
                 <div class="md-form" *ngIf="item.type === 1">
-                  <input mdbInput type="text" name="text" [disabled]="item.evaluated" [(ngModel)]="item.evaluation" id="form5" class="form-control">
+                  <input mdbInput type="text" name="text" [disabled]="item.evaluated" [(ngModel)]="item.evaluation"
+                    id="form5" class="form-control">
                   <label for="form5" class="">Đánh giá chi tiết</label>
                 </div>
                 <div class="d-flex flex-wrap w-100 justify-content-center">
@@ -181,10 +182,10 @@
       <div class="col-md-5 col-12">
         <div class="md-form ">
           <h6 class="font-weight-bold d-flex flex-wrap">
-            <span class="col-6 px-0 mr-auto">Trạng thái</span>
+            <span class="col-6 px-0 mr-auto mt-auto">Trạng thái</span>
             <div class="col-6 px-0 ml-auto text-right">
-              <a mdbBtn floating="true" size="sm" color="primary" class="btn-history" mdbWavesEffect>
-                <i class="fa fa-history" (click)="history.show()"></i>
+              <a mdbBtn floating="true" size="md" color="primary" class="btn-list" mdbWavesEffect>
+                <i class="fa fa-list-alt" (click)="history.show()"></i>
               </a>
             </div>
           </h6>
@@ -200,7 +201,9 @@
         </div>
 
         <div class="md-form">
-          <h6 class="font-weight-bold">Điểm danh</h6>
+          <h6 class="font-weight-bold">Điểm danh 
+            <span *ngIf="task.checkInTime">lúc {{task.checkInTime | date: 'HH:mm'}} ngày {{task.checkInTime | date: 'dd-MM-yyyy'}}</span>
+          </h6>
           <span *ngIf="task.attendanceStatus === 0" style="font-size: 15px" class="badge badge-light">Chưa điểm
             danh</span>
           <span *ngIf="task.attendanceStatus === 1" style="font-size: 15px" class="badge badge-success">Đúng
@@ -241,6 +244,7 @@
             </owl-form-field>
           </div>
         </div>
+
       </div>
       <!-- <button *ngIf="isUpdate" class="btn-confirm" mdbBtn type="button" color="success" rounded="true"
         mdbWavesEffect (click)="updateTask()">Xác nhận</button>
@@ -335,8 +339,8 @@
 
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createTaskBasic()">Tạo
-          mới
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createTaskBasic()">
+          Tạo mới
           <i class="fa fa-check ml-1"></i>
         </button>
       </div>
@@ -423,7 +427,7 @@
       <div class="modal-body mx-3 row">
 
         <div class="md-form mt-0 mb-3 col-6 col-md-12">
-          <input type="text" id="title" class="form-control" mdbInput [(ngModel)]="managerReport.description">
+          <input type="text" id="title" class="form-control" mdbInput [(ngModel)]="managerReport.evaluation">
           <label for="title">Nội dung báo cáo</label>
         </div>
 

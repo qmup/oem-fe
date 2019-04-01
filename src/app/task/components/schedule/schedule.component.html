@@ -18,8 +18,7 @@
           <div class="col-md-12 mx-auto text-left my-3">
             <div class="d-flex flex-wrap">
               <h5 style="color: #8993a4" class="text-left col-xl-8 col-lg-12">
-                <span class="text-primary">{{userAccount.fullName}}</span>
-                / Các công việc thường nhật đang phụ trách</h5>
+                Các công việc thường nhật đang phụ trách</h5>
             </div>
             <table class="table table-hover" cellspacing="0" width="100%">
               <thead>
@@ -40,9 +39,12 @@
                     Thời gian
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
-                  <th (click)="sort('daysOfWeek')">
+                  <th (click)="sort('daysOfWeek')" style="width: 165px">
                     Các ngày trong tuần
                     <mdb-icon icon="sort"></mdb-icon>
+                  </th>
+                  <th>
+                    Trạng thái
                   </th>
                   <th>
                     Thao tác
@@ -50,34 +52,40 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let item of scheduleList" style="cursor: pointer">
-                  <td (click)="openDetailModal(item)">
+                <tr *ngFor="let item of scheduleList" style="cursor: pointer"
+                [ngStyle]="{'opacity': item.status === 0 ? '.5' : '1'}">
+                  <td (click)="openDetailModal(item.id)">
                     {{ item.title }}
                   </td>
-                  <td (click)="openDetailModal(item)">
+                  <td (click)="openDetailModal(item.id)">
                     {{ item.workplaceName }}
                   </td>
-                  <td (click)="openDetailModal(item)">
+                  <td (click)="openDetailModal(item.id)">
                     {{ item.assignee.name }}
                   </td>
-                  <td (click)="openDetailModal(item)">
+                  <td (click)="openDetailModal(item.id)">
                     {{ item.startTime | date: 'HH:mm' }} - {{ item.endTime | date: 'HH:mm' }}
                   </td>
-                  <td (click)="openDetailModal(item)">
+                  <td (click)="openDetailModal(item.id)">
                     <span *ngFor="let day of item.dayList; let i = index">
                       <span *ngIf="day == 1">Chủ nhật</span>
                       <span *ngIf="day != 1">Thứ {{day}}</span>
                       <span *ngIf="i !== item.dayList.length - 1">, </span>
                     </span>
                   </td>
-                  <td>
-                    <div class="switch rounded blue-white-switch">
+                  <td class="d-flex flex-wrap justify-content-center">
+                    <div class="switch rounded blue-white-switch my-auto">
                       <label>
-                        Tạm dừng
+                        Dừng
                         <input type="checkbox" (change)="switch($event, item.id)" [checked]="item.status === 1">
                         <span class="lever"></span> Tiếp tục
                       </label>
                     </div>
+                  </td>
+                  <td>
+                    <a mdbBtn floating="true" size="sm" color="danger" mdbWavesEffect (click)="openDeleteModal(item.id)">
+                      <i class="fa fa-trash"></i>
+                    </a>
                   </td>
                 </tr>
               </tbody>
@@ -136,7 +144,7 @@
         </span>
         <div class="w-100 d-flex justify-content-center align-items-center my-3" *ngIf="isSelectWorkplace">
           <mdb-range-input id="range" [min]="10" [step]="10" [max]="300" name="range"
-            (rangeValueChange)="isSelectRange = true" [(ngModel)]="scheduleCM.duration" class="w-100"></mdb-range-input>
+            (rangeValueChange)="isSelectRange = true" [ngModel]="scheduleCM.duration" (ngModelChange)="changeDuration($event)" class="w-100"></mdb-range-input>
           <span class="ml-2">phút</span>
         </div>
 
@@ -171,5 +179,31 @@
         </button>
       </div>
     </div>
+  </div>
+</div>
+
+<div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="delete" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Xóa công việc này?</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-times fa-4x animated rotateIn"></i>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeSchedule()">Đồng ý</a>
+        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+          (click)="delete.hide()">Hủy</a>
+      </div>
+    </div>
+    <!--/.Content-->
   </div>
 </div>

@@ -7,8 +7,8 @@ export const environment = {
   production: false,
   token: 'OEM_TOKEN',
   account: 'OEM_ACCOUNT',
-  // endPoint: 'http://localhost:8080/',
-  endPoint: 'http://113.161.84.125/',
+  endPoint: 'http://localhost:8080/',
+  // endPoint: 'http://113.161.84.125/',
   apiPaths: {
     firebase: {
       apiKey: 'AIzaSyCv23Kx9Xfh4okq30jtY_QJi2CudhO_7f4',
@@ -103,10 +103,14 @@ export const environment = {
       getAssignHistory: 'assign-task/get-assign-history',
       checkRemove: 'task/check-task-basic',
     },
+    coordinate: {
+      create: 'coordinate/create',
+      update: 'coordinate/update',
+    },
     report: {
       delete: 'report/delete-report/',
       getByTaskId: 'report/get-report/',
-      submit: 'report/submit-report',
+      submit: 'report/manager-submit-report',
       update: 'report/update',
     },
     taskBasic: {
@@ -119,7 +123,11 @@ export const environment = {
       create: 'schedule/create',
       getAll: 'schedule/get-all',
       getDetail: 'schedule/get-detail/',
-      update: 'schedule/update/',
+      updateField: 'schedule/update/',
+      update: 'schedule/update-dto/',
+      updateTaskBasic: 'schedule/update-task-basic/',
+      deleteTaskBasic: 'schedule/remove-task-basic/',
+
     },
     upload: {
       handlerUpload: 'upload/handler-upload',

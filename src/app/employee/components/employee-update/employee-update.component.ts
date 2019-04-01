@@ -7,6 +7,8 @@ import { ManagerService } from 'src/app/manager/services/manager.service';
 import { GlobalService } from 'src/app/core/services/global.service';
 import { PaginationResponse } from 'src/app/core/models/shared';
 import { AgmMap } from '@agm/core';
+import { CoordinateService } from 'src/app/core/services/coordinate.service';
+import { Coordinate } from 'src/app/core/models/coordinate';
 
 declare var google: any;
 
@@ -51,6 +53,7 @@ export class EmployeeUpdateComponent implements OnInit {
 
   @ViewChild(AgmMap) map: AgmMap;
 
+  coordinate: Coordinate = new Coordinate();
   gender: number;
   employee: Employee;
   employeeUM: Employee = new Employee();
@@ -73,7 +76,7 @@ export class EmployeeUpdateComponent implements OnInit {
     public modalRef: BsModalRef,
     private employeeService: EmployeeService,
     private toastService: ToastService,
-    private managerService: ManagerService,
+    private coordinateSerivce: CoordinateService,
     private globalService: GlobalService
     ) {
     this.files = [];
@@ -96,10 +99,6 @@ export class EmployeeUpdateComponent implements OnInit {
     this.location.address_level_1 = this.employee.address;
     this.location.lat = this.employee.latitude;
     this.location.lng = this.employee.longitude;
-    // const year = this.employee.birthDate.split('-', 3)[0];
-    // const month = this.employee.birthDate.split('-', 3)[1];
-    // const day = this.employee.birthDate.split('-', 3)[2];
-    // this.employee.birthDate = `${day}-${month}-${year}`;
   }
 
   checkEmailExist() {
@@ -155,6 +154,7 @@ export class EmployeeUpdateComponent implements OnInit {
     this.employeeUM.latitude = this.location.lat;
     this.employeeUM.longitude = this.location.lng;
     this.employeeUM.address = this.location.address_level_1;
+    this.employeeUM.status = this.employee.status;
     this.employee.fullName = `${this.employee.firstName} ${this.employee.lastName}`;
     this.employeeUM.id = this.employee.id;
     this.employeeUM.employeeId = this.employee.employeeId;
@@ -173,6 +173,10 @@ export class EmployeeUpdateComponent implements OnInit {
     this.employeeUM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employee.birthDate));
     this.employeeUM.address = this.employee.address;
     this.employeeUM.email = this.employee.email;
+    this.employeeUM.coordinateId = this.employee.coordinateId;
+    this.coordinate.id = this.employeeUM.coordinateId;
+    this.coordinate.latitude = this.employeeUM.latitude;
+    this.coordinate.longitude = this.employeeUM.longitude;
     if (this.employee.roleId === 2) {
       this.employee.managerId = 0;
     }
@@ -191,6 +195,10 @@ export class EmployeeUpdateComponent implements OnInit {
       .then(
         (response) => {
           this.employeeUM.picture = response;
+          this.coordinateSerivce.update(this.coordinate)
+            .then(
+              () => { }
+            );
           this.employeeService.update(this.employeeUM)
             .then(
               () => {
@@ -210,6 +218,10 @@ export class EmployeeUpdateComponent implements OnInit {
   }
 
   updateEmployeeWithoutImage() {
+    this.coordinateSerivce.update(this.coordinate)
+      .then(
+        () => { }
+      );
     this.employeeService.update(this.employeeUM)
       .then(
         () => {
@@ -333,8 +345,8 @@ export class EmployeeUpdateComponent implements OnInit {
         }
 
         if (results[0].geometry.location) {
-          this.location.lat = results[0].geometry.location.lat();
-          this.location.lng = results[0].geometry.location.lng();
+          this.employee.latitude = results[0].geometry.location.lat();
+          this.employee.longitude = results[0].geometry.location.lng();
           this.location.marker.lat = results[0].geometry.location.lat();
           this.location.marker.lng = results[0].geometry.location.lng();
           this.location.marker.draggable = true;

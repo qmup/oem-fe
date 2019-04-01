@@ -4,15 +4,15 @@
       <div class="dashboard-up"><i class="fa fa-tasks primary-color"></i>
         <div class="data">
           <p>TỔNG SỐ CÔNG VIỆC</p>
-          <h4><strong>5</strong></h4>
+          <h4><strong>{{summaryTask.totalTask}}</strong></h4>
         </div>
       </div>
       <div class="card-body card-body-cascade">
         <div class="progress">
-          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" class="progress-bar bg-primary" role="progressbar"
-            style="width: 25%"></div>
+          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" class="progress-bar bg-primary"
+            role="progressbar" style="width: 25%"></div>
         </div>
-        <p class="card-text">Better than last week (25%)</p>
+        <p class="card-text">Tốt hơn tuần trước (25%)</p>
       </div>
     </div>
   </div>
@@ -22,33 +22,33 @@
       <div class="dashboard-up"><i class="fa fa-check success-color"></i>
         <div class="data">
           <p>ĐÃ HOÀN THÀNH</p>
-          <h4><strong>1</strong></h4>
+          <h4><strong>{{summaryTask.numberOfTaskDone}}</strong></h4>
         </div>
       </div>
       <div class="card-body card-body-cascade">
         <div class="progress">
-          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" class="progress-bar bg-success" role="progressbar"
-            style="width: 25%"></div>
+          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" class="progress-bar bg-success"
+            role="progressbar" style="width: 25%"></div>
         </div>
-        <p class="card-text">Better than last week (25%)</p>
+        <p class="card-text">Tốt hơn tuần trước (25%)</p>
       </div>
     </div>
   </div>
 
   <div class="col-xl-3 col-md-6 my-5">
     <div class="card card-cascade cascading-dashboard-card">
-      <div class="dashboard-up"><i class="fa fa-minus blue-grey"></i>
+      <div class="dashboard-up"><i class="fa fa-minus warning-color"></i>
         <div class="data">
-          <p>CHƯA HOÀN THÀNH</p>
-          <h4><strong>2</strong></h4>
+          <p>ĐANG THỰC HIỆN</p>
+          <h4><strong>{{summaryTask.numberOfTaskInProgress}}</strong></h4>
         </div>
       </div>
       <div class="card-body card-body-cascade">
         <div class="progress">
-          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" class="progress-bar blue-grey" role="progressbar"
-            style="width: 25%"></div>
+          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" class="progress-bar warning-color"
+            role="progressbar" style="width: 25%"></div>
         </div>
-        <p class="card-text">Better than last week (25%)</p>
+        <p class="card-text">Tốt hơn tuần trước (25%)</p>
       </div>
     </div>
   </div>
@@ -58,15 +58,15 @@
       <div class="dashboard-up"><i class="fa fa-close red accent-2"></i>
         <div class="data">
           <p>QUÁ HẠN</p>
-          <h4><strong>2</strong></h4>
+          <h4><strong>{{summaryTask.numberOfTaskDoneAfterDeadline}}</strong></h4>
         </div>
       </div>
       <div class="card-body card-body-cascade">
         <div class="progress">
-          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" class="progress-bar red accent-2" role="progressbar"
-            style="width: 25%"></div>
+          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" class="progress-bar red accent-2"
+            role="progressbar" style="width: 25%"></div>
         </div>
-        <p class="card-text">Better than last week (25%)</p>
+        <p class="card-text">Tốt hơn tuần trước (25%)</p>
       </div>
     </div>
   </div>
@@ -80,16 +80,16 @@
         </div>
         <div class="card-body card-body-cascade pb-0" class="date-range-form">
           <div class="d-flex flex-wrap card-body pt-3">
-            <div class="col-md-12">
-              <input type="text" placeholder="Chọn khoảng thời gian" aria-describedby="time" class="form-control" bsDaterangepicker [bsConfig]="{ containerClass: 'theme-dark-blue' }" [(ngModel)]="dateRange" placement="right">
-            </div>
-            <div class="col-md-12 text-center">
-              <button mdbBtn type="button" color="info" class="waves-light" mdbWavesEffect (click)="search()">Tìm kiếm</button>
-            </div>
+            <owl-form-field class="col-md-12 px-0">
+              <input owlInput [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker"
+              [selectMode]="'range'" placeholder="Khoảng thời gian" [(ngModel)]="dateRange" (dateTimeChange)="search()">
+              <owl-date-time #datepicker [pickerType]="'calendar'"></owl-date-time>
+            </owl-form-field>
           </div>
         </div>
       </div>
       <div class="col-xl-7 col-lg-12 my-5">
+        <p class="h5 text-center w-100">Từ {{endTime | date: 'dd-MM-yyyy'}} đến {{startTime | date: 'dd-MM-yyyy'}}</p>
         <!-- <div style="display: block">
           <canvas mdbChart
               [chartType]="'line'"
@@ -103,13 +103,8 @@
           </canvas>
         </div> -->
         <div style="display: block">
-          <canvas mdbChart
-              [chartType]="'bar'"
-              [datasets]="chartDatasets"
-              [labels]="chartLabels"
-              [colors]="chartColors"
-              [options]="chartOptions"
-              [legend]="true">
+          <canvas mdbChart [chartType]="'bar'" [datasets]="chartDatasets" [labels]="chartLabels" [colors]="chartColors"
+            [options]="chartOptions" [legend]="true">
           </canvas>
         </div>
       </div>

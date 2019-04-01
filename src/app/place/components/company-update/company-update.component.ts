@@ -241,8 +241,8 @@ export class CompanyUpdateComponent implements OnInit {
         }
 
         if (results[0].geometry.location) {
-          this.location.lat = results[0].geometry.location.lat();
-          this.location.lng = results[0].geometry.location.lng();
+          this.company.latitude = results[0].geometry.location.lat();
+          this.company.longitude = results[0].geometry.location.lng();
           this.location.marker.lat = results[0].geometry.location.lat();
           this.location.marker.lng = results[0].geometry.location.lng();
           this.location.marker.draggable = true;

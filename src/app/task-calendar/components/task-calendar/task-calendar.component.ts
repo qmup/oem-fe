@@ -1,15 +1,8 @@
 import {
-  colors
-} from '../../models/colors';
-import {
   Component,
   ChangeDetectionStrategy,
   OnInit,
 } from '@angular/core';
-import {
-  startOfDay,
-  addHours
-} from 'date-fns';
 import {
   CalendarEvent,
   CalendarEventTimesChangedEvent,
@@ -69,7 +62,9 @@ export class TaskCalendarComponent implements OnInit {
   }
 
   getCalendarEvent() {
-    this.calendarService.get(this.userAccount.id, this.globalService.convertToYearMonthDay(this.viewDate))
+    this.calendarService.get(
+      this.userAccount.id,
+      `${this.viewDate.toISOString()};${new Date(this.viewDate.getTime() + (24 * 60 * 60 * 1000 - 1000)).toISOString()}`)
       .then(
         (response) => {
           this.users = [];
@@ -92,13 +87,12 @@ export class TaskCalendarComponent implements OnInit {
                 user: user
               },
               resizable: {
-                beforeStart: true,
-                afterEnd: true
+                beforeStart: false,
+                afterEnd: false
               },
-              draggable: true
+              draggable: false
             };
           });
-          console.log(this.events);
         }
       );
   }

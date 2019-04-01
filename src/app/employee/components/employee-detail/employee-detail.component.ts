@@ -88,8 +88,6 @@ export class EmployeeDetailComponent implements OnInit {
           });
           if (this.employee.managerId !== 0) {
             this.managerInfo = response.content.find((manager: Manager) => manager.id === this.employee.managerId);
-            console.log(this.managerInfo);
-            console.log(this.managerList);
           }
         }
       );

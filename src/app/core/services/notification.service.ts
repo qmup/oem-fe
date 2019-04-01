@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import { Notification, NotificationResponse } from '../models/notification';
 import { environment } from 'src/environments/environment';
 import { PaginationResponse } from '../models/shared';
+import { GlobalService } from './global.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ import { PaginationResponse } from '../models/shared';
 export class NotificationService {
 
   currentMessage = new BehaviorSubject(null);
-  userAccount: Employee;
+  countUnread: number;
 
   constructor(
     private toastService: ToastService,
@@ -27,8 +28,10 @@ export class NotificationService {
     private angularFireMessaging: AngularFireMessaging,
     private authService: AuthService,
     private httpClient: HttpClient,
-    private router: Router
+    private router: Router,
+    private globalService: GlobalService
   ) {
+    this.countUnread = this.globalService.countUnread;
     this.angularFireMessaging.messaging.subscribe(
       (_messaging) => {
         _messaging.onMessage = _messaging.onMessage.bind(_messaging);
@@ -76,7 +79,7 @@ export class NotificationService {
   receiveMessage() {
     this.angularFireMessaging.messages.subscribe(
       (payload: any) => {
-
+        this.countUnread++;
         const alertInstance = this.toastService.info(
           `${payload.data.sender + ' ' + payload.data['gcm.notification.message']}`,
           payload.notification.title, { positionClass: 'toast-bottom-right'} );

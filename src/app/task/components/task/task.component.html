@@ -21,7 +21,12 @@
                 <span class="text-primary">{{userAccount.fullName}}</span>
                 / Các công việc đang phụ trách</h5>
             </div>
-            <app-task-search (searchChanged)="search($event)"></app-task-search>
+            <app-task-search
+              [sortRequest]="fieldSort"
+              [page]="currentPage"
+              [size]="currentSize"
+              (searchChanged)="search($event)">
+            </app-task-search>
             <table mdbTable mdbTableHover mdbTableScroll scrollX="true" maxWidth="100%">
               <thead>
                 <tr scole="col">
@@ -50,7 +55,11 @@
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
                   <th (click)="sort('startTime')">
-                    Thời gian
+                    Thời gian bắt đầu
+                    <mdb-icon icon="sort"></mdb-icon>
+                  </th>
+                  <th (click)="sort('endTime')">
+                    Thời gian kết thúc
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
                   <th (click)="sort('dateUpdate')">
@@ -94,12 +103,13 @@
                       mặt</span>
                   </td>
                   <td>
-                    Ngày {{task.startTime | date: 'dd/MM'}}: {{ task.startTime | date: 'HH:mm' }} ~
-                    {{ task.endTime | date: 'HH:mm' }}
+                    {{ task.startTime | date: 'HH:mm' }} ngày {{ task.startTime | date: 'dd-MM-yyyy' }}
+                  </td>
+                  <td>
+                    {{ task.endTime | date: 'HH:mm' }} ngày {{ task.endTime | date: 'dd-MM-yyyy' }}
                   </td>
                   <td *ngIf="task.dateUpdate">
-                    Ngày {{task.dateUpdate | date: 'dd/MM'}}: {{ task.dateUpdate | date: 'HH:mm' }} ~
-                    {{ task.dateUpdate | date: 'HH:mm' }}
+                    Gần nhất lúc {{ task.dateUpdate | date: 'HH:mm' }} ngày {{ task.dateUpdate | date: 'dd-MM-yyyy' }}
                   </td>
                   <td *ngIf="!task.dateUpdate"></td>
                 </tr>
@@ -185,7 +195,7 @@
           </div>
         </div>
 
-        <div *ngIf="isSelectWorkplace" class="col-12 md-form mt-0 mb-3 px-0">
+        <div *ngIf="isSelectWorkplace" class="col-12 md-form mt-3 mb-3 px-0">
           <mdb-select [label]="'Mức độ ưu tiên'" class="select-wrapper mdb-select colorful-select dropdown-success"
             [options]="iconPrioritySelect" [(ngModel)]="taskCM.priority">
           </mdb-select>

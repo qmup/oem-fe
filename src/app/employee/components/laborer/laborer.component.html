@@ -155,7 +155,7 @@
             [(ngModel)]="employeeCM.managerId"></mdb-select>
         </div>
 
-        <div class="md-form mt-1 mb-3 col-md-6">
+        <div class="md-form mt-1 mb-1 col-md-6">
           <input type="text" id="employeeId" class="form-control" mdbInput [(ngModel)]="employeeCM.employeeId"
             (blur)="checkDuplicateId()" #employeeId=ngModel [class.has-error]="isDuplicate">
           <label for="employeeId">Mã số nhân viên</label>
@@ -164,26 +164,26 @@
           </mdb-error>
         </div>
 
-        <div class="md-form mt-1 mb-3 col-md-6">
+        <div class="md-form mt-1 mb-1 col-md-6">
           <input type="password" id="password" class="form-control" mdbInput [(ngModel)]="employeeCM.password">
           <label for="password">Mật khẩu</label>
         </div>
 
-        <div class="md-form mt-1 mb-3 col-md-6">
+        <div class="md-form mt-1 mb-1 col-md-6">
           <input type="text" id="firstName" class="form-control" mdbInput [(ngModel)]="employeeCM.firstName">
           <label for="firstName">Họ</label>
         </div>
 
-        <div class="md-form mt-1 mb-3 col-md-6">
+        <div class="md-form mt-1 mb-1 col-md-6">
           <input type="text" id="lastName" class="form-control" mdbInput [(ngModel)]="employeeCM.lastName">
           <label for="lastName">Tên</label>
         </div>
 
-        <div class="md-form mt-1 mb-3 col-md-6 ">
+        <div class="md-form mt-1 mb-1 col-md-6 ">
           <mdb-select [label]="'Giới tính'" [options]="optionsSex" id="gender" [(ngModel)]="gender"></mdb-select>
         </div>
 
-        <div class="md-form mt-1 mb-3 col-md-6">
+        <div class="md-form mt-1 mb-1 col-md-6">
           <input type="text" id="phoneNumber" class="form-control" mdbInput [(ngModel)]="employeeCM.phoneNumber">
           <label for="phoneNumber">Số điện thoại</label>
         </div>
@@ -195,7 +195,7 @@
           <owl-date-time #datepicker [pickerType]="'calendar'"></owl-date-time>
         </owl-form-field>
 
-        <div class="md-form mt-1 mb-3 col-md-6">
+        <div class="md-form m-0 col-md-6">
           <input type="text" id="macAddress" class="form-control" mdbInput [(ngModel)]="employeeCM.phoneMacAddress">
           <label for="macAddress">Địa chỉ MAC</label>
         </div>

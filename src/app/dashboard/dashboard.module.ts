@@ -8,6 +8,8 @@ import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CoreModule } from '../core/core.module';
+import { OwlInputModule, OwlFormFieldModule } from 'owl-ng';
+import { OwlNativeDateTimeModule, OwlDateTimeModule } from 'ng-pick-datetime';
 
 @NgModule({
   declarations: [DashboardPageComponent, DashboardComponent],
@@ -16,6 +18,10 @@ import { CoreModule } from '../core/core.module';
     DashboardRoutingModule,
     FormsModule,
     CoreModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    OwlFormFieldModule,
+    OwlInputModule,
     BsDatepickerModule.forRoot(),
     MDBBootstrapModulesPro.forRoot(),
   ]
