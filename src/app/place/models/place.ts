@@ -72,6 +72,8 @@ export class Place {
   zone: ZoneDTO;
   company: CompanyDTO;
   basicTaskList: TaskBasic[];
+  managerName: string;
+  managerId: number;
 
   constructor() {
     this.description = '';
@@ -86,6 +88,8 @@ export class Place {
     this.status = 0;
     this.numberOfReworks = 0;
     this.basicTaskList = new Array<TaskBasic>();
+    this.managerId = 0;
+    this.managerName = '';
   }
 }
 

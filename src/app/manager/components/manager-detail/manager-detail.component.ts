@@ -32,7 +32,7 @@ export class ManagerDetailComponent implements OnInit {
   @ViewChild('removeWp') removeWorkplaceModal: ModalDirective;
   @ViewChild('moreEmp') empToggle: any;
   @ViewChild('moreWP') workplaceToggle: any;
-  manager: Manager = new Manager();
+  manager: Employee = new Employee();
   formData: FormData;
   files: UploadFile[];
   uploadInput: EventEmitter<UploadInput>;
@@ -95,7 +95,7 @@ export class ManagerDetailComponent implements OnInit {
   getInfo() {
     this.employeeService.getById(this.id)
       .then(
-        (response: Manager) => {
+        (response: Employee) => {
           this.manager = response;
         }
       );
@@ -188,13 +188,19 @@ export class ManagerDetailComponent implements OnInit {
     this.workplaceService.getWorkplaceByManager(0, zoneId, '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
-          this.placeList = response.listOfWorkplace.content.map((place) => {
-            return {
-              value: place.id,
-              label: place.name,
-              icon: place.picture
-            };
-          });
+          if (response.listOfWorkplace.totalElements !== 0) {
+            this.placeList = response.listOfWorkplace.content.map((place) => {
+              return {
+                value: place.id,
+                label: place.name,
+                icon: place.picture
+              };
+            });
+          } else {
+            this.placeList = [
+              { value: '-1', label: 'Không còn nơi làm việc chưa được quản lý ', disabled: true }
+            ];
+          }
         }
       );
   }

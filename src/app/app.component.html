@@ -1,7 +1,5 @@
 <app-layout [isLogin]="globalService.isLogin"></app-layout>
 
-<div class="overlay" *ngIf="isRequesting || isRequestingGoogleMap">
-  <mdb-spinner spinnerType="big" *ngIf="isRequesting"></mdb-spinner>
-  <img src="../assets/animat-map-color.gif" *ngIf="isRequestingGoogleMap" height="100" width="100">
-
-</div>
+<mdb-spinner spinnerType="big" *ngIf="isRequesting"></mdb-spinner>
+<!-- <mdb-progress-bar class="progress primary-color-dark" mode="indeterminate" *ngIf="isRequesting"></mdb-progress-bar> -->
+<img src="../assets/animat-map-color.gif" *ngIf="isRequestingGoogleMap" height="100" width="100">

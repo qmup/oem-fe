@@ -19,8 +19,8 @@
       <div class="card-body card-body-cascade pb-0 d-flex flex-wrap">
 
         <h4 class="text-left col-11 mx-auto pb-3">
-          <span routerLink="/company" style="cursor: pointer; color: #007bff"> Công ty {{companyName}} </span>
-          <span (click)="location.back()" style="cursor: pointer; color: #6c757d; font-size: 20px;"> / {{zoneName}}
+          <span routerLink="/company" style="cursor: pointer; color: #007bff"> {{companyName}} </span> <span *ngIf="companyName">/</span>
+          <span (click)="location.back()" style="cursor: pointer; color: #6c757d; font-size: 20px;"> {{zoneName}}
           </span>
         </h4>
 
@@ -45,7 +45,26 @@
               <!--Content-->
               <div class="content">
                 <h4 style="cursor: pointer; color: #007bff">{{p.name}}</h4>
-                <h6>Miêu tả: {{[p.description ? p.description : 'Chưa có']}}</h6>
+                <div class="col-12 px-0">
+                  <div class="d-flex flex-wrap">
+                    <div class="col-7 px-0" *ngIf="userAccount.roleId === 1">
+                      Người quản lý
+                      <br>
+                      <span class="text-danger">{{p.managerName}}</span>
+                    </div>
+                    <div class="col-5 px-0">
+                      <a *ngIf="p.managerId === 0" mdbBtn floating="true" size="sm" color="success" mdbWavesEffect>
+                        <i class="fa fa-plus" (click)="openManagerModal(p.id, 1)"></i>
+                      </a>
+                      <a *ngIf="p.managerId !== 0" mdbBtn floating="true" size="sm" color="primary" mdbWavesEffect>
+                        <i class="fa fa-pencil" (click)="openManagerModal(p.id, 2)"></i>
+                      </a>
+                      <a *ngIf="p.managerId !== 0" mdbBtn floating="true" size="sm" color="danger" mdbWavesEffect>
+                        <i class="fa fa-trash" (click)="openManagerModal(p.id, 3)"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
                 <hr>
                 <div *ngIf="userAccount.roleId === 2">
                   <p>Số lần vệ sinh:
@@ -66,11 +85,11 @@
                 <div class="d-flex flex-wrap justify-content-center" id="action-button">
                   <button mdbBtn type="button" color="primary" rounded="true" mdbWavesEffect
                     (click)="openUpdateModal(p)">
-                    <i class="fa fa-pencil fa-1x"></i>
+                    Sửa
                   </button>
                   <button mdbBtn type="button" color="danger" rounded="true" mdbWavesEffect
                     (click)="openDeleteModal(p.id)" *ngIf="userAccount.roleId === 1">
-                    <i class="fa fa-trash fa-1x"></i>
+                    Xóa
                   </button>
                   <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect
                     (click)="openCreateTaskModal(p.id, i)"
@@ -294,6 +313,98 @@
         <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removePlace()">Đồng ý</a>
         <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
           (click)="delete.hide()">Hủy</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+<div mdbModal #addManager="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="delete" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-success" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">
+          Ngưng quyền quản lý của manager này?
+        </p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <div class="col-12">
+          <div class="md-form my-3">
+            <mdb-select [label]="'Người quản lý'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="managerList" [(ngModel)]="selectingManagerId"></mdb-select>
+          </div>
+        </div>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a mdbBtn color="success" outline="true" class="waves-effect" mdbWavesEffect (click)="updateManagerForWorkplace()">Đồng ý</a>
+        <a type="button" mdbBtn color="success" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+          (click)="addManager.hide()">Hủy</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+<div mdbModal #editManager="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="delete" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-primary" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">
+          Thay đổi người quản lý của nơi làm việc này
+        </p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <div class="col-12">
+          <div class="md-form my-3">
+            <mdb-select [label]="'Người quản lý mới'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="managerList" [(ngModel)]="selectingManagerId"></mdb-select>
+          </div>
+        </div>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a mdbBtn color="primary" outline="true" class="waves-effect" mdbWavesEffect (click)="updateManagerForWorkplace()">Đồng ý</a>
+        <a type="button" mdbBtn color="primary" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+          (click)="editManager.hide()">Hủy</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+<div mdbModal #deleteManager="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="delete" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">
+          Ngưng quyền quản lý của manager này?
+        </p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-times fa-4x animated rotateIn"></i>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="updateManagerForWorkplace()">Đồng ý</a>
+        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+          (click)="deleteManager.hide()">Hủy</a>
       </div>
     </div>
     <!--/.Content-->

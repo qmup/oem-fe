@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AssignTask, NotificationSendingModel } from '../models/shared';
 import { AuthGuardService } from './auth-guard.service';
 import { Employee } from 'src/app/employee/models/employee';
+import { ToastService } from 'ng-uikit-pro-standard';
 
 @Injectable({
   providedIn: 'root',
@@ -96,6 +97,7 @@ export class GlobalService {
 
   constructor(
     private httpClient: HttpClient,
+    private toastService: ToastService,
     private authGuardService: AuthGuardService
   ) {
     const token = this.authGuardService.getToken();
@@ -140,7 +142,11 @@ export class GlobalService {
       `${environment.endPoint}${environment.apiPaths.upload.handlerUpload}?pathPackage=${pathPackage}`,
       formData,
       { headers: headers, responseType: 'text' }
-    ).toPromise();
+    ).toPromise().catch(
+      () => {
+        this.toastService.error('Vui lòng chọn file dưới 1MB' , 'File quá lớn', { positionClass: 'toast-bottom-right'});
+      }
+    );
   }
 
   assignTask(assignTask: AssignTask): Promise<any> {

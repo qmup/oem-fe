@@ -81,11 +81,12 @@ export class PlaceService {
       }
     ).toPromise();
   }
-  addManagerToWorkplace(manageWorkplace: ManageWorkplace): Promise<any> {
-    return this.httpClient.post<any>(
-      `${environment.endPoint}${environment.apiPaths.workplace.addManager}`, manageWorkplace,
+  updateManager(id, key, value): Promise<any> {
+    return this.httpClient.put<any>(
+      `${environment.endPoint}${environment.apiPaths.workplace.addManager + id}`,
       {
-        responseType: 'text' as 'json'
+        key: `${key}`,
+        value: `${value}`
       }
     ).toPromise();
   }

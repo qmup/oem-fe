@@ -21,6 +21,7 @@ export class Employee {
   latitude: number;
   longitude: number;
   status: number;
+  roleName: string;
 
   constructor() {
     this.address = '';
@@ -40,9 +41,11 @@ export class Employee {
     this.phoneNumber = '';
     this.picture = '';
     this.resetPasswordToken = '';
-    this.roleId = 0;
+    this.roleId = 4;
     this.sex = false;
     this.latitude = 0;
     this.longitude = 0;
+    this.status = 1;
+    this.roleName = '';
   }
 }

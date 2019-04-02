@@ -88,13 +88,13 @@ export class EmployeeUpdateComponent implements OnInit {
     this.getManager();
     this.getRole();
     this.optionsSex = [
-      { value: 0, label: 'Nam'},
-      { value: 1, label: 'Nữ'},
+      { value: 1, label: 'Nam'},
+      { value: 2, label: 'Nữ'},
     ];
     if (this.employee.sex === true) {
-      this.gender = 0;
-    } else {
       this.gender = 1;
+    } else {
+      this.gender = 2;
     }
     this.location.address_level_1 = this.employee.address;
     this.location.lat = this.employee.latitude;
@@ -169,7 +169,7 @@ export class EmployeeUpdateComponent implements OnInit {
     this.employeeUM.resetPasswordToken = this.employee.resetPasswordToken;
     this.employeeUM.roleId = this.employee.roleId;
     this.employeeUM.sex = this.employee.sex;
-    (this.gender === 0) ? this.employeeUM.sex = true : this.employeeUM.sex = false;
+    (this.gender === 1) ? this.employeeUM.sex = true : this.employeeUM.sex = false;
     this.employeeUM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employee.birthDate));
     this.employeeUM.address = this.employee.address;
     this.employeeUM.email = this.employee.email;
@@ -197,17 +197,18 @@ export class EmployeeUpdateComponent implements OnInit {
           this.employeeUM.picture = response;
           this.coordinateSerivce.update(this.coordinate)
             .then(
-              () => { }
-            );
-          this.employeeService.update(this.employeeUM)
-            .then(
               () => {
-                this.toastService.success('Cập nhật thông tin thành công', '', { positionClass: 'toast-bottom-right'} );
-                this.modalRef.hide();
-                this.refresh.emit();
-              },
-              () => {
-                this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+                this.employeeService.update(this.employeeUM)
+                  .then(
+                    () => {
+                      this.toastService.success('Cập nhật thông tin thành công', '', { positionClass: 'toast-bottom-right'} );
+                      this.modalRef.hide();
+                      this.refresh.emit();
+                    },
+                    () => {
+                      this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+                    }
+                  );
               }
             );
         },
@@ -220,17 +221,18 @@ export class EmployeeUpdateComponent implements OnInit {
   updateEmployeeWithoutImage() {
     this.coordinateSerivce.update(this.coordinate)
       .then(
-        () => { }
-      );
-    this.employeeService.update(this.employeeUM)
-      .then(
         () => {
-          this.toastService.success('Cập nhật thông tin thành công', '', { positionClass: 'toast-bottom-right'} );
-          this.modalRef.hide();
-          this.refresh.emit();
-        },
-        () => {
-          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+          this.employeeService.update(this.employeeUM)
+            .then(
+              () => {
+                this.toastService.success('Cập nhật thông tin thành công', '', { positionClass: 'toast-bottom-right'} );
+                this.modalRef.hide();
+                this.refresh.emit();
+              },
+              () => {
+                this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+              }
+            );
         }
       );
   }

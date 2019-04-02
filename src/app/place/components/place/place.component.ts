@@ -37,6 +37,9 @@ export class PlaceComponent implements OnInit {
   @ViewChild('createTaskModal') createTaskModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
   @ViewChild('beacon') beaconModal: ModalDirective;
+  @ViewChild('addManager') addManagerModal: ModalDirective;
+  @ViewChild('editManager') editManagerModal: ModalDirective;
+  @ViewChild('deleteManager') deleteManagerModal: ModalDirective;
   formData: FormData;
   files: UploadFile[];
   uploadInput: EventEmitter<UploadInput>;
@@ -64,6 +67,8 @@ export class PlaceComponent implements OnInit {
   dateRange = [];
   dateSearch = new Date();
   currentIndex = 0;
+  selectingManagerId: number;
+  selectingWorkplaceId: number;
 
   constructor(
     public location: Location,
@@ -240,6 +245,20 @@ export class PlaceComponent implements OnInit {
       );
   }
 
+  updateManagerForWorkplace() {
+    this.placeService.updateManager(this.selectingWorkplaceId, 'managerId', this.selectingManagerId)
+      .then(
+        () => {
+          this.toastService.success('Thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.hideManagerModal();
+          this.getPlace();
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
+  }
+
   removePlace() {
     this.placeService.remove(this.id)
       .then(
@@ -314,6 +333,25 @@ export class PlaceComponent implements OnInit {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
         }
       );
+  }
+
+
+  openManagerModal(id: number, type: number) {
+    this.selectingManagerId = 0;
+    this.selectingWorkplaceId = id;
+    if (type === 1) {
+      this.addManagerModal.show();
+    } else if (type === 2) {
+      this.editManagerModal.show();
+    } else {
+      this.deleteManagerModal.show();
+    }
+  }
+
+  hideManagerModal() {
+    this.addManagerModal.hide();
+    this.editManagerModal.hide();
+    this.deleteManagerModal.hide();
   }
 
   switch(e: any, workplaceId: number) {

@@ -8,10 +8,15 @@ div.overlay {
   background: rgba(0, 0, 0, 0.5);
   z-index: 10000000;
 }
-div.overlay mdb-spinner, div.overlay img {
-  position: absolute;
+mdb-spinner, img {
+  position: fixed;
   top: 50%;
   left: 50%;
   z-index: 999999999;
   transform: translate(-50%, -50%);
+}
+mdb-progress-bar {
+  position: absolute;
+  top: 74px;
+  z-index: 999999999;
 }

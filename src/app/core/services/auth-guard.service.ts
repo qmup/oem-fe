@@ -18,7 +18,6 @@ export class AuthGuardService {
     const token = this.getToken();
     const now = new Date().getTime();
     if (!token || token.expired_time < now) {
-      this.toastService.info('Phiên đăng nhập hết hạn, vui lòng đăng nhập lại', 'Đăng nhập lại', { positionClass: 'toast-bottom-right'});
       this.router.navigate(['login']);
       return false;
     }

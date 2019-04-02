@@ -74,7 +74,7 @@ export const environment = {
       update: 'workplace/update-dto/',
       updateField: 'workplace/update/',
       addTask: 'workplace/add-task/',
-      addManager: 'workplace/add-manager',
+      addManager: 'workplace/add-manager/',
       getTaskBasic: 'workplace/get-task-basic/',
       getByManager: 'workplace/get-list-by-manager/',
       removeFromManager: 'workplace/remove-workplace-from-manager',

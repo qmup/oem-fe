@@ -16,7 +16,7 @@
           <!--Content-->
           <div class="card-body">
             <h4>{{ manager.firstName }} {{ manager.lastName }}</h4>
-            <p class="text-danger font-weight-normal">Chức vụ: Quản lý</p>
+            <p class="text-danger font-weight-normal">Chức vụ: {{manager.roleName}}</p>
             <a class="rotate-btn font-weight-normal" data-card="card-1" (click)="cards.toggle()">Chi tiết </a>
             <!--Triggering button-->
           </div>
