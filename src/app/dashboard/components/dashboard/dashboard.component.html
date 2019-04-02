@@ -4,7 +4,7 @@
       <div class="dashboard-up"><i class="fa fa-tasks primary-color"></i>
         <div class="data">
           <p>TỔNG SỐ CÔNG VIỆC</p>
-          <h4><strong>{{summaryTask.totalTask}}</strong></h4>
+          <h4><strong>{{summaryTask?.totalTask}}</strong></h4>
         </div>
       </div>
       <div class="card-body card-body-cascade">
@@ -22,7 +22,7 @@
       <div class="dashboard-up"><i class="fa fa-check success-color"></i>
         <div class="data">
           <p>ĐÃ HOÀN THÀNH</p>
-          <h4><strong>{{summaryTask.numberOfTaskDone}}</strong></h4>
+          <h4><strong>{{summaryTask?.numberOfTaskDone}}</strong></h4>
         </div>
       </div>
       <div class="card-body card-body-cascade">
@@ -40,7 +40,7 @@
       <div class="dashboard-up"><i class="fa fa-minus warning-color"></i>
         <div class="data">
           <p>ĐANG THỰC HIỆN</p>
-          <h4><strong>{{summaryTask.numberOfTaskInProgress}}</strong></h4>
+          <h4><strong>{{summaryTask?.numberOfTaskInProgress}}</strong></h4>
         </div>
       </div>
       <div class="card-body card-body-cascade">
@@ -58,7 +58,7 @@
       <div class="dashboard-up"><i class="fa fa-close red accent-2"></i>
         <div class="data">
           <p>QUÁ HẠN</p>
-          <h4><strong>{{summaryTask.numberOfTaskDoneAfterDeadline}}</strong></h4>
+          <h4><strong>{{summaryTask?.numberOfTaskDoneAfterDeadline}}</strong></h4>
         </div>
       </div>
       <div class="card-body card-body-cascade">

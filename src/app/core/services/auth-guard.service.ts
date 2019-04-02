@@ -2,25 +2,31 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { Employee } from 'src/app/employee/models/employee';
+import { Token } from 'src/app/authorize/models/token';
+import { ToastService } from 'ng-uikit-pro-standard';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuardService {
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private toastService: ToastService) { }
 
   canActivate(): boolean {
     const token = this.getToken();
-    if (!token) {
+    const now = new Date().getTime();
+    if (!token || token.expired_time < now) {
+      this.toastService.info('Phiên đăng nhập hết hạn, vui lòng đăng nhập lại', 'Đăng nhập lại', { positionClass: 'toast-bottom-right'});
       this.router.navigate(['login']);
       return false;
     }
     return true;
   }
 
-  getToken(): string {
-    let token: string;
+  getToken(): Token {
+    let token: Token;
     try {
       token = JSON.parse(localStorage.getItem(environment.token));
     } catch (exception) {
@@ -29,7 +35,7 @@ export class AuthGuardService {
     return token;
   }
 
-  setToken(token: string) {
+  setToken(token: Token) {
     localStorage.setItem(environment.token, JSON.stringify(token));
   }
 

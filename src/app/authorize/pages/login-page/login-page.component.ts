@@ -7,6 +7,7 @@ import { AuthGuardService } from 'src/app/core/services/auth-guard.service';
 import { ToastService } from 'ng-uikit-pro-standard';
 import { Employee } from 'src/app/employee/models/employee';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { Token } from '../../models/token';
 
 @Component({
   selector: 'app-login-page',
@@ -34,8 +35,8 @@ export class LoginPageComponent implements OnInit {
   login() {
     this.loginService.login(this.email, this.password)
       .then(
-        (response: any) => {
-          this.authGuardService.setToken(response.Authorization);
+        (response: Token) => {
+          this.setExpiredTime(response);
           this.authService.getInformation(this.email)
           .then(
             (response2: Employee) => {
@@ -55,6 +56,12 @@ export class LoginPageComponent implements OnInit {
           this.globalService.isLogin = false;
         }
       );
+  }
+
+  setExpiredTime(token: Token) {
+    const now = new Date().getTime();
+    token.expired_time = now + token.expired_time;
+    this.authGuardService.setToken(token);
   }
 
 }

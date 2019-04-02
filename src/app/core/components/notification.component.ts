@@ -191,7 +191,6 @@ export class NotificationComponent implements OnInit {
     this.notificationService.getAll(this.userAccount.id, '', 'dateCreate', 0, this.size)
       .then(
         (response) => {
-          console.log(response);
           this.countUnread = response.totalNotSeen;
           this.notificationList = response.notificationModels.content;
           for (let i = 0; i < this.notificationList.length; i++) {
