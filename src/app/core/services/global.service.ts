@@ -69,6 +69,11 @@ export class GlobalService {
     { id: 7, inputId: 'option6', label: 'Thứ 7' , check: false},
     { id: 1, inputId: 'option7', label: 'Chủ nhật' , check: false},
   ];
+  workplaceStatus = [
+    { value: 1, label: 'Mở'},
+    { value: 2, label: 'Đóng'},
+    { value: 0, label: 'Đã xóa'},
+  ];
   typeList = [
     { value: 1, label: 'Cơ bản' },
     { value: 2, label: 'Bình thường '}

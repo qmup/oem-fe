@@ -6,14 +6,16 @@
           <h2 class="h2-responsive mb-0">Quản lý nơi làm việc</h2>
         </div>
       </div>
-      <div *ngIf="userAccount.roleId === 1" class="col-xl-6 col-lg-12 px-5 pt-3 text-right">
-        <a class="btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i>
+      <div *ngIf="userAccount.roleId === 1" class="col-xl-6 col-lg-12 px-5 pt-3">
+        <mdb-select class="col-10" [label]="'Trạng thái nơi làm việc'" [notFoundMsg]="'Không tìm thấy'" [options]="workplaceStatusList" [(ngModel)]="currentStatus" (selected)="getPlace();"></mdb-select>
+        <a class="col-2 btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i>
         </a>
       </div>
       <div *ngIf="userAccount.roleId === 2" class="col-xl-6 col-lg-12 px-5 pt-3">
 
         <div class="col-12 px-0 d-flex flex-wrap">
-          <a class="show-all text-left col-6 px-0" *ngIf="!showAll" (click)="getAllWorkplaceByManager()">Xem tất cả nơi làm việc</a>
+          <a class="show-all text-left col-6 px-0" *ngIf="!showAll" (click)="getAllWorkplaceByManager()">Xem tất cả nơi
+            làm việc</a>
           <a class="show-all text-left col-6 px-0" *ngIf="showAll" (click)="getWorkplaceByManager()">Trở lại</a>
           <a class="show-all text-right col-6 px-0" *ngIf="!showAll">Toggle</a>
 
@@ -21,16 +23,18 @@
       </div>
       <div class="card-body card-body-cascade pb-0 d-flex flex-wrap">
 
-        <h4 class="text-left col-7 mx-auto pb-3" *ngIf="!showAll">
+        <h4 [ngClass]="{'col-7': userAccount.roleId === 2, 'col-11': userAccount.roleId === 1}"
+          class="text-left mx-auto pb-3" *ngIf="!showAll">
           <span routerLink="/company" style="cursor: pointer; color: #007bff"> {{companyName}} </span>
-          <span (click)="location.back()" style="cursor: pointer; color: #6c757d; font-size: 20px;"> <span
-            *ngIf="companyName">/</span> {{zoneName}}
+          <span (click)="location.back()" style="cursor: pointer; color: #007bff; font-size: 20px;"> <span
+              *ngIf="companyName">/</span> {{zoneName}}
           </span>
         </h4>
-        <h4 class="text-left col-7 mx-auto pb-3" *ngIf="showAll">
+        <h4 [ngClass]="{'col-7': userAccount.roleId === 2, 'col-11': userAccount.roleId === 1}"
+          class="text-left mx-auto pb-3" *ngIf="showAll">
           <span style="color: #6c757d">Tất cả nơi làm việc đang quản lý</span>
         </h4>
-        <owl-form-field class="col-4 mx-auto pb-3">
+        <owl-form-field class="col-4 mx-auto pb-3" *ngIf="userAccount.roleId === 2">
           <input owlInput [owlDateTimeTrigger]="dateSearchInput" [owlDateTime]="dateSearchInput"
             placeholder="Nơi làm việc và công việc vào ngày" [(ngModel)]="dateSearch" (dateTimeChange)="getPlace()">
           <owl-date-time #dateSearchInput [pickerType]="'calendar'"></owl-date-time>
@@ -55,7 +59,7 @@
               </a>
 
               <!--Content-->
-              <div class="content">
+              <div class="content" *ngIf="p.status !== 0">
                 <h4 style="cursor: pointer; color: #007bff">{{p.name}}</h4>
                 <div class="col-12 px-0" *ngIf="userAccount.roleId === 1">
                   <div class="d-flex flex-wrap">
@@ -64,7 +68,7 @@
                       <br>
                       <span class="text-danger">{{p.managerName}}</span>
                     </div>
-                    <div class="col-5 px-0">
+                    <div class="col-5 px-0 text-right">
                       <a *ngIf="p.managerId === 0" mdbBtn floating="true" size="sm" color="success" mdbWavesEffect>
                         <i class="fa fa-plus" (click)="openManagerModal(p.id, 1)"></i>
                       </a>
@@ -72,7 +76,7 @@
                         <i class="fa fa-pencil" (click)="openManagerModal(p.id, 2)"></i>
                       </a>
                       <a *ngIf="p.managerId !== 0" mdbBtn floating="true" size="sm" color="danger" mdbWavesEffect>
-                        <i class="fa fa-trash" (click)="openManagerModal(p.id, 3)"></i>
+                        <i class="fa fa-trash" (click)="checkRemovable(p.id)"></i>
                       </a>
                     </div>
                   </div>
@@ -113,6 +117,10 @@
                       beacon</button>
                   </div>
                 </div>
+              </div>
+              <div class="content" *ngIf="p.status === 0">
+                <h4 style="cursor: pointer; color: #007bff">{{p.name}}</h4>
+                <h6 class="text-center text-danger">ĐÃ XÓA</h6>
               </div>
               <!--/.Content-->
 
@@ -322,6 +330,14 @@
       <!--Body-->
       <div class="modal-body">
         <i class="fa fa-times fa-4x animated rotateIn"></i>
+        <div *ngFor="let m of warningMessage">
+          <p class="h6 font-weight-bold">
+            {{m}}
+          </p>
+        </div>
+        <p class="h6 font-weight-bold">
+          Bạn có muốn tiếp tục xóa?
+        </p>
       </div>
 
       <!--Footer-->

@@ -78,6 +78,7 @@ export const environment = {
       updateManager: 'workplace/update-manager/',
       getTaskBasic: 'workplace/get-task-basic/',
       getByManager: 'workplace/get-list-by-manager/',
+      checkRemove: 'workplace/check-remove/',
       removeFromManager: 'workplace/remove-workplace-from-manager',
       addTaskToWorkplace: 'workplace/add-task-to-workplace',
       getAvailableByDate: 'workplace/get-available-workplace-and-task-by-date/',

@@ -59,6 +59,7 @@ export class PlaceComponent implements OnInit {
   timeFrom: any;
   assignTask: AssignTask = new AssignTask();
   iconPrioritySelect = [];
+  workplaceStatusList = [];
   currentPage = 0;
   userAccount: Employee;
   placeResponse: PaginationResponse;
@@ -76,6 +77,7 @@ export class PlaceComponent implements OnInit {
   showAll = false;
   canCreateTask: boolean;
   currentStatus = WORKPLACE_OPEN_STATUS;
+  warningMessage: any;
 
   constructor(
     public location: Location,
@@ -100,6 +102,7 @@ export class PlaceComponent implements OnInit {
     this.getEmployee();
     this.getManager();
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
+    this.workplaceStatusList = this.globalService.workplaceStatus;
   }
 
   getPlace() {
@@ -302,19 +305,32 @@ export class PlaceComponent implements OnInit {
       );
   }
 
+  checkRemovable(id: number) {
+    this.placeService.checkRemove(id)
+      .then(
+        (response) => {
+          this.warningMessage = response.message.split(';');
+          if (this.userAccount.roleId === 2) {
+            this.warningMessage = this.warningMessage.filter((m, index) => index !== 2);
+          }
+          this.deleteManagerModal.show();
+        }
+      );
+  }
+
   removePlace() {
     this.placeService.remove(this.id)
       .then(
         (response) => {
           (response) ? (
-              this.toastService.success('Xóa nơi làm việc thành công', '', { positionClass: 'toast-bottom-right'} ),
-              this.deleteModal.hide(),
-              this.placeList = [],
-              this.getPlace()
-              ) : (
-              this.toastService.error('Đang có công việc tại nơi này' , '', { positionClass: 'toast-bottom-right'}),
-              this.deleteModal.hide()
-              );
+            this.toastService.success('Xóa nơi làm việc thành công', '', { positionClass: 'toast-bottom-right'} ),
+            this.deleteModal.hide(),
+            this.placeList = [],
+            this.getPlace()
+            ) : (
+            this.toastService.error('Đang có công việc tại nơi này' , '', { positionClass: 'toast-bottom-right'}),
+            this.deleteModal.hide()
+            );
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
