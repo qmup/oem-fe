@@ -333,6 +333,23 @@ export class PlaceComponent implements OnInit {
       );
   }
 
+  checkRemovableManager(type: number) {
+    this.placeService.removeFromManager(this.currentManagerId, this.selectingWorkplaceId)
+      .then(
+        (response: boolean) => {
+          if (response) {
+            if (type === 1) {
+              this.updateManagerForWorkplace();
+            } else {
+              this.toastService.success('Xóa thành công' , '', { positionClass: 'toast-bottom-right'});
+            }
+          } else {
+            this.toastService.error('Vẫn còn công việc tại đây chưa được giải quyết xong' , '', { positionClass: 'toast-bottom-right'});
+          }
+        }
+      );
+  }
+
   removePlace() {
     this.placeService.remove(this.id)
       .then(
@@ -409,7 +426,6 @@ export class PlaceComponent implements OnInit {
       );
   }
 
-
   openManagerModal(id: number, type: number, managerId: number) {
     this.currentManagerId = managerId;
     this.selectingManagerId = 0;
@@ -417,8 +433,8 @@ export class PlaceComponent implements OnInit {
     if (type === 1) {
       this.addManagerModal.show();
     } else if (type === 2) {
-      this.editManagerModal.show();
       this._getManager();
+      this.editManagerModal.show();
     } else {
       this.deleteManagerModal.show();
     }

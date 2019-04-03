@@ -90,11 +90,8 @@ export class PlaceService {
     ).toPromise();
   }
   removeFromManager(managerId: number, workplaceId: number): Promise<any> {
-    return this.httpClient.delete<any>(
-      `${environment.endPoint}${environment.apiPaths.workplace.removeFromManager}/${managerId}/${workplaceId}`,
-      {
-        responseType: 'text' as 'json'
-      }
+    return this.httpClient.put<any>(
+      `${environment.endPoint}${environment.apiPaths.workplace.removeFromManager}/${managerId}/${workplaceId}`, {},
     ).toPromise();
   }
   addTaskToWorkplace(taskId: number, workplaceId: number): Promise<any> {

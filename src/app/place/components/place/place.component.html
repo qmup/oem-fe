@@ -81,7 +81,7 @@
                         <i class="fa fa-pencil" (click)="openManagerModal(p.id, 2, p.managerId)"></i>
                       </a>
                       <a *ngIf="p.managerId !== 0" mdbBtn floating="true" size="sm" color="danger" mdbWavesEffect>
-                        <i class="fa fa-trash" (click)="openManagerModal(p.id, 3)"></i>
+                        <i class="fa fa-trash" (click)="openManagerModal(p.id, 3, p.managerId)"></i>
                       </a>
                     </div>
                   </div>
@@ -419,7 +419,7 @@
       <!--Footer-->
       <div class="modal-footer flex-center">
         <a mdbBtn color="primary" outline="true" class="waves-effect" mdbWavesEffect
-          (click)="updateManagerForWorkplace()">Đồng ý</a>
+          (click)="checkRemovableManager(1)">Đồng ý</a>
         <a type="button" mdbBtn color="primary" class="waves-effect" mdbWavesEffect data-dismiss="modal"
           (click)="editManager.hide()">Hủy</a>
       </div>
@@ -448,7 +448,7 @@
       <!--Footer-->
       <div class="modal-footer flex-center">
         <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect
-          (click)="updateManagerForWorkplace()">Đồng ý</a>
+          (click)="checkRemovableManager(2)">Đồng ý</a>
         <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
           (click)="deleteManager.hide()">Hủy</a>
       </div>

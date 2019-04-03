@@ -45,14 +45,14 @@
   </div>
 
   <div class="md-form mt-0 mb-3 col-6 col-md-12" *ngIf="taskSuggestion.length > 0">
-    <table class="table table-hover table-bordered">
+    <table class="table table-hover table-bordered text-center">
       <thead>
         <tr class="text-center">
           <th>Nhân viên</th>
           <th>Danh sách công việc đã giao hôm nay</th>
           <th>Kết thúc công việc gần nhất tại</th>
           <th>Quãng đường - thời gian đến {{ company.label }}</th>
-          <th>Bắt đầu công việc mới tại</th>
+          <th>Bắt đầu công việc tiếp theo tại</th>
           <th>Quãng đường - thời gian từ {{company.label}}</th>
           <th>Chọn</th>
         </tr>
@@ -78,10 +78,11 @@
               <span *ngIf="item.cpaName">
                 <span class="font-weight-bold">{{item?.cpaName}}</span>
                 <br>
-                Lúc {{ item?.endTimePreviousTask | date: 'HH:mm' }}
+                Lúc <span class="text-danger font-weight-normal">{{ item?.endTimePreviousTask | date: 'HH:mm' }}</span>
                 <br>
                 <!-- Khoảng thời gian đến công việc sắp tạo {{item?.endTimePreviousTask | date: 'HH:mm'}} - {{startTime | date: 'HH:mm'}} là -->
-                Thời gian dự kiến đến nơi đang làm việc đang tạo là
+                Thời gian trống đến công việc đang tạo
+                <br>
                 <span class="font-weight-normal text-danger" *ngIf="item?.timeAllowedCpaToCpc/60000 < 60">
                   {{item?.timeAllowedCpaToCpc/60000 | number: '1.0-0'}} phút
                 </span>
@@ -95,9 +96,9 @@
             <p *ngIf="item.typeCase !== 0">
               <span class="font-weight-bold">Điểm xuất phát: {{item.moveFromHome ? 'Nhà' : item?.cpaName}}</span>
               <br>
-              Quãng đường dự kiến {{ item?.dataTravelFromCpAtoCpc?.distance / 1000 | number: '1.0-1' }} Km
+              Quãng đường dự kiến <br><span class="font-weight-normal text-danger">{{ item?.dataTravelFromCpAtoCpc?.distance / 1000 | number: '1.0-1' }} Km</span>
               <br>
-              Thời gian dự kiến {{ item?.dataTravelFromCpAtoCpc?.duration / 60000 | number: '1.0-0' }} phút
+              Thời gian dự kiến <br><span class="font-weight-normal text-danger">{{ item?.dataTravelFromCpAtoCpc?.duration / 60000 | number: '1.0-0' }} phút</span>
               <br>
               <span *ngIf="!item.caseCpaToCpcAvailable" class="text-danger font-weight-normal">
                 Thời gian không phù hợp
@@ -111,9 +112,9 @@
               <span *ngIf="item.cpbName">
                 <span class="font-weight-bold">{{item?.cpbName}}</span>
                 <br>
-                Lúc {{ item?.startTimeNextTask | date: 'HH:mm' }}
+                Lúc <span class="text-danger font-weight-normal">{{ item?.startTimeNextTask | date: 'HH:mm' }}</span>
                 <br>
-                Thời gian dự kiến đến nơi đang làm việc đang tạo là
+                Thời gian trống từ công việc đang tạo đến công việc tiếp theo
                 <span class="font-weight-normal text-danger" *ngIf="item?.timeAllowedCpcToCpB/60000 < 60">
                   {{item?.timeAllowedCpcToCpB/60000 | number: '1.0-0'}} phút
                 </span>
@@ -128,9 +129,9 @@
               <span class="font-weight-bold">Điểm đến: {{ item.cpbName ? item?.cpbName : 'Nhà' }}</span>
               <br>
               <div *ngIf="!item.cpbName">
-                Quãng đường dự kiến {{ item?.dataTravelFromCpCtoCpB?.distance / 1000 | number: '1.0-1' }} Km
+                Quãng đường dự kiến <br><span class="font-weight-normal text-danger">{{ item?.dataTravelFromCpCtoCpB?.distance / 1000 | number: '1.0-1' }} Km</span>
                 <br>
-                Thời gian dự kiến {{ item?.dataTravelFromCpCtoCpB?.duration / 60000 | number: '1.0-0' }} phút
+                Thời gian dự kiến <br><span class="font-weight-normal text-danger">{{ item?.dataTravelFromCpCtoCpB?.duration / 60000 | number: '1.0-0' }} phút</span>
                 <br>
                 <span *ngIf="!item.caseCpcToCpbAvailable" class="text-danger font-weight-normal">
                   Thời gian không phù hợp 

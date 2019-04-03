@@ -21,7 +21,7 @@ export class PlaceModel {
     this.picture = '';
     this.zoneId = 0;
     this.managerId = 0;
-    this.status = 0;
+    this.status = 1;
   }
 }
 
