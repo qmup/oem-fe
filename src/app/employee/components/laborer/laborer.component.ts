@@ -55,6 +55,7 @@ export class LaborerComponent implements OnInit {
   id: number;
   searchText = '';
   employeeList: Employee[];
+  employeeRemovedList: Employee[];
   employeeResponse: PaginationResponse;
   managerList = new Array<any>();
   optionsSex = new Array<any>();
@@ -78,6 +79,7 @@ export class LaborerComponent implements OnInit {
   fieldSort = 'id';
   sortBoolean = false;
   sortValue = '';
+  showRemovedEmp = false;
 
   constructor(
     private employeeService: EmployeeService,
@@ -121,6 +123,18 @@ export class LaborerComponent implements OnInit {
         (response: PaginationResponse) => {
           this.employeeList = response.content;
           this.employeeResponse = response;
+          this.showRemovedEmp = false;
+        }
+      );
+  }
+
+  getRemovedEmployee() {
+    this.employeeService.getRemovedEmployee(this.sortValue, this.fieldSort, this.currentPage, 10)
+      .then(
+        (response: PaginationResponse) => {
+          this.employeeList = response.content;
+          this.employeeResponse = response;
+          this.showRemovedEmp = true;
         }
       );
   }
@@ -140,12 +154,14 @@ export class LaborerComponent implements OnInit {
       .then(
         (response) => {
           response.shift();
+          response.splice(2, 1);
           this.roleList = response.map((role) => {
             return {
               value: role.id,
-              label: (role.id === 2) ? 'Quản lý' : 'Nhân viên',
+              label: role.roleName,
             };
           });
+          console.log(this.roleList);
         }
       );
   }
@@ -208,6 +224,10 @@ export class LaborerComponent implements OnInit {
       () => this.getEmployee()
     );
 
+  }
+
+  selectRole(e: any) {
+    this.employeeCM.roleId = e.value;
   }
 
   filterIt(arr: any, searchKey: any) {

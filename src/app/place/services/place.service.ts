@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { TaskBasic } from 'src/app/task/models/task-basic';
-import { PaginationResponse } from 'src/app/core/models/shared';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +19,7 @@ export class PlaceService {
 
   getAll(
     zoneId: number,
-    search: string,
+    status: any,
     sort: string,
     fieldSort: string,
     page: number,
@@ -30,7 +29,7 @@ export class PlaceService {
       {
         params: {
           zoneId: `${zoneId}`,
-          search: `${search}`,
+          status: `${status}`,
           sort: `${sort}`,
           fieldSort: `${fieldSort}`,
           page: `${page}`,
@@ -83,7 +82,7 @@ export class PlaceService {
   }
   updateManager(id, key, value): Promise<any> {
     return this.httpClient.put<any>(
-      `${environment.endPoint}${environment.apiPaths.workplace.addManager + id}`,
+      `${environment.endPoint}${environment.apiPaths.workplace.updateManager + id}`,
       {
         key: `${key}`,
         value: `${value}`
@@ -115,7 +114,7 @@ export class PlaceService {
   }
 
   getAvailableByDate(
-    managerId: number, zoneId: number, date: string, sort: string, fieldSort: string, page: number, size: number
+    managerId: number, zoneId: any, date: string, sort: string, fieldSort: string, page: number, size: number
   ): Promise<any> {
     return this.httpClient.get<any>(
       `${environment.endPoint}${environment.apiPaths.workplace.getAvailableByDate + managerId}`,

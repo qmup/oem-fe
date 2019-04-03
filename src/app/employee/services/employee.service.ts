@@ -102,6 +102,20 @@ export class EmployeeService {
     ).toPromise();
   }
 
+  getRemovedEmployee(sort: string, fieldSort: string, page: number, size: number): Promise<PaginationResponse> {
+    return this.httpClient.get<PaginationResponse>(
+      `${environment.endPoint}${environment.apiPaths.employee.getRemovedEmployee}`,
+      {
+        params: {
+          fieldSort: `${fieldSort}`,
+          sort: `${sort}`,
+          page: `${page}`,
+          size: `${size}`
+        }
+      }
+    ).toPromise();
+  }
+
   remove(id: number): Promise<any> {
     return this.httpClient.delete(
       `${environment.endPoint}${environment.apiPaths.employee.remove + id}`

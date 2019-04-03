@@ -59,6 +59,7 @@ export const environment = {
       checkExist: 'account/check-exist-username',
       checkDuplicateId: 'employee/check-duplicate-id',
       checkEmployeeConstraint: 'employee/check-employee-constraint',
+      getRemovedEmployee: 'employee/get-removed-employee',
       suggestion: 'suggestion/employee',
     },
     manager: {
@@ -74,7 +75,7 @@ export const environment = {
       update: 'workplace/update-dto/',
       updateField: 'workplace/update/',
       addTask: 'workplace/add-task/',
-      addManager: 'workplace/add-manager/',
+      updateManager: 'workplace/update-manager/',
       getTaskBasic: 'workplace/get-task-basic/',
       getByManager: 'workplace/get-list-by-manager/',
       removeFromManager: 'workplace/remove-workplace-from-manager',

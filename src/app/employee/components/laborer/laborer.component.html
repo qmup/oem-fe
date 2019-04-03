@@ -8,6 +8,10 @@
             <h2 class="h2-responsive mb-0">Quản lý nhân viên</h2>
           </div>
         </div>
+        <div class="col-xl-7 col-lg-12 m-auto text-right">
+          <a class="remove-employee pr-5" *ngIf="!showRemovedEmp && userAccount.roleId === 1" (click)="getRemovedEmployee()">Danh sách nhân viên đã nghỉ việc</a>
+          <a class="remove-employee pr-5" *ngIf="showRemovedEmp && userAccount.roleId === 1" (click)="getEmployeeByAdmin()">Trở lại</a>
+        </div>
         <div class="card-body card-body-cascade pb-0">
           <div class="d-flex flex-wrap card-body pt-3">
             <!-- Grid row -->
@@ -62,7 +66,7 @@
                   <mdb-icon icon="sort"></mdb-icon>
                 </th>
                 <th *ngIf="userAccount.roleId === 2">Trạng thái</th>
-                <th [ngStyle]="userAccount.roleId === 1 && {'width': '300px', 'max-width': '300px'}">Thao tác</th>
+                <th [ngStyle]="userAccount.roleId === 1 && {'width': '300px', 'max-width': '300px'}" *ngIf="!showRemovedEmp">Thao tác</th>
               </tr>
             </thead>
             <!--Table head-->
@@ -89,7 +93,7 @@
                     </label>
                   </div>
                 </td>
-                <td class="d-flex justify-content-start">
+                <td class="d-flex justify-content-start" *ngIf="!showRemovedEmp">
                   <button *ngIf="data.roleId !== 2" title="Chi tiết" mdbBtn type="button" rounded="true" color="warning"
                     class="waves-light" size="sm" mdbWavesEffect [routerLink]="['/employee-detail', data.id]">
                     <i class="fa fa-eye"></i>
@@ -138,7 +142,7 @@
 
         <div class="md-form mt-1 mb-3 col-md-12 ">
           <mdb-select [label]="'Chức vụ'" [notFoundMsg]="'Không tìm thấy'" [options]="roleList"
-            [(ngModel)]="employeeCM.roleId"></mdb-select>
+            (selected)="selectRole($event)"></mdb-select>
         </div>
 
         <div class="md-form mt-1 mb-3 col-md-12" *ngIf="employeeCM.roleId === 2">
@@ -232,7 +236,7 @@
         </div>
 
         <div class="file-field md-form col-12 pl-0 mt-1 mb-3">
-          <div mdbBtn floating="true" size="md" color="blue" mdbWavesEffect>
+          <div mdbBtn floating="true" size="md" color="success" mdbWavesEffect>
             <i class="fa fa-cloud-upload" aria-hidden="true"></i>
             <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
               (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">

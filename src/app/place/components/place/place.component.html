@@ -6,23 +6,35 @@
           <h2 class="h2-responsive mb-0">Quản lý nơi làm việc</h2>
         </div>
       </div>
-      <div class="col-xl-6 col-lg-12 px-5 pt-3 text-right">
-        <a *ngIf="userAccount.roleId === 1" class="btn-floating btn-md btn-success" (click)="openCreateModal()"><i
-            class="fa fa-plus"></i>
+      <div *ngIf="userAccount.roleId === 1" class="col-xl-6 col-lg-12 px-5 pt-3 text-right">
+        <a class="btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i>
         </a>
-        <owl-form-field class="col-12 px-0" *ngIf="userAccount.roleId === 2">
-          <input owlInput [owlDateTimeTrigger]="dateSearchInput" [owlDateTime]="dateSearchInput" placeholder="Ngày"
-            [(ngModel)]="dateSearch" (dateTimeChange)="getPlace()">
-          <owl-date-time #dateSearchInput [pickerType]="'calendar'" ></owl-date-time>
-        </owl-form-field>
+      </div>
+      <div *ngIf="userAccount.roleId === 2" class="col-xl-6 col-lg-12 px-5 pt-3">
+
+        <div class="col-12 px-0 d-flex flex-wrap">
+          <a class="show-all text-left col-6 px-0" *ngIf="!showAll" (click)="getAllWorkplaceByManager()">Xem tất cả nơi làm việc</a>
+          <a class="show-all text-left col-6 px-0" *ngIf="showAll" (click)="getWorkplaceByManager()">Trở lại</a>
+          <a class="show-all text-right col-6 px-0" *ngIf="!showAll">Toggle</a>
+
+        </div>
       </div>
       <div class="card-body card-body-cascade pb-0 d-flex flex-wrap">
 
-        <h4 class="text-left col-11 mx-auto pb-3">
-          <span routerLink="/company" style="cursor: pointer; color: #007bff"> {{companyName}} </span> <span *ngIf="companyName">/</span>
-          <span (click)="location.back()" style="cursor: pointer; color: #6c757d; font-size: 20px;"> {{zoneName}}
+        <h4 class="text-left col-7 mx-auto pb-3" *ngIf="!showAll">
+          <span routerLink="/company" style="cursor: pointer; color: #007bff"> {{companyName}} </span>
+          <span (click)="location.back()" style="cursor: pointer; color: #6c757d; font-size: 20px;"> <span
+            *ngIf="companyName">/</span> {{zoneName}}
           </span>
         </h4>
+        <h4 class="text-left col-7 mx-auto pb-3" *ngIf="showAll">
+          <span style="color: #6c757d">Tất cả nơi làm việc đang quản lý</span>
+        </h4>
+        <owl-form-field class="col-4 mx-auto pb-3">
+          <input owlInput [owlDateTimeTrigger]="dateSearchInput" [owlDateTime]="dateSearchInput"
+            placeholder="Nơi làm việc và công việc vào ngày" [(ngModel)]="dateSearch" (dateTimeChange)="getPlace()">
+          <owl-date-time #dateSearchInput [pickerType]="'calendar'"></owl-date-time>
+        </owl-form-field>
 
         <div class="col-md-4 mb-4" *ngFor="let p of placeList; let i = index">
 
@@ -45,9 +57,9 @@
               <!--Content-->
               <div class="content">
                 <h4 style="cursor: pointer; color: #007bff">{{p.name}}</h4>
-                <div class="col-12 px-0">
+                <div class="col-12 px-0" *ngIf="userAccount.roleId === 1">
                   <div class="d-flex flex-wrap">
-                    <div class="col-7 px-0" *ngIf="userAccount.roleId === 1">
+                    <div class="col-7 px-0">
                       Người quản lý
                       <br>
                       <span class="text-danger">{{p.managerName}}</span>
@@ -93,7 +105,8 @@
                   </button>
                   <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect
                     (click)="openCreateTaskModal(p.id, i)"
-                    *ngIf="userAccount.roleId === 2 && (p.taskList.length < p.numberOfReworks)">Tạo công việc</button>
+                    *ngIf="userAccount.roleId === 2 && (p.taskList.length < p.numberOfReworks) && canCreateTask">Tạo
+                    công việc</button>
                   <div class="col-12 text-center">
                     <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect
                       (click)="openBeaconModal(p.id)" *ngIf="userAccount.roleId === 1 && (p.setToBeacon === false)">Thêm
@@ -110,12 +123,15 @@
             <div class="face back tp-box_side tp-box_back">
               <div class="d-flex justify-content-center flex-wrap pt-3">
                 <p class="h5">Công việc thường nhật</p>
-                <div *ngFor="let bt of placeList[i].basicTaskList; let idx1 = index" class="col-12">
+                <div *ngFor="let bt of p.basicTaskList; let idx1 = index" class="col-12">
                   {{ idx1 + 1 }}. {{ bt.title }}
                 </div>
                 <p class="h5 pt-3">Công việc trong ngày</p>
-                <div *ngFor="let t of placeList[i].taskList; let idx2 = index" class="col-12">
+                <div *ngFor="let t of p.taskList; let idx2 = index" class="col-12">
                   {{ idx2 + 1 }}. {{ t.assignee }}: {{ t.startTime | date: 'HH:mm' }} ~ {{ t.endTime | date: 'HH:mm' }}
+                </div>
+                <div *ngIf="p.taskList.length === 0">
+                  <span class="text-danger">Không có công việc trong ngày</span>
                 </div>
                 <button *ngIf="userAccount.roleId === 2" title="Thêm xóa sửa công việc" mdbBtn type="button"
                   rounded="true" color="primary" class="waves-light list-btn" mdbWavesEffect
@@ -178,7 +194,7 @@
         </div>
 
         <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
-          <div mdbBtn floating="true" size="md" color="blue" mdbWavesEffect>
+          <div mdbBtn floating="true" size="md" color="success" mdbWavesEffect>
             <i class="fa fa-cloud-upload" aria-hidden="true"></i>
             <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
               (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
@@ -214,8 +230,8 @@
       <div class="modal-body mx-3 row">
 
         <div class="md-form mt-0 mb-3 col-md-12">
-          <mdb-select [label]="'Beacon'" [notFoundMsg]="'Không tìm thấy'" [options]="beaconList"
-            [(ngModel)]="beaconId"></mdb-select>
+          <mdb-select [label]="'Beacon'" [notFoundMsg]="'Không tìm thấy'" [options]="beaconList" [(ngModel)]="beaconId">
+          </mdb-select>
         </div>
 
       </div>
@@ -270,8 +286,8 @@
         </div>
 
         <div class="col-12 md-form mt-0 mb-3 px-0">
-          <mdb-select [label]="'Mức độ ưu tiên'" class="select-wrapper mdb-select colorful-select dropdown-success" [options]="iconPrioritySelect"
-            [(ngModel)]="taskCM.priority">
+          <mdb-select [label]="'Mức độ ưu tiên'" class="select-wrapper mdb-select colorful-select dropdown-success"
+            [options]="iconPrioritySelect" [(ngModel)]="taskCM.priority">
           </mdb-select>
           <label>Mức độ ưu tiên</label>
         </div>
@@ -335,14 +351,16 @@
       <div class="modal-body">
         <div class="col-12">
           <div class="md-form my-3">
-            <mdb-select [label]="'Người quản lý'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="managerList" [(ngModel)]="selectingManagerId"></mdb-select>
+            <mdb-select [label]="'Người quản lý'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true"
+              [options]="managerList" [(ngModel)]="selectingManagerId"></mdb-select>
           </div>
         </div>
       </div>
 
       <!--Footer-->
       <div class="modal-footer flex-center">
-        <a mdbBtn color="success" outline="true" class="waves-effect" mdbWavesEffect (click)="updateManagerForWorkplace()">Đồng ý</a>
+        <a mdbBtn color="success" outline="true" class="waves-effect" mdbWavesEffect
+          (click)="updateManagerForWorkplace()">Đồng ý</a>
         <a type="button" mdbBtn color="success" class="waves-effect" mdbWavesEffect data-dismiss="modal"
           (click)="addManager.hide()">Hủy</a>
       </div>
@@ -367,14 +385,16 @@
       <div class="modal-body">
         <div class="col-12">
           <div class="md-form my-3">
-            <mdb-select [label]="'Người quản lý mới'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="managerList" [(ngModel)]="selectingManagerId"></mdb-select>
+            <mdb-select [label]="'Người quản lý mới'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true"
+              [options]="managerList" [(ngModel)]="selectingManagerId"></mdb-select>
           </div>
         </div>
       </div>
 
       <!--Footer-->
       <div class="modal-footer flex-center">
-        <a mdbBtn color="primary" outline="true" class="waves-effect" mdbWavesEffect (click)="updateManagerForWorkplace()">Đồng ý</a>
+        <a mdbBtn color="primary" outline="true" class="waves-effect" mdbWavesEffect
+          (click)="updateManagerForWorkplace()">Đồng ý</a>
         <a type="button" mdbBtn color="primary" class="waves-effect" mdbWavesEffect data-dismiss="modal"
           (click)="editManager.hide()">Hủy</a>
       </div>
@@ -402,7 +422,8 @@
 
       <!--Footer-->
       <div class="modal-footer flex-center">
-        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="updateManagerForWorkplace()">Đồng ý</a>
+        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect
+          (click)="updateManagerForWorkplace()">Đồng ý</a>
         <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
           (click)="deleteManager.hide()">Hủy</a>
       </div>

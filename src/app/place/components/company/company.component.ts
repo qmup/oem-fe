@@ -66,9 +66,10 @@ export class CompanyComponent implements OnInit {
   dragOver: boolean;
   url: any;
   filesToUpload: FileList;
-  // map: any = { lat: 10.774157, lng: 106.661049 };
   currentPage = 0;
   companyResponse: PaginationResponse;
+
+  showAll = false;
 
   constructor(
     private companyService: CompanyService,

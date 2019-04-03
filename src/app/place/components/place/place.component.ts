@@ -17,6 +17,10 @@ import { Employee } from 'src/app/employee/models/employee';
 import { TaskBasicService } from 'src/app/task/service/task-basic.service';
 import { AssignTask, PaginationResponse } from 'src/app/core/models/shared';
 
+const WORKPLACE_REMOVED_STATUS = 0;
+const WORKPLACE_OPEN_STATUS = 1;
+const WORKPLACE_CLOSE_STATUS = 2;
+
 @Component({
   selector: 'app-place',
   templateUrl: './place.component.html',
@@ -69,6 +73,9 @@ export class PlaceComponent implements OnInit {
   currentIndex = 0;
   selectingManagerId: number;
   selectingWorkplaceId: number;
+  showAll = false;
+  canCreateTask: boolean;
+  currentStatus = WORKPLACE_OPEN_STATUS;
 
   constructor(
     public location: Location,
@@ -100,7 +107,7 @@ export class PlaceComponent implements OnInit {
   }
 
   getWorkplaceByAdmin() {
-    this.placeService.getAll(this.zoneId, '', '', 'id', 0, 99)
+    this.placeService.getAll(this.zoneId, this.currentStatus, '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content;
@@ -121,13 +128,49 @@ export class PlaceComponent implements OnInit {
   }
 
   getWorkplaceByManager() {
+    const now = new Date().getTime() - 24 * 60 * 60 * 1000;
+    const taskTime = this.dateSearch.getTime();
+    if (taskTime < now) {
+      this.canCreateTask = false;
+    } else {
+      this.canCreateTask = true;
+    }
     const d = this.dateSearch.getDate();
     const m = this.dateSearch.getMonth();
     const y = this.dateSearch.getFullYear();
     const from = new Date(y, m, d, 0, 0, 0, 0).toISOString();
     const to = new Date(y, m, d, 23, 59, 0, 0).toISOString();
+    this.showAll = false;
     this.placeService.getAvailableByDate(
       this.userAccount.id, this.zoneId, `${from};${to}`, '', 'id', 0, 99)
+      .then(
+        (response: PlacePagination) => {
+          this.placeList = response.listOfWorkplace.content;
+          this.placeResponse = response.listOfWorkplace;
+          this.zoneName = response.zone.name;
+          this.companyName = response.company.name;
+          for (let index = 0; index < this.placeList.length; index++) {
+            const element = this.placeList[index];
+            this.placeService.getTaskBasic(element.id)
+              .then(
+                (response2: TaskBasic[]) => {
+                  element.basicTaskList = response2;
+                }
+              );
+          }
+        }
+      );
+  }
+
+  getAllWorkplaceByManager() {
+    const d = this.dateSearch.getDate();
+    const m = this.dateSearch.getMonth();
+    const y = this.dateSearch.getFullYear();
+    const from = new Date(y, m, d, 0, 0, 0, 0).toISOString();
+    const to = new Date(y, m, d, 23, 59, 0, 0).toISOString();
+    this.showAll = true;
+    this.placeService.getAvailableByDate(
+      this.userAccount.id, '', `${from};${to}`, '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content;
@@ -356,7 +399,7 @@ export class PlaceComponent implements OnInit {
 
   switch(e: any, workplaceId: number) {
     e.target.checked ?
-      this.placeService.updateField(workplaceId, 'status', 1)
+      this.placeService.updateField(workplaceId, 'status', WORKPLACE_OPEN_STATUS)
         .then(
           () => {
             this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
@@ -366,7 +409,7 @@ export class PlaceComponent implements OnInit {
           () => this.getPlace()
         )
         :
-      this.placeService.updateField(workplaceId, 'status', 0)
+      this.placeService.updateField(workplaceId, 'status', WORKPLACE_CLOSE_STATUS)
         .then(
           () => {
             this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
