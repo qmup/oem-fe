@@ -74,15 +74,10 @@
           <div class="list-group">
             <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect *ngFor="let task of taskList" [routerLink]="['/task-detail', task.id]">
               <i class="fa fa-trash mt-2 col"></i>
-              <div class="col-9">
+              <div class="col-11">
                 {{task.title}} từ {{ task.startTime | date: 'HH:mm'}} đến {{task.endTime | date: 'HH:mm'}}
                 <br>
                 <small>Tại {{task.companyDTO.name}} - {{task.workplaceName}}</small>
-              </div>
-              <div class="col-2">
-                <button mdbBtn type="button" color="danger" size="sm" rounded="true" mdbWavesEffect (click)="openRemoveTaskModal(task.id)">
-                  <i class="fa fa-ban"></i>
-                </button>
               </div>
             </a>
             <div *ngIf="taskList.length === 0">
