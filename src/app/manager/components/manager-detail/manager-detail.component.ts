@@ -244,7 +244,7 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   addWorkplaceForManager() {
-    this.workplaceService.addManagerToWorkplace(this.manageWorkplace)
+    this.workplaceService.updateManager(this.manageWorkplace.workplaceId, 'managerId', this.manageWorkplace.managerId)
       .then(
         () => {
           this.toastService.success('Cập nhật thông tin thành công', '', { positionClass: 'toast-bottom-right'} );
