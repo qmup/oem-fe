@@ -85,7 +85,7 @@ export class Place {
     this.taskList = new Array<TaskList>();
     this.zone = new ZoneDTO();
     this.company = new CompanyDTO();
-    this.status = 0;
+    this.status = 1;
     this.numberOfReworks = 0;
     this.basicTaskList = new Array<TaskBasic>();
     this.managerId = 0;

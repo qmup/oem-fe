@@ -77,7 +77,9 @@ export class PlaceComponent implements OnInit {
   showAll = false;
   canCreateTask: boolean;
   currentStatus = WORKPLACE_OPEN_STATUS;
-  warningMessage: any;
+  warningMessage = [];
+  currentManagerId = 0;
+  _managerList = [];
 
   constructor(
     public location: Location,
@@ -208,6 +210,22 @@ export class PlaceComponent implements OnInit {
       );
   }
 
+  _getManager(): any {
+    this.employeeService.getByRole(2, '', '', 'id', 0, 99)
+      .then(
+        (response) => {
+          this._managerList = response.content.filter((m: Employee) => m.id !== this.currentManagerId).map((m: Employee) => {
+            return {
+              label: m.fullName,
+              value: m.id,
+              icon: m.picture
+            };
+          });
+          console.log(this._managerList);
+        }
+      );
+  }
+
   getBeacon() {
     this.beaconService.getAvailableBeacon()
       .then(
@@ -310,10 +328,7 @@ export class PlaceComponent implements OnInit {
       .then(
         (response) => {
           this.warningMessage = response.message.split(';');
-          if (this.userAccount.roleId === 2) {
-            this.warningMessage = this.warningMessage.filter((m, index) => index !== 2);
-          }
-          this.deleteManagerModal.show();
+          this.deleteModal.show();
         }
       );
   }
@@ -395,13 +410,15 @@ export class PlaceComponent implements OnInit {
   }
 
 
-  openManagerModal(id: number, type: number) {
+  openManagerModal(id: number, type: number, managerId: number) {
+    this.currentManagerId = managerId;
     this.selectingManagerId = 0;
     this.selectingWorkplaceId = id;
     if (type === 1) {
       this.addManagerModal.show();
     } else if (type === 2) {
       this.editManagerModal.show();
+      this._getManager();
     } else {
       this.deleteManagerModal.show();
     }

@@ -133,12 +133,7 @@ export class PlaceService {
 
   checkRemove(workplaceId: number): Promise<any> {
     return this.httpClient.get<any>(
-      `${environment.endPoint}${environment.apiPaths.workplace.checkRemove}`,
-      {
-        params: {
-          workplaceId: `${workplaceId}`,
-        }
-      }
+      `${environment.endPoint}${environment.apiPaths.workplace.checkRemove + workplaceId}`,
     ).toPromise();
   }
 }

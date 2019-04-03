@@ -109,7 +109,7 @@
                     {{ task.endTime | date: 'HH:mm' }} ngày {{ task.endTime | date: 'dd-MM-yyyy' }}
                   </td>
                   <td *ngIf="task.dateUpdate">
-                    Gần nhất lúc {{ task.dateUpdate | date: 'HH:mm' }} ngày {{ task.dateUpdate | date: 'dd-MM-yyyy' }}
+                    {{ task.dateUpdate | date: 'HH:mm' }} ngày {{ task.dateUpdate | date: 'dd-MM-yyyy' }}
                   </td>
                   <td *ngIf="!task.dateUpdate"></td>
                 </tr>
