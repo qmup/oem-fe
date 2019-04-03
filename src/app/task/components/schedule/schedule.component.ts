@@ -209,13 +209,9 @@ export class ScheduleComponent implements OnInit {
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content.map((place) => {
-            const numberOfReworks = place.numberOfReworks;
-            const taskAssigned = place.taskList.length;
-            let taskMissing = numberOfReworks - taskAssigned;
-            taskMissing = Math.max(0, taskMissing);
             return {
               value: place.id,
-              label: `${place.name} | Số việc chưa được giao: ${taskMissing}`,
+              label: `${place.name}`,
               icon: place.picture
             };
           });

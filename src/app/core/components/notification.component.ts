@@ -41,8 +41,8 @@ import {
       <button type="button" class="btn btn-sm btn-notification" (click)="toggleShowDiv()">
         <i class="fa fa-bell"></i>
       </button>
-      <span class="counter" *ngIf="countUnread !== 0">{{countUnread}}<span *ngIf="countUnread > 99">+</span></span>
-
+      <span class="counter" *ngIf="countUnread !== 0 && countUnread <= 9">{{countUnread}}</span>
+      <span class="counter" *ngIf="countUnread !== 0 && countUnread > 9">9+</span>
       <div [@slideInOut]="animationState" class="card-notification">
         <h6 class="p-3 font-weight-bold">Thông báo</h6>
         <div class="pt51">

@@ -30,6 +30,9 @@ export class LoginPageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    if (this.globalService.isLogin) {
+      this.router.navigate(['']);
+    }
   }
 
   login() {

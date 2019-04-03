@@ -76,9 +76,9 @@ export class LaborerComponent implements OnInit {
   currentPage = 0;
   userAccount: Employee;
   isDuplicate = false;
-  fieldSort = 'id';
+  fieldSort = 'roleId';
   sortBoolean = false;
-  sortValue = '';
+  sortValue = 'asc';
   showRemovedEmp = false;
 
   constructor(
@@ -184,9 +184,9 @@ export class LaborerComponent implements OnInit {
   sort(field: string) {
     this.sortBoolean = ! this.sortBoolean;
     if (this.sortBoolean) {
-      this.sortValue = 'asc';
-    } else {
       this.sortValue = 'desc';
+    } else {
+      this.sortValue = 'asc';
     }
     this.fieldSort = field;
     this.getEmployee();

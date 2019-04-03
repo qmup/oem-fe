@@ -78,8 +78,14 @@ export class PlaceComponent implements OnInit {
   canCreateTask: boolean;
   currentStatus = WORKPLACE_OPEN_STATUS;
   warningMessage = [];
+  viewOptions = [];
+  viewTypes = [];
+  currentViewType = 1;
   currentManagerId = 0;
   _managerList = [];
+  fieldSort = '';
+  sortValue = '';
+  sortBoolean = false;
 
   constructor(
     public location: Location,
@@ -105,6 +111,7 @@ export class PlaceComponent implements OnInit {
     this.getManager();
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
     this.workplaceStatusList = this.globalService.workplaceStatus;
+    this.viewTypes = this.globalService.viewTypes;
   }
 
   getPlace() {
@@ -163,6 +170,10 @@ export class PlaceComponent implements OnInit {
                 }
               );
           }
+          this.viewOptions = [
+            { value: 1, label: 'Tất cả'},
+            { value: 2, label: `Tại ${response.zone.name}`},
+          ];
         }
       );
   }
@@ -193,6 +204,25 @@ export class PlaceComponent implements OnInit {
           }
         }
       );
+  }
+
+  changeViewOption(e: any) {
+    e.value === 1 ? this.getAllWorkplaceByManager() : this.getWorkplaceByManager();
+  }
+
+  changeViewType(e: any) {
+    this.currentViewType = e.value;
+  }
+
+  sort(field: string) {
+    this.sortBoolean = ! this.sortBoolean;
+    if (this.sortBoolean) {
+      this.sortValue = 'desc';
+    } else {
+      this.sortValue = 'asc';
+    }
+    this.fieldSort = field;
+    this.getPlace();
   }
 
   getManager() {
@@ -324,11 +354,13 @@ export class PlaceComponent implements OnInit {
   }
 
   checkRemovable(id: number) {
+    this.warningMessage = [];
     this.placeService.checkRemove(id)
       .then(
-        (response) => {
-          this.warningMessage = response.message.split(';');
-          this.deleteModal.show();
+        (response: any) => {
+          response.removeAble ?
+          this.deleteModal.show() :
+          (this.warningMessage = response.message.split(';'), this.deleteModal.show());
         }
       );
   }
@@ -342,9 +374,11 @@ export class PlaceComponent implements OnInit {
               this.updateManagerForWorkplace();
             } else {
               this.toastService.success('Xóa thành công' , '', { positionClass: 'toast-bottom-right'});
+              this.hideManagerModal();
             }
           } else {
             this.toastService.error('Vẫn còn công việc tại đây chưa được giải quyết xong' , '', { positionClass: 'toast-bottom-right'});
+            this.hideManagerModal();
           }
         }
       );

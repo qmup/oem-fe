@@ -5,7 +5,7 @@ import { TaskService } from 'src/app/task/service/task.service';
 import { Task } from 'src/app/task/models/task';
 import { ActivatedRoute } from '@angular/router';
 import { EmployeeService } from 'src/app/employee/services/employee.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective, ModalOptions, BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { Employee } from 'src/app/employee/models/employee';
 import { ZoneService } from 'src/app/place/services/zone.service';
 import { PlaceService } from 'src/app/place/services/place.service';
@@ -15,6 +15,7 @@ import { Zone, ZonePagination } from 'src/app/place/models/zone';
 import { Place, ManageWorkplace, PlacePagination } from 'src/app/place/models/place';
 import { PaginationResponse } from 'src/app/core/models/shared';
 import { GlobalService } from 'src/app/core/services/global.service';
+import { EmployeeUpdateComponent } from 'src/app/employee/components/employee-update/employee-update.component';
 
 @Component({
   selector: 'app-manager-detail',
@@ -59,6 +60,7 @@ export class ManagerDetailComponent implements OnInit {
   deletingWpId: number;
   manageWorkplace: ManageWorkplace = new ManageWorkplace();
   userAccount: Employee;
+  modalRef: BsModalRef;
   currentPage1 = 0;
   currentPage2 = 0;
 
@@ -68,8 +70,9 @@ export class ManagerDetailComponent implements OnInit {
     private companyService: CompanyService,
     private zoneService: ZoneService,
     private workplaceService: PlaceService,
+    private toastService: ToastService,
+    private modalService: BsModalService,
     private globalService: GlobalService,
-    private toastService: ToastService
   ) {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
@@ -205,6 +208,19 @@ export class ManagerDetailComponent implements OnInit {
       );
   }
 
+  openUpdateEmployeeModal(employee: Employee) {
+    const modalOptions: ModalOptions = {
+      animated: true,
+      class: 'modal-lg modal-notify modal-primary',
+      initialState: { employee }
+    };
+    this.modalRef = this.modalService.show(EmployeeUpdateComponent, modalOptions);
+    this.modalRef.content.refresh.subscribe(
+      () => this.getInfo()
+    );
+
+  }
+
   selectWorkplace(e: any) {
     this.manageWorkplace.workplaceId = e.value;
   }
@@ -281,17 +297,14 @@ export class ManagerDetailComponent implements OnInit {
   removeWorkplaceByManager() {
     this.workplaceService.removeFromManager(this.id, this.deletingWpId)
       .then(
-        (response) => {
-          console.log(response);
-          this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'} );
-          this.getWorkplaceByManager();
-          this.removeWorkplaceModal.hide();
-          this.workplaceListByManager = [];
-          this.workplaceResponseByManager = new PaginationResponse();
-        },
-        (error) => {
-          console.log(error);
-          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        (response: boolean) => {
+          if (response) {
+            this.toastService.success('Xóa thành công' , '', { positionClass: 'toast-bottom-right'});
+            this.removeWorkplaceModal.hide();
+          } else {
+            this.toastService.error('Vẫn còn công việc tại đây chưa được giải quyết xong' , '', { positionClass: 'toast-bottom-right'});
+            this.removeWorkplaceModal.hide();
+          }
         }
       );
   }

@@ -3,14 +3,6 @@
   font-size: 1rem;
   font-weight: 400;
 }
-mdb-flipping-card mdb-card-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  padding: 40px;
-}
 .rotate-btn {
   position: absolute;
   top: 90%;
@@ -34,4 +26,7 @@ a.btn-floating.btn-md.btn-success {
 }
 .fa {
   font-size: 1.2rem;
+}
+.fa-4x {
+  font-size: 4rem !important;
 }

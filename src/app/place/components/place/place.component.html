@@ -7,162 +7,226 @@
         </div>
       </div>
       <div *ngIf="userAccount.roleId === 1" class="col-xl-6 col-lg-12 px-5 pt-3">
-        <mdb-select class="col-10" [label]="'Trạng thái nơi làm việc'" [notFoundMsg]="'Không tìm thấy'" [options]="workplaceStatusList" [(ngModel)]="currentStatus" (selected)="getPlace();"></mdb-select>
+        <mdb-select class="col-10" [label]="'Trạng thái nơi làm việc'" [options]="workplaceStatusList"
+          [(ngModel)]="currentStatus" (selected)="getPlace();"></mdb-select>
         <a class="col-2 btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i>
         </a>
       </div>
       <div *ngIf="userAccount.roleId === 2" class="col-xl-6 col-lg-12 px-5 pt-3">
-
         <div class="col-12 px-0 d-flex flex-wrap">
-          <a class="show-all text-left col-6 px-0" *ngIf="!showAll" (click)="getAllWorkplaceByManager()">Xem tất cả nơi
-            làm việc</a>
-          <a class="show-all text-left col-6 px-0" *ngIf="showAll" (click)="getWorkplaceByManager()">Trở lại</a>
-          <a class="show-all text-right col-6 px-0" *ngIf="!showAll">Toggle</a>
-
+          <mdb-select class="col" [label]="'Nơi làm việc'" [options]="viewOptions"
+            (selected)="changeViewOption($event)"></mdb-select>
+          <mdb-select class="col" [label]="'Chế độ xem'" [options]="viewTypes" (selected)="changeViewType($event)">
+          </mdb-select>
         </div>
       </div>
-      <div class="card-body card-body-cascade pb-0 d-flex flex-wrap">
+      <div class="card-body card-body-cascade pb-0">
+        <div *ngIf="currentViewType == 1" class="d-flex flex-wrap">
+          <h4 [ngClass]="{'col-5': userAccount.roleId === 2, 'col-11': userAccount.roleId === 1}"
+            class="text-left mx-auto pb-3" *ngIf="!showAll">
+            <span routerLink="/company" style="cursor: pointer; color: #007bff"> {{companyName}} </span>
+            <span (click)="location.back()" style="cursor: pointer; color: #007bff; font-size: 20px;">
+              <span *ngIf="companyName"> - </span>
+              {{zoneName}}
+              <span *ngIf="userAccount.roleId === 1 && companyName"> - </span>
+              <span *ngIf="userAccount.roleId === 1 && currentStatus === 0 && companyName" class="text-danger"
+                style="font-size: 18px">Đã xóa</span>
+              <span *ngIf="userAccount.roleId === 1 && currentStatus === 1 && companyName" class="text-primary"
+                style="font-size: 18px">Đang mở</span>
+              <span *ngIf="userAccount.roleId === 1 && currentStatus === 2 && companyName" class="text-muted"
+                style="font-size: 18px">Đang tạm đóng</span>
+            </span>
+          </h4>
+          <h4 [ngClass]="{'col-5': userAccount.roleId === 2, 'col-11': userAccount.roleId === 1}"
+            class="text-left mx-auto pb-3" *ngIf="showAll">
+            <span style="color: #6c757d">Tất cả nơi làm việc đang quản lý</span>
+          </h4>
+          <owl-form-field class="col-6 ml-auto pl-5 pr-4 pb-3" *ngIf="userAccount.roleId === 2">
+            <input owlInput [owlDateTimeTrigger]="dateSearchInput" [owlDateTime]="dateSearchInput"
+              placeholder="Nơi làm việc và công việc vào ngày" [(ngModel)]="dateSearch" (dateTimeChange)="getPlace()">
+            <owl-date-time #dateSearchInput [pickerType]="'calendar'"></owl-date-time>
+          </owl-form-field>
 
-        <h4 [ngClass]="{'col-7': userAccount.roleId === 2, 'col-11': userAccount.roleId === 1}"
-          class="text-left mx-auto pb-3" *ngIf="!showAll">
-          <span routerLink="/company" style="cursor: pointer; color: #007bff"> {{companyName}} </span>
-          <span (click)="location.back()" style="cursor: pointer; color: #007bff; font-size: 20px;">
-            <span *ngIf="companyName"> - </span>
-            {{zoneName}}
-            <span *ngIf="companyName"> - </span>
-            <span *ngIf="currentStatus === 0 && companyName" class="text-danger" style="font-size: 18px">Đã xóa</span>
-            <span *ngIf="currentStatus === 1 && companyName" class="text-primary" style="font-size: 18px">Đang mở</span>
-            <span *ngIf="currentStatus === 2 && companyName" class="text-muted" style="font-size: 18px">Đang tạm đóng</span>
-          </span>
-        </h4>
-        <h4 [ngClass]="{'col-7': userAccount.roleId === 2, 'col-11': userAccount.roleId === 1}"
-          class="text-left mx-auto pb-3" *ngIf="showAll">
-          <span style="color: #6c757d">Tất cả nơi làm việc đang quản lý</span>
-        </h4>
-        <owl-form-field class="col-4 mx-auto pb-3" *ngIf="userAccount.roleId === 2">
-          <input owlInput [owlDateTimeTrigger]="dateSearchInput" [owlDateTime]="dateSearchInput"
-            placeholder="Nơi làm việc và công việc vào ngày" [(ngModel)]="dateSearch" (dateTimeChange)="getPlace()">
-          <owl-date-time #dateSearchInput [pickerType]="'calendar'"></owl-date-time>
-        </owl-form-field>
+          <div class="col-md-4 mb-4" *ngFor="let p of placeList; let i = index">
 
-        <div class="col-md-4 mb-4" *ngFor="let p of placeList; let i = index">
-
-          <mdb-flipping-card #card>
-            <!--Front Side-->
-            <div class="face front card tp-box_side tp-box_front">
-              <!-- Image-->
-              <div class="card-up">
-                <div class="view overlay hm-white-slight waves-light" mdbWavesEffect>
-                  <img [src]="p.picture" class="img-fluid" alt="workplaceImg">
-                </div>
-              </div>
-
-              <a *ngIf="userAccount.roleId === 2"
-                class="btn-floating btn-action ml-auto mr-4 mdb-color info-color waves-light" (click)="card.toggle()"
-                mdbWavesEffect>
-                <mdb-icon icon="chevron-right" mdbWavesEffect></mdb-icon>
-              </a>
-
-              <!--Content-->
-              <div class="content" *ngIf="p.status !== 0">
-                <h4 style="cursor: pointer; color: #007bff">{{p.name}}</h4>
-                <div class="col-12 px-0" *ngIf="userAccount.roleId === 1">
-                  <div class="d-flex flex-wrap">
-                    <div class="col-7 px-0">
-                      Người quản lý
-                      <br>
-                      <span class="text-danger">{{p.managerName}}</span>
-                    </div>
-                    <div class="col-5 px-0 text-right">
-                      <a *ngIf="p.managerId === 0" mdbBtn floating="true" size="sm" color="success" mdbWavesEffect>
-                        <i class="fa fa-plus" (click)="openManagerModal(p.id, 1)"></i>
-                      </a>
-                      <a *ngIf="p.managerId !== 0" mdbBtn floating="true" size="sm" color="primary" mdbWavesEffect>
-                        <i class="fa fa-pencil" (click)="openManagerModal(p.id, 2, p.managerId)"></i>
-                      </a>
-                      <a *ngIf="p.managerId !== 0" mdbBtn floating="true" size="sm" color="danger" mdbWavesEffect>
-                        <i class="fa fa-trash" (click)="openManagerModal(p.id, 3, p.managerId)"></i>
-                      </a>
-                    </div>
+            <mdb-flipping-card #card>
+              <!--Front Side-->
+              <div class="face front card tp-box_side tp-box_front">
+                <!-- Image-->
+                <div class="card-up">
+                  <div class="view overlay hm-white-slight waves-light" mdbWavesEffect>
+                    <img [src]="p.picture" class="img-fluid" alt="workplaceImg">
                   </div>
                 </div>
-                <hr>
-                <div *ngIf="userAccount.roleId === 2">
-                  <p>Số lần vệ sinh:
-                    <span class="text-danger font-weight-bold h6">{{p.numberOfReworks}}</span>
-                  </p>
-                  <p>Số công việc đã giao:
-                    <span class="text-danger font-weight-bold h6">{{p.taskList.length}}</span>
-                  </p>
 
-                </div>
-                <div class="switch rounded blue-white-switch text-center" *ngIf="userAccount.roleId === 1">
-                  <label>
-                    Đóng
-                    <input type="checkbox" (change)="switch($event, p.id)" [checked]="p.status === 1">
-                    <span class="lever"></span> Mở
-                  </label>
-                </div>
-                <div class="d-flex flex-wrap justify-content-center" id="action-button">
-                  <button mdbBtn type="button" color="primary" rounded="true" mdbWavesEffect
-                    (click)="openUpdateModal(p)">
-                    Sửa
-                  </button>
-                  <button mdbBtn type="button" color="danger" rounded="true" mdbWavesEffect
-                    (click)="checkRemovable(p.id)" *ngIf="userAccount.roleId === 1">
-                    Xóa
-                  </button>
-                  <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect
-                    (click)="openCreateTaskModal(p.id, i)"
-                    *ngIf="userAccount.roleId === 2 && (p.taskList.length < p.numberOfReworks) && canCreateTask">Tạo
-                    công việc</button>
-                  <div class="col-12 text-center">
-                    <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect
+                <a *ngIf="userAccount.roleId === 2"
+                  class="btn-floating btn-action ml-auto mr-4 mdb-color info-color waves-light" (click)="card.toggle()"
+                  mdbWavesEffect>
+                  <mdb-icon icon="chevron-right" mdbWavesEffect></mdb-icon>
+                </a>
+
+                <!--Content-->
+                <div class="content" *ngIf="p.status !== 0">
+                  <h4 style="cursor: pointer; color: #007bff">{{p.name}}</h4>
+                  <div class="col-12 px-0" *ngIf="userAccount.roleId === 1">
+                    <div class="d-flex flex-wrap">
+                      <div class="col-7 px-0">
+                        Người quản lý
+                        <br>
+                        <span class="text-danger" *ngIf="p.managerId !== 0">{{p.managerName}}</span>
+                        <span class="text-danger" *ngIf="p.managerId === 0">Chưa có người quản lý</span>
+                      </div>
+                      <div class="col-5 px-0 text-right">
+                        <a *ngIf="p.managerId === 0" mdbBtn floating="true" size="sm" color="success" mdbWavesEffect>
+                          <i class="fa fa-plus" (click)="openManagerModal(p.id, 1)"></i>
+                        </a>
+                        <a *ngIf="p.managerId !== 0" mdbBtn floating="true" size="sm" color="primary" mdbWavesEffect>
+                          <i class="fa fa-pencil" (click)="openManagerModal(p.id, 2, p.managerId)"></i>
+                        </a>
+                        <a *ngIf="p.managerId !== 0" mdbBtn floating="true" size="sm" color="danger" mdbWavesEffect>
+                          <i class="fa fa-trash" (click)="openManagerModal(p.id, 3, p.managerId)"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  <div *ngIf="userAccount.roleId === 2">
+                    <p>Số lần phải dọn tối thiểu:
+                      <span class="text-danger font-weight-bold h6">{{p.numberOfReworks}}</span>
+                    </p>
+                    <p>Số công việc đã giao:
+                      <span class="text-danger font-weight-bold h6">{{p.taskList.length}}</span>
+                    </p>
+
+                  </div>
+                  <div class="switch rounded blue-white-switch text-center" *ngIf="userAccount.roleId === 1">
+                    <label>
+                      Đóng
+                      <input type="checkbox" (change)="switch($event, p.id)" [checked]="p.status === 1">
+                      <span class="lever"></span> Mở
+                    </label>
+                  </div>
+                  <div class="d-flex flex-wrap justify-content-center" id="action-button">
+                    <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect size="sm"
                       (click)="openBeaconModal(p.id)" *ngIf="userAccount.roleId === 1 && (p.setToBeacon === false)">Thêm
                       beacon</button>
+                    <button mdbBtn type="button" color="primary" rounded="true" mdbWavesEffect size="sm"
+                      (click)="openUpdateModal(p)">
+                      Sửa
+                    </button>
+                    <button mdbBtn type="button" color="danger" rounded="true" mdbWavesEffect size="sm"
+                      (click)="checkRemovable(p.id)" *ngIf="userAccount.roleId === 1">
+                      Xóa
+                    </button>
+                    <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect size="sm"
+                      (click)="openCreateTaskModal(p.id, i)"
+                      *ngIf="userAccount.roleId === 2 && (p.taskList.length < p.numberOfReworks) && canCreateTask">Tạo
+                      công việc</button>
                   </div>
                 </div>
-              </div>
-              <div class="content my-auto text-center" *ngIf="p.status === 0">
-                <h4 style="cursor: pointer; color: #007bff">{{p.name}}</h4>
-                <h6>Miêu tả: {{p.description}}</h6>
-              </div>
-              <!--/.Content-->
-
-            </div>
-            <!--/.Front Side-->
-
-            <!--Back Side-->
-            <div class="face back tp-box_side tp-box_back">
-              <div class="d-flex justify-content-center flex-wrap pt-3">
-                <p class="h5">Công việc thường nhật</p>
-                <div *ngFor="let bt of p.basicTaskList; let idx1 = index" class="col-12">
-                  {{ idx1 + 1 }}. {{ bt.title }}
+                <div class="content my-auto text-center" *ngIf="p.status === 0">
+                  <h4 style="cursor: pointer; color: #007bff">{{p.name}}</h4>
+                  <h6>Miêu tả: {{p.description}}</h6>
                 </div>
-                <p class="h5 pt-3">Công việc trong ngày</p>
-                <div *ngFor="let t of p.taskList; let idx2 = index" class="col-12">
-                  {{ idx2 + 1 }}. {{ t.assignee }}: {{ t.startTime | date: 'HH:mm' }} ~ {{ t.endTime | date: 'HH:mm' }}
-                </div>
-                <div *ngIf="p.taskList.length === 0">
-                  <span class="text-danger">Không có công việc trong ngày</span>
-                </div>
-                <button *ngIf="userAccount.roleId === 2" title="Thêm xóa sửa công việc" mdbBtn type="button"
-                  rounded="true" color="primary" class="waves-light list-btn" mdbWavesEffect
-                  (click)="openTaskBasicModal(p.basicTaskList, p.id)">
-                  <i class="mr-2 fa fa-list-ol"></i>Danh sách công việc
-                </button>
-              </div>
-              <hr>
-              <div class="d-flex justify-content-center">
-                <a class="rotate-btn" data-card="card-1" (click)="card.toggle()">Trở lại</a>
-              </div>
+                <!--/.Content-->
 
-              <!--Social Icons-->
+              </div>
+              <!--/.Front Side-->
 
-            </div>
-            <!--/.Back Side-->
-          </mdb-flipping-card>
+              <!--Back Side-->
+              <div class="face back tp-box_side tp-box_back">
+                <div class="d-flex justify-content-center flex-wrap pt-3">
+                  <p class="h5">Công việc thường nhật</p>
+                  <div *ngFor="let bt of p.basicTaskList; let idx1 = index" class="col-12">
+                    {{ idx1 + 1 }}. {{ bt.title }}
+                  </div>
+                  <p class="h5 pt-3">Công việc trong ngày</p>
+                  <div *ngFor="let t of p.taskList; let idx2 = index" class="col-12">
+                    {{ idx2 + 1 }}. {{ t.assignee }}: {{ t.startTime | date: 'HH:mm' }} ~
+                    {{ t.endTime | date: 'HH:mm' }}
+                  </div>
+                  <div *ngIf="p.taskList.length === 0">
+                    <span class="text-danger">Không có công việc trong ngày</span>
+                  </div>
+                  <button *ngIf="userAccount.roleId === 2" title="Thêm xóa sửa công việc" mdbBtn type="button"
+                    rounded="true" color="primary" class="waves-light list-btn" mdbWavesEffect
+                    (click)="openTaskBasicModal(p.basicTaskList, p.id)">
+                    <i class="mr-2 fa fa-list-ol"></i>Danh sách công việc
+                  </button>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-center">
+                  <a class="rotate-btn" p-card="card-1" (click)="card.toggle()">Trở lại</a>
+                </div>
+
+                <!--Social Icons-->
+
+              </div>
+              <!--/.Back Side-->
+            </mdb-flipping-card>
+          </div>
         </div>
+
+
+        <table class="table table-hover" *ngIf="currentViewType == 2">
+
+          <!--Table head-->
+          <thead>
+            <tr>
+              <th class="text-center">Hình ảnh</th>
+              <th (click)="sort('name')">
+                Tên
+                <mdb-icon icon="sort"></mdb-icon>
+              </th>
+              <th (click)="sort('numberOfReworks')">
+                Số lần phải dọn tối thiểu
+                <mdb-icon icon="sort"></mdb-icon>
+              </th>
+              <th>
+                Số công việc đã giao
+              </th>
+              <th (click)="sort('setToBeacon')">
+                Beacon
+                <mdb-icon icon="sort"></mdb-icon>
+              </th>
+              <th [ngStyle]="userAccount.roleId === 1 && {'width': '300px', 'max-width': '300px'}"
+                *ngIf="!showRemovedEmp">Thao tác</th>
+            </tr>
+          </thead>
+          <!--Table head-->
+
+          <!--Table body-->
+          <tbody>
+            <tr *ngFor="let p of placeList; let i of index">
+              <td scope="row" style="position: relative; width: 120px">
+                <img src="{{p.picture}}" alt="image" class="avatar">
+              </td>
+              <td>{{p.name}}</td>
+              <td>{{p.numberOfReworks}}</td>
+              <!-- <td>{{p.sex ? 'Nam' : 'Nữ'}}</td> -->
+              <td>{{p.taskList.length}}</td>
+              <td>{{p.setToBeacon ? 'Đã có beacon' : 'Chưa có beacon'}}</td>
+              <td class="d-flex flex-wrap justify-content-center" id="action-button">
+                <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect size="sm"
+                  (click)="openBeaconModal(p.id)" *ngIf="userAccount.roleId === 1 && (p.setToBeacon === false)">Thêm
+                  beacon</button>
+                <button mdbBtn type="button" color="primary" rounded="true" mdbWavesEffect size="sm"
+                  (click)="openUpdateModal(p)">
+                  Sửa
+                </button>
+                <button mdbBtn type="button" color="danger" rounded="true" mdbWavesEffect size="sm"
+                  (click)="checkRemovable(p.id)" *ngIf="userAccount.roleId === 1">
+                  Xóa
+                </button>
+                <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect size="sm"
+                  (click)="openCreateTaskModal(p.id, i)"
+                  *ngIf="userAccount.roleId === 2 && (p.taskList.length < p.numberOfReworks) && canCreateTask">Tạo
+                  công việc</button>
+              </td>
+            </tr>
+          </tbody>
+          <!--Table body-->
+        </table>
 
         <div *ngIf="placeResponse?.numberOfElements === 0" class="text-left col-11 mx-auto pb-3">
           <h5 class="text-danger">Không tìm thấy</h5>
@@ -172,6 +236,7 @@
           [totalPage]="placeResponse.totalPages" [currentPage]="placeResponse.number" (changePage)="changePage($event)">
         </app-pagination>
       </div>
+
     </div>
   </section>
 </div>
@@ -183,7 +248,7 @@
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
         <p class="heading">Tạo mới nơi làm việc</p>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
+        <button type="button" class="close" p-dismiss="modal" aria-label="Close" (click)="create.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -240,7 +305,7 @@
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
         <p class="heading">Thêm beacon vào nơi làm việc</p>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
+        <button type="button" class="close" p-dismiss="modal" aria-label="Close" (click)="create.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -267,7 +332,7 @@
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
         <p class="heading">Tạo công việc</p>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
+        <button type="button" class="close" p-dismiss="modal" aria-label="Close" (click)="create.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -352,7 +417,7 @@
       <!--Footer-->
       <div class="modal-footer flex-center">
         <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removePlace()">Đồng ý</a>
-        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect p-dismiss="modal"
           (click)="delete.hide()">Hủy</a>
       </div>
     </div>
@@ -386,7 +451,7 @@
       <div class="modal-footer flex-center">
         <a mdbBtn color="success" outline="true" class="waves-effect" mdbWavesEffect
           (click)="updateManagerForWorkplace()">Đồng ý</a>
-        <a type="button" mdbBtn color="success" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+        <a type="button" mdbBtn color="success" class="waves-effect" mdbWavesEffect p-dismiss="modal"
           (click)="addManager.hide()">Hủy</a>
       </div>
     </div>
@@ -420,7 +485,7 @@
       <div class="modal-footer flex-center">
         <a mdbBtn color="primary" outline="true" class="waves-effect" mdbWavesEffect
           (click)="checkRemovableManager(1)">Đồng ý</a>
-        <a type="button" mdbBtn color="primary" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+        <a type="button" mdbBtn color="primary" class="waves-effect" mdbWavesEffect p-dismiss="modal"
           (click)="editManager.hide()">Hủy</a>
       </div>
     </div>
@@ -449,7 +514,7 @@
       <div class="modal-footer flex-center">
         <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect
           (click)="checkRemovableManager(2)">Đồng ý</a>
-        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect p-dismiss="modal"
           (click)="deleteManager.hide()">Hủy</a>
       </div>
     </div>

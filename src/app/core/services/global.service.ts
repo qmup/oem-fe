@@ -15,6 +15,10 @@ export class GlobalService {
   userAccount: Employee;
   isRequesting: EventEmitter<boolean> = new EventEmitter<boolean>();
   isRequestingGoogleMap: EventEmitter<boolean> = new EventEmitter<boolean>();
+  viewTypes = [
+    { value: '1', label: 'Xem dưới dạng hình ảnh'},
+    { value: '2', label: 'Xem dưới dạng bảng'},
+  ];
   iconPrioritySelect = [
     {
       value: '1',
