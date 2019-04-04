@@ -58,6 +58,8 @@ export class TaskDetailComponent implements OnInit {
   url: any;
   dateFrom: string;
   dateTo: string;
+  changeTitle = false;
+  changeDescription = false;
   canUpdate = false;
   currentPage2 = 0;
   taskBasicManagerResponse: PaginationResponse;
@@ -245,15 +247,18 @@ export class TaskDetailComponent implements OnInit {
   }
 
   updateTitle() {
-    this.taskService.updateField(this.task.id, 'title', this.task.title)
-      .then(
-        (response) => {
-          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
-        },
-        (error) => {
-          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
-        }
-      );
+    if (this.changeTitle) {
+      this.taskService.updateField(this.task.id, 'title', this.task.title)
+        .then(
+          (response) => {
+            this.changeTitle = false;
+            this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+          },
+          (error) => {
+            this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+          }
+        );
+    }
   }
 
   changeStatus(e) {
@@ -288,15 +293,18 @@ export class TaskDetailComponent implements OnInit {
   }
 
   updateDescription() {
-    this.taskService.updateField(this.task.id, 'description', this.task.description)
-      .then(
-        (response) => {
-          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
-        },
-        (error) => {
-          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
-        }
-      );
+    if (this.changeDescription) {
+      this.taskService.updateField(this.task.id, 'description', this.task.description)
+        .then(
+          (response) => {
+            this.changeDescription = false;
+            this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+          },
+          (error) => {
+            this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+          }
+        );
+    }
   }
 
   removeTask() {

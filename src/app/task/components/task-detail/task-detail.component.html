@@ -59,7 +59,7 @@
             </p>
 
             <div class="md-form my-0" *ngIf="task.status === 0">
-              <input mdbInput type="text" class="form-control" [(ngModel)]="task.title" (blur)="updateTitle()">
+              <input mdbInput type="text" class="form-control" [ngModel]="task.title" (blur)="updateTitle()" (ngModelChange)="changeTitle = true">
               <label>Tên công việc</label>
             </div>
 
@@ -72,7 +72,7 @@
 
             <div class="md-form my-0" *ngIf="task.status === 0">
               <input mdbInput type="text" class="form-control" [(ngModel)]="task.description"
-                (blur)="updateDescription()">
+                (blur)="updateDescription()" (ngModelChange)="changeDescription = true">
               <label>Miêu tả công việc</label>
             </div>
 
@@ -402,10 +402,10 @@
             {{i+1}}. Lúc {{ el.dateAssign | date: 'HH:mm' }} ngày {{ el.dateAssign | date: 'dd-MM-yyyy' }}
           </h6>
 
-          <p>Giao cho {{el.assignee.name}}</p>
+          <p class="pl-3 m-0">Giao cho {{el.assignee.name}}</p>
 
-          <p *ngIf="!el.description">Không có miêu tả</p>
-          <p *ngIf="el.description">Nguyên nhân: {{ el.description }}</p>
+          <p class="pl-3" *ngIf="!el.description">Không có miêu tả</p>
+          <p class="pl-3" *ngIf="el.description">Nguyên nhân: {{ el.description }}</p>
 
         </div>
 
