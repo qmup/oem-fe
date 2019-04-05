@@ -1,5 +1,5 @@
 <div class="modal-header d-flex justify-content-center">
-  <p class="heading">Quản lý công việc</p>
+  <p class="heading">Công việc phải làm tại đây</p>
   <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalRef.hide()">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -13,7 +13,7 @@
     </div>
   </div>
   <div *ngIf="taskBasicResponse.numberOfElements === 0">
-    <span class="text-danger">Chưa có công việc tại nơi này!</span>
+    <span class="text-danger font-weight-normal">Chưa có công việc tại nơi này!</span>
   </div>
 </div>
 <div class="modal-footer d-flex justify-content-center">

@@ -59,10 +59,10 @@ export class EmployeeDetailComponent implements OnInit {
     this.userAccount = this.globalService.getUserAccount();
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
-      this.getEmployeeDetail(this.id);
     });
+    this.getEmployeeDetail(this.id);
     this.getTodayTaskByEmployee();
-    // this.getManager();
+    this.getManager();
   }
 
   getEmployeeDetail(id: number) {
@@ -70,7 +70,7 @@ export class EmployeeDetailComponent implements OnInit {
       .then(
         (response: Employee) => {
           this.employee = response;
-          this.getManager();
+          // this.getManager();
         }
       );
   }

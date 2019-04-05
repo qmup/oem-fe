@@ -15,9 +15,9 @@
     <label for="address">Miêu tả</label>
   </div>
 
-  <span *ngIf="userAccount.roleId === 2">Số lần vệ sinh trong ngày</span>
+  <span *ngIf="userAccount.roleId === 2">Số lần vệ sinh trong ngày: {{place.numberOfReworks}} lần</span>
   <div class="w-100 d-flex justify-content-center align-items-center my-3" *ngIf="userAccount.roleId === 2">
-    <mdb-range-input id="range" [min]="0" [value]="1" [step]="1" [max]="5" name="range"
+    <mdb-range-input id="range" [min]="1" [value]="1" [step]="1" [max]="5" name="range"
       [(ngModel)]="place.numberOfReworks" class="w-100"></mdb-range-input>
     <span class="ml-2">lần</span>
   </div>

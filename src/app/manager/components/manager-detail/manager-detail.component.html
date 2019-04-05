@@ -1,4 +1,4 @@
-<div class="container" id="manager-detail">
+<div class="container animated fadeIn" id="manager-detail">
   <div class="row">
     <div class="col-md-4 mb-4">
       <mdb-flipping-card #cards>
@@ -6,9 +6,7 @@
         <div class="face front tp-box_side tp-box_front">
 
           <!-- Image-->
-          <div class="card-up blue-gradient lighten-1">
-            <img src="assets/background-profile.jpg" class="img-fluid">
-          </div>
+          <div class="card-up gradient-background"></div>
           <!--Avatar-->
           <div class="avatar">
             <img src="{{ manager.picture }}" class="rounded-circle img-responsive">
@@ -17,8 +15,6 @@
           <div class="card-body">
             <h4>{{ manager.firstName }} {{ manager.lastName }}</h4>
             <p class="text-danger font-weight-normal">Chức vụ: {{manager.roleName}}</p>
-            <a class="rotate-btn font-weight-normal" data-card="card-1" (click)="cards.toggle()">Chi tiết </a>
-            <!--Triggering button-->
           </div>
         </div>
         <!--/.Front Side-->
@@ -44,7 +40,8 @@
             <span class="mb-3">Địa chỉ: {{ manager.address }}</span>
           </mdb-card-text>
 
-          <button mdbBtn type="button" color="primary" class="waves-light" mdbWavesEffect (click)="openUpdateEmployeeModal(manager)">Chỉnh sửa</button>
+          <button mdbBtn type="button" color="primary" class="waves-light" mdbWavesEffect
+            (click)="openUpdateEmployeeModal(manager)">Chỉnh sửa</button>
 
           <!--Triggering button-->
           <a class="rotate-btn font-weight-normal" data-card="card-1" (click)="cards.toggle()">Trở lại</a>
@@ -52,6 +49,38 @@
         </div>
         <!--/.Back Side-->
       </mdb-flipping-card>
+      <mdb-card class="mt-3" cascade="true">
+
+        <mdb-card-body cascade="true" class="text-left" *ngIf="userAccount.roleId === 1">
+          <mdb-card-title class="d-flex flex-wrap">
+            <div class="col-9 pr-0 my-auto">
+              <p class="h5">Hồ sơ nhân viên</p>
+            </div>
+            <div class="col-3 pr-0">
+              <a class="btn-floating btn-md btn-primary"><i class="fa fa-pencil"
+                  (click)="openUpdateEmployeeModal(manager)"></i></a>
+            </div>
+          </mdb-card-title>
+
+          <mdb-card-text style="text-align: left; font-size: 16px" class="profile-text pl-3 mb-0">
+            <i class="fa fa-venus-mars mr-2 mb-4"></i>
+            <span class="mb-3">Giới tính: {{ manager.sex ? 'Nam' : 'Nữ' }}</span>
+            <br>
+            <i class="fa fa-birthday-cake mr-2 mb-4"></i>
+            <span class="mb-3">Sinh nhật: {{ manager.birthDate | date: 'dd-MM-yyyy' }}</span>
+            <br>
+            <i class="fa fa-phone mr-2 mb-4"></i>
+            <span class="mb-3">Số điện thoại: {{ manager.phoneNumber }}</span>
+            <br>
+            <i class="fa fa-envelope-open-o mr-2 mb-4"></i>
+            <span class="mb-3">Email: {{ manager.email }}</span>
+            <br>
+            <i class="fa fa-map-marker mr-2 mb-4"></i>
+            <span class="mb-3">Địa chỉ: {{ manager.address }}</span>
+            <br>
+          </mdb-card-text>
+        </mdb-card-body>
+      </mdb-card>
     </div>
     <div class="col-md-7 mb-4 mx-auto">
       <!-- Card -->
@@ -74,10 +103,10 @@
           <div class="list-group">
             <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect
               *ngFor="let e of employeeListByManager">
-              <div class="avatar" [routerLink]="['/employee-detail', e.id]">
+              <div class="avatar col-2" [routerLink]="['/employee-detail', e.id]">
                 <img [src]="e.picture" alt="" class="rounded-circle img-responsive list-avatar">
               </div>
-              <div class="col-9" [routerLink]="['/employee-detail', e.id]">
+              <div class="col-8" [routerLink]="['/employee-detail', e.id]">
                 {{e.firstName}} {{e.lastName}}
                 <br>
                 <small>Địa chỉ: {{e.address}}</small>
@@ -116,10 +145,10 @@
           <div class="list-group">
             <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect
               *ngFor="let wp of workplaceListByManager">
-              <div class="avatar">
+              <div class="avatar col-2">
                 <img [src]="wp.picture" alt="" class="rounded-circle img-responsive list-avatar">
               </div>
-              <div class="col-9">
+              <div class="col-8">
                 {{wp.name}}
                 <br>
                 <small>{{wp.description}}</small>
@@ -159,8 +188,8 @@
       <div class="modal-body mx-3 row">
         <div class="col-12">
           <div class="md-form my-3">
-            <mdb-select [label]="'Nhân viên'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="employeeList"
-              (selected)="selectEmployee($event)"></mdb-select>
+            <mdb-select [label]="'Nhân viên'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true"
+              [options]="employeeList" (selected)="selectEmployee($event)"></mdb-select>
           </div>
         </div>
       </div>
@@ -186,16 +215,16 @@
       </div>
       <div class="modal-body mx-3 row">
         <div class="col-12 md-form my-3">
-          <mdb-select [label]="'Công ty'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="companyList"
-            (selected)="selectCompany($event)"></mdb-select>
+          <mdb-select [label]="'Công ty'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true"
+            [options]="companyList" (selected)="selectCompany($event)"></mdb-select>
         </div>
         <div class="col-12 md-form my-3" *ngIf="isSelectCompany">
           <mdb-select [label]="'Khu vực'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="zoneList"
             (selected)="selectZone($event)"></mdb-select>
         </div>
         <div class="col-12 md-form my-3" *ngIf="isSelectZone">
-          <mdb-select [label]="'Nơi làm việc'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="placeList"
-            (selected)="selectWorkplace($event)"></mdb-select>
+          <mdb-select [label]="'Nơi làm việc'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true"
+            [options]="placeList" (selected)="selectWorkplace($event)"></mdb-select>
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-center">

@@ -45,9 +45,9 @@ export class ManagerDetailComponent implements OnInit {
   isSelectCompany = false;
   isSelectZone = false;
   employeeList = [];
-  employeeListByManager: Employee[] = [];
+  employeeListByManager: Employee[];
   employeeResponseByManager: PaginationResponse;
-  workplaceListByManager: Place[] = [];
+  workplaceListByManager: Place[];
   workplaceResponseByManager: PaginationResponse = new PaginationResponse();
   companyList = [];
   zoneList = [];
@@ -85,15 +85,13 @@ export class ManagerDetailComponent implements OnInit {
       this.id = +params['id'];
       this.manageWorkplace.managerId = this.id;
     });
-    this.getWorkplaceByManager();
-  }
-
-  getOnInit() {
-    this.getEmployeeByManager();
     this.getInfo();
+    this.getWorkplaceByManager();
+    this.getEmployeeByManager();
     this.getEmployeeWithoutManager();
     this.getCompany();
   }
+
 
   getInfo() {
     this.employeeService.getById(this.id)
@@ -136,8 +134,6 @@ export class ManagerDetailComponent implements OnInit {
           this.workplaceListByManager = response.listOfWorkplace.content;
           this.workplaceResponseByManager = response.listOfWorkplace;
         }
-      ).then(
-        () => this.getOnInit()
       );
   }
 

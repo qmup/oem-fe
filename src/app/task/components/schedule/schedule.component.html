@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-xl-6 col-9 mr-0">
           <div class="view view-cascade gradient-card-header light-blue lighten-1">
-            <h2 class="h2-responsive mb-0">Quản lý công việc</h2>
+            <h2 class="h2-responsive mb-0">Quản lý công việc thường nhật</h2>
           </div>
         </div>
         <div class="col-xl-6 col-2 mr-0 text-right">
@@ -90,6 +90,10 @@
                 </tr>
               </tbody>
             </table>
+            <app-pagination *ngIf="scheduleResponse?.totalPages > 1" [pageSize]="scheduleResponse.size"
+                [totalPage]="scheduleResponse.totalPages" [currentPage]="scheduleResponse.number"
+                (changePage)="changePage1($event)">
+              </app-pagination>
           </div>
         </div>
       </div>

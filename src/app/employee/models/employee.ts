@@ -11,6 +11,7 @@ export class Employee {
   id: number;
   lastName: string;
   managerId: number;
+  managerName: string;
   password: string;
   phoneMacAddress: string;
   phoneNumber: string;
@@ -36,6 +37,7 @@ export class Employee {
     this.id = 0;
     this.lastName = '';
     this.managerId = 0;
+    this.managerName = '';
     this.password = '';
     this.phoneMacAddress = '';
     this.phoneNumber = '';

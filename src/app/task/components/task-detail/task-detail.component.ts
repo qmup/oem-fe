@@ -45,7 +45,6 @@ export class TaskDetailComponent implements OnInit {
   startTime: Date;
   dateRange = [];
   employeeList = [];
-  taskUM: TaskModel = new TaskModel();
   assignTask: AssignTask = new AssignTask();
   manageWorkplace: ManageWorkplace = new ManageWorkplace();
   workplaceListByManager = [];
@@ -343,26 +342,33 @@ export class TaskDetailComponent implements OnInit {
   }
 
   changeStartTime(e: any) {
-    // const from: Date = e.value[0];
-    // const to: Date = e.value[1];
-    // const duration = to.getMilliseconds() - from.getMilliseconds();
-    // const taskUM: TaskModel = new TaskModel();
-    // taskUM.attendanceStatus = this.task.attendanceStatus;
-    // taskUM.basic = false;
-    // taskUM.checkInTime = this.task.checkInTime;
-    // taskUM.dateCreate = this.task.dateCreate;
-    // taskUM.description = this.task.description;
-    // taskUM.duration = duration;
-    // taskUM.id = this.task.id;
-    // taskUM.endTime = to.toISOString();
-    // taskUM.picture = this.task.picture;
-    // taskUM.priority = this.task.priority;
-    // taskUM.scheduleId = this.task.scheduleId;
-    // taskUM.startTime = from.toISOString();
-    // taskUM.status = this.task.status;
-    // taskUM.title = this.task.title;
-    // taskUM.taskBasics = this.task.checkList;
-    // this.taskService.update()
+    const from: Date = e.value[0];
+    const to: Date = e.value[1];
+    const duration = to.getMilliseconds() - from.getMilliseconds();
+    const taskUM: TaskModel = new TaskModel();
+    taskUM.attendanceStatus = this.task.attendanceStatus;
+    taskUM.basic = false;
+    taskUM.checkInTime = this.task.checkInTime;
+    taskUM.dateCreate = this.task.dateCreate;
+    taskUM.description = this.task.description;
+    taskUM.duration = to.getTime() - from.getTime();
+    taskUM.id = this.task.id;
+    taskUM.endTime = to.toISOString();
+    taskUM.picture = this.task.picture;
+    taskUM.priority = this.task.priority;
+    taskUM.scheduleId = this.task.scheduleId;
+    taskUM.startTime = from.toISOString();
+    taskUM.status = this.task.status;
+    taskUM.title = this.task.title;
+    this.taskService.update(taskUM)
+      .then(
+        () => {
+          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
   }
 
   openTaskBasicModal(workplaceId: number, task: TaskDetail) {

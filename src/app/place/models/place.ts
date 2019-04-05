@@ -16,7 +16,7 @@ export class PlaceModel {
     this.description = '';
     this.id = 0;
     this.name = '';
-    this.numberOfReworks = 0;
+    this.numberOfReworks = 1;
     this.taskList = new Array<TaskList>();
     this.picture = '';
     this.zoneId = 0;
@@ -86,7 +86,7 @@ export class Place {
     this.zone = new ZoneDTO();
     this.company = new CompanyDTO();
     this.status = 1;
-    this.numberOfReworks = 0;
+    this.numberOfReworks = 1;
     this.basicTaskList = new Array<TaskBasic>();
     this.managerId = 0;
     this.managerName = '';

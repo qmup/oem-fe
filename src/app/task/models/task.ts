@@ -140,6 +140,10 @@ export class TaskResponse {
 
 export class TaskDetail {
   id: number;
+  dateCreate: string;
+  priority: number;
+  rating: number;
+  scheduleId: number;
   assignee: Shared;
   title: string;
   workplace: Shared;
@@ -151,7 +155,6 @@ export class TaskDetail {
   picture: string;
   status: number;
   description: string;
-  rating: number;
   checkList: TaskBasic[];
 
   constructor() {

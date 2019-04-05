@@ -9,8 +9,10 @@
           </div>
         </div>
         <div class="col-xl-7 col-lg-12 m-auto text-right">
-          <a class="remove-employee pr-5" *ngIf="!showRemovedEmp && userAccount.roleId === 1" (click)="getRemovedEmployee()">Danh sách nhân viên đã nghỉ việc</a>
-          <a class="remove-employee pr-5" *ngIf="showRemovedEmp && userAccount.roleId === 1" (click)="getEmployeeByAdmin()">Trở lại</a>
+          <a class="remove-employee pr-5" *ngIf="!showRemovedEmp && userAccount.roleId === 1"
+            (click)="getRemovedEmployee()">Danh sách nhân viên đã nghỉ việc</a>
+          <a class="remove-employee pr-5" *ngIf="showRemovedEmp && userAccount.roleId === 1"
+            (click)="getEmployeeByAdmin()">Trở lại</a>
         </div>
         <div class="card-body card-body-cascade pb-0">
           <div class="d-flex flex-wrap card-body pt-3">
@@ -57,6 +59,10 @@
                   Chức vụ
                   <mdb-icon icon="sort"></mdb-icon>
                 </th>
+                <th *ngIf="userAccount.roleId === 1" (click)="sort('roleId')" style="width: 200px; max-width: 200px">
+                  Người quản lý
+                  <mdb-icon icon="sort"></mdb-icon>
+                </th>
                 <th (click)="sort('phoneNumber')" style="width: 140px; max-width: 140px">
                   Số điện thoại
                   <mdb-icon icon="sort"></mdb-icon>
@@ -66,7 +72,7 @@
                   <mdb-icon icon="sort"></mdb-icon>
                 </th>
                 <th *ngIf="userAccount.roleId === 2">Trạng thái</th>
-                <th [ngStyle]="userAccount.roleId === 1 && {'width': '300px', 'max-width': '300px'}" *ngIf="!showRemovedEmp">Thao tác</th>
+                <th *ngIf="!showRemovedEmp">Thao tác</th>
               </tr>
             </thead>
             <!--Table head-->
@@ -81,7 +87,7 @@
                 <td>{{data.firstName}}</td>
                 <td>{{data.lastName}}</td>
                 <td [ngClass]="{'text-danger' : data.roleId === 2}">{{data.roleName}}</td>
-                <!-- <td>{{data.sex ? 'Nam' : 'Nữ'}}</td> -->
+                <td *ngIf="userAccount.roleId === 1" class="text-danger">{{data.managerName}}</td>
                 <td>{{data.phoneNumber}}</td>
                 <td>{{data.address}}</td>
                 <td *ngIf="userAccount.roleId === 2" class="text-nowrap">
@@ -102,10 +108,10 @@
                     class="waves-light" size="sm" mdbWavesEffect [routerLink]="['/manager-detail', data.id]">
                     <i class="fa fa-eye"></i>
                   </button>
-                  <button *ngIf="userAccount.roleId === 1" title="Cập nhật" mdbBtn type="button" rounded="true"
+                  <!-- <button *ngIf="userAccount.roleId === 1" title="Cập nhật" mdbBtn type="button" rounded="true"
                     color="primary" class="waves-light" size="sm" mdbWavesEffect (click)="openUpdateModal(data)">
                     <i class="fa fa-pencil"></i>
-                  </button>
+                  </button> -->
                   <button *ngIf="userAccount.roleId === 1" title="Xóa" mdbBtn type="button" rounded="true"
                     color="danger" class="waves-light" size="sm" mdbWavesEffect (click)="openDeleteModal(data.id)">
                     <i class="fa fa-ban"></i>

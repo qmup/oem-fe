@@ -1,0 +1,38 @@
+<div class="modal-header d-flex justify-content-center">
+  <p class="heading">Cập nhật công việc phải làm</p>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body mx-3 d-flex justify-content-center flex-wrap pt-3">
+  <div *ngIf="workplace?.basicTaskList?.length !== 0" class="col-12 px-0">
+    <p class="h5 pt-3">Công việc trong ngày</p>
+    <div *ngFor="let t of workplace.taskList; let idx2 = index" class="col-12">
+      {{ idx2 + 1 }}. {{ t.assignee }}: {{ t.startTime | date: 'HH:mm' }} ~
+      {{ t.endTime | date: 'HH:mm' }}
+    </div>
+    <div *ngIf="workplace.taskList.length === 0">
+      <span class="text-danger col-12">Không có công việc trong ngày</span>
+    </div>
+  </div>
+  <div class="col-12 px-0 pt-2 d-flex flex-wrap">
+    <p class="h5">Danh sách công việc phải làm</p>
+    <div *ngFor="let item of taskBasicList; let i of index" class="col-6">
+      <div>
+        <mdb-checkbox [checked]="item.checked" name="item-{{i}}"
+        #checkbox
+        (change)="changeCheckbox(item.id, $event)">{{item.title}}</mdb-checkbox>
+      </div>
+    </div>
+    <div *ngIf="workplace?.basicTaskList?.length === 0">
+      <span class="text-danger font-weight-normal">Chưa thêm công việc cho nơi này</span>
+    </div>
+  </div>
+</div>
+<div class="modal-footer d-flex justify-content-center">
+  <button *ngIf="userAccount.roleId === 2" title="Thêm xóa sửa công việc cơ bản" mdbBtn type="button" rounded="true"
+    color="primary" class="waves-light list-btn" mdbWavesEffect
+    (click)="updateTaskBasic()">
+    Cập nhật<i class="ml-2 fa fa-check"></i>
+  </button>
+</div>

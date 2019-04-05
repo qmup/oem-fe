@@ -7,9 +7,10 @@ import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
 import { ProfileComponent } from './components/profile/profile.component';
 import { FormsModule } from '@angular/forms';
 import { UserInfoComponent } from './components/user-info/user-info.component';
+import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 
 @NgModule({
-  declarations: [LoginPageComponent, ProfileComponent, UserInfoComponent],
+  declarations: [LoginPageComponent, ProfileComponent, UserInfoComponent, ProfilePageComponent],
   imports: [
     CommonModule,
     AuthorizeRoutingModule,

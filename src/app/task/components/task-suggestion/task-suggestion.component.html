@@ -1,32 +1,40 @@
 <div class="modal-header d-flex justify-content-center">
-  <p class="heading">Gợi ý nhân viên phù hợp</p>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalRef.hide()">
-    <span aria-hidden="true">&times;</span>
+  <button type="button" class="close" aria-label="Close" (click)="cancel()">
+    <span aria-hidden="true"><i class="fa fa-arrow-left ml-2"></i></span>
   </button>
+  <p class="heading">Gợi ý nhân viên phù hợp</p>
 </div>
 <div class="modal-body mx-3 row">
 
-  <div class="col-3">
+  <div class="col-4">
     <owl-form-field class="w-100">
       <input owlInput [min]="minDate" [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker"
         placeholder="Thời gian bắt đầu" [(ngModel)]="startTime" (dateTimeChange)="changeStartTime()">
       <owl-date-time #datepicker></owl-date-time>
     </owl-form-field>
     <span *ngIf="startTime">Thời gian hoàn thành</span>
-    <div *ngIf="startTime" class="w-100 d-flex justify-content-center align-items-center my-3">
-      <mdb-range-input id="range" [min]="10" [step]="10" [max]="300" name="range"
-        (rangeValueChange)="changeRange($event)" [(ngModel)]="duration" class="w-100"></mdb-range-input>
-      <span class="ml-2">phút</span>
+    <div class="d-flex justify-content-center align-items-center my-3 w-100">
+      <div *ngIf="startTime" class="w-75">
+        <mdb-range-input id="range" [min]="10" [step]="10" [max]="300" name="range"
+          (rangeValueChange)="changeRange($event)" [(ngModel)]="duration" class="w-100"></mdb-range-input>
+        <span class="ml-2">phút</span>
+      </div>
+      <div class="w-25 text-right">
+        <a *ngIf="startTime && duration" class="btn-floating btn-md btn-primary" (click)="suggest()"><i
+            class="fa fa-lightbulb-o"></i></a>
+      </div>
     </div>
   </div>
   <div class="col-4">
-    <h6 class="font-weight-bold">Công việc sắp tạo tại <span class="text-danger">{{company.label}}</span>
+    <h6 class="font-weight-bold">Công việc sắp tạo tại <span
+        class="text-danger font-weight-bold">{{company.label}}</span>
     </h6>
     <div class="col-12 font-weight-normal" style="font-size: 17px">
       <span class="pt-3">Ngày: {{startTime | date: 'dd-MM-yyyy'}}</span>
       <br>
-      <span class="pt-3">Thời gian: {{startTime | date: 'HH:mm'}} <span *ngIf="startTime">~</span> {{endTime | date: 'HH:mm'}}</span>
-    </div>  
+      <span class="pt-3">Thời gian: {{startTime | date: 'HH:mm'}} <span *ngIf="startTime">~</span>
+        {{endTime | date: 'HH:mm'}}</span>
+    </div>
   </div>
   <div class="col-4">
     <h6 class="font-weight-bold">Các công việc đã giao trong ngày {{(startTime || minDate) | date: 'dd-MM-yyyy'}}</h6>
@@ -36,9 +44,6 @@
         {{ t.endTime | date: 'HH:mm' }}
       </div>
     </div>
-  </div>
-  <div class="col" *ngIf="startTime && duration">
-    <a class="btn-floating btn-md btn-primary" (click)="suggest()"><i class="fa fa-lightbulb-o"></i></a>
   </div>
   <div class="col-12 text-danger text-right font-weight-normal" *ngIf="taskSuggestion.length > 0">
     * Thời gian giữa mỗi công việc trừ hao 10 phút
@@ -60,8 +65,7 @@
       <tbody>
         <tr *ngFor="let item of taskSuggestion; let i = index" [ngClass]="{'border-danger': item.typeCase === 0}">
           <td class="text-center">
-            <img [src]="item.employeePicture"
-                class="rounded-circle img-responsive list-avatar mr-2">
+            <img [src]="item.employeePicture" class="rounded-circle img-responsive list-avatar mr-2">
             <br>
             <span class="font-weight-bold">{{ item.employeeName }}</span>
           </td>
@@ -96,14 +100,19 @@
             <p *ngIf="item.typeCase !== 0">
               <span class="font-weight-bold">Điểm xuất phát: {{item.moveFromHome ? 'Nhà' : item?.cpaName}}</span>
               <br>
-              Quãng đường dự kiến <br><span class="font-weight-normal text-danger">{{ item?.dataTravelFromCpAtoCpc?.distance / 1000 | number: '1.0-1' }} Km</span>
+              Quãng đường dự kiến <br><span
+                class="font-weight-normal text-danger">{{ item?.dataTravelFromCpAtoCpc?.distance / 1000 | number: '1.0-1' }}
+                Km</span>
               <br>
-              Thời gian dự kiến <br><span class="font-weight-normal text-danger">{{ item?.dataTravelFromCpAtoCpc?.duration / 60000 | number: '1.0-0' }} phút</span>
+              Thời gian dự kiến <br><span
+                class="font-weight-normal text-danger">{{ item?.dataTravelFromCpAtoCpc?.duration / 60000 | number: '1.0-0' }}
+                phút</span>
               <br>
               <span *ngIf="!item.caseCpaToCpcAvailable" class="text-danger font-weight-normal">
                 Thời gian không phù hợp
                 <br>
-                ({{item?.dataTravelFromCpAtoCpc?.duration/60000 | number: '1.0-0'}} + 10) phút > {{item?.timeAllowedCpaToCpc/60000 | number: '1.0-0'}} phút
+                ({{item?.dataTravelFromCpAtoCpc?.duration/60000 | number: '1.0-0'}} + 10) phút >
+                {{item?.timeAllowedCpaToCpc/60000 | number: '1.0-0'}} phút
               </span>
             </p>
           </td>
@@ -129,21 +138,27 @@
               <span class="font-weight-bold">Điểm đến: {{ item.cpbName ? item?.cpbName : 'Nhà' }}</span>
               <br>
               <div *ngIf="!item.cpbName">
-                Quãng đường dự kiến <br><span class="font-weight-normal text-danger">{{ item?.dataTravelFromCpCtoCpB?.distance / 1000 | number: '1.0-1' }} Km</span>
+                Quãng đường dự kiến <br><span
+                  class="font-weight-normal text-danger">{{ item?.dataTravelFromCpCtoCpB?.distance / 1000 | number: '1.0-1' }}
+                  Km</span>
                 <br>
-                Thời gian dự kiến <br><span class="font-weight-normal text-danger">{{ item?.dataTravelFromCpCtoCpB?.duration / 60000 | number: '1.0-0' }} phút</span>
+                Thời gian dự kiến <br><span
+                  class="font-weight-normal text-danger">{{ item?.dataTravelFromCpCtoCpB?.duration / 60000 | number: '1.0-0' }}
+                  phút</span>
                 <br>
                 <span *ngIf="!item.caseCpcToCpbAvailable" class="text-danger font-weight-normal">
-                  Thời gian không phù hợp 
+                  Thời gian không phù hợp
                   <br>
-                  ({{item?.dataTravelFromCpCtoCpB?.duration/60000 | number: '1.0-0'}} + 10) phút > {{item?.timeAllowedCpcToCpB/60000 | number: '1.0-0'}} phút
+                  ({{item?.dataTravelFromCpCtoCpB?.duration/60000 | number: '1.0-0'}} + 10) phút >
+                  {{item?.timeAllowedCpcToCpB/60000 | number: '1.0-0'}} phút
                 </span>
               </div>
             </div>
           </td>
           <td>
             <div *ngIf="item.typeCase !== 0">
-              <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect (click)="selectEmployee(item.employeeId)">
+              <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect
+                (click)="selectEmployee(item.employeeId)">
                 <i class="fa fa-check"></i>
               </button>
             </div>
@@ -156,8 +171,8 @@
 
 </div>
 <div class="modal-footer d-flex justify-content-center">
-  <button type="button" mdbBtn color="light" class="waves-light" aria-label="Close" (click)="cancel()"
-    mdbWavesEffect>
-    <i class="fa fa-undo"></i>
+  <button type="button" mdbBtn rounded="true" color="primary" outline="true" class="waves-light" aria-label="Close"
+    (click)="cancel()" mdbWavesEffect>
+    <i style="color: #4285f4 !important" class="fa fa-arrow-left"></i>
   </button>
 </div>

@@ -6,9 +6,7 @@
         <div class="face front tp-box_side tp-box_front">
 
           <!-- Image-->
-          <div class="card-up">
-            <img src="assets/background-profile.jpg" class="img-fluid">
-          </div>
+          <div class="card-up gradient-background"></div>
           <!--Avatar-->
           <div class="avatar">
             <img src="{{ employee.picture }}" class="rounded-circle img-responsive">
@@ -134,7 +132,7 @@
 
           <mdb-card-text style="text-align: left; font-size: 16px" class="profile-text pl-5 mb-0">
             <i class="fa fa-venus-mars mr-2 mb-4"></i>
-            <span class="mb-3">Giới tính: {{ !employee.sex ? 'Nam' : 'Nữ' }}</span>
+            <span class="mb-3">Giới tính: {{ employee.sex ? 'Nam' : 'Nữ' }}</span>
             <br>
             <i class="fa fa-birthday-cake mr-2 mb-4"></i>
             <span class="mb-3">Sinh nhật: {{ employee.birthDate | date: 'dd-MM-yyyy' }}</span>

@@ -115,10 +115,11 @@ export class EmployeeUpdateComponent implements OnInit {
       .then(
         (response) => {
           response.shift();
+          response.splice(2, 1);
           this.roleList = response.map((role) => {
             return {
               value: role.id,
-              label: (role.id === 2) ? 'Quản lý' : 'Nhân viên',
+              label: role.roleName,
             };
           });
         }

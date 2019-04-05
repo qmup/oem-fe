@@ -161,7 +161,6 @@ export class LaborerComponent implements OnInit {
               label: role.roleName,
             };
           });
-          console.log(this.roleList);
         }
       );
   }

@@ -32,6 +32,7 @@ import {
 import {
   Router
 } from '@angular/router';
+import { tick } from '@angular/core/testing';
 
 @Component({
   selector: 'app-notification',
@@ -58,7 +59,7 @@ import {
               class="rounded-circle img-responsive list-avatar mr-2">
             </div>
             <div class="col-10">
-              <span class="font-weight-bold mb-0">{{noti.sender}}</span> đã {{noti.title | lowercase}} với ID {{noti.taskId}}
+              <span class="font-weight-bold mb-0">{{noti.sender}}</span> đã {{noti.title | lowercase}} với ID
               <br>
               <small>{{noti.timeStatus}}</small>
             </div>
@@ -184,6 +185,9 @@ export class NotificationComponent implements OnInit {
   }
 
   toggleShowDiv() {
+    if (this.animationState === 'out') {
+      this.getNotifications();
+    }
     this.animationState = this.animationState === 'out' ? 'in' : 'out';
   }
 

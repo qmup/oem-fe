@@ -16,8 +16,8 @@ export class GlobalService {
   isRequesting: EventEmitter<boolean> = new EventEmitter<boolean>();
   isRequestingGoogleMap: EventEmitter<boolean> = new EventEmitter<boolean>();
   viewTypes = [
-    { value: '1', label: 'Xem dưới dạng hình ảnh'},
-    { value: '2', label: 'Xem dưới dạng bảng'},
+    { value: 1, label: 'Xem dạng lưới'},
+    { value: 2, label: 'Xem dạng danh sách'},
   ];
   iconPrioritySelect = [
     {

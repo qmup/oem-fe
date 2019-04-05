@@ -16,6 +16,7 @@ import { EmployeeService } from 'src/app/employee/services/employee.service';
 import { Employee } from 'src/app/employee/models/employee';
 import { TaskBasicService } from 'src/app/task/service/task-basic.service';
 import { AssignTask, PaginationResponse } from 'src/app/core/models/shared';
+import { PlaceDetailComponent } from '../place-detail/place-detail.component';
 
 const WORKPLACE_REMOVED_STATUS = 0;
 const WORKPLACE_OPEN_STATUS = 1;
@@ -41,6 +42,7 @@ export class PlaceComponent implements OnInit {
   @ViewChild('createTaskModal') createTaskModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
   @ViewChild('beacon') beaconModal: ModalDirective;
+  @ViewChild('removeBeacon') removeBeaconModal: ModalDirective;
   @ViewChild('addManager') addManagerModal: ModalDirective;
   @ViewChild('editManager') editManagerModal: ModalDirective;
   @ViewChild('deleteManager') deleteManagerModal: ModalDirective;
@@ -81,11 +83,10 @@ export class PlaceComponent implements OnInit {
   viewOptions = [];
   viewTypes = [];
   currentViewType = 1;
+  currentViewOption = 2;
   currentManagerId = 0;
   _managerList = [];
-  fieldSort = '';
-  sortValue = '';
-  sortBoolean = false;
+  deletingBeaconId: any;
 
   constructor(
     public location: Location,
@@ -115,7 +116,16 @@ export class PlaceComponent implements OnInit {
   }
 
   getPlace() {
-    this.userAccount.roleId === 1 ? this.getWorkplaceByAdmin() : this.getWorkplaceByManager();
+    // this.userAccount.roleId === 1 ? this.getWorkplaceByAdmin() : this.getWorkplaceByManager();
+    if (this.userAccount.roleId === 1) {
+      this.getWorkplaceByAdmin();
+    } else {
+      if (this.currentViewOption === 1) {
+        this.getAllWorkplaceByManager();
+      } else {
+        this.getWorkplaceByManager();
+      }
+    }
   }
 
   getWorkplaceByAdmin() {
@@ -171,8 +181,8 @@ export class PlaceComponent implements OnInit {
               );
           }
           this.viewOptions = [
-            { value: 1, label: 'Tất cả'},
             { value: 2, label: `Tại ${response.zone.name}`},
+            { value: 1, label: 'Tất cả'},
           ];
         }
       );
@@ -184,6 +194,13 @@ export class PlaceComponent implements OnInit {
     const y = this.dateSearch.getFullYear();
     const from = new Date(y, m, d, 0, 0, 0, 0).toISOString();
     const to = new Date(y, m, d, 23, 59, 0, 0).toISOString();
+    const now = new Date().getTime() - 24 * 60 * 60 * 1000;
+    const taskTime = this.dateSearch.getTime();
+    if (taskTime < now) {
+      this.canCreateTask = false;
+    } else {
+      this.canCreateTask = true;
+    }
     this.showAll = true;
     this.placeService.getAvailableByDate(
       this.userAccount.id, '', `${from};${to}`, '', 'id', 0, 99)
@@ -191,8 +208,6 @@ export class PlaceComponent implements OnInit {
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content;
           this.placeResponse = response.listOfWorkplace;
-          this.zoneName = response.zone.name;
-          this.companyName = response.company.name;
           for (let index = 0; index < this.placeList.length; index++) {
             const element = this.placeList[index];
             this.placeService.getTaskBasic(element.id)
@@ -207,22 +222,12 @@ export class PlaceComponent implements OnInit {
   }
 
   changeViewOption(e: any) {
+    this.currentViewOption = e.value;
     e.value === 1 ? this.getAllWorkplaceByManager() : this.getWorkplaceByManager();
   }
 
   changeViewType(e: any) {
     this.currentViewType = e.value;
-  }
-
-  sort(field: string) {
-    this.sortBoolean = ! this.sortBoolean;
-    if (this.sortBoolean) {
-      this.sortValue = 'desc';
-    } else {
-      this.sortValue = 'asc';
-    }
-    this.fieldSort = field;
-    this.getPlace();
   }
 
   getManager() {
@@ -460,6 +465,18 @@ export class PlaceComponent implements OnInit {
       );
   }
 
+  openDetailModal(workplace: Place) {
+    const modalOptions: ModalOptions = {
+      animated: true,
+      class: 'modal-md modal-notify modal-primary',
+      initialState: { workplace }
+    };
+    this.modalRef = this.modalService.show(PlaceDetailComponent, modalOptions);
+    this.modalRef.content.refresh.subscribe(
+      () => this.getPlace()
+    );
+  }
+
   openManagerModal(id: number, type: number, managerId: number) {
     this.currentManagerId = managerId;
     this.selectingManagerId = 0;
@@ -472,6 +489,20 @@ export class PlaceComponent implements OnInit {
     } else {
       this.deleteManagerModal.show();
     }
+  }
+
+  openRemoveBeaconModal(e: any) {
+    this.deletingBeaconId = e.value;
+    this.removeBeaconModal.show();
+  }
+
+  removeBeaconOfWorkplace() {
+    // this.beaconService.updateField(this.deletingBeaconId, 'workplaceId', 0)
+    //   .then(
+    //     (response) => {
+          
+    //     }
+    //   );
   }
 
   hideManagerModal() {

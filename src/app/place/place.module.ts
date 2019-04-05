@@ -19,6 +19,7 @@ import { PlaceRemoveComponent } from './components/place-remove/place-remove.com
 import { CoreModule } from '../core/core.module';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
 import { OwlInputModule, OwlFormFieldModule } from 'owl-ng';
+import { PlaceDetailComponent } from './components/place-detail/place-detail.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { OwlInputModule, OwlFormFieldModule } from 'owl-ng';
     CompanyPagesComponent,
     ZonePagesComponent,
     PlaceTaskBasicComponent,
-    PlaceRemoveComponent
+    PlaceRemoveComponent,
+    PlaceDetailComponent
   ],
   imports: [
     CommonModule,
@@ -54,7 +56,8 @@ import { OwlInputModule, OwlFormFieldModule } from 'owl-ng';
     CompanyUpdateComponent,
     ZoneUpdateComponent,
     PlaceTaskBasicComponent,
-    PlaceRemoveComponent
+    PlaceRemoveComponent,
+    PlaceDetailComponent,
   ],
   providers: [{
     provide: OWL_DATE_TIME_LOCALE, useValue: 'in'

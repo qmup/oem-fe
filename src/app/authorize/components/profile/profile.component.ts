@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { GlobalService } from 'src/app/core/services/global.service';
+import { Employee } from 'src/app/employee/models/employee';
 
 @Component({
   selector: 'app-profile',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor() { }
+  info: Employee;
+
+  constructor(
+    private globalService: GlobalService
+  ) { }
 
   ngOnInit() {
+    this.info = this.globalService.getUserAccount();
   }
 
 }

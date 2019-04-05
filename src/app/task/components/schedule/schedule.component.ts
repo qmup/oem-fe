@@ -286,20 +286,23 @@ export class ScheduleComponent implements OnInit {
       );
   }
 
-  removeSchedule(id: number) {
+  changePage1(event) {
+    this.currentPage = event - 1;
+  }
+
+  removeSchedule() {
     const options = { positionClass: 'toast-bottom-right' };
-  //   this.scheduleService.remove(this.id)
-  //     .then(
-  //       () => {
-  //         this.toastService.success('Xóa công việc thành công', '', options);
-  //         this.deleteModal.hide();
-  //         this.scheduleList = [];
-  //         this.getSchedule();
-  //       },
-  //       () => {
-  //         this.toastService.error('Đã có lỗi xảy ra' , '', options);
-  //       }
-  //     );
-  // }
+      this.scheduleService.updateField(this.id, 'status', 2)
+      .then(
+        () => {
+          this.toastService.success('Xóa công việc thành công', '', options);
+          this.deleteModal.hide();
+          this.scheduleList = [];
+          this.getSchedule();
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', options);
+        }
+      );
   }
 }
