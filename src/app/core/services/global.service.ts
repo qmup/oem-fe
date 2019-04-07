@@ -2,7 +2,6 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { AssignTask, NotificationSendingModel } from '../models/shared';
-import { AuthGuardService } from './auth-guard.service';
 import { Employee } from 'src/app/employee/models/employee';
 import { ToastService } from 'ng-uikit-pro-standard';
 
@@ -47,10 +46,6 @@ export class GlobalService {
     },
   ];
   iconStatusSelect = [
-    // {
-    //   value: 1,
-    //   label: 'Đang thực hiện'
-    // },
     {
       value: 2,
       label: 'Hoàn thành'
@@ -76,6 +71,11 @@ export class GlobalService {
   workplaceStatus = [
     { value: 1, label: 'Mở'},
     { value: 2, label: 'Đóng'},
+    { value: 0, label: 'Đã xóa'},
+  ];
+  employeeStatus = [
+    { value: 1, label: 'Đang làm việc'},
+    { value: 2, label: 'Tạm nghỉ việc'},
     { value: 0, label: 'Đã xóa'},
   ];
   typeList = [
@@ -107,9 +107,8 @@ export class GlobalService {
   constructor(
     private httpClient: HttpClient,
     private toastService: ToastService,
-    private authGuardService: AuthGuardService
   ) {
-    const token = this.authGuardService.getToken();
+    const token = JSON.parse(localStorage.getItem(`${environment.token}`));
     this.isLogin = token ? true : false;
   }
 

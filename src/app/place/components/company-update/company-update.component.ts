@@ -6,6 +6,8 @@ import { BsModalRef } from 'ngx-bootstrap';
 import { GlobalService } from 'src/app/core/services/global.service';
 import { CompanyService } from '../../services/company.service';
 import { AgmMap, MapsAPILoader } from '@agm/core';
+import { Coordinate } from 'src/app/core/models/coordinate';
+import { CoordinateService } from 'src/app/core/services/coordinate.service';
 
 declare var google: any;
 
@@ -51,6 +53,7 @@ export class CompanyUpdateComponent implements OnInit {
   @ViewChild(AgmMap) map: AgmMap;
 
   company: Company;
+  coordinate: Coordinate = new Coordinate();
   companyUM: Company = new Company();
   optionsSelect = [];
   refresh: EventEmitter<any> = new EventEmitter<any>();
@@ -68,6 +71,7 @@ export class CompanyUpdateComponent implements OnInit {
     private toastService: ToastService,
     private globalService: GlobalService,
     private companyService: CompanyService,
+    private coordinateSerivce: CoordinateService,
     private mapsApiLoader: MapsAPILoader
     ) {
       this.mapsApiLoader = mapsApiLoader;
@@ -91,23 +95,30 @@ export class CompanyUpdateComponent implements OnInit {
     this.companyUM.id = this.company.id;
     this.companyUM.phone = this.company.phone;
     this.companyUM.address = this.location.address_level_1;
-    this.companyUM.latitude = this.location.lat;
-    this.companyUM.longitude = this.location.lng;
     this.companyUM.name = this.company.name;
     this.companyUM.picture = this.company.picture;
+    this.companyUM.coordinateId = this.company.coordinateId;
+    this.coordinate.id = this.company.coordinateId;
+    this.coordinate.latitude = this.company.latitude;
+    this.coordinate.longitude = this.company.longitude;
     this.filesToUpload ? this.updateWithImage() : this.updateWithoutImage();
   }
 
   updateWithoutImage() {
-    this.companyService.update(this.companyUM)
+    this.coordinateSerivce.update(this.coordinate)
       .then(
         () => {
-          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
-          this.modalRef.hide();
-          this.refresh.emit();
-        },
-        () => {
-          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+          this.companyService.update(this.companyUM)
+            .then(
+              () => {
+                this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
+                this.modalRef.hide();
+                this.refresh.emit();
+              },
+              () => {
+                this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+              }
+            );
         }
       );
   }
@@ -124,15 +135,20 @@ export class CompanyUpdateComponent implements OnInit {
       .then(
         (response) => {
           this.companyUM.picture = response;
-          this.companyService.update(this.companyUM)
+          this.coordinateSerivce.update(this.coordinate)
             .then(
               () => {
-                this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
-                this.modalRef.hide();
-                this.refresh.emit();
-              },
-              () => {
-                this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+                this.companyService.update(this.companyUM)
+                  .then(
+                    () => {
+                      this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
+                      this.modalRef.hide();
+                      this.refresh.emit();
+                    },
+                    () => {
+                      this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+                    }
+                  );
               }
             );
         },
@@ -140,6 +156,10 @@ export class CompanyUpdateComponent implements OnInit {
           console.error(error);
         }
       );
+  }
+
+  changeAddress(e: any) {
+    this.location.address_level_1 = e;
   }
 
   showFiles() {
@@ -251,7 +271,7 @@ export class CompanyUpdateComponent implements OnInit {
 
         this.map.triggerResize();
       } else {
-        alert('Sorry, this search produced no results.');
+        this.toastService.warning('Không tìm thấy địa chỉ trên Google Map' , 'Không tìm thấy', { positionClass: 'toast-bottom-right'});
       }
     });
   }

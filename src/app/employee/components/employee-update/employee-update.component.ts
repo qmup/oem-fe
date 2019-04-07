@@ -71,6 +71,7 @@ export class EmployeeUpdateComponent implements OnInit {
   isExist: boolean;
   roleList: any;
   isDuplicate = false;
+  role: number;
 
   constructor(
     public modalRef: BsModalRef,
@@ -85,6 +86,7 @@ export class EmployeeUpdateComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.employee);
     this.getManager();
     this.getRole();
     this.optionsSex = [
@@ -125,6 +127,11 @@ export class EmployeeUpdateComponent implements OnInit {
         }
       );
   }
+
+  selectRole(e: any) {
+    this.employee.roleId = e.value;
+  }
+
   getManager() {
     this.employeeService.getByRole(2, '', '', 'id', 0, 10)
       .then(
@@ -152,8 +159,8 @@ export class EmployeeUpdateComponent implements OnInit {
   }
 
   updateEmployee() {
-    this.employeeUM.latitude = this.location.lat;
-    this.employeeUM.longitude = this.location.lng;
+    this.employeeUM.latitude = this.employee.latitude;
+    this.employeeUM.longitude = this.employee.longitude;
     this.employeeUM.address = this.location.address_level_1;
     this.employeeUM.status = this.employee.status;
     this.employee.fullName = `${this.employee.firstName} ${this.employee.lastName}`;
@@ -172,14 +179,13 @@ export class EmployeeUpdateComponent implements OnInit {
     this.employeeUM.sex = this.employee.sex;
     (this.gender === 1) ? this.employeeUM.sex = true : this.employeeUM.sex = false;
     this.employeeUM.birthDate = this.globalService.convertToYearMonthDay(new Date(this.employee.birthDate));
-    this.employeeUM.address = this.employee.address;
     this.employeeUM.email = this.employee.email;
     this.employeeUM.coordinateId = this.employee.coordinateId;
-    this.coordinate.id = this.employeeUM.coordinateId;
-    this.coordinate.latitude = this.employeeUM.latitude;
-    this.coordinate.longitude = this.employeeUM.longitude;
-    if (this.employee.roleId === 2) {
-      this.employee.managerId = 0;
+    this.coordinate.id = this.employee.coordinateId;
+    this.coordinate.latitude = this.employee.latitude;
+    this.coordinate.longitude = this.employee.longitude;
+    if (this.employeeUM.roleId === 2) {
+      this.employeeUM.managerId = 0;
     }
     this.filesToUpload ? this.updateEmployeeWithImage() : this.updateEmployeeWithoutImage();
   }
@@ -306,15 +312,6 @@ export class EmployeeUpdateComponent implements OnInit {
       );
   }
 
-  checkConstraint() {
-    this.employeeService.checkDuplicateId(this.employee.employeeId)
-      .then(
-        (res) => {
-          this.isDuplicate = res;
-        }
-      );
-  }
-
   updateOnMap() {
     let full_address: string = this.location.address_level_1 || '';
     if (this.location.address_level_2) { full_address = full_address + ' ' + this.location.address_level_2; }
@@ -358,7 +355,7 @@ export class EmployeeUpdateComponent implements OnInit {
 
         this.map.triggerResize();
       } else {
-        alert('Sorry, this search produced no results.');
+        this.toastService.warning('Không tìm thấy địa chỉ trên Google Map' , 'Không tìm thấy', { positionClass: 'toast-bottom-right'});
       }
     });
   }

@@ -16,8 +16,6 @@ export class Beacon {
     this.workplaceId = 0;
     this.description = '';
     this.name = '';
-    this.major = 0;
-    this.minor = 0;
     this.uuid = '';
   }
 }

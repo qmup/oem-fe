@@ -41,6 +41,16 @@ input.owl-input-element {
       max-width: 1250px;
   }
 }
+.error-message {
+  left: auto;
+}
+.owl-form-field-error {
+  font-weight: 400 !important;
+  font-size: .8rem !important;
+}
+.owl-form-field-invalid .owl-form-field-placeholder {
+  color: #757575;
+}
 #task-search {
   mdb-select > div > div.single > div.placeholder {
     left: 0 !important;

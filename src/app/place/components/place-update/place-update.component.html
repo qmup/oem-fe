@@ -5,45 +5,59 @@
   </button>
 </div>
 <div class="modal-body mx-3 row">
-  <div class="md-form mt-0 mb-3 col-md-12" *ngIf="userAccount.roleId === 1">
-    <input type="text" id="name" class="form-control" mdbInput [(ngModel)]="place.name">
-    <label for="name">Tên</label>
-  </div>
+  <form (ngSubmit)="updatePlace()" #updateForm="ngForm" class="d-flex flex-wrap w-100">
+    <div class="md-form mt-0 mb-3 col-md-12">
+      <input 
+        type="text" 
+        id="name" 
+        name="name" 
+        class="form-control" 
+        mdbInput
+        required
+        #name=ngModel
+        [(ngModel)]="place.name"
+        [class.ng-invalid.validate-error]="(name.invalid && (name.dirty || name.touched))"
+        >
+      <label for="name">Tên nơi làm việc*</label>
+      
+      <mdb-error *ngIf="name.invalid && (name.dirty || name.touched)">
+        <span *ngIf="name?.errors?.required" class="font-weight-normal">Vui lòng nhập tên nơi làm việc</span>
+      </mdb-error>
 
-  <div class="md-form mt-0 mb-3 col-md-12" *ngIf="userAccount.roleId === 1">
-    <input type="text" id="address" class="form-control" mdbInput [(ngModel)]="place.description">
-    <label for="address">Miêu tả</label>
-  </div>
-
-  <span *ngIf="userAccount.roleId === 2">Số lần vệ sinh trong ngày: {{place.numberOfReworks}} lần</span>
-  <div class="w-100 d-flex justify-content-center align-items-center my-3" *ngIf="userAccount.roleId === 2">
-    <mdb-range-input id="range" [min]="1" [value]="1" [step]="1" [max]="5" name="range"
-      [(ngModel)]="place.numberOfReworks" class="w-100"></mdb-range-input>
-    <span class="ml-2">lần</span>
-  </div>
-
-  <div class="file-field md-form col-12 pl-0 mt-0 mb-3" *ngIf="userAccount.roleId === 1">
-    <div mdbBtn floating="true" size="md" color="primary" mdbWavesEffect>
-      <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-      <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
-        (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
     </div>
-    <div class="file-path-wrapper mt-3">
-      <input class="file-path" type="text" placeholder="Chọn hình ảnh tải lên" [value]="showFiles()">
-    </div>
-  </div>
-  <div class="col text-center w-100" *ngIf="(place.picture || url) && userAccount.roleId === 1">
-    <img [src]="place.picture || url" height="150">
-  </div>
 
-</div>
-<div class="modal-footer d-flex justify-content-center" *ngIf="userAccount.roleId === 1">
-  <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="updatePlace()">Cập nhật
-    <i class="fa fa-check ml-1"></i>
-  </button>
-</div>
-<div class="modal-footer d-flex justify-content-center" *ngIf="userAccount.roleId === 2">
-  <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="updateNoOfRwk()">Cập nhật
-    <i class="fa fa-check ml-1"></i>
-  </button>
+    <div class="md-form my-3 col-md-12">
+      <textarea 
+        id="description" 
+        name="description" 
+        class="form-control md-textarea" 
+        mdbInput
+        #description=ngModel
+        [(ngModel)]="place.description"
+      >
+      </textarea>
+      <label for="description">Miêu tả</label>
+
+    </div>
+
+    <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
+      <div mdbBtn floating="true" size="md" color="primary" mdbWavesEffect>
+        <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+        <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
+          (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+      </div>
+      <div class="file-path-wrapper mt-3">
+        <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()" disabled>
+      </div>
+    </div>
+    <div class="col text-center w-100" *ngIf="place.picture || url">
+      <img [src]="place.picture || url" height="150">
+    </div>
+
+    <div class="col-12 text-center mt-3 border-top pt-3">
+      <button mdbBtn color="primary" class="waves-light" mdbWavesEffect [disabled]="!updateForm.form.valid">Cập nhật
+        <i class="fa fa-check ml-1"></i>
+      </button>
+    </div>
+  </form>
 </div>

@@ -95,46 +95,109 @@
         </button>
       </div>
       <div class="modal-body mx-3 row">
-        <div class="md-form mt-0 mb-3 col-md-12">
-          <input type="text" id="name" class="form-control" mdbInput [(ngModel)]="beaconCM.name">
-          <label for="name">Tên</label>
-        </div>
+        <form (ngSubmit)="createBeacon()" #createForm="ngForm" class="d-flex flex-wrap w-100">
 
-        <div class="md-form mt-0 mb-3 col-md-12">
-          <input type="text" id="uuid" class="form-control" mdbInput [(ngModel)]="beaconCM.uuid">
-          <label for="uuid">UUID</label>
-        </div>
-      
-        <div class="md-form mt-0 mb-3 col-md-6">
-          <input type="text" id="major" class="form-control" mdbInput [(ngModel)]="beaconCM.major">
-          <label for="major">Major</label>
-        </div>
-      
-        <div class="md-form mt-0 mb-3 col-md-6">
-          <input type="text" id="minor" class="form-control" mdbInput [(ngModel)]="beaconCM.minor">
-          <label for="minor">Minor</label>
-        </div>
-        
-        <div class="md-form mt-0 mb-3 col-md-12">
-          <textarea type="text" id="description" class="form-control md-textarea" mdbInput [(ngModel)]="beaconCM.description"></textarea>
-          <label for="description">Chi tiết</label>
-        </div>
+          <div class="md-form my-3 col-md-12">
+            <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            class="form-control" 
+            mdbInput
+            required
+            #name=ngModel
+            [(ngModel)]="beaconCM.name"
+            [class.ng-invalid.validate-error]="(name.invalid && (name.dirty || name.touched))"
+            >
+            <label for="name">Tên*</label>
+            
+            <mdb-error *ngIf="name.invalid && (name.dirty || name.touched)">
+              <span *ngIf="name?.errors?.required" class="font-weight-normal">Vui lòng nhập tên beacon</span>
+            </mdb-error>
 
-        <!-- <div class="col-md-6 px-0">
-          <div class="">
-            <mdb-checkbox [(ngModel)]="haveWorkplace">Thêm địa điểm</mdb-checkbox>
           </div>
-        </div> -->
 
-        <!-- <div class="md-form mt-0 mb-3 col-md-6" *ngIf="haveWorkplace">
-          <mdb-select [notFoundMsg]="'Không tìm thấy'" [options]="optionsSelect" placeholder="Địa điểm" [(ngModel)]="beaconCM.workplaceId"></mdb-select>
-        </div> -->
+          <div class="md-form my-3 col-md-12">
+            <input 
+            type="text" 
+            id="uuid" 
+            name="uuid" 
+            class="form-control" 
+            mdbInput
+            required
+            #uuid=ngModel
+            [(ngModel)]="beaconCM.uuid"
+            [class.ng-invalid.validate-error]="(uuid.invalid && (uuid.dirty || uuid.touched))"
+            >
+            <label for="uuid">UUID*</label>
+            
+            <mdb-error *ngIf="uuid.invalid && (uuid.dirty || uuid.touched)">
+              <span *ngIf="uuid?.errors?.required" class="font-weight-normal">Vui lòng uuid</span>
+            </mdb-error>
 
-      </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createBeacon()">Tạo mới
-          <i class="fa fa-check ml-1"></i>
-        </button>
+          </div>
+
+          <div class="md-form my-3 col-md-12">
+            <input 
+            type="text" 
+            id="major" 
+            name="major" 
+            class="form-control" 
+            mdbInput
+            required
+            #major=ngModel
+            [(ngModel)]="beaconCM.major"
+            [class.ng-invalid.validate-error]="(major.invalid && (major.dirty || major.touched))"
+            >
+            <label for="major">Major*</label>
+            
+            <mdb-error *ngIf="major.invalid && (major.dirty || major.touched)">
+            <span *ngIf="major?.errors?.required" class="font-weight-normal">Vui lòng major</span>
+            </mdb-error>
+
+          </div>
+
+          <div class="md-form my-3 col-md-12">
+            <input 
+            type="text" 
+            id="minor" 
+            name="minor" 
+            class="form-control" 
+            mdbInput
+            required
+            #minor=ngModel
+            [(ngModel)]="beaconCM.minor"
+            [class.ng-invalid.validate-error]="(minor.invalid && (minor.dirty || minor.touched))"
+            >
+            <label for="minor">Minor*</label>
+            
+            <mdb-error *ngIf="minor.invalid && (minor.dirty || minor.touched)">
+              <span *ngIf="minor?.errors?.required" class="font-weight-normal">Vui lòng minor</span>
+            </mdb-error>
+
+          </div>
+
+          <div class="md-form my-3 col-md-12">
+            <textarea 
+            id="description" 
+            name="description" 
+            class="form-control md-textarea" 
+            mdbInput
+            #description=ngModel
+            [(ngModel)]="beaconCM.description"
+            ></textarea>
+            <label for="description">Miêu tả</label>
+
+          </div>
+
+          <div class="col-12 text-center mt-3 border-top pt-3">
+            <button mdbBtn color="success" class="waves-light" mdbWavesEffect [disabled]="!createForm.form.valid">Tạo mới
+              <i class="fa fa-check ml-1"></i>
+            </button>
+          </div>
+
+        </form>
+    
       </div>
     </div>
   </div>
@@ -143,24 +206,19 @@
 <div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
   aria-hidden="true">
   <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-    <!--Content-->
     <div class="modal-content text-center">
-      <!--Header-->
       <div class="modal-header d-flex justify-content-center">
         <p class="heading">Xóa beacon này?</p>
       </div>
 
-      <!--Body-->
       <div class="modal-body">
         <i class="fa fa-times fa-4x animated rotateIn"></i>
       </div>
 
-      <!--Footer-->
       <div class="modal-footer flex-center">
         <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeBeacon()">Đồng ý</a>
         <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">Hủy</a>
       </div>
     </div>
-    <!--/.Content-->
   </div>
 </div>

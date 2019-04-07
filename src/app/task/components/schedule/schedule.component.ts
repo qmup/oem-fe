@@ -254,11 +254,23 @@ export class ScheduleComponent implements OnInit {
     e.target.checked ?
       this.scheduleService.updateField(id, 'status', 1)
         .then(
-          () => this.getSchedule()
+          () => {
+          this.toastService.success('Cập nhât thành công', '', { positionClass: 'toast-bottom-right'} );
+            this.getSchedule();
+          },
+          () => {
+            this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+          }
         ) :
       this.scheduleService.updateField(id, 'status', 0)
         .then(
-          () => this.getSchedule()
+          () => {
+            this.toastService.success('Cập nhât thành công', '', { positionClass: 'toast-bottom-right'} );
+            this.getSchedule();
+          },
+          () => {
+            this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+          }
         );
   }
 

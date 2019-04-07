@@ -18,7 +18,7 @@ export class LoginPageComponent implements OnInit {
 
   email: string;
   password: string;
-
+  wrongUsernameOrPassword = false;
   constructor(
     private globalService: GlobalService,
     private loginService: LoginService,
@@ -44,6 +44,7 @@ export class LoginPageComponent implements OnInit {
           .then(
             (response2: Employee) => {
               this.globalService.userAccount = response2;
+              this.wrongUsernameOrPassword = false;
               this.authGuardService.setUserAccount(this.globalService.userAccount);
               this.globalService.isLogin = true;
               this.notificationService.requestPermission(response2.id);
@@ -55,8 +56,9 @@ export class LoginPageComponent implements OnInit {
               }
             );
         },
-        (error: any) => {
+        () => {
           this.globalService.isLogin = false;
+          this.wrongUsernameOrPassword = true;
         }
       );
   }

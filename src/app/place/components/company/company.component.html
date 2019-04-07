@@ -81,63 +81,99 @@
         </button>
       </div>
       <div class="modal-body mx-3 row">
-        <div class="col-md-12">
-          <div class="md-form mt-0 mb-3">
-            <input type="text" id="name" class="form-control" mdbInput [(ngModel)]="companyCM.name">
-            <label for="name">Tên</label>
+        <form (ngSubmit)="createCompany()" #createForm="ngForm" class="d-flex flex-wrap w-100">
+          <div class="md-form mt-0 mb-3 col-md-12">
+            <input 
+              type="text" 
+              id="name" 
+              name="name" 
+              class="form-control" 
+              mdbInput
+              required
+              #name=ngModel
+              [(ngModel)]="companyCM.name"
+              [class.ng-invalid.validate-error]="(name.invalid && (name.dirty || name.touched))"
+              >
+            <label for="name">Tên*</label>
+            
+            <mdb-error *ngIf="name.invalid && (name.dirty || name.touched)">
+              <span *ngIf="name?.errors?.required" class="font-weight-normal">Vui lòng nhập tên công việc</span>
+            </mdb-error>
+
           </div>
-        </div>
 
-        <div class="col-md-12">
-          <div class="md-form mt-0 mb-3">
-            <input type="text" id="phone" class="form-control" mdbInput [(ngModel)]="companyCM.phone">
-            <label for="phone">Số điện thoại</label>
+          <div class="md-form my-3 col-md-12">
+            <input 
+              type="text" 
+              id="phone" 
+              name="phone" 
+              class="form-control" 
+              mdbInput
+              required
+              #phone=ngModel
+              [(ngModel)]="companyCM.phone"
+              [class.ng-invalid.validate-error]="(phone.invalid && (phone.dirty || phone.touched))"
+              >
+            <label for="phone">Số điện thoại*</label>
+            
+            <mdb-error *ngIf="phone.invalid && (phone.dirty || phone.touched)">
+              <span *ngIf="phone?.errors?.required" class="font-weight-normal">Vui lòng nhập số điện thoại</span>
+            </mdb-error>
+
           </div>
-        </div>
 
+          <div class="col-md-12">
+            <div class="md-form my-3 form-inline mr-auto w-100">
 
-        <div class="col-md-12">
-          <div class="md-form mt-0 mb-3">
-            <input type="text" [(ngModel)]='location.address_level_1' class="form-control" id="searchField" mdbInput>
-            <label for="searchField">Địa chỉ công ty</label>
+              <input
+                type="text"
+                class="form-control w-100"
+                id="searchField"
+                name="searchField"
+                mdbInput
+                required
+                #address=ngModel
+                [class.ng-invalid.validate-error]="(address.invalid && (address.dirty || address.touched))"
+                [(ngModel)]='location.address_level_1'
+                (blur)="updateOnMap()"
+                >
+                
+              <label for="searchField">Địa chỉ*</label>
 
-          </div>
-          <div class="row">
-            <div class="col-md-12 d-flex flex-center">
-              <button mdbBtn color="primary" mdbWavesLight (click)='updateOnMap()' type="submit">
-                Tìm kiếm
-                <i class="fa fa-search"></i>
-              </button>
+              <mdb-error *ngIf="address.invalid && (address.dirty || address.touched)">
+                <span *ngIf="address?.errors?.required" class="font-weight-normal">Vui lòng nhập địa chỉ</span>
+              </mdb-error>
+
             </div>
           </div>
-        </div>
 
-        <div class="col-md-12">
-          <agm-map #map [mapTypeId]="'terrain'" [latitude]="location.lat" [longitude]="location.lng"
-            [zoom]="location.zoom" style="height: 300px">
-            <agm-marker [latitude]="location.lat" [longitude]="location.lng"></agm-marker>
-          </agm-map>
-        </div>
-
-        <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
-          <div mdbBtn floating="true" size="md" color="success" mdbWavesEffect>
-            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-            <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
-              (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+          <div class="col-md-12">
+            <agm-map #map [mapTypeId]="'terrain'" [latitude]="location.lat" [longitude]="location.lng"
+              [zoom]="location.zoom" style="height: 300px">
+              <agm-marker [latitude]="location.lat" [longitude]="location.lng"></agm-marker>
+            </agm-map>
           </div>
-          <div class="file-path-wrapper mt-3">
-            <input class="file-path" type="text" placeholder="Chọn hình ảnh tải lên" [value]="showFiles()">
+  
+          <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
+            <div mdbBtn floating="true" size="md" color="success" mdbWavesEffect>
+              <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+              <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
+                (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+            </div>
+            <div class="file-path-wrapper mt-3">
+              <input class="file-path" type="text" placeholder="Chọn hình ảnh tải lên" [value]="showFiles()" disabled>
+            </div>
           </div>
-        </div>
-        <div class="col text-center" *ngIf="url">
-          <img [src]="url" height="150">
-        </div>
-
-      </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createCompany()">Tạo mới
-          <i class="fa fa-check ml-1"></i>
-        </button>
+          <div class="col text-center" *ngIf="url">
+            <img [src]="url" height="150">
+          </div>
+  
+          <div class="col-12 text-center mt-3 border-top pt-3">
+            <button mdbBtn color="success" class="waves-light" mdbWavesEffect [disabled]="!createForm.form.valid">Tạo mới
+              <i class="fa fa-check ml-1"></i>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

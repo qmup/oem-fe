@@ -277,7 +277,7 @@ export class PlaceComponent implements OnInit {
 
   getEmployee() {
     // get BY manager not get all
-    this.employeeService.getEmployeeByManager(this.userAccount.id, '', 'id', 0, 99)
+    this.employeeService.getEmployeeByManager(this.userAccount.id, '', '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
           this.employeeList = response.content.map((employee) => {
@@ -348,6 +348,7 @@ export class PlaceComponent implements OnInit {
     this.placeService.updateManager(this.selectingWorkplaceId, 'managerId', this.selectingManagerId)
       .then(
         () => {
+          this.selectingManagerId = 0;
           this.toastService.success('Thành công', '', { positionClass: 'toast-bottom-right'} );
           this.hideManagerModal();
           this.getPlace();
@@ -378,8 +379,10 @@ export class PlaceComponent implements OnInit {
             if (type === 1) {
               this.updateManagerForWorkplace();
             } else {
+              this.selectingManagerId = 0;
               this.toastService.success('Xóa thành công' , '', { positionClass: 'toast-bottom-right'});
               this.hideManagerModal();
+              this.getPlace();
             }
           } else {
             this.toastService.error('Vẫn còn công việc tại đây chưa được giải quyết xong' , '', { positionClass: 'toast-bottom-right'});
@@ -500,7 +503,6 @@ export class PlaceComponent implements OnInit {
     // this.beaconService.updateField(this.deletingBeaconId, 'workplaceId', 0)
     //   .then(
     //     (response) => {
-          
     //     }
     //   );
   }

@@ -1,5 +1,6 @@
 export class Company {
   address: string;
+  coordinateId: number;
   id: number;
   name: string;
   picture: string;
@@ -10,6 +11,7 @@ export class Company {
   constructor() {
     this.address = '';
     this.id = 0;
+    this.coordinateId = 0;
     this.name = '';
     this.picture = '';
     this.latitude = 0;

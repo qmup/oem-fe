@@ -16,7 +16,6 @@ import { OwlFormFieldModule, OwlInputModule, OwlRatingModule } from 'owl-ng';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { DatepickerComponent } from './components/datepicker.component';
 import { NotificationComponent } from './components/notification.component';
-// import { FlatpickrModule } from 'angularx-flatpickr';
 
 
 @NgModule({

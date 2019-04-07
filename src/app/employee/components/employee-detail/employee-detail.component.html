@@ -18,7 +18,7 @@
 
             <!-- Button for manager -->
             <!-- Triggering button-->
-            <a *ngIf="userAccount.roleId === 2" class="rotate-btn font-weight-normal" data-card="card-1" (click)="cards.toggle()">Chi tiết </a>
+            <!-- <a *ngIf="userAccount.roleId === 2" class="rotate-btn font-weight-normal" data-card="card-1" (click)="cards.toggle()">Chi tiết </a> -->
           </div>
         </div>
         <!--/.Front Side-->
@@ -32,7 +32,7 @@
 
           <mdb-card-text style="text-align: left" class="profile-text">
             <i class="fa fa-birthday-cake mr-2 mb-3"></i>
-            <span class="mb-3">Sinh nhật: {{ employee.birthDate | date: 'dd-MM-yyyy' }}</span>
+            <span class="mb-3">Ngày sinh: {{ employee.birthDate | date: 'dd-MM-yyyy' }}</span>
             <br>
             <i class="fa fa-phone mr-2 mb-3"></i>
             <span class="mb-3">Số điện thoại: {{ employee.phoneNumber }}</span>
@@ -135,7 +135,7 @@
             <span class="mb-3">Giới tính: {{ employee.sex ? 'Nam' : 'Nữ' }}</span>
             <br>
             <i class="fa fa-birthday-cake mr-2 mb-4"></i>
-            <span class="mb-3">Sinh nhật: {{ employee.birthDate | date: 'dd-MM-yyyy' }}</span>
+            <span class="mb-3">Ngày sinh: {{ employee.birthDate | date: 'dd-MM-yyyy' }}</span>
             <br>
             <i class="fa fa-phone mr-2 mb-4"></i>
             <span class="mb-3">Số điện thoại: {{ employee.phoneNumber }}</span>
@@ -174,7 +174,7 @@
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="updateEmployeeForManager()">Sửa
+        <button mdbBtn color="primary" class="waves-light" mdbWavesEffect *ngIf="selectingManagerId" (click)="updateEmployeeForManager()">Sửa
           <i class="fa fa-check ml-1"></i>
         </button>
       </div>

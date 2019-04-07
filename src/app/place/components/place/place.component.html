@@ -300,48 +300,76 @@
         </button>
       </div>
       <div class="modal-body mx-3 row">
-        <div class="md-form mt-0 mb-3 col-md-12">
-          <input type="text" id="name" class="form-control" mdbInput [(ngModel)]="placeCM.name">
-          <label for="name">Tên</label>
-        </div>
+        <form (ngSubmit)="createPlace()" #createForm="ngForm" class="d-flex flex-wrap w-100">
+            <div class="md-form mt-0 mb-3 col-md-12">
+              <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                class="form-control" 
+                mdbInput
+                required
+                #name=ngModel
+                [(ngModel)]="placeCM.name"
+                [class.ng-invalid.validate-error]="(name.invalid && (name.dirty || name.touched))"
+                >
+              <label for="name">Tên nơi làm việc*</label>
+              
+              <mdb-error *ngIf="name.invalid && (name.dirty || name.touched)">
+                <span *ngIf="name?.errors?.required" class="font-weight-normal">Vui lòng nhập tên nơi làm việc</span>
+              </mdb-error>
+  
+            </div>
+  
+            <div class="md-form my-3 col-md-12">
+              <textarea 
+                id="description" 
+                name="description" 
+                class="form-control md-textarea" 
+                mdbInput
+                #description=ngModel
+                [(ngModel)]="placeCM.description"
+              >
+              </textarea>
+              <label for="description">Miêu tả</label>
+  
+            </div>
+            
+            <div class="md-form my-3 col-md-12 ">
 
-        <!-- <span>Số lần vệ sinh trong ngày</span>
-        <div class="w-100 d-flex justify-content-center align-items-center my-3">
-          <mdb-range-input id="range" [min]="0" [value]="3" [step]="1" [max]="5" name="range" [(ngModel)]="placeCM.numberOfReworks"
-            class="w-100"></mdb-range-input>
-          <span class="ml-2">lần</span>
-        </div> -->
+              <mdb-select
+                id="role"
+                name="role"
+                [label]="'Người quản lý'"
+                [notFoundMsg]="'Không tìm thấy'"
+                [options]="managerList"
+                #mngId="ngModel"
+                [(ngModel)]="managerId"
+                >
+              </mdb-select>
 
-        <div class="md-form mt-0 mb-3 col-md-12">
-          <input type="text" id="description" class="form-control" mdbInput [(ngModel)]="placeCM.description">
-          <label for="description">Miêu tả</label>
-        </div>
+            </div>
 
-        <div class="md-form mt-0 mb-3 col-md-12">
-          <mdb-select [label]="'Người quản lý'" [notFoundMsg]="'Không tìm thấy'" [options]="managerList"
-            [(ngModel)]="managerId"></mdb-select>
-        </div>
-
-        <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
-          <div mdbBtn floating="true" size="md" color="success" mdbWavesEffect>
-            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-            <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
-              (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
-          </div>
-          <div class="file-path-wrapper mt-3">
-            <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()">
-          </div>
-        </div>
-        <div class="col text-center w-100" *ngIf="url">
-          <img [src]="url" height="100">
-        </div>
-
-      </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <button title="Tạo mới nơi làm việc" mdbBtn color="success" class="waves-light" mdbWavesEffect
-          (click)="createPlace()">Tạo mới
-          <i class="fa fa-check ml-1"></i>
-        </button>
+            <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
+              <div mdbBtn floating="true" size="md" color="success" mdbWavesEffect>
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
+                  (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+              </div>
+              <div class="file-path-wrapper mt-3">
+                <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()" disabled>
+              </div>
+            </div>
+            <div class="col text-center w-100" *ngIf="url">
+              <img [src]="url" height="100">
+            </div>
+    
+            <div class="col-12 text-center mt-3 border-top pt-3">
+              <button mdbBtn color="success" class="waves-light" mdbWavesEffect [disabled]="!createForm.form.valid">Tạo mới
+                <i class="fa fa-check ml-1"></i>
+              </button>
+            </div>
+        </form>
       </div>
     </div>
   </div>
@@ -366,7 +394,7 @@
 
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="addBeacon()">Tạo mới
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect *ngIf="beaconId" (click)="addBeacon()">Tạo mới
           <i class="fa fa-check ml-1"></i>
         </button>
       </div>
@@ -524,7 +552,7 @@
       </div>
 
       <!--Footer-->
-      <div class="modal-footer flex-center">
+      <div class="modal-footer flex-center" *ngIf="selectingManagerId">
         <a mdbBtn color="success" outline="true" class="waves-effect" mdbWavesEffect
           (click)="updateManagerForWorkplace()">Đồng ý</a>
         <a type="button" mdbBtn color="success" class="waves-effect" mdbWavesEffect p-dismiss="modal"
@@ -558,7 +586,7 @@
       </div>
 
       <!--Footer-->
-      <div class="modal-footer flex-center">
+      <div class="modal-footer flex-center" *ngIf="selectingManagerId">
         <a mdbBtn color="primary" outline="true" class="waves-effect" mdbWavesEffect
           (click)="checkRemovableManager(1)">Đồng ý</a>
         <a type="button" mdbBtn color="primary" class="waves-effect" mdbWavesEffect p-dismiss="modal"

@@ -9,6 +9,10 @@ import { GlobalService } from 'src/app/core/services/global.service';
 import { PaginationResponse } from 'src/app/core/models/shared';
 import { AgmMap, MapsAPILoader } from '@agm/core';
 
+const EMPLOYEE_REMOVED_STATUS = 0;
+const EMPLOYEE_OPEN_STATUS = 1;
+const EMPLOYEE_CLOSE_STATUS = 2;
+
 declare var google: any;
 
 interface Marker {
@@ -53,6 +57,7 @@ export class LaborerComponent implements OnInit {
   @ViewChild(AgmMap) map: AgmMap;
 
   id: number;
+  currentStatus = EMPLOYEE_OPEN_STATUS;
   searchText = '';
   employeeList: Employee[];
   employeeRemovedList: Employee[];
@@ -60,6 +65,7 @@ export class LaborerComponent implements OnInit {
   managerList = new Array<any>();
   optionsSex = new Array<any>();
   gender: number;
+  role: number;
   modalRef: BsModalRef;
   employeeCM: Employee = new Employee();
   @ViewChild('create') createModal: ModalDirective;
@@ -80,6 +86,8 @@ export class LaborerComponent implements OnInit {
   sortBoolean = false;
   sortValue = 'asc';
   showRemovedEmp = false;
+  employeeStatusList = [];
+  timeoutSearch: any;
 
   constructor(
     private employeeService: EmployeeService,
@@ -103,11 +111,13 @@ export class LaborerComponent implements OnInit {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
     this.humanizeBytes = humanizeBytes;
+
   }
 
   ngOnInit() {
     this.optionsSex = this.globalService.optionsSex;
     this.userAccount = this.globalService.getUserAccount();
+    this.employeeStatusList = this.globalService.employeeStatus;
     this.getManager();
     this.getRole();
     this.getEmployee();
@@ -118,7 +128,7 @@ export class LaborerComponent implements OnInit {
   }
 
   getEmployeeByAdmin() {
-    this.employeeService.getAll(this.sortValue, this.fieldSort, this.currentPage, 10)
+    this.employeeService.getAll(this.searchText, this.currentStatus, this.sortValue, this.fieldSort, this.currentPage, 10)
       .then(
         (response: PaginationResponse) => {
           this.employeeList = response.content;
@@ -140,7 +150,7 @@ export class LaborerComponent implements OnInit {
   }
 
   getEmployeeByManager() {
-    this.employeeService.getEmployeeByManager(this.userAccount.id, this.sortValue, this.fieldSort, this.currentPage, 10)
+    this.employeeService.getEmployeeByManager(this.userAccount.id, this.searchText, this.sortValue, this.fieldSort, this.currentPage, 10)
       .then(
         (response: PaginationResponse) => {
           this.employeeResponse = response;
@@ -180,6 +190,15 @@ export class LaborerComponent implements OnInit {
       );
   }
 
+  searchEmployee() {
+    if (this.timeoutSearch) {
+      clearTimeout(this.timeoutSearch);
+    }
+    this.timeoutSearch = setTimeout(() => {
+      this.getEmployee();
+    }, 500);
+  }
+
   sort(field: string) {
     this.sortBoolean = ! this.sortBoolean;
     if (this.sortBoolean) {
@@ -195,11 +214,23 @@ export class LaborerComponent implements OnInit {
     e.target.checked ?
       this.employeeService.updateField(employeeId, 'status', 1)
         .then(
-          () => this.getEmployee()
+          () => {
+            this.toastService.success('Cập nhât thành công', '', { positionClass: 'toast-bottom-right'} );
+            this.getEmployee();
+          },
+          () => {
+            this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+          }
         ) :
       this.employeeService.updateField(employeeId, 'status', 2)
         .then(
-          () => this.getEmployee()
+          () => {
+            this.toastService.success('Cập nhât thành công', '', { positionClass: 'toast-bottom-right'} );
+            this.getEmployee();
+          },
+          () => {
+            this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+          }
         );
   }
 
@@ -251,12 +282,14 @@ export class LaborerComponent implements OnInit {
   }
 
   checkEmailExist() {
-    this.employeeService.checkExist(this.employeeCM.email)
-      .then(
-        (response) => {
-          this.isExist = response;
-        }
-      );
+    if (this.employeeCM.email) {
+      this.employeeService.checkExist(this.employeeCM.email)
+        .then(
+          (response) => {
+            this.isExist = response;
+          }
+        );
+    }
   }
 
   createEmployee() {
@@ -414,30 +447,25 @@ export class LaborerComponent implements OnInit {
   }
 
   checkDuplicateId() {
-    this.employeeService.checkDuplicateId(this.employeeCM.employeeId)
-      .then(
-        (res) => {
-          this.isDuplicate = res;
-        }
-      );
-  }
-
-  checkConstraint() {
-    this.employeeService.checkDuplicateId(this.employeeCM.employeeId)
-      .then(
-        (res) => {
-          this.isDuplicate = res;
-        }
-      );
+    if (this.employeeCM.employeeId) {
+      this.employeeService.checkDuplicateId(this.employeeCM.employeeId)
+        .then(
+          (res) => {
+            this.isDuplicate = res;
+          }
+        );
+    }
   }
 
   updateOnMap() {
-    let full_address: string = this.location.address_level_1 || '';
-    if (this.location.address_level_2) { full_address = full_address + ' ' + this.location.address_level_2; }
-    if (this.location.address_state) { full_address = full_address + ' ' + this.location.address_state; }
-    if (this.location.address_country) { full_address = full_address + ' ' + this.location.address_country; }
+    if (this.location.address_level_1) {
+      let full_address: string = this.location.address_level_1 || '';
+      if (this.location.address_level_2) { full_address = full_address + ' ' + this.location.address_level_2; }
+      if (this.location.address_state) { full_address = full_address + ' ' + this.location.address_state; }
+      if (this.location.address_country) { full_address = full_address + ' ' + this.location.address_country; }
 
-    this.findLocation(full_address);
+      this.findLocation(full_address);
+    }
   }
 
   findLocation(address) {
@@ -474,7 +502,7 @@ export class LaborerComponent implements OnInit {
 
         this.map.triggerResize();
       } else {
-        alert('Sorry, this search produced no results.');
+        this.toastService.warning('Không tìm thấy địa chỉ trên Google Map' , 'Không tìm thấy', { positionClass: 'toast-bottom-right'});
       }
     });
   }

@@ -28,7 +28,7 @@
 
           <mdb-card-text style="text-align: left" class="profile-text px-4 py-5">
             <i class="fa fa-birthday-cake mr-2 mb-3"></i>
-            <span class="mb-3">Sinh nhật: {{ manager.birthDate | date: 'dd-MM-yyyy' }}</span>
+            <span class="mb-3">Ngày sinh: {{ manager.birthDate | date: 'dd-MM-yyyy' }}</span>
             <br>
             <i class="fa fa-phone mr-2 mb-3"></i>
             <span class="mb-3">Số điện thoại: {{ manager.phoneNumber }}</span>
@@ -67,7 +67,7 @@
             <span class="mb-3">Giới tính: {{ manager.sex ? 'Nam' : 'Nữ' }}</span>
             <br>
             <i class="fa fa-birthday-cake mr-2 mb-4"></i>
-            <span class="mb-3">Sinh nhật: {{ manager.birthDate | date: 'dd-MM-yyyy' }}</span>
+            <span class="mb-3">Ngày sinh: {{ manager.birthDate | date: 'dd-MM-yyyy' }}</span>
             <br>
             <i class="fa fa-phone mr-2 mb-4"></i>
             <span class="mb-3">Số điện thoại: {{ manager.phoneNumber }}</span>
@@ -194,7 +194,7 @@
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="addEmployeeForManager()">Thêm
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect *ngIf="addingEmpId" (click)="addEmployeeForManager()">Thêm
           <i class="fa fa-check ml-1"></i>
         </button>
       </div>
@@ -228,7 +228,7 @@
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="addWorkplaceForManager()">Thêm
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect *ngIf="manageWorkplace.workplaceId" (click)="addWorkplaceForManager()">Thêm
           <i class="fa fa-check ml-1"></i>
         </button>
       </div>

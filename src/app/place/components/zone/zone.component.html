@@ -68,30 +68,46 @@
         </button>
       </div>
       <div class="modal-body mx-3 row">
-        <div class="md-form mt-0 mb-3 col-md-12">
-          <input type="text" id="name" class="form-control" mdbInput [(ngModel)]="zoneCM.name">
-          <label for="name">Tên</label>
-        </div>
+        <form (ngSubmit)="createZone()" #createForm="ngForm" class="d-flex flex-wrap w-100">
+          <div class="md-form mt-0 mb-3 col-md-12">
+            <input 
+            type="text" 
+            id="title" 
+            name="title" 
+            class="form-control" 
+            mdbInput
+            required
+            #title=ngModel
+            [(ngModel)]="zoneCM.name"
+            [class.ng-invalid.validate-error]="(title.invalid && (title.dirty || title.touched))"
+            >
+            <label for="title">Tên khu vực*</label>
+            
+            <mdb-error *ngIf="title.invalid && (title.dirty || title.touched)">
+              <span *ngIf="title?.errors?.required" class="font-weight-normal">Vui lòng nhập tên khu vực</span>
+            </mdb-error>
 
-        <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
-          <div mdbBtn floating="true" size="md" color="success" mdbWavesEffect>
-            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-            <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect (uploadOutput)="onUploadOutput($event)"
-              [uploadInput]="uploadInput">
           </div>
-          <div class="file-path-wrapper mt-3">
-            <input class="file-path" type="text" placeholder="Chọn hình ảnh tải lên" [value]="showFiles()">
+  
+          <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
+            <div mdbBtn floating="true" size="md" color="success" mdbWavesEffect>
+              <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+              <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
+                (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+            </div>
+            <div class="file-path-wrapper mt-3">
+              <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()" disabled>
+            </div>
           </div>
-        </div>
-        <div class="col text-center" *ngIf="url">
-          <img [src]="url" height="150">
-        </div>
-
-      </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createZone()">Tạo mới
-          <i class="fa fa-check ml-1"></i>
-        </button>
+          <div class="col text-center" *ngIf="url">
+            <img [src]="url" height="100">
+          </div>
+          <div class="col-12 text-center mt-3 border-top pt-3">
+            <button mdbBtn color="success" class="waves-light" mdbWavesEffect [disabled]="!createForm.form.valid">Tạo mới
+              <i class="fa fa-check ml-1"></i>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

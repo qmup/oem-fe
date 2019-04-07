@@ -34,17 +34,31 @@
 
           <div class="md-form pb-3">
             <i class="fa fa-lock prefix grey-text"></i>
-            <input type="password" id="password" name="oem-password" class="form-control" mdbInput mdbValidate [(ngModel)]="password" #pass="ngModel">
+            <input
+              type="password"
+              id="password"
+              name="oem-password"
+              class="form-control"
+              [class.has-error]="pass.invalid && (pass.dirty || pass.touched)"
+              required
+              mdbInput
+              mdbValidate
+              [(ngModel)]="password"
+              #pass="ngModel">
             <label for="password">Mật khẩu</label>
             <mdb-error *ngIf="pass.invalid && (pass.dirty || pass.touched)">
               <p *ngIf="pass?.errors.required">
-              Vui lòng nhập mật khẩu                
+              Vui lòng nhập mật khẩu         
               </p>
             </mdb-error>
-            <p class="font-small blue-text d-flex justify-content-end">
-              <a href="#" class="blue-text ml-1">Quên mật khẩu?</a>
-            </p>
           </div>
+
+          <p *ngIf="wrongUsernameOrPassword" class="text-danger text-center">
+            Sai tên đăng nhập hoặc mật khẩu
+            <br>
+            Vui lòng thử lại!      
+          </p>
+
         </form>
         <!--Body-->
 

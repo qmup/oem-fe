@@ -312,7 +312,7 @@ export class CompanyComponent implements OnInit {
 
         this.map.triggerResize();
       } else {
-        alert('Sorry, this search produced no results.');
+        this.toastService.warning('Không tìm thấy địa chỉ trên Google Map' , 'Không tìm thấy', { positionClass: 'toast-bottom-right'});
       }
     });
   }

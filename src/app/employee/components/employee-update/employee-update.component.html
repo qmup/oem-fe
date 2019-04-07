@@ -1,106 +1,239 @@
 <div class="modal-header d-flex justify-content-center">
   <p class="heading">Cập nhật nhân viên</p>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalRef.hide()">
-    <span aria-hidden="true">&times;</span>
-  </button>
 </div>
 <div class="modal-body mx-3 row">
+  <form (ngSubmit)="updateEmployee()" #updateForm="ngForm" class="d-flex flex-wrap w-100">
 
-  <div class="md-form mt-1 mb-3 col-md-12">
-    <mdb-select [label]="'Chức vụ'" [notFoundMsg]="'Không tìm thấy'" [label]="'Chức vụ'" [options]="roleList"
-      [(ngModel)]="employee.roleId"></mdb-select>
-  </div>
+    <div class="md-form mt-2 mb-2" [ngClass]="{'col-md-6' : employee.roleId === 2, 'col-md-12' : employee.roleId === 3}">
 
-  <div class="md-form mt-1 mb-3 col-md-12" *ngIf="employee.roleId === 3">
-    <mdb-select [label]="'Người quản lý'" [notFoundMsg]="'Không tìm thấy'" [label]="'Người quản lý'"
-      [options]="managerList" [(ngModel)]="employee.managerId"></mdb-select>
-  </div>
+      <mdb-select
+        id="role"
+        name="role"
+        required
+        [label]="'Chức vụ*'"
+        [options]="roleList"
+        [class.ng-invalid.validate-error]="_roleId.invalid && (_roleId.dirty || _roleId.touched)"
+        #_roleId="ngModel"
+        [(ngModel)]="employee.roleId"
+        (selected)="selectRole($event)"
+        >
+        </mdb-select>
+      <span class="text-danger font-weight-normal" *ngIf="_roleId.invalid && (_roleId.dirty || _roleId.touched)" style="font-size: .8rem">Vui lòng chọn chức vụ</span>
 
-  <div class="md-form mt-1 mb-3 col-md-12" *ngIf="employee.roleId === 2">
-    <input type="text" id="email" class="form-control" mdbInput [(ngModel)]="employee.email" (blur)="checkEmailExist()"
-      #email=ngModel disabled [class.has-error]="isExist">
-    <label for="email">Email</label>
-    <mdb-error *ngIf="isExist">
-      <p class="font-weight-bold">Email đã tồn tại</p>
-    </mdb-error>
-  </div>
+    </div>
 
-  <div class="md-form mt-1 mb-3 col-md-12">
-    <input type="text" id="employeeId" class="form-control" mdbInput [(ngModel)]="employee.employeeId">
-    <label for="userName">Mã số nhân viên</label>
-  </div>
+    <div class="md-form mt-2 mb-2 col-md-6" *ngIf="employee.roleId === 2">
+      <input
+        type="text"
+        id="email"
+        class="form-control"
+        name="email"
+        mdbInput
+        required
+        [(ngModel)]="employee.email"
+        (blur)="checkEmailExist()"
+        #_email=ngModel
+        [class.ng-invalid.validate-error]="(_email.invalid && (_email.dirty || _email.touched)) || isExist">
+      <label for="email">Email</label>
 
-  <div class="md-form mt-1 mb-3 col-md-6">
-    <input type="text" id="firstName" class="form-control" mdbInput [(ngModel)]="employee.firstName">
-    <label for="firstName">Họ</label>
-  </div>
+      <mdb-error *ngIf="(_email.invalid && (_email.dirty || _email.touched)) || isExist">
+        <span *ngIf="_email?.errors?.required" class="font-weight-normal">Vui lòng nhập email</span>
+        <span *ngIf="isExist && !email?.errors?.required" class="font-weight-normal">Email đã tồn tại</span>
+      </mdb-error>
+    </div>
 
-  <div class="md-form mt-1 mb-3 col-md-6">
-    <input type="text" id="lastName" class="form-control" mdbInput [(ngModel)]="employee.lastName">
-    <label for="lastName">Tên</label>
-  </div>
+    <div class="md-form mt-2 mb-2 col-md-12" *ngIf="employee.roleId === 3">
+      <mdb-select
+        id="managerId"
+        name="managerId"
+        [label]="'Người quản lý'"
+        [notFoundMsg]="'Không tìm thấy'"
+        [options]="managerList"
+        [(ngModel)]="employee.managerId">
+      </mdb-select>
+    </div>
 
-  <div class="md-form mt-1 mb-3 col-md-6 ">
-    <mdb-select [label]="'Giới tính'" [options]="optionsSex" id="gender" [(ngModel)]="gender">
-    </mdb-select>
-  </div>
+    <div class="md-form my-3 col-md-6">
+      <input 
+        type="text" 
+        id="employeeId" 
+        class="form-control" 
+        name="employeeId"
+        mdbInput
+        required
+        [(ngModel)]="employee.employeeId"
+        (blur)="checkDuplicateId()" 
+        #_employeeId=ngModel
+        [class.ng-invalid.validate-error]="(_employeeId.invalid && (_employeeId.dirty || _employeeId.touched)) || isDuplicate"
+        >
+      <label for="employeeId">Mã số nhân viên*</label>
+      <mdb-error *ngIf="(_employeeId.invalid && (_employeeId.dirty || _employeeId.touched)) || isDuplicate">
+        <span *ngIf="_employeeId?.errors?.required" class="font-weight-normal">Vui lòng nhập mã số nhân viên</span>
+        <span *ngIf="isExist && !_employeeId?.errors?.required" class="font-weight-normal">Mã số nhân viên đã tồn tại</span>
+      </mdb-error>
+    </div>
 
-  <div class="md-form mt-1 mb-3 col-md-6">
-    <input type="text" id="phoneNumber" class="form-control" mdbInput [(ngModel)]="employee.phoneNumber" disabled>
-    <label for="phoneNumber">Số điện thoại</label>
-  </div>
+    <div class="md-form my-3 col-md-6">
+      <input 
+      type="text" 
+      id="firstName" 
+      name="firstName"
+      class="form-control" 
+      mdbInput 
+      required
+      #_firstName=ngModel
+      [(ngModel)]="employee.firstName"
+      [class.ng-invalid.validate-error]="(_firstName.invalid && (_firstName.dirty || _firstName.touched))"
+      >
+      <label for="firstName">Họ*</label>
+      
+      <mdb-error *ngIf="(_firstName.invalid && (_firstName.dirty || _firstName.touched))">
+        <span *ngIf="_firstName?.errors?.required" class="font-weight-normal">Vui lòng nhập họ nhân viên</span>
+      </mdb-error>
 
-  <owl-form-field class="col-md-6">
-    <input owlInput [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker" placeholder="Sinh nhật"
-      [(ngModel)]="employee.birthDate">
-    <owl-date-time #datepicker [pickerType]="'calendar'"></owl-date-time>
-  </owl-form-field>
+    </div>
 
-  <div class="md-form mt-1 mb-3 col-md-6">
-    <input type="text" id="macAddress" class="form-control" mdbInput [(ngModel)]="employee.phoneMacAddress">
-    <label for="macAddress">Địa chỉ MAC</label>
-  </div>
+    <div class="md-form my-3 col-md-6">
+      <input 
+      type="text" 
+      id="lastName" 
+      name="lastName" 
+      class="form-control" 
+      mdbInput
+      required
+      #_lastName=ngModel
+      [(ngModel)]="employee.lastName"
+      [class.ng-invalid.validate-error]="(_lastName.invalid && (_lastName.dirty || _lastName.touched))"
+      >
+      <label for="lastName">Tên*</label>
+      
+      <mdb-error *ngIf="_lastName.invalid && (_lastName.dirty || _lastName.touched)">
+        <span *ngIf="_lastName?.errors?.required" class="font-weight-normal">Vui lòng nhập tên nhân viên</span>
+      </mdb-error>
 
-  <div class="col-md-12">
-    <div class="md-form mt-0 mb-3 form-inline mr-auto w-100">
+    </div>
 
-      <!-- <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search"> -->
+    <div class="md-form my-3 col-md-6 ">
+      <mdb-select
+        name="sex"
+        required
+        [label]="'Giới tính*'"
+        [options]="optionsSex"
+        id="gender"
+        [class.ng-invalid.validate-error]="_sex.invalid && (_sex.dirty || _sex.touched)"
+        #_sex="ngModel"
+        [(ngModel)]="gender">
+      </mdb-select>
+      <span class="text-danger font-weight-normal" *ngIf="_sex.invalid && (_sex.dirty || _sex.touched)" style="font-size: .8rem">Vui lòng chọn giới tính</span>
+    </div>
 
-      <input type="text" [ngModel]="employee.address" (ngModelChange)='changeAddress($event)'
-        class="form-control mr-sm-2" id="searchField" mdbInput>
-      <label for="searchField">Địa chỉ</label>
-      <button mdbBtn size="sm" color="primary" rounded="true" class="my-0 waves-light" mdbWavesEffect type="submit"
-        (click)='updateOnMap()'>
-        <i class="fa fa-search"></i>
+    <div class="md-form my-3 col-md-6">
+      <input 
+      type="text" 
+      id="phoneNumber" 
+      name="phoneNumber" 
+      class="form-control" 
+      mdbInput
+      required
+      #_phoneNumber=ngModel
+      [(ngModel)]="employee.phoneNumber"
+      [class.ng-invalid.validate-error]="(_phoneNumber.invalid && (_phoneNumber.dirty || _phoneNumber.touched))"
+      >
+      <label for="phoneNumber">Số điện thoại*</label>
+      
+      <mdb-error *ngIf="_phoneNumber.invalid && (_phoneNumber.dirty || _phoneNumber.touched)">
+        <span *ngIf="_phoneNumber?.errors?.required" class="font-weight-normal">Vui lòng nhập số điện thoại</span>
+      </mdb-error>
+
+    </div>
+
+    <owl-form-field class="col-md-6 mt-3">
+      <input
+        owlInput
+        name="birthday"
+        [owlDateTimeTrigger]="datepicker"
+        [owlDateTime]="datepicker"
+        placeholder="Ngày sinh"
+        [(ngModel)]="employee.birthDate"
+        required
+        #_dateTime="ngModel">
+      <owl-date-time #datepicker [pickerType]="'calendar'"></owl-date-time>
+      <owl-error *ngIf="_dateTime?.errors?.required">
+          Vui lòng nhập ngày sinh
+      </owl-error>
+    </owl-form-field>
+
+    <div class="md-form my-3 col-md-12">
+      <input 
+      type="text" 
+      id="macAddress" 
+      name="macAddress" 
+      class="form-control" 
+      mdbInput
+      required
+      #_macAddress=ngModel
+      [(ngModel)]="employee.phoneMacAddress"
+      [class.ng-invalid.validate-error]="_macAddress.invalid && (_macAddress.dirty || _macAddress.touched)"
+      >
+      <label for="macAddress">Địa chỉ MAC*</label>
+
+      <mdb-error *ngIf="_macAddress.invalid && (_macAddress.dirty || _macAddress.touched)">
+        <span *ngIf="_macAddress?.errors?.required" class="font-weight-normal">Vui lòng nhập mã số nhân viên</span>
+      </mdb-error>
+
+    </div>
+
+    <div class="col-md-12">
+      <div class="md-form my-3 form-inline mr-auto w-100">
+
+          <input
+            type="text"
+            class="form-control w-100"
+            id="searchField"
+            name="searchField"
+            mdbInput
+            required
+            #_address=ngModel
+            [class.ng-invalid.validate-error]="(_address.invalid && (_address.dirty || _address.touched))"
+            [ngModel]='employee.address'
+            (ngModelChange)="changeAddress($event)"
+            (blur)="updateOnMap()"
+            >
+        <label for="searchField">Địa chỉ</label>
+
+        <mdb-error *ngIf="_address.invalid && (_address.dirty || _address.touched)">
+          <span *ngIf="_address?.errors?.required" class="font-weight-normal">Vui lòng nhập địa chỉ</span>
+        </mdb-error>
+
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <agm-map #map [mapTypeId]="'terrain'" [latitude]="employee.latitude" [longitude]="employee.longitude"
+        [zoom]="location.zoom" style="height: 300px">
+        <agm-marker [latitude]="employee.latitude" [longitude]="employee.longitude"></agm-marker>
+      </agm-map>
+    </div>
+
+    <div class="file-field md-form col-12 pl-0 mt-1 mb-3">
+      <div mdbBtn floating="true" size="md" color="primary" mdbWavesEffect>
+        <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+        <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
+          (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+      </div>
+      <div class="file-path-wrapper mt-3">
+        <input class="file-path" type="text" placeholder="Chọn ảnh đại diện" [value]="showFiles()" disabled>
+      </div>
+    </div>
+    <div class="col text-center w-100" *ngIf="employee.picture || url">
+      <img [src]="employee.picture || url" height="150">
+    </div>
+    
+    <div class="col-12 text-center mt-3 border-top pt-3">
+      <button mdbBtn color="primary" class="waves-light" mdbWavesEffect [disabled]="!updateForm.form.valid">Cập nhật
+        <i class="fa fa-check ml-1"></i>
       </button>
-
     </div>
-  </div>
+  </form>
 
-  <div class="col-md-12">
-    <agm-map #map [mapTypeId]="'terrain'" [latitude]="employee.latitude" [longitude]="employee.longitude"
-      [zoom]="location.zoom" style="height: 300px">
-      <agm-marker [latitude]="employee.latitude" [longitude]="employee.longitude"></agm-marker>
-    </agm-map>
-  </div>
-
-  <div class="file-field md-form col-12 pl-0 mt-1 mb-3">
-    <div mdbBtn floating="true" size="md" color="primary" mdbWavesEffect>
-      <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-      <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
-        (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
-    </div>
-    <div class="file-path-wrapper mt-3">
-      <input class="file-path" type="text" placeholder="Chọn ảnh đại diện" [value]="showFiles()">
-    </div>
-  </div>
-  <div class="col text-center w-100" *ngIf="employee.picture || url">
-    <img [src]="employee.picture || url" height="150">
-  </div>
-
-</div>
-<div class="modal-footer d-flex justify-content-center">
-  <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="updateEmployee()">Cập nhật
-    <i class="fa fa-check ml-1"></i>
-  </button>
 </div>

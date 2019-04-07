@@ -96,7 +96,6 @@ export class SalerComponent {
 
         this.map.triggerResize();
       } else {
-        alert('Sorry, this search produced no results.');
       }
     });
   }

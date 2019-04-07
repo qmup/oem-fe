@@ -69,6 +69,9 @@ export class RequestInterceptorService implements HttpInterceptor {
         (event: HttpEvent < any > ) => {},
         (error: any) => {
           if (error instanceof HttpErrorResponse) {
+            if (!navigator.onLine) {
+              this.toastService.warning('Lỗi kết nối mạng', 'Kiếm tra lại Internet', { positionClass: 'toast-bottom-right'});
+            }
             const now = new Date().getTime();
             if (token.expired_time < now) {
               this.toastService.info('Phiên đăng nhập hết hạn', 'Vui lòng đăng nhập lại', { positionClass: 'toast-bottom-right'});

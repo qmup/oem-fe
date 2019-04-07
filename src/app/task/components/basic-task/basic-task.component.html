@@ -10,8 +10,8 @@
         <div class="col-xl-6 col-lg-12 px-5 pt-3 text-right">
           <a class="btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i></a>
         </div>
-        <div [ngClass]="{'col-12': userAccount.roleId === 1, 'col-6': userAccount.roleId === 2}"
-          class="card-body card-body-cascade pb-0 px-5 border-right">
+        <div [ngClass]="{'col-12': userAccount.roleId === 1, 'col-6 border-right': userAccount.roleId === 2}"
+          class="card-body card-body-cascade pb-0 px-5">
 
           <div class="col-md-12 mx-auto text-left my-3">
             <div class="d-flex flex-wrap">
@@ -138,42 +138,46 @@
         </button>
       </div>
       <div class="modal-body mx-3 row">
-        <div class="md-form mt-0 mb-3 col-6 col-md-12">
-          <input type="text" id="title" class="form-control" mdbInput [(ngModel)]="taskBasicCM.title">
-          <label for="title">Tên công việc</label>
-        </div>
+        <form (ngSubmit)="createTaskBasic()" #createForm="ngForm" class="d-flex flex-wrap w-100">
+          <div class="md-form mt-0 mb-3 col-md-12">
+            <input 
+            type="text" 
+            id="title" 
+            name="title" 
+            class="form-control" 
+            mdbInput
+            required
+            #title=ngModel
+            [(ngModel)]="taskBasicCM.title"
+            [class.ng-invalid.validate-error]="(title.invalid && (title.dirty || title.touched))"
+            >
+            <label for="title">Tên*</label>
+            
+            <mdb-error *ngIf="title.invalid && (title.dirty || title.touched)">
+              <span *ngIf="title?.errors?.required" class="font-weight-normal">Vui lòng nhập tên công việc</span>
+            </mdb-error>
 
-        <!-- <div class="col-12 md-form mt-0 mb-3">
-          <textarea type="text" id="description" class="md-textarea form-control" mdbInput [(ngModel)]="taskBasicCM.description"></textarea>
-          <label id="description">Miêu tả công việc</label>
-        </div> -->
-
-        <!-- <span>Thời gian hoàn thành</span>
-        <div class="w-100 d-flex justify-content-center align-items-center my-3">
-          <mdb-range-input id="range" [min]="0" [step]="5" [max]="30" name="range" [(ngModel)]="taskBasicCM.duration" class="w-100"></mdb-range-input>
-          <span class="ml-2">phút</span>
-        </div> -->
-
-        <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
-          <div mdbBtn floating="true" size="md" color="success" mdbWavesEffect>
-            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-            <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
-              (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
           </div>
-          <div class="file-path-wrapper mt-3">
-            <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()">
+  
+          <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
+            <div mdbBtn floating="true" size="md" color="success" mdbWavesEffect>
+              <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+              <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
+                (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+            </div>
+            <div class="file-path-wrapper mt-3">
+              <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()" disabled>
+            </div>
           </div>
-        </div>
-        <div class="col text-center" *ngIf="url">
-          <img [src]="url" height="100">
-        </div>
-
-      </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createTaskBasic()">Tạo
-          mới
-          <i class="fa fa-check ml-1"></i>
-        </button>
+          <div class="col text-center" *ngIf="url">
+            <img [src]="url" height="100">
+          </div>
+          <div class="col-12 text-center mt-3 border-top pt-3">
+            <button mdbBtn color="success" class="waves-light" mdbWavesEffect [disabled]="!createForm.form.valid">Tạo mới
+              <i class="fa fa-check ml-1"></i>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

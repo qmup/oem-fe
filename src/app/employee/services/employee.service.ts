@@ -19,7 +19,7 @@ export class EmployeeService {
 
   getEmployeeByManager(
     managerId: number,
-    // roleId: number,
+    search: string,
     sort: string,
     fieldSort: string,
     page: number,
@@ -29,7 +29,7 @@ export class EmployeeService {
       {
         params: {
           managerId: `${managerId}`,
-          // roleID: `${roleId}`,
+          search: `${search}`,
           sort: `${sort}`,
           fieldSort: `${fieldSort}`,
           page: `${page}`,
@@ -41,7 +41,7 @@ export class EmployeeService {
 
   getAvailableEmployee(
     managerId: number,
-    // roleId: number,
+    // search: string,
     sort: string,
     fieldSort: string,
     page: number,
@@ -51,7 +51,7 @@ export class EmployeeService {
       {
         params: {
           managerId: `${managerId}`,
-          // roleID: `${roleId}`,
+          // search: `${search}`,
           sort: `${sort}`,
           fieldSort: `${fieldSort}`,
           page: `${page}`,
@@ -67,32 +67,19 @@ export class EmployeeService {
     ).toPromise();
   }
 
-  getByManager(managerId: number, sort: string, fieldSort: string, page: number, size: number): Promise<Employee[]> {
-    return this.httpClient.get<Employee[]>(
-      `${environment.endPoint}${environment.apiPaths.employee.get}`,
-      {
-        params: {
-          managerID: `${managerId}`,
-          sort: `${sort}`,
-          fieldSort: `${fieldSort}`,
-          page: `${page}`,
-          size: `${size}`
-        },
-      }
-    ).toPromise();
-  }
-
   getById(employeeId: number): Promise<Employee> {
     return this.httpClient.get<Employee>(
       `${environment.endPoint}${environment.apiPaths.employee.getById}?id=${employeeId}`
     ).toPromise();
   }
 
-  getAll(sort: string, fieldSort: string, page: number, size: number): Promise<PaginationResponse> {
+  getAll(search: string, status: number, sort: string, fieldSort: string, page: number, size: number): Promise<PaginationResponse> {
     return this.httpClient.get<PaginationResponse>(
       `${environment.endPoint}${environment.apiPaths.employee.getAll}`,
       {
         params: {
+          search: `${search}`,
+          status: `${status}`,
           fieldSort: `${fieldSort}`,
           sort: `${sort}`,
           page: `${page}`,
