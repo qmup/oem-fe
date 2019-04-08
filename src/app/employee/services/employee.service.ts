@@ -18,6 +18,7 @@ export class EmployeeService {
   }
 
   getEmployeeByManager(
+    status: number,
     managerId: number,
     search: string,
     sort: string,
@@ -28,6 +29,7 @@ export class EmployeeService {
       `${environment.endPoint}${environment.apiPaths.employee.getEmployeeByManager}`,
       {
         params: {
+          status: `${status}`,
           managerId: `${managerId}`,
           search: `${search}`,
           sort: `${sort}`,

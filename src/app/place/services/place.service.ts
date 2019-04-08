@@ -65,7 +65,7 @@ export class PlaceService {
   getWorkplaceByManager(
     managerId: number,
     search: string,
-    zoneId: number,
+    zoneId: any,
     status: number,
     sort: string,
     fieldSort: string,

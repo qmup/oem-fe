@@ -211,7 +211,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   getWorkplaceByManager(managerId: number) {
-    this.workplaceService.getWorkplaceByManager(managerId, '', '', 'id', 0, 99)
+    this.workplaceService.getWorkplaceByManager(managerId, '', '', 1, '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
           this.workplaceListByManager = response.listOfWorkplace.content.map((wp: Shared) => {

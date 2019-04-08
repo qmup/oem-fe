@@ -120,6 +120,9 @@ export class LaborerComponent implements OnInit {
     this.optionsSex = this.globalService.optionsSex;
     this.userAccount = this.globalService.getUserAccount();
     this.employeeStatusList = this.globalService.employeeStatus;
+    if (this.userAccount.roleId === 2) {
+      this.employeeStatusList.pop();
+    }
     this.getManager();
     this.getRole();
     this.getEmployee();
@@ -152,7 +155,9 @@ export class LaborerComponent implements OnInit {
   }
 
   getEmployeeByManager() {
-    this.employeeService.getEmployeeByManager(this.userAccount.id, this.searchText, this.sortValue, this.fieldSort, this.currentPage, 10)
+    this.employeeService.getEmployeeByManager(
+      this.currentStatus, this.userAccount.id, this.searchText, this.sortValue, this.fieldSort, this.currentPage, 10
+    )
       .then(
         (response: PaginationResponse) => {
           this.employeeResponse = response;

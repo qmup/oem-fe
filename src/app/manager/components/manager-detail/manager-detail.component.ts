@@ -64,6 +64,9 @@ export class ManagerDetailComponent implements OnInit {
   modalRef: BsModalRef;
   currentPage1 = 0;
   currentPage2 = 0;
+  searchWorkplaceText = '';
+  searchEmployeeText = '';
+  timeoutSearch: any;
 
   constructor(
     private employeeService: EmployeeService,
@@ -104,7 +107,7 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   getEmployeeWithoutManager() {
-    this.employeeService.getEmployeeByManager(0, '', '', 'id', 0, 99)
+    this.employeeService.getEmployeeByManager(1, 0, '', '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
           this.employeeList = response.content.map((employee) => {
@@ -119,7 +122,7 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   getEmployeeByManager() {
-    this.employeeService.getEmployeeByManager(this.id, '', '', 'id', this.currentPage1, 3)
+    this.employeeService.getEmployeeByManager(1, this.id, this.searchEmployeeText, '', 'id', this.currentPage1, 3)
       .then(
         (response: PaginationResponse) => {
           this.employeeListByManager = response.content;
@@ -129,13 +132,31 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   getWorkplaceByManager() {
-    this.workplaceService.getWorkplaceByManager(this.id, '', '', 'id', this.currentPage2, 3)
+    this.workplaceService.getWorkplaceByManager(this.id, this.searchWorkplaceText, '', 1, '', 'id', this.currentPage2, 3)
       .then(
         (response: PlacePagination) => {
           this.workplaceListByManager = response.listOfWorkplace.content;
           this.workplaceResponseByManager = response.listOfWorkplace;
         }
       );
+  }
+
+  searchEmployee() {
+    if (this.timeoutSearch) {
+      clearTimeout(this.timeoutSearch);
+    }
+    this.timeoutSearch = setTimeout(() => {
+      this.getEmployeeByManager();
+    }, 500);
+  }
+
+  searchWorkplace() {
+    if (this.timeoutSearch) {
+      clearTimeout(this.timeoutSearch);
+    }
+    this.timeoutSearch = setTimeout(() => {
+      this.getWorkplaceByManager();
+    }, 500);
   }
 
   selectEmployee(e: any) {
@@ -185,7 +206,7 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   getWorkplaceWithoutManager(zoneId: number) {
-    this.workplaceService.getWorkplaceByManager(0, zoneId, '', 'id', 0, 99)
+    this.workplaceService.getWorkplaceByManager(0, '', zoneId, 1, '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
           if (response.listOfWorkplace.totalElements !== 0) {

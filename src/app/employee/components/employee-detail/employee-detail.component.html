@@ -64,8 +64,6 @@
               <p class="h5">Công việc trong ngày</p>
             </div>
             <div class="col pl-0">
-              <!-- <a [routerLink]="['/task']" class="link">Xem tất cả</a> -->
-              <!-- <a class="btn-floating btn-md btn-success"><i class="fa fa-plus"></i></a> -->
             </div>
           </mdb-card-title>
 
@@ -120,12 +118,12 @@
 
       <mdb-card class="mt-3" cascade="true">
 
-        <mdb-card-body cascade="true" class="text-left" *ngIf="userAccount.roleId === 1">
+        <mdb-card-body cascade="true" class="text-left">
           <mdb-card-title class="d-flex flex-wrap w-100">
             <div class="col pr-0">
               <p class="h5">Hồ sơ nhân viên</p>
             </div>
-            <div class="col pr-0">
+            <div class="col pr-0" *ngIf="userAccount.roleId === 1">
               <a class="btn-floating btn-md btn-primary"><i class="fa fa-pencil" (click)="openUpdateEmployeeModal(employee)"></i></a>
             </div>
           </mdb-card-title>

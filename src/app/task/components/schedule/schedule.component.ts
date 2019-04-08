@@ -156,7 +156,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   getCompany() {
-    this.companyService.getCompanyByManager(this.userAccount.id, '', 'id', 0, 99)
+    this.companyService.getCompanyByManager(this.userAccount.id, '', '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
           this.companyList = response.content.map((company) => {
@@ -205,7 +205,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   getWorkplace(zoneId: number) {
-    this.workplaceService.getWorkplaceByManager(this.userAccount.id, zoneId, '', 'id', 0, 99)
+    this.workplaceService.getWorkplaceByManager(this.userAccount.id, '', zoneId, 1, '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content.map((place) => {

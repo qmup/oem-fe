@@ -287,7 +287,7 @@ export class PlaceComponent implements OnInit {
   }
 
   getEmployee() {
-    this.employeeService.getEmployeeByManager(this.userAccount.id, '', '', 'id', 0, 99)
+    this.employeeService.getEmployeeByManager(1, this.userAccount.id, '', '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
           this.employeeList = response.content.map((employee) => {

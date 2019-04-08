@@ -93,9 +93,15 @@
               <p class="h5">Nhân viên đang quản lý</p>
             </div>
             <div class="col pl-0">
-              <a [routerLink]="['/employee']" class="link">Xem tất cả</a>
+              <!-- <a [routerLink]="['/employee']" class="link">Xem tất cả</a> -->
               <a class="btn-floating btn-md btn-success" (click)="openCreateEmployeeModal()"><i
                   class="fa fa-plus"></i></a>
+            </div>
+            <div class="col-12">
+              <div class="md-form">
+                <input type="text" [(ngModel)]="searchEmployeeText" class="form-control" mdbInput (keyup)="searchEmployee()">
+                <label>Tìm kiếm</label>
+              </div>
             </div>
           </mdb-card-title>
 
@@ -121,7 +127,7 @@
               </div>
             </a>
             <div *ngIf="employeeResponseByManager?.numberOfElements === 0">
-              <span class="text-danger pl-3">Chưa quản lý nhân viên nào</span>
+              <span class="text-danger pl-3">Không tìm thấy nhân viên</span>
             </div>
             <app-pagination *ngIf="employeeResponseByManager?.totalPages > 1"
               [pageSize]="employeeResponseByManager.size" [totalPage]="employeeResponseByManager.totalPages"
@@ -137,9 +143,15 @@
               <p class="h5">Nơi làm việc đang quản lý</p>
             </div>
             <div class="col pl-0">
-              <a [routerLink]="['/company']" class="link">Xem tất cả</a>
+              <!-- <a [routerLink]="['/company']" class="link">Xem tất cả</a> -->
               <a class="btn-floating btn-md btn-success" (click)="openCreateWorkplaceModal()"><i
                   class="fa fa-plus"></i></a>
+            </div>
+            <div class="col-12">
+              <div class="md-form">
+                <input type="text" [(ngModel)]="searchWorkplaceText" class="form-control" mdbInput (keyup)="searchWorkplace()">
+                <label>Tìm kiếm</label>
+              </div>
             </div>
           </mdb-card-title>
           <div class="list-group">
@@ -166,7 +178,7 @@
             </app-pagination>
           </div>
           <div *ngIf="workplaceResponseByManager.numberOfElements === 0">
-            <span class="text-danger pl-3">Chưa quản lý nơi làm việc nào</span>
+            <span class="text-danger pl-3">Không tìm thấy nơi làm việc nào</span>
           </div>
         </mdb-card-body>
       </mdb-card>
@@ -194,7 +206,8 @@
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect *ngIf="addingEmpId" (click)="addEmployeeForManager()">Thêm
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect *ngIf="addingEmpId"
+          (click)="addEmployeeForManager()">Thêm
           <i class="fa fa-check ml-1"></i>
         </button>
       </div>
@@ -228,7 +241,8 @@
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect *ngIf="manageWorkplace.workplaceId" (click)="addWorkplaceForManager()">Thêm
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect *ngIf="manageWorkplace.workplaceId"
+          (click)="addWorkplaceForManager()">Thêm
           <i class="fa fa-check ml-1"></i>
         </button>
       </div>

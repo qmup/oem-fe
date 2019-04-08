@@ -84,7 +84,7 @@ export class TaskSearchComponent implements OnChanges {
   }
 
   getEmployeeByManager() {
-    this.employeeService.getEmployeeByManager(this.userAccount.id, '', '', 'id', this.currentPage, 99)
+    this.employeeService.getEmployeeByManager(1, this.userAccount.id, '', '', 'id', this.currentPage, 99)
       .then(
         (response: PaginationResponse) => {
           this.employeeList = response.content.map(e => {
@@ -99,7 +99,7 @@ export class TaskSearchComponent implements OnChanges {
   }
 
   getWorkplaceByManager() {
-    this.workplaceService.getWorkplaceByManager(this.userAccount.id, '', '', 'id', 0, 99)
+    this.workplaceService.getWorkplaceByManager(this.userAccount.id, '', '', 1, '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content.map(p => {

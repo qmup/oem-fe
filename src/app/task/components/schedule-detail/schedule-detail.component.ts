@@ -140,7 +140,7 @@ export class ScheduleDetailComponent implements OnInit {
   }
 
   getWorkplaceByManager() {
-    this.workplaceService.getWorkplaceByManager(this.userAccount.id, '', '', 'id', 0, 99)
+    this.workplaceService.getWorkplaceByManager(this.userAccount.id, '', '', 1, '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content.map(p => {
