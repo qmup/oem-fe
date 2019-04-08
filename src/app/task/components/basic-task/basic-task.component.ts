@@ -46,6 +46,7 @@ export class BasicTaskComponent implements OnInit {
   adminSearchText = '';
   mngSearchText = '';
   timeoutSearch: any;
+  myTask: boolean;
 
   constructor(
     private taskBasicService: TaskBasicService,
@@ -137,7 +138,6 @@ export class BasicTaskComponent implements OnInit {
     this.createModal.show();
   }
   openUpdateModal(taskBasic: Task) {
-    console.log(taskBasic);
     const modalOptions: ModalOptions = {
       animated: true,
       class: 'modal-notify modal-primary',
@@ -217,11 +217,6 @@ export class BasicTaskComponent implements OnInit {
       );
   }
 
-  openDeleteModal(taskId: number) {
-    this.deletingId = taskId;
-    this.deleteModal.show();
-  }
-
   removeTaskBasicAdmin() {
     this.taskService.remove(this.deletingId)
       .then(
@@ -243,7 +238,7 @@ export class BasicTaskComponent implements OnInit {
   }
 
   removeTaskBasic() {
-    if (this.userAccount.roleId === 1) {
+    if (this.myTask) {
       this.removeTaskBasicAdmin();
     } else {
       this.taskBasicService.remove(this.deletingId, this.userAccount.id)
@@ -266,15 +261,19 @@ export class BasicTaskComponent implements OnInit {
     }
   }
 
-  checkRemovable(id: number) {
-    this.taskService.checkRemove(id)
+  checkRemovable(id: number, editable: boolean) {
+    this.deletingId = id;
+    this.myTask = false;
+    if (editable) {
+      this.myTask = editable;
+    }
+    this.warningMessage = [];
+    this.taskService.checkRemoveTaskBasic(id, this.userAccount.id)
       .then(
         (response) => {
-          this.warningMessage = response.message.split(';');
-          if (this.userAccount.roleId === 2) {
-            this.warningMessage = this.warningMessage.filter((m, index) => index !== 2);
-          }
-          this.openDeleteModal(id);
+          response.removeAble ?
+          this.deleteModal.show() :
+          (this.warningMessage = response.message.split(';'), this.deleteModal.show());
         }
       );
   }

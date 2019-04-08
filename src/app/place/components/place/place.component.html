@@ -13,53 +13,65 @@
       <div *ngIf="userAccount.roleId === 2" class="col-xl-6 col-lg-12 px-5 pt-3">
         <div class="col-12 px-0 d-flex flex-wrap w-100">
           <mdb-select class="col pl-0" [label]="'Nơi làm việc'" [options]="viewOptions"
-            (selected)="changeViewOption($event)"></mdb-select>
-          <mdb-select class="col px-0" [label]="'Chế độ xem'" [options]="viewTypes" (selected)="changeViewType($event)">
+            (selected)="changeViewOption($event)" [ngModel]="currentViewOption"></mdb-select>
+          <mdb-select class="col px-0" [label]="'Chế độ xem'" [options]="viewTypes" [ngModel]="currentViewType" (selected)="changeViewType($event)">
           </mdb-select>
         </div>
       </div>
-      <div class="card-body card-body-cascade pb-0 d-flex flex-wrap w-100">
-        <div class="col-xl-8 col-lg-12 px-4">
-          <!-- Search -->
-          <div class="md-form">
+      <div class="card-body card-body-cascade pb-0 d-flex flex-wrap w-100 pt-1">
+
+        <div class="d-flex flex-wrap w-100 pb-3">
+          <h4
+            class="col-8 text-left mt-auto mx-auto" *ngIf="!showAll">
+            <span routerLink="/company" style="cursor: pointer; color: #007bff"> {{companyName}} </span>
+            <span (click)="location.back()" style="cursor: pointer; color: #007bff; font-size: 20px;">
+              <span *ngIf="companyName"> - </span>
+              {{zoneName}}
+              <span *ngIf="companyName"> - </span>
+              <span *ngIf="currentStatus === 0 && companyName"
+                class="text-danger font-weight-normal" style="font-size: 18px">Đã xóa</span>
+              <span *ngIf="currentStatus === 1 && companyName" class="text-success"
+                style="font-size: 18px">Đang mở</span>
+              <span *ngIf="currentStatus === 2 && companyName" class="text-muted"
+                style="font-size: 18px">Đang tạm đóng</span>
+            </span>
+          </h4>
+          <h4
+            class="col-8 text-left mt-auto mx-auto" *ngIf="showAll">
+            <span style="color: #007bff">Tất cả nơi làm việc đang quản lý - </span>
+            <span *ngIf="currentStatus === 0"
+                class="text-danger font-weight-normal" style="font-size: 18px">Đã xóa</span>
+              <span *ngIf="currentStatus === 1" class="text-success"
+                style="font-size: 18px">Đang mở</span>
+              <span *ngIf="currentStatus === 2" class="text-muted"
+                style="font-size: 18px">Đang tạm đóng</span>
+          </h4>
+
+          <div class="col-xl-3 col-lg-12 px-4">
+            <owl-form-field class="col px-0" *ngIf="userAccount.roleId === 2">
+              <input owlInput [owlDateTimeTrigger]="dateSearchInput" [owlDateTime]="dateSearchInput"
+                placeholder="Công việc vào ngày" [(ngModel)]="dateSearch" (dateTimeChange)="getPlace()">
+              <owl-date-time #dateSearchInput [pickerType]="'calendar'"></owl-date-time>
+            </owl-form-field>
+          </div>
+          
+        </div>
+        <div class="col-xl-8 pl-xl-5 col-lg-12 px-4">
+            <!-- Search -->
+          <div class="md-form m-0">
             <input type="text" [(ngModel)]="searchText" class="form-control" mdbInput (keyup)="search()">
             <label>Tìm kiếm</label>
           </div>
 
         </div>
-        <div *ngIf="userAccount.roleId === 1" class="col-xl-4 col-lg-12 pt-4 px-4">
-          <mdb-select [label]="'Trạng thái khu vực'" [options]="workplaceStatusList"
-            [(ngModel)]="currentStatus" (selected)="getPlace();"></mdb-select>
+        <div class="col-xl-4 pr-xl-5 pt-xl-0 col-lg-12 pt-4 px-4">
+          <div class="col-12 px-0 d-flex flex-wrap w-100">
+            <mdb-select class="col px-0" [label]="'Trạng thái nơi làm việc'" [options]="workplaceStatusList"
+              [(ngModel)]="currentStatus" (selected)="getPlace();"></mdb-select>
+          
+          </div>
         </div>
-        
-        <owl-form-field class="col-xl-4 col-lg-12 pt-4 px-4" *ngIf="userAccount.roleId === 2">
-          <input owlInput [owlDateTimeTrigger]="dateSearchInput" [owlDateTime]="dateSearchInput"
-            placeholder="Nơi làm việc và công việc vào ngày" [(ngModel)]="dateSearch" (dateTimeChange)="getPlace()">
-          <owl-date-time #dateSearchInput [pickerType]="'calendar'"></owl-date-time>
-        </owl-form-field>
-
-        <div class="d-flex flex-wrap w-100">
-          <h4
-            class="col-11 text-left mx-auto pb-3" *ngIf="!showAll">
-            <span routerLink="/company" style="cursor: pointer; color: #007bff"> {{companyName}} </span>
-            <span (click)="location.back()" style="cursor: pointer; color: #007bff; font-size: 20px;">
-              <span *ngIf="companyName"> - </span>
-              {{zoneName}}
-              <span *ngIf="userAccount.roleId === 1 && companyName"> - </span>
-              <span *ngIf="userAccount.roleId === 1 && currentStatus === 0 && companyName"
-                class="text-danger font-weight-normal" style="font-size: 18px">Đã xóa</span>
-              <span *ngIf="userAccount.roleId === 1 && currentStatus === 1 && companyName" class="text-success"
-                style="font-size: 18px">Đang mở</span>
-              <span *ngIf="userAccount.roleId === 1 && currentStatus === 2 && companyName" class="text-muted"
-                style="font-size: 18px">Đang tạm đóng</span>
-            </span>
-          </h4>
-          <h4
-            class=" col-11 text-left mx-auto pb-3" *ngIf="showAll">
-            <span style="color: #007bff">Tất cả nơi làm việc đang quản lý</span>
-          </h4>
-        </div>
-        <div *ngIf="currentViewType == 1" class="d-flex flex-wrap w-100 animated zoomIn">
+        <div *ngIf="currentViewType == 1" class="d-flex flex-wrap w-100 animated zoomIn pt-3">
 
           <div class="col-md-4 mb-4" *ngFor="let p of placeList; let i = index">
 
@@ -198,7 +210,7 @@
         </div>
 
 
-        <table class="table table-hover animated fadeIn" *ngIf="currentViewType == 2">
+        <table class="table table-hover animated fadeIn pt-3" *ngIf="currentViewType == 2">
 
           <!--Table head-->
           <thead>

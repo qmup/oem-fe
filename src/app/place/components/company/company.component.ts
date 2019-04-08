@@ -103,6 +103,9 @@ export class CompanyComponent implements OnInit {
   ngOnInit() {
     this.companyStatusList = this.globalService.workplaceStatus;
     this.userAccount = this.globalService.getUserAccount();
+    if (this.userAccount.roleId === 2) {
+      this.companyStatusList.pop();
+    }
     this.getCompany();
   }
 

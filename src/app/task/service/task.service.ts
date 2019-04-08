@@ -162,4 +162,10 @@ export class TaskService {
       }
     ).toPromise();
   }
+
+  checkRemoveTaskBasic(taskId: number, assignerId: number): Promise<any> {
+    return this.httpClient.get<any>(
+      `${environment.endPoint}${environment.apiPaths.task.checkRemoveTaskBasic + taskId}/${assignerId}`,
+    ).toPromise();
+  }
 }

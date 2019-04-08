@@ -58,7 +58,7 @@
 
                     <a *ngIf="userAccount.roleId === 1" type="button"
                       class="btn-floating btn-small btn-danger waves-light" mdbWavesEffect
-                      (click)="checkRemovable(t.id)">
+                      (click)="checkRemovable(t.id, true)">
                       <i class="fa fa-close"></i>
                     </a>
 
@@ -114,7 +114,7 @@
                     </a>
 
                     <a type="button" class="btn-floating btn-small btn-danger waves-light" mdbWavesEffect
-                      (click)="checkRemovable(t.id)">
+                      (click)="checkRemovable(t.id, t.editable)">
                       <i class="fa fa-close"></i>
                     </a>
 

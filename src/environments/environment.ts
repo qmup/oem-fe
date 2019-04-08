@@ -104,6 +104,7 @@ export const environment = {
       updateTaskBasicList: 'task/update-task-basic-list',
       getAssignHistory: 'assign-task/get-assign-history',
       checkRemove: 'task/check-task-basic',
+      checkRemoveTaskBasic: 'task/check-remove-task-basic/'
     },
     coordinate: {
       create: 'coordinate/create',
