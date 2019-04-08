@@ -70,6 +70,7 @@ export class TaskComponent implements OnInit {
   currentZone: any;
   currentWorkplace: any;
   currentSize = 10;
+  defaultImage = '../../../../assets/default-image.jpg';
 
   constructor(
     private taskService: TaskService,

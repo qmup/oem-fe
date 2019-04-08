@@ -88,6 +88,8 @@ export class LaborerComponent implements OnInit {
   showRemovedEmp = false;
   employeeStatusList = [];
   timeoutSearch: any;
+  timeoutSearchMap: any;
+  defaultImage = '../../../../assets/default-image.jpg';
 
   constructor(
     private employeeService: EmployeeService,
@@ -458,14 +460,19 @@ export class LaborerComponent implements OnInit {
   }
 
   updateOnMap() {
-    if (this.location.address_level_1) {
-      let full_address: string = this.location.address_level_1 || '';
-      if (this.location.address_level_2) { full_address = full_address + ' ' + this.location.address_level_2; }
-      if (this.location.address_state) { full_address = full_address + ' ' + this.location.address_state; }
-      if (this.location.address_country) { full_address = full_address + ' ' + this.location.address_country; }
-
-      this.findLocation(full_address);
+    if (this.timeoutSearchMap) {
+      clearTimeout(this.timeoutSearchMap);
     }
+    this.timeoutSearchMap = setTimeout(() => {
+      if (this.location.address_level_1) {
+        let full_address: string = this.location.address_level_1 || '';
+        if (this.location.address_level_2) { full_address = full_address + ' ' + this.location.address_level_2; }
+        if (this.location.address_state) { full_address = full_address + ' ' + this.location.address_state; }
+        if (this.location.address_country) { full_address = full_address + ' ' + this.location.address_country; }
+
+        this.findLocation(full_address);
+      }
+    }, 500);
   }
 
   findLocation(address) {

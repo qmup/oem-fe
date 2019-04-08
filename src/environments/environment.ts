@@ -140,7 +140,8 @@ export const environment = {
       getById: 'company/get-company-by-id',
       remove: 'company/remove-company',
       update: 'company/update-company-information',
-      getByManager: 'company/get-all-company-by-manager/'
+      getByManager: 'company/get-all-company-by-manager/',
+      checkRemove: 'company/check-remove/',
 
     },
     zone: {
@@ -148,7 +149,8 @@ export const environment = {
       getByCompany: 'zone/get-all-zone-by-company',
       remove: 'zone/remove-zone',
       update: 'zone/update-zone-information',
-      getByManager: 'zone/get-all-zone-by-manager/'
+      getByManager: 'zone/get-all-zone-by-manager/',
+      checkRemove: 'zone/check-remove/',
     },
     calendar: {
       get: 'task/get-task-by-date-and-manager-id/'

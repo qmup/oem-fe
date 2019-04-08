@@ -87,6 +87,9 @@ export class PlaceComponent implements OnInit {
   currentManagerId = 0;
   _managerList = [];
   deletingBeaconId: any;
+  defaultImage: '../../../../assets/default-image.jpg';
+  timeoutSearch: any;
+  searchText = '';
 
   constructor(
     public location: Location,
@@ -116,7 +119,6 @@ export class PlaceComponent implements OnInit {
   }
 
   getPlace() {
-    // this.userAccount.roleId === 1 ? this.getWorkplaceByAdmin() : this.getWorkplaceByManager();
     if (this.userAccount.roleId === 1) {
       this.getWorkplaceByAdmin();
     } else {
@@ -129,7 +131,7 @@ export class PlaceComponent implements OnInit {
   }
 
   getWorkplaceByAdmin() {
-    this.placeService.getAll(this.zoneId, this.currentStatus, '', 'id', 0, 99)
+    this.placeService.getAll(this.zoneId, this.searchText, this.currentStatus, '', 'id', this.currentPage, 9)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content;
@@ -164,7 +166,7 @@ export class PlaceComponent implements OnInit {
     const to = new Date(y, m, d, 23, 59, 0, 0).toISOString();
     this.showAll = false;
     this.placeService.getAvailableByDate(
-      this.userAccount.id, this.zoneId, `${from};${to}`, '', 'id', 0, 99)
+      this.userAccount.id, this.searchText, this.zoneId, `${from};${to}`, '', 'id', 0, 9)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content;
@@ -203,7 +205,7 @@ export class PlaceComponent implements OnInit {
     }
     this.showAll = true;
     this.placeService.getAvailableByDate(
-      this.userAccount.id, '', `${from};${to}`, '', 'id', 0, 99)
+      this.userAccount.id, this.searchText, '', `${from};${to}`, '', 'id', 0, 9)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content;
@@ -228,6 +230,15 @@ export class PlaceComponent implements OnInit {
 
   changeViewType(e: any) {
     this.currentViewType = e.value;
+  }
+
+  search() {
+    if (this.timeoutSearch) {
+      clearTimeout(this.timeoutSearch);
+    }
+    this.timeoutSearch = setTimeout(() => {
+      this.getPlace();
+    }, 500);
   }
 
   getManager() {
@@ -276,7 +287,6 @@ export class PlaceComponent implements OnInit {
   }
 
   getEmployee() {
-    // get BY manager not get all
     this.employeeService.getEmployeeByManager(this.userAccount.id, '', '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {

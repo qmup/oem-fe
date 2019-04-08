@@ -6,24 +6,41 @@
           <h2 class="h2-responsive mb-0">Quản lý nơi làm việc</h2>
         </div>
       </div>
-      <div *ngIf="userAccount.roleId === 1" class="col-xl-6 col-lg-12 px-5 pt-3">
-        <mdb-select class="col-10" [label]="'Trạng thái nơi làm việc'" [options]="workplaceStatusList"
-          [(ngModel)]="currentStatus" (selected)="getPlace();"></mdb-select>
+      <div *ngIf="userAccount.roleId === 1" class="col-xl-6 col-lg-12 px-5 pt-3 text-right">
         <a class="col-2 btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i>
         </a>
       </div>
       <div *ngIf="userAccount.roleId === 2" class="col-xl-6 col-lg-12 px-5 pt-3">
-        <div class="col-12 px-0 d-flex flex-wrap">
+        <div class="col-12 px-0 d-flex flex-wrap w-100">
           <mdb-select class="col pl-0" [label]="'Nơi làm việc'" [options]="viewOptions"
             (selected)="changeViewOption($event)"></mdb-select>
           <mdb-select class="col px-0" [label]="'Chế độ xem'" [options]="viewTypes" (selected)="changeViewType($event)">
           </mdb-select>
         </div>
       </div>
-      <div class="card-body card-body-cascade pb-0">
-        <div class="d-flex flex-wrap">
-          <h4 [ngClass]="{'col-5': userAccount.roleId === 2, 'col-11': userAccount.roleId === 1}"
-            class="text-left mx-auto pb-3" *ngIf="!showAll">
+      <div class="card-body card-body-cascade pb-0 d-flex flex-wrap w-100">
+        <div class="col-xl-8 col-lg-12 px-4">
+          <!-- Search -->
+          <div class="md-form">
+            <input type="text" [(ngModel)]="searchText" class="form-control" mdbInput (keyup)="search()">
+            <label>Tìm kiếm</label>
+          </div>
+
+        </div>
+        <div *ngIf="userAccount.roleId === 1" class="col-xl-4 col-lg-12 pt-4 px-4">
+          <mdb-select [label]="'Trạng thái khu vực'" [options]="workplaceStatusList"
+            [(ngModel)]="currentStatus" (selected)="getPlace();"></mdb-select>
+        </div>
+        
+        <owl-form-field class="col-xl-4 col-lg-12 pt-4 px-4" *ngIf="userAccount.roleId === 2">
+          <input owlInput [owlDateTimeTrigger]="dateSearchInput" [owlDateTime]="dateSearchInput"
+            placeholder="Nơi làm việc và công việc vào ngày" [(ngModel)]="dateSearch" (dateTimeChange)="getPlace()">
+          <owl-date-time #dateSearchInput [pickerType]="'calendar'"></owl-date-time>
+        </owl-form-field>
+
+        <div class="d-flex flex-wrap w-100">
+          <h4
+            class="col-11 text-left mx-auto pb-3" *ngIf="!showAll">
             <span routerLink="/company" style="cursor: pointer; color: #007bff"> {{companyName}} </span>
             <span (click)="location.back()" style="cursor: pointer; color: #007bff; font-size: 20px;">
               <span *ngIf="companyName"> - </span>
@@ -37,15 +54,10 @@
                 style="font-size: 18px">Đang tạm đóng</span>
             </span>
           </h4>
-          <h4 [ngClass]="{'col-5': userAccount.roleId === 2, 'col-11': userAccount.roleId === 1}"
-            class="text-left mx-auto pb-3" *ngIf="showAll">
+          <h4
+            class=" col-11 text-left mx-auto pb-3" *ngIf="showAll">
             <span style="color: #007bff">Tất cả nơi làm việc đang quản lý</span>
           </h4>
-          <owl-form-field class="col-6 ml-auto pl-5 pr-4 pb-3" *ngIf="userAccount.roleId === 2">
-            <input owlInput [owlDateTimeTrigger]="dateSearchInput" [owlDateTime]="dateSearchInput"
-              placeholder="Nơi làm việc và công việc vào ngày" [(ngModel)]="dateSearch" (dateTimeChange)="getPlace()">
-            <owl-date-time #dateSearchInput [pickerType]="'calendar'"></owl-date-time>
-          </owl-form-field>
         </div>
         <div *ngIf="currentViewType == 1" class="d-flex flex-wrap w-100 animated zoomIn">
 
@@ -57,7 +69,7 @@
                 <!-- Image-->
                 <div class="card-up">
                   <div class="view overlay hm-white-slight waves-light" mdbWavesEffect>
-                    <img [src]="p.picture" class="img-fluid" alt="workplaceImg">
+                    <img [src]="p.picture || defaultImage" class="img-fluid" alt="workplaceImg">
                   </div>
                 </div>
 
@@ -71,7 +83,7 @@
                 <div class="content" *ngIf="p.status !== 0">
                   <h4 style="cursor: pointer; color: #007bff">{{p.name}}</h4>
                   <div class="col-12 px-0" *ngIf="userAccount.roleId === 1">
-                    <div class="d-flex flex-wrap">
+                    <div class="d-flex flex-wrap w-100">
                       <div class="col-7 px-0">
                         Người quản lý
                         <br>
@@ -114,7 +126,7 @@
                       <span class="lever"></span> Mở
                     </label>
                   </div>
-                  <div class="d-flex flex-wrap justify-content-center" id="action-button">
+                  <div class="d-flex flex-wrap w-100 justify-content-center" id="action-button">
                     <button title="Thêm beacon cho nơi này" mdbBtn type="button" color="success" rounded="true"
                       mdbWavesEffect size="sm" (click)="openBeaconModal(p.id)"
                       *ngIf="userAccount.roleId === 1 && (p.setToBeacon === false)">Thêm
@@ -217,7 +229,7 @@
           <tbody>
             <tr *ngFor="let p of placeList; let i of index">
               <td scope="row" style="position: relative; width: 120px">
-                <img src="{{p.picture}}" alt="image" class="avatar">
+                <img src="{{p.picture || defaultImage}}" alt="image" class="avatar">
               </td>
               <td>{{p.name}}</td>
               <td>{{p.numberOfReworks}}</td>
@@ -252,7 +264,7 @@
                   </div>
                 </div>
               </td>
-              <td class="d-flex flex-wrap justify-content-center" id="action-button">
+              <td class="d-flex flex-wrap w-100 justify-content-center" id="action-button">
                 <button title="Chi tiết" mdbBtn type="button" rounded="true" color="warning" class="waves-light"
                   size="sm" mdbWavesEffect (click)="openDetailModal(p)">
                   <i class="fa fa-eye"></i>

@@ -197,7 +197,7 @@
             [class.ng-invalid.validate-error]="(_address.invalid && (_address.dirty || _address.touched))"
             [ngModel]='employee.address'
             (ngModelChange)="changeAddress($event)"
-            (blur)="updateOnMap()"
+            (keyup)="updateOnMap()"
             >
         <label for="searchField">Địa chỉ</label>
 

@@ -26,6 +26,7 @@ export class TaskSuggestionComponent implements OnInit {
   isSelectRange = false;
   duration: number;
   userAccount: Employee;
+  defaultImage = '../../../../assets/default-image.jpg';
   taskList: TaskList;
 
   constructor(

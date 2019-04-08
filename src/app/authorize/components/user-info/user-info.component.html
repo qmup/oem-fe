@@ -4,7 +4,7 @@
     {{ userAccount.fullName }}
   </a>
   <span>
-    <img [src]="userAccount.picture">
+    <img [src]="userAccount.picture || defaultImage">
   </span>
   <div class="dropdown-menu dropdown-info dropdown-menu-right" role="menu">
     <a class="dropdown-item" [routerLink]="['/view-profile']">Thông tin cá nhân</a>

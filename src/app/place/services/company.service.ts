@@ -16,9 +16,21 @@ export class CompanyService {
       `${environment.endPoint}${environment.apiPaths.company.create}`, companyCM
     ).toPromise();
   }
-  getAll(): Promise<Company[]> {
-    return this.httpClient.get<Company[]>(
-      `${environment.endPoint}${environment.apiPaths.company.getAll}`
+  getAll(
+    sort: string, search: string, fieldSort: string, status: number, page: number, size: number
+  ): Promise<PaginationResponse> {
+    return this.httpClient.get<PaginationResponse>(
+      `${environment.endPoint}${environment.apiPaths.company.getAll}`,
+      {
+        params: {
+          sort: `${sort}`,
+          search: `${search}`,
+          fieldSort: `${fieldSort}`,
+          status: `${status}`,
+          page: `${page}`,
+          size: `${size}`
+        }
+      }
     ).toPromise();
   }
   getById(): Promise<Company> {
@@ -27,8 +39,8 @@ export class CompanyService {
     ).toPromise();
   }
   remove(id: number): Promise<any> {
-    return this.httpClient.delete(
-      `${environment.endPoint}${environment.apiPaths.company.remove}/${id}`
+    return this.httpClient.put(
+      `${environment.endPoint}${environment.apiPaths.company.remove}/${id}`, {}
     ).toPromise();
   }
   update(companyUM: Company): Promise<Company> {
@@ -36,17 +48,25 @@ export class CompanyService {
       `${environment.endPoint}${environment.apiPaths.company.update}`, companyUM
     ).toPromise();
   }
-  getCompanyByManager(managerId: number, sort: string, fieldSort: string, page: number, size: number ): Promise<PaginationResponse> {
+  getCompanyByManager(
+    managerId: number, sort: string, search: string, fieldSort: string, page: number, size: number
+  ): Promise<PaginationResponse> {
     return this.httpClient.get<PaginationResponse>(
       `${environment.endPoint}${environment.apiPaths.company.getByManager + managerId}`,
       {
         params: {
           sort: `${sort}`,
+          search: `${search}`,
           fieldSort: `${fieldSort}`,
           page: `${page}`,
           size: `${size}`
         }
       }
+    ).toPromise();
+  }
+  checkRemove(companyId: number): Promise<any> {
+    return this.httpClient.get<any>(
+      `${environment.endPoint}${environment.apiPaths.company.checkRemove + companyId}`,
     ).toPromise();
   }
 }

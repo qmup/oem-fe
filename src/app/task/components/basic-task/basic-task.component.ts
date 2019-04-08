@@ -42,9 +42,12 @@ export class BasicTaskComponent implements OnInit {
   taskBasicManagerList: Task[];
   deletingId = 0;
   warningMessage: string[] = [];
+  defaultImage = '../../../../assets/default-image.jpg';
+  adminSearchText = '';
+  mngSearchText = '';
+  timeoutSearch: any;
 
   constructor(
-    private renderer: Renderer2,
     private taskBasicService: TaskBasicService,
     private toastService: ToastService,
     private globalService: GlobalService,
@@ -62,7 +65,7 @@ export class BasicTaskComponent implements OnInit {
   }
 
   getTaskBasicByAdmin() {
-    this.taskBasicService.getListTaskBasic(1, '', '', 'id', this.currentPage1, 8)
+    this.taskBasicService.getListTaskBasic(1, this.adminSearchText, '', 'id', this.currentPage1, 8)
       .then(
         (response: any) => {
           this.taskBasicResponse = response;
@@ -81,7 +84,7 @@ export class BasicTaskComponent implements OnInit {
   }
 
   getTaskBasicByManager() {
-    this.taskBasicService.getListTaskBasic(this.userAccount.id, '', '', 'id', this.currentPage2, 8)
+    this.taskBasicService.getListTaskBasic(this.userAccount.id, this.mngSearchText, '', 'id', this.currentPage2, 8)
       .then(
         (response: any) => {
           this.taskBasicManagerResponse = response;
@@ -112,15 +115,24 @@ export class BasicTaskComponent implements OnInit {
       );
   }
 
-  coverage() {
-    if (typeof this.range === 'string' && this.range.length !== 0) {
-
-      return this.range;
+  searchAdmin() {
+    if (this.timeoutSearch) {
+      clearTimeout(this.timeoutSearch);
     }
-    const maxValue = this.input.nativeElement.getAttribute('max');
-    const cloudRange = (this.range / maxValue) * 100;
-    this.renderer.setStyle(this.rangeCloud.nativeElement, 'left', cloudRange + '%');
+    this.timeoutSearch = setTimeout(() => {
+      this.getTaskBasicByAdmin();
+    }, 500);
   }
+
+  searchMng() {
+    if (this.timeoutSearch) {
+      clearTimeout(this.timeoutSearch);
+    }
+    this.timeoutSearch = setTimeout(() => {
+      this.getTaskBasicByManager();
+    }, 500);
+  }
+
   openCreateModal() {
     this.createModal.show();
   }
@@ -210,22 +222,48 @@ export class BasicTaskComponent implements OnInit {
     this.deleteModal.show();
   }
 
-  removeTaskBasic() {
-    this.taskBasicService.remove(this.deletingId, this.userAccount.id)
+  removeTaskBasicAdmin() {
+    this.taskService.remove(this.deletingId)
       .then(
-        (response) => {
+        () => {
           this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'} );
           this.deleteModal.hide();
           if (this.userAccount.roleId === 1 ) {
             this.taskBasicList = [];
+            this.getTaskBasic();
           } else {
             this.taskBasicManagerList = [];
+            this.getTaskBasic();
           }
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra', '', { positionClass: 'toast-bottom-right'} );
         }
       );
+  }
+
+  removeTaskBasic() {
+    if (this.userAccount.roleId === 1) {
+      this.removeTaskBasicAdmin();
+    } else {
+      this.taskBasicService.remove(this.deletingId, this.userAccount.id)
+        .then(
+          () => {
+            this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'} );
+            this.deleteModal.hide();
+            if (this.userAccount.roleId === 1 ) {
+              this.taskBasicList = [];
+              this.getTaskBasic();
+            } else {
+              this.taskBasicManagerList = [];
+              this.getTaskBasic();
+            }
+          },
+          () => {
+            this.toastService.error('Đã có lỗi xảy ra', '', { positionClass: 'toast-bottom-right'} );
+          }
+        );
+    }
   }
 
   checkRemovable(id: number) {

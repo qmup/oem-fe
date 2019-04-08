@@ -9,7 +9,7 @@
           </div>
         </div>
         <div class="card-body card-body-cascade pb-0">
-          <div class="d-flex flex-wrap card-body pt-3">
+          <div class="d-flex flex-wrap w-100 card-body pt-3">
             <!-- Grid row -->
 
             <!-- Grid column -->
@@ -55,7 +55,7 @@
             <tbody>
               <tr *ngFor="let data of search()">
                 <th scope="row" style="position: relative; width: 120px">
-                  <img src="{{data.picture}}" alt="image" class="avatar">
+                  <img src="{{data.picture || defaultImage}}" alt="image" class="avatar">
                 </th>
                 <td>{{data.firstName}}</td>
                 <td>{{data.lastName}}</td>

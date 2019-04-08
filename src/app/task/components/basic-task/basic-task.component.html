@@ -14,9 +14,13 @@
           class="card-body card-body-cascade pb-0 px-5">
 
           <div class="col-md-12 mx-auto text-left my-3">
-            <div class="d-flex flex-wrap">
-              <div class="col-12 mr-0 text-right pr-0">
+            <div class="d-flex flex-wrap w-100">
+              <div class="col-12 mr-0 text-left pr-0">
                 <h4 class="text-left pt-3">Công việc cơ bản</h4>
+                <div class="md-form">
+                  <input type="text" [(ngModel)]="adminSearchText" class="form-control" mdbInput (keyup)="searchAdmin()">
+                  <label>Tìm kiếm</label>
+                </div>
               </div>
             </div>
             <div class="row pt-5">
@@ -27,7 +31,7 @@
 
                   <!--Card image-->
                   <div class="view view-cascade overlay waves-light regular-card">
-                    <mdb-card-img [src]="t.picture"></mdb-card-img>
+                    <mdb-card-img [src]="t.picture || defaultImage"></mdb-card-img>
                     <a>
                       <div class="mask rgba-white-slight"></div>
                     </a>
@@ -73,9 +77,13 @@
         <div *ngIf="userAccount.roleId === 2" class="card-body card-body-cascade pb-0 px-5 col-6">
 
           <div class="col-md-12 mx-auto text-left my-3">
-            <div class="d-flex flex-wrap">
-              <div class="col-12 mr-0 text-right pr-0">
+            <div class="d-flex flex-wrap w-100">
+              <div class="col-12 mr-0 text-left pr-0">
                 <h4 class="text-left pt-3">Danh sách của tôi</h4>
+                <div class="md-form">
+                  <input type="text" [(ngModel)]="mngSearchText" class="form-control" mdbInput (keyup)="searchMng()">
+                  <label>Tìm kiếm</label>
+                </div>
               </div>
             </div>
             <div class="row pt-5">
@@ -85,7 +93,7 @@
 
                   <!--Card image-->
                   <div class="view view-cascade overlay waves-light regular-card">
-                    <mdb-card-img [src]="t.picture"></mdb-card-img>
+                    <mdb-card-img [src]="t.picture || defaultImage"></mdb-card-img>
                     <a>
                       <div class="mask rgba-white-slight"></div>
                     </a>

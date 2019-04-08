@@ -22,6 +22,7 @@ export class ManagerComponent implements OnInit {
   optionsSelect = new Array<any>();
   optionsSex = new Array<any>();
   gender: number;
+  defaultImage = '../../../../assets/default-image.jpg';
   modalRef: BsModalRef;
   managerCM: Manager = new Manager();
   datePickerOptions: IMyOptions;

@@ -40,6 +40,7 @@ export class EmployeeDetailComponent implements OnInit {
   taskList: Task[] = new Array<Task>();
   deletingId = 0;
   modalRef: BsModalRef;
+  defaultImage = '../../../../assets/default-image.jpg';
 
   constructor(
     private route: ActivatedRoute,

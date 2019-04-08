@@ -68,8 +68,14 @@ export class CompanyComponent implements OnInit {
   filesToUpload: FileList;
   currentPage = 0;
   companyResponse: PaginationResponse;
-
+  defaultImage = '../../../../assets/default-image.jpg';
   showAll = false;
+  timeoutSearchMap: any;
+  warningMessage: any[];
+  companyStatusList = [];
+  currentStatus = 1;
+  searchText = '';
+  timeoutSearch: any;
 
   constructor(
     private companyService: CompanyService,
@@ -95,6 +101,7 @@ export class CompanyComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.companyStatusList = this.globalService.workplaceStatus;
     this.userAccount = this.globalService.getUserAccount();
     this.getCompany();
   }
@@ -105,22 +112,32 @@ export class CompanyComponent implements OnInit {
 
 
   getCompanyByAdmin() {
-    this.companyService.getAll()
-      .then(
-        (response: Company[]) => {
-          this.companyList = response;
-        }
-      );
-  }
-
-  getCompanyByManager() {
-    this.companyService.getCompanyByManager(this.userAccount.id, '', 'id', this.currentPage, 6)
+    this.companyService.getAll('', this.searchText, 'id', this.currentStatus, 0, 6)
       .then(
         (response: PaginationResponse) => {
           this.companyResponse = response;
           this.companyList = response.content;
         }
       );
+  }
+
+  getCompanyByManager() {
+    this.companyService.getCompanyByManager(this.userAccount.id, '',  this.searchText, 'id', this.currentPage, 6)
+      .then(
+        (response: PaginationResponse) => {
+          this.companyResponse = response;
+          this.companyList = response.content;
+        }
+      );
+  }
+
+  search() {
+    if (this.timeoutSearch) {
+      clearTimeout(this.timeoutSearch);
+    }
+    this.timeoutSearch = setTimeout(() => {
+      this.getCompany();
+    }, 500);
   }
 
   createCompany() {
@@ -150,6 +167,18 @@ export class CompanyComponent implements OnInit {
                 this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
               }
             );
+        }
+      );
+  }
+
+  checkRemovable(id: number) {
+    this.warningMessage = [];
+    this.companyService.checkRemove(id)
+      .then(
+        (response: any) => {
+          response.removeAble ?
+          this.deleteModal.show() :
+          (this.warningMessage = response.message.split(';'), this.deleteModal.show());
         }
       );
   }
@@ -269,13 +298,21 @@ export class CompanyComponent implements OnInit {
 
   // Google map
 
-  updateOnMap() {
-    let full_address: string = this.location.address_level_1 || '';
-    if (this.location.address_level_2) { full_address = full_address + ' ' + this.location.address_level_2; }
-    if (this.location.address_state) { full_address = full_address + ' ' + this.location.address_state; }
-    if (this.location.address_country) { full_address = full_address + ' ' + this.location.address_country; }
+    updateOnMap() {
+      if (this.timeoutSearchMap) {
+        clearTimeout(this.timeoutSearchMap);
+      }
+      this.timeoutSearchMap = setTimeout(() => {
+        if (this.location.address_level_1) {
+          let full_address: string = this.location.address_level_1 || '';
+          if (this.location.address_level_2) { full_address = full_address + ' ' + this.location.address_level_2; }
+          if (this.location.address_state) { full_address = full_address + ' ' + this.location.address_state; }
+          if (this.location.address_country) { full_address = full_address + ' ' + this.location.address_country; }
 
-    this.findLocation(full_address);
+          this.findLocation(full_address);
+        }
+      }, 500);
+
   }
 
   findLocation(address) {

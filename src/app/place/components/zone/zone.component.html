@@ -3,17 +3,27 @@
     <div class="row">
       <div class="col-xl-6 col-lg-12 mr-0">
         <div class="view view-cascade gradient-card-header light-blue lighten-1">
-          <h2 class="h2-responsive mb-0">Khu vực</h2>
+          <h2 class="h2-responsive mb-0">Danh sách khu vực</h2>
         </div>
       </div>
-      <div class="col-xl-6 col-lg-12 px-5 pt-3 text-right">
-        <a *ngIf="userAccount.roleId === 1" class="btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i></a>
+      <div *ngIf="userAccount.roleId === 1" class="col-xl-6 col-lg-12 px-5 pt-3 text-right">
+        <a class="col-2 btn-floating btn-md btn-success" (click)="openCreateModal()"><i class="fa fa-plus"></i>
+        </a>
       </div>
-      <div class="card-body card-body-cascade pb-0 d-flex flex-wrap">
+      <div class="card-body card-body-cascade pb-0 d-flex flex-wrap w-100">
 
-        <h4 class="text-left col-11 mx-auto pb-3">
-          <span class="text-primary">Danh sách khu vực </span>
-        </h4>
+        <div [ngClass]="{'col-xl-12' : userAccount.roleId === 2, 'col-xl-8' : userAccount.roleId === 1}" class="col-lg-12 pl-5 pr-3">
+          <!-- Search -->
+          <div class="md-form">
+            <input type="text" [(ngModel)]="searchText" class="form-control" mdbInput (keyup)="search()">
+            <label>Tìm kiếm</label>
+          </div>
+
+        </div>
+        <div *ngIf="userAccount.roleId === 1" class="col-xl-4 col-lg-12 pl-3 pr-5 pt-4">
+          <mdb-select [label]="'Trạng thái khu vực'" [options]="zoneStatusList"
+            [(ngModel)]="currentStatus" (selected)="getZone();"></mdb-select>
+        </div>
 
         <div class="col-md-4 mb-4" *ngFor="let z of zoneList; let i of index">
 
@@ -22,7 +32,7 @@
 
             <!--Card image-->
             <div class="view view-cascade overlay waves-light" mdbWavesEffect [routerLink]="['/place', z.id]">
-              <mdb-card-img src="{{z.picture}}"></mdb-card-img>
+              <mdb-card-img src="{{z.picture || defaultImage}}"></mdb-card-img>
               <a>
                 <div class="mask rgba-white-slight"></div>
               </a>
@@ -41,7 +51,7 @@
                 <i class="fa fa-pencil"></i>
               </button>
               <button *ngIf="userAccount.roleId === 1" title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light" mdbWavesEffect
-                (click)="openDeleteModal(z.id)">
+                (click)="checkRemovable(z.id)">
                 <i class="fa fa-ban"></i>
               </button>
 
@@ -51,6 +61,13 @@
           </mdb-card>
           <!--/.Card-->
         </div>
+        <div *ngIf="zoneResponse?.numberOfElements === 0" class="text-left col-11 mx-auto pb-3">
+          <h5 class="text-danger font-weight-normal">Không tìm thấy</h5>
+        </div>
+  
+        <app-pagination *ngIf="zoneResponse?.totalPages > 1" [pageSize]="zoneResponse.size"
+          [totalPage]="zoneResponse.totalPages" [currentPage]="zoneResponse.number" (changePage)="changePage($event)">
+        </app-pagination>
       </div>
     </div>
   </section>
@@ -127,6 +144,14 @@
       <!--Body-->
       <div class="modal-body">
         <i class="fa fa-times fa-4x animated rotateIn"></i>
+        <div *ngFor="let m of warningMessage">
+          <p class="h6 font-weight-bold">
+            {{m}}
+          </p>
+        </div>
+        <p class="h6 font-weight-bold">
+          Bạn có muốn tiếp tục xóa?
+        </p>
       </div>
 
       <!--Footer-->

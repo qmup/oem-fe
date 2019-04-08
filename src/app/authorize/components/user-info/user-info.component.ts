@@ -12,6 +12,7 @@ import { Employee } from 'src/app/employee/models/employee';
 export class UserInfoComponent implements OnInit {
 
   @Input() userAccount: Employee;
+  defaultImage = '../../../../assets/default-image.jpg';
 
   constructor(
     private authGuardService: AuthGuardService,

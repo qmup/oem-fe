@@ -9,7 +9,7 @@
           <div class="card-up gradient-background"></div>
           <!--Avatar-->
           <div class="avatar">
-            <img src="{{ employee.picture }}" class="rounded-circle img-responsive">
+            <img src="{{ employee.picture || defaultImage }}" class="rounded-circle img-responsive">
           </div>
           <!--Content-->
           <div class="card-body">
@@ -59,7 +59,7 @@
       <mdb-card class="mt-3" cascade="true" *ngIf="userAccount.roleId === 2">
         
         <mdb-card-body cascade="true" class="text-left"> 
-          <mdb-card-title class="d-flex flex-wrap">
+          <mdb-card-title class="d-flex flex-wrap w-100">
             <div class="col pr-0">
               <p class="h5">Công việc trong ngày</p>
             </div>
@@ -89,7 +89,7 @@
 
         <!--Card content-->
         <mdb-card-body cascade="true" class="text-left">
-          <mdb-card-title class="d-flex flex-wrap">
+          <mdb-card-title class="d-flex flex-wrap w-100">
             <div class="col pr-0">
               <p class="h5">Người quản lý</p>
             </div>
@@ -102,7 +102,7 @@
           <div class="list-group" *ngIf="employee.managerId !== 0">
             <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect [routerLink]="['/manager-detail', managerInfo.id]">
               <div class="avatar">
-                <img [src]="managerInfo.picture" alt="" class="rounded-circle img-responsive list-avatar">
+                <img [src]="managerInfo.picture || defaultImage" alt="" class="rounded-circle img-responsive list-avatar">
               </div>
               <div class="col-11">
                 {{managerInfo.fullName}}
@@ -121,7 +121,7 @@
       <mdb-card class="mt-3" cascade="true">
 
         <mdb-card-body cascade="true" class="text-left" *ngIf="userAccount.roleId === 1">
-          <mdb-card-title class="d-flex flex-wrap">
+          <mdb-card-title class="d-flex flex-wrap w-100">
             <div class="col pr-0">
               <p class="h5">Hồ sơ nhân viên</p>
             </div>

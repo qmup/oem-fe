@@ -65,6 +65,7 @@ export class CompanyUpdateComponent implements OnInit {
   url: any;
   filesToUpload: FileList;
   userAccount: Employee;
+  timeoutSearchMap: any;
 
   constructor(
     public modalRef: BsModalRef,
@@ -229,12 +230,19 @@ export class CompanyUpdateComponent implements OnInit {
   }
 
   updateOnMap() {
-    let full_address: string = this.location.address_level_1 || '';
-    if (this.location.address_level_2) { full_address = full_address + ' ' + this.location.address_level_2; }
-    if (this.location.address_state) { full_address = full_address + ' ' + this.location.address_state; }
-    if (this.location.address_country) { full_address = full_address + ' ' + this.location.address_country; }
+    if (this.timeoutSearchMap) {
+      clearTimeout(this.timeoutSearchMap);
+    }
+    this.timeoutSearchMap = setTimeout(() => {
+      if (this.location.address_level_1) {
+        let full_address: string = this.location.address_level_1 || '';
+        if (this.location.address_level_2) { full_address = full_address + ' ' + this.location.address_level_2; }
+        if (this.location.address_state) { full_address = full_address + ' ' + this.location.address_state; }
+        if (this.location.address_country) { full_address = full_address + ' ' + this.location.address_country; }
 
-    this.findLocation(full_address);
+        this.findLocation(full_address);
+      }
+    }, 500);
   }
 
   findLocation(address) {

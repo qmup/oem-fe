@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewChild, EventEmitter } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Zone, ZoneModel, ZonePagination } from '../../models/zone';
 import { BsModalRef, ModalDirective, BsModalService, ModalOptions } from 'ngx-bootstrap';
 import { UploadFile, UploadInput, ToastService, humanizeBytes, UploadOutput } from 'ng-uikit-pro-standard';
@@ -7,9 +6,12 @@ import { ZoneService } from '../../services/zone.service';
 import { ZoneUpdateComponent } from '../zone-update/zone-update.component';
 import { Location } from '@angular/common';
 import { Employee } from 'src/app/employee/models/employee';
-import { PaginationResponse } from 'src/app/core/models/shared';
-import { Company } from '../../models/company';
 import { GlobalService } from 'src/app/core/services/global.service';
+import { PaginationResponse } from 'src/app/core/models/shared';
+
+const ZONE_REMOVED_STATUS = 0;
+const ZONE_OPEN_STATUS = 1;
+const ZONE_CLOSE_STATUS = 2;
 
 @Component({
   selector: 'app-zone',
@@ -33,10 +35,17 @@ export class ZoneComponent implements OnInit {
   humanizeBytes: Function;
   dragOver: boolean;
   url: any;
+  defaultImage = '../../../../assets/default-image.jpg';
   filesToUpload: FileList;
   userAccount: Employee;
   currentPage = 0;
-  zoneResponse: ZonePagination;
+  zoneResponse: PaginationResponse;
+  zonePaginationResponse: ZonePagination;
+  warningMessage: any[];
+  currentStatus = ZONE_OPEN_STATUS;
+  searchText = '';
+  timeoutSearch: any;
+  zoneStatusList = [];
 
   constructor(
     private zoneService: ZoneService,
@@ -52,6 +61,7 @@ export class ZoneComponent implements OnInit {
 
   ngOnInit() {
     this.userAccount = this.globalService.getUserAccount();
+    this.zoneStatusList = this.globalService.workplaceStatus;
     this.getZone();
   }
 
@@ -60,10 +70,11 @@ export class ZoneComponent implements OnInit {
   }
 
   getZoneByAdmin() {
-    this.zoneService.getByCompany(this.companyId, '', '', 'id', 0, 99)
+    this.zoneService.getByCompany(this.companyId, this.currentStatus, this.searchText, '', 'id', this.currentPage, 9)
       .then(
         (response: ZonePagination) => {
-          this.zoneResponse = response;
+          this.zonePaginationResponse = response;
+          this.zoneResponse = response.listOfZone;
           this.zoneList = response.listOfZone.content;
           this.companyName = response.company.name;
         }
@@ -71,15 +82,24 @@ export class ZoneComponent implements OnInit {
   }
 
   getZoneByManager() {
-    this.zoneService.getAll(this.userAccount.id, this.companyId, '', '', 'id', 0, 99)
+    this.zoneService.getAll(this.userAccount.id, this.companyId, this.searchText, '', 'id', 0, 99)
       .then(
         (response: ZonePagination) => {
-          this.zoneResponse = response;
+          this.zonePaginationResponse = response;
+          this.zoneResponse = response.listOfZone;
           this.zoneList = response.listOfZone.content;
         }
       );
   }
 
+  search() {
+    if (this.timeoutSearch) {
+      clearTimeout(this.timeoutSearch);
+    }
+    this.timeoutSearch = setTimeout(() => {
+      this.getZone();
+    }, 500);
+  }
   createZone() {
     const formData: FormData = new FormData();
     if (!!this.filesToUpload) {
@@ -91,7 +111,7 @@ export class ZoneComponent implements OnInit {
     this.globalService.uploadFile(formData, 'image/zone/')
       .then(
         (response) => {
-          this.zoneCM.companyId = this.zoneResponse.company.id;
+          this.zoneCM.companyId = this.zonePaginationResponse.company.id;
           this.zoneCM.picture = response;
           this.zoneService.create(this.zoneCM)
             .then(
@@ -105,6 +125,18 @@ export class ZoneComponent implements OnInit {
                 this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
               }
             );
+        }
+      );
+  }
+
+  checkRemovable(id: number) {
+    this.warningMessage = [];
+    this.zoneService.checkRemove(id)
+      .then(
+        (response: any) => {
+          response.removeAble ?
+          this.deleteModal.show() :
+          (this.warningMessage = response.message.split(';'), this.deleteModal.show());
         }
       );
   }
@@ -147,6 +179,11 @@ export class ZoneComponent implements OnInit {
     this.modalRef = this.modalService.show(ZoneUpdateComponent, modalOptions);
     this.modalRef.content.refresh.subscribe(() => this.getZone());
 
+  }
+
+  changePage(event) {
+    this.currentPage = event - 1;
+    this.getZone();
   }
 
   showFiles() {

@@ -33,6 +33,7 @@ export class ManagerDetailComponent implements OnInit {
   @ViewChild('removeWp') removeWorkplaceModal: ModalDirective;
   @ViewChild('moreEmp') empToggle: any;
   @ViewChild('moreWP') workplaceToggle: any;
+  defaultImage = '../../../../assets/default-image.jpg';
   manager: Employee = new Employee();
   formData: FormData;
   files: UploadFile[];
@@ -142,10 +143,10 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   getCompany() {
-    this.companyService.getAll()
+    this.companyService.getAll('', '', 'id', 1, 0, 99)
       .then(
-        (response: Company[]) => {
-          this.companyList = response.map((company) => {
+        (response: PaginationResponse) => {
+          this.companyList = response.content.map((company) => {
             return {
               value: company.id,
               label: company.name,
@@ -163,7 +164,7 @@ export class ManagerDetailComponent implements OnInit {
   }
 
   getZone(companyId: number) {
-    this.zoneService.getByCompany(companyId, '', '', 'id', 0, 99)
+    this.zoneService.getByCompany(companyId, 1, '', '', 'id', 0, 99)
       .then(
         (response: ZonePagination) => {
           this.zoneList = response.listOfZone.content.map((zone) => {

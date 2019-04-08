@@ -10,6 +10,7 @@ import { Employee } from 'src/app/employee/models/employee';
 export class ProfileComponent implements OnInit {
 
   info: Employee;
+  defaultImage = '../../../../assets/default-image.jpg';
 
   constructor(
     private globalService: GlobalService

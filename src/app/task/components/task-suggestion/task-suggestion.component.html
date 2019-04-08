@@ -65,7 +65,7 @@
       <tbody>
         <tr *ngFor="let item of taskSuggestion; let i = index" [ngClass]="{'border-danger': item.typeCase === 0}">
           <td class="text-center">
-            <img [src]="item.employeePicture" class="rounded-circle img-responsive list-avatar mr-2">
+            <img [src]="item.employeePicture || defaultImage" class="rounded-circle img-responsive list-avatar mr-2">
             <br>
             <span class="font-weight-bold">{{ item.employeeName }}</span>
           </td>

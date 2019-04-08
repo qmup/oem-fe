@@ -19,6 +19,7 @@ export class ZoneService {
   }
   getByCompany(
     companyId: number,
+    status: number,
     search: string,
     sort: string,
     fieldSort: string,
@@ -29,6 +30,7 @@ export class ZoneService {
       {
         params: {
           search: `${search}`,
+          status: `${status}`,
           sort: `${sort}`,
           fieldSort: `${fieldSort}`,
           page: `${page}`,
@@ -38,8 +40,8 @@ export class ZoneService {
     ).toPromise();
   }
   remove(id: number): Promise<any> {
-    return this.httpClient.delete(
-      `${environment.endPoint}${environment.apiPaths.zone.remove}/${id}`
+    return this.httpClient.put(
+      `${environment.endPoint}${environment.apiPaths.zone.remove}/${id}`, {}
     ).toPromise();
   }
   update(zoneUM: ZoneModel): Promise<Zone> {
@@ -66,6 +68,11 @@ export class ZoneService {
           size: `${size}`
         }
       }
+    ).toPromise();
+  }
+  checkRemove(zoneId: number): Promise<any> {
+    return this.httpClient.get<any>(
+      `${environment.endPoint}${environment.apiPaths.zone.checkRemove + zoneId}`,
     ).toPromise();
   }
 }

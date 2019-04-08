@@ -55,7 +55,7 @@ import { tick } from '@angular/core/testing';
           (click)="toggleSeen(noti.id, noti.taskId)"
           >
             <div class="col-2 my-auto">
-              <img [src]="noti.pictureSender"
+              <img [src]="noti.pictureSender || defaultImage"
               class="rounded-circle img-responsive list-avatar mr-2">
             </div>
             <div class="col-10">
@@ -170,6 +170,7 @@ export class NotificationComponent implements OnInit {
   disableScrollDown = false;
   animationState = 'out';
   countUnread: number;
+  defaultImage = '../../../../assets/default-image.jpg';
   // @ViewChild('scroll') private scrollContainer: ElementRef;
 
   constructor(
