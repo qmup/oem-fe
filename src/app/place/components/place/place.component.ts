@@ -169,7 +169,7 @@ export class PlaceComponent implements OnInit {
     const to = new Date(y, m, d, 23, 59, 0, 0).toISOString();
     this.showAll = false;
     this.placeService.getAvailableByDate(
-      this.userAccount.id, this.searchText, this.zoneId, `${from};${to}`, '', 'id', 0, 9)
+      this.userAccount.id, this.searchText, this.currentStatus, this.zoneId, `${from};${to}`, '', 'id', 0, 9)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content;
@@ -208,7 +208,7 @@ export class PlaceComponent implements OnInit {
     }
     this.showAll = true;
     this.placeService.getAvailableByDate(
-      this.userAccount.id, this.searchText, '', `${from};${to}`, '', 'id', 0, 9)
+      this.userAccount.id, this.searchText, this.currentStatus, '', `${from};${to}`, '', 'id', 0, 9)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content;

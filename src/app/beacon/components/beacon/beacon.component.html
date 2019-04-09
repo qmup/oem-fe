@@ -11,18 +11,17 @@
           <!-- Grid row -->
 
           <!-- Grid column -->
-          <div class="col-md-2">
-            <!-- Add button -->
+          <!-- <div class="col-md-2">
             <button title="Tạo mới beacon" mdbBtn type="button" color="success" rounded="true" size="sm" class="addNewButton w-75"
               mdbWavesEffect (click)="openCreateModal()">
               <i class="fa fa-plus"></i>
             </button>
 
-          </div>
-          <div class="col-md-10">
+          </div> -->
+          <div class="col-md-12">
             <!-- Search -->
             <div class="md-form">
-              <input type="search" [(ngModel)]="searchText" id="search" class="form-control" mdbInput>
+              <input type="search" [(ngModel)]="searchText" id="search" class="form-control" mdbInput (keyup)="searchBeacon()">
               <label for="search">Tìm kiếm</label>
             </div>
 
@@ -37,27 +36,29 @@
             <!--Table head-->
             <thead>
               <tr>
+                <th>ID</th>
                 <th>Tên</th>
                 <th>UUID</th>
                 <th>Minor</th>
                 <th>Major</th>
                 <th>Địa điểm</th>
                 <th>Chi tiết</th>
-                <th>Thao tác</th>
+                <!-- <th>Thao tác</th> -->
               </tr>
             </thead>
             <!--Table head-->
 
             <!--Table body-->
             <tbody>
-              <tr *ngFor="let data of search()">
+              <tr *ngFor="let data of beaconList">
+                <td>{{ data.id }}</td>
                 <td>{{ data.name }}</td>
                 <td>{{ data.uuid }}</td>
                 <td>{{ data.minor }}</td>
                 <td>{{ data.major }}</td>
                 <td>{{ (!data.workplace) ? 'Chưa thiết lập' : data.workplace.name }}</td>
                 <td>{{ data.description }}</td>
-                <td class="d-flex justify-content-center">
+                <!-- <td class="d-flex justify-content-center">
                   <button title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light col"
                     size="sm" mdbWavesEffect (click)="openUpdateModal(data)">
                     <i class="fa fa-pencil"></i>
@@ -66,7 +67,7 @@
                     size="sm" mdbWavesEffect (click)="openDeleteModal(data.id)">
                     <i class="fa fa-ban"></i>
                   </button>
-                </td>
+                </td> -->
               </tr>
             </tbody>
             <!--Table body-->

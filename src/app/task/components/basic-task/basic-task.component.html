@@ -155,14 +155,16 @@
             class="form-control" 
             mdbInput
             required
+            maxlength="25"
             #title=ngModel
             [(ngModel)]="taskBasicCM.title"
             [class.ng-invalid.validate-error]="(title.invalid && (title.dirty || title.touched))"
             >
             <label for="title">Tên*</label>
             
-            <mdb-error *ngIf="title.invalid && (title.dirty || title.touched)">
-              <span *ngIf="title?.errors?.required" class="font-weight-normal">Vui lòng nhập tên công việc</span>
+            <mdb-error *ngIf="taskBasicCM.title.length === 25" class="font-weight-normal">Tên công việc nhỏ hơn 25 ký tự</mdb-error>
+            <mdb-error *ngIf="title.invalid && (title.dirty || title.touched)" class="font-weight-normal">
+              <span *ngIf="title?.errors?.required">Vui lòng nhập tên công việc</span>
             </mdb-error>
 
           </div>

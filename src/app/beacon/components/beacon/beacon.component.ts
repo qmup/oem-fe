@@ -27,6 +27,7 @@ export class BeaconComponent implements OnInit {
   searchText: string;
   placeList: Place[];
   beaconResponse: PaginationResponse;
+  timeoutSearch: any;
 
   constructor(
     private beaconService: BeaconService,
@@ -128,13 +129,13 @@ export class BeaconComponent implements OnInit {
     });
   }
 
-  search() {
-    if (!this.searchText) {
-      return this.beaconList;
+  searchBeacon() {
+    if (this.timeoutSearch) {
+      clearTimeout(this.timeoutSearch);
     }
-    if (this.searchText) {
-      return this.filterIt(this.beaconList, this.searchText);
-    }
+    this.timeoutSearch = setTimeout(() => {
+      this.getBeacon();
+    }, 500);
   }
 
   changePage(event) {

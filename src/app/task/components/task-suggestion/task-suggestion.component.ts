@@ -61,7 +61,7 @@ export class TaskSuggestionComponent implements OnInit {
     to = new Date(y, m, d, 23, 59, 0, 0).toISOString();
 
     this.workplaceService.getAvailableByDate(
-      this.userAccount.id, '', this.zone.value, `${from};${to}`, '', '', 0, 99
+      this.userAccount.id, '', 1, this.zone.value, `${from};${to}`, '', '', 0, 99
     ).then(
       (response) => {
         this.taskList = response.listOfWorkplace.content.find(t => t.id === this.workplace.value).taskList;

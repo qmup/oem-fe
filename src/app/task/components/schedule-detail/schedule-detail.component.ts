@@ -21,8 +21,6 @@ import { TaskBasicManager } from '../../models/task-basic';
 })
 export class ScheduleDetailComponent implements OnInit {
 
-  @ViewChild('create') createModal: ModalDirective;
-
   taskBasicCM: Task;
   schedule: Schedule = new Schedule();
   scheduleId: number;
@@ -46,6 +44,7 @@ export class ScheduleDetailComponent implements OnInit {
   modalRef1: BsModalRef | null;
   modalRef2: BsModalRef;
 
+  @ViewChild('create') public createModal: TemplateRef<any>;
   @ViewChild('edit') public editTaskBasicModal: TemplateRef<any>;
   @ViewChild('main') public mainModal: TemplateRef<any>;
   @ViewChild('delete') public deleteModal: TemplateRef<any>;
@@ -182,7 +181,7 @@ export class ScheduleDetailComponent implements OnInit {
   }
 
   openCreateModal() {
-    this.createModal.show();
+    // this.createModal.show();
   }
 
   openDetailModal() {
@@ -330,7 +329,7 @@ export class ScheduleDetailComponent implements OnInit {
                         .then(
                           () => {
                             this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-                            this.createModal.hide();
+                            // this.createModal.hide();
                           },
                           () => {
                             this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -356,7 +355,7 @@ export class ScheduleDetailComponent implements OnInit {
             .then(
               () => {
                 this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-                this.createModal.hide();
+                // this.createModal.hide();
               },
               () => {
                 this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});

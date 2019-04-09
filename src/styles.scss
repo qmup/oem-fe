@@ -33,7 +33,7 @@ mdb-select > div > div.single > div.placeholder {
 .md-form label {
   left: auto;
 }
-input.owl-input-element {
+input.owl-input-element, mdb-error {
   font-weight: 400 !important;
 }
 @media (min-width: 992px) {

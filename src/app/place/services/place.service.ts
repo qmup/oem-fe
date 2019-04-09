@@ -117,7 +117,15 @@ export class PlaceService {
   }
 
   getAvailableByDate(
-    managerId: number, search: string, zoneId: any, date: string, sort: string, fieldSort: string, page: number, size: number
+    managerId: number,
+    search: string,
+    status: number,
+    zoneId: any,
+    date: string,
+    sort: string,
+    fieldSort: string,
+    page: number,
+    size: number
   ): Promise<any> {
     return this.httpClient.get<any>(
       `${environment.endPoint}${environment.apiPaths.workplace.getAvailableByDate + managerId}`,
@@ -125,6 +133,7 @@ export class PlaceService {
         params: {
           zoneId: `${zoneId}`,
           search: `${search}`,
+          status: `${status}`,
           date: `${date}`,
           sort: `${sort}`,
           fieldSort: `${fieldSort}`,
