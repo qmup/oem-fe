@@ -208,6 +208,7 @@ export class BasicTaskComponent implements OnInit {
                 } else {
                   this.taskBasicManagerList = [];
                 }
+                this.getTaskBasic();
               },
               () => {
                 this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -267,15 +268,19 @@ export class BasicTaskComponent implements OnInit {
     if (editable) {
       this.myTask = editable;
     }
-    this.warningMessage = [];
-    this.taskService.checkRemoveTaskBasic(id, this.userAccount.id)
-      .then(
-        (response) => {
-          response.removeAble ?
-          this.deleteModal.show() :
-          (this.warningMessage = response.message.split(';'), this.deleteModal.show());
-        }
-      );
+    if (!this.myTask) {
+      this.deleteModal.show();
+    } else {
+      this.warningMessage = [];
+      this.taskService.checkRemoveTaskBasic(id, this.userAccount.id)
+        .then(
+          (response) => {
+            response.removeAble ?
+            this.deleteModal.show() :
+            (this.warningMessage = response.message.split(';'), this.deleteModal.show());
+          }
+        );
+    }
   }
 
   sortBy(by: string | any): void {

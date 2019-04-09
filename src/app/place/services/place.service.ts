@@ -140,4 +140,9 @@ export class PlaceService {
       `${environment.endPoint}${environment.apiPaths.workplace.checkRemove + workplaceId}`,
     ).toPromise();
   }
+  checkRemoveManager(assigner: number, workplaceId: number): Promise<any> {
+    return this.httpClient.get<any>(
+      `${environment.endPoint}${environment.apiPaths.workplace.checkRemoveManager + assigner}/${workplaceId}`,
+    ).toPromise();
+  }
 }

@@ -61,10 +61,7 @@ export class ZoneComponent implements OnInit {
 
   ngOnInit() {
     this.userAccount = this.globalService.getUserAccount();
-    this.zoneStatusList = this.globalService.workplaceStatus;
-    if (this.userAccount.roleId === 2) {
-      this.zoneStatusList.pop();
-    }
+    this.zoneStatusList = this.globalService.zoneStatus;
     this.getZone();
   }
 

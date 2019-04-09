@@ -497,13 +497,30 @@ export class PlaceComponent implements OnInit {
     this.currentManagerId = managerId;
     this.selectingManagerId = 0;
     this.selectingWorkplaceId = id;
+    this.warningMessage = [];
     if (type === 1) {
       this.addManagerModal.show();
-    } else if (type === 2) {
-      this._getManager();
-      this.editManagerModal.show();
     } else {
-      this.deleteManagerModal.show();
+      this.placeService.checkRemoveManager(managerId, id)
+        .then(
+          (res) => {
+            if (res.removeAble) {
+              if (type === 2) {
+                this._getManager();
+                this.editManagerModal.show();
+              } else {
+                this.deleteManagerModal.show();
+              }
+            } else {
+              this.warningMessage = res.message.split(';');
+              let warningString = '';
+              this.warningMessage.forEach((element: string) => {
+                warningString += element;
+                this.toastService.error(warningString, '', {positionClass: 'toast-bottom-right'});
+              });
+            }
+          }
+        );
     }
   }
 

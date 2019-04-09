@@ -73,6 +73,14 @@ export class GlobalService {
     { value: 2, label: 'Đóng'},
     { value: 0, label: 'Đã xóa'},
   ];
+  companyStatus = [
+    { value: 1, label: 'Đang hoạt động'},
+    { value: 0, label: 'Đã xóa'},
+  ];
+  zoneStatus = [
+    { value: 1, label: 'Đang hoạt động'},
+    { value: 0, label: 'Đã xóa'},
+  ];
   employeeStatus = [
     { value: 1, label: 'Đang làm việc'},
     { value: 2, label: 'Tạm nghỉ việc'},
