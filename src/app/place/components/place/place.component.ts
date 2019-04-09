@@ -116,7 +116,7 @@ export class PlaceComponent implements OnInit {
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
     this.workplaceStatusList = this.globalService.workplaceStatus;
     this.viewTypes = this.globalService.viewTypes;
-    if (this.userAccount.roleId === 2) {
+    if (this.userAccount.roleId === 2 && this.workplaceStatusList.length > 2) {
     this.workplaceStatusList.pop();
     }
   }

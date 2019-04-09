@@ -120,7 +120,7 @@ export class LaborerComponent implements OnInit {
     this.optionsSex = this.globalService.optionsSex;
     this.userAccount = this.globalService.getUserAccount();
     this.employeeStatusList = this.globalService.employeeStatus;
-    if (this.userAccount.roleId === 2) {
+    if (this.userAccount.roleId === 2 && this.employeeStatusList.length > 2) {
       this.employeeStatusList.pop();
     }
     this.getManager();
