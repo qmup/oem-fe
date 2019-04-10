@@ -475,6 +475,7 @@ export class PlaceComponent implements OnInit {
           this.toastService.success('Thêm thành công', '', { positionClass: 'toast-bottom-right'} );
           this.beaconModal.hide();
           this.placeList = [];
+          this.getBeacon();
           this.getPlace();
         },
         (error) => {
@@ -523,6 +524,7 @@ export class PlaceComponent implements OnInit {
   }
 
   checkRemoveBeacon(e: number) {
+    this.deletingBeaconId = e;
     this.beaconService.checkRemove(e)
       .then(
         (res) => {
@@ -536,16 +538,12 @@ export class PlaceComponent implements OnInit {
       );
   }
 
-  openRemoveBeaconModal(e: any) {
-    this.deletingBeaconId = e.value;
-    this.removeBeaconModal.show();
-  }
-
   removeBeaconOfWorkplace() {
     this.beaconService.updateField(this.deletingBeaconId, 'workplaceId', 0)
       .then(
         (response) => {
-          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.toastService.success('Gỡ thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.getBeacon();
           this.getPlace();
         }
       );

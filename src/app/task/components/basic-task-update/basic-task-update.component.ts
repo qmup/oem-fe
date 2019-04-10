@@ -76,7 +76,7 @@ export class BasicTaskUpdateComponent implements OnInit {
 
   updateTaskWithoutImage() {
     this.taskBasicUM.id = this.taskBasic.id;
-    this.taskBasicUM.picture = this.taskBasicUM.picture;
+    this.taskBasicUM.picture = this.taskBasic.picture;
     this.taskBasicUM.title = this.taskBasic.title;
     this.taskBasicUM.basic = true;
     this.taskService.update(this.taskBasicUM)

@@ -74,6 +74,8 @@ export class EmployeeUpdateComponent implements OnInit {
   role: number;
   timeoutSearch: any;
   timeoutSearchMap: any;
+  warningMessage = [];
+  canChange: boolean;
 
   constructor(
     public modalRef: BsModalRef,
@@ -130,7 +132,20 @@ export class EmployeeUpdateComponent implements OnInit {
   }
 
   selectRole(e: any) {
-    this.employee.roleId = e.value;
+    this.employeeService.checkConstraint(this.employee.id)
+      .then(
+        (res) => {
+          if (res.removeAble) {
+            this.canChange = res.removeAble;
+            this.employee.roleId = e.value;
+          } else {
+            this.canChange = res.removeAble;
+            this.employee.roleId = this.employee.roleId;
+            this.warningMessage = [];
+            this.warningMessage = res.message.split(';');
+          }
+        }
+      );
   }
 
   getManager() {

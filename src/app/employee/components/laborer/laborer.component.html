@@ -53,11 +53,15 @@
                   Tên
                   <mdb-icon icon="sort"></mdb-icon>
                 </th>
+                <th (click)="sort('employeeId')">
+                  Mã số
+                  <mdb-icon icon="sort"></mdb-icon>
+                </th>
                 <th (click)="sort('roleId')" style="width: 100px; max-width: 100px">
                   Chức vụ
                   <mdb-icon icon="sort"></mdb-icon>
                 </th>
-                <th *ngIf="userAccount.roleId === 1" (click)="sort('roleId')" style="width: 200px; max-width: 200px">
+                <th *ngIf="userAccount.roleId === 1" (click)="sort('roleId')" style="width: 150px; max-width: 150px">
                   Người quản lý
                   <mdb-icon icon="sort"></mdb-icon>
                 </th>
@@ -84,6 +88,7 @@
                 </td>
                 <td>{{data.firstName}}</td>
                 <td>{{data.lastName}}</td>
+                <td>{{data.employeeId}}</td>
                 <td [ngClass]="{'text-danger' : data.roleId === 2}">{{data.roleName}}</td>
                 <td *ngIf="userAccount.roleId === 1 && data.managerName" class="text-danger">{{data.managerName}}</td>
                 <td *ngIf="userAccount.roleId === 1 && !data.managerName">Không có người quản lý</td>
@@ -185,8 +190,19 @@
           </div>
 
           <div class="md-form mt-2 mb-2 col-md-12" *ngIf="employeeCM.roleId === 3">
-            <mdb-select [label]="'Người quản lý'" [notFoundMsg]="'Không tìm thấy'" [options]="managerList"
-              [(ngModel)]="employeeCM.managerId"></mdb-select>
+            <mdb-select
+              id="manager"
+              name="manager"
+              required
+              [label]="'Người quản lý*'"
+              [options]="managerList"
+              [class.ng-invalid.validate-error]="managerId.invalid && (managerId.dirty || managerId.touched)"
+              #managerId="ngModel"
+              (selected)="selectManager($event)"
+              ngModel
+              >
+            </mdb-select>
+            <span class="text-danger font-weight-normal" *ngIf="managerId.invalid && (managerId.dirty || managerId.touched)" style="font-size: .8rem">Vui lòng chọn người quản lý</span>
           </div>
 
           <div class="md-form my-3 col-md-6">

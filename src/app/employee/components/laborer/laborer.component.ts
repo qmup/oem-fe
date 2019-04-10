@@ -269,6 +269,10 @@ export class LaborerComponent implements OnInit {
     this.employeeCM.roleId = e.value;
   }
 
+  selectManager(e: any) {
+    this.employeeCM.managerId = e.value;
+  }
+
   filterIt(arr: any, searchKey: any) {
     return arr.filter((obj: any) => {
       return Object.keys(obj).some((key) => {

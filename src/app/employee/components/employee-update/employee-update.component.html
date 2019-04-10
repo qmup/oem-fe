@@ -12,13 +12,21 @@
         required
         [label]="'Chức vụ*'"
         [options]="roleList"
-        [class.ng-invalid.validate-error]="_roleId.invalid && (_roleId.dirty || _roleId.touched)"
+        [class.ng-invalid.validate-error]="(_roleId.invalid && (_roleId.dirty || _roleId.touched)) || !canChange"
         #_roleId="ngModel"
         [(ngModel)]="employee.roleId"
         (selected)="selectRole($event)"
         >
         </mdb-select>
-      <span class="text-danger font-weight-normal" *ngIf="_roleId.invalid && (_roleId.dirty || _roleId.touched)" style="font-size: .8rem">Vui lòng chọn chức vụ</span>
+      <span 
+        class="text-danger font-weight-normal"
+        *ngIf="(_roleId.invalid && (_roleId.dirty || _roleId.touched)) || !canChange"
+        style="font-size: .8rem">
+        <span *ngIf="_roleId.invalid && (_roleId.dirty || _roleId.touched)">Vui lòng chọn chức vụ</span>
+        <span *ngIf="!canChange && !(_roleId.invalid && (_roleId.dirty || _roleId.touched))">
+          <span *ngFor="let m of warningMessage">{{m}}</span>
+        </span>
+      </span>
 
     </div>
 
