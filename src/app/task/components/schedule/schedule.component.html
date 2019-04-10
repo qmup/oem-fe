@@ -107,80 +107,198 @@
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
         <p class="heading">Tạo công việc thường nhật</p>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="create.hide()">
-          <span aria-hidden="true">&times;</span>
-        </button>
       </div>
       <div class="modal-body mx-3 row">
-        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
-          <input type="text" id="title" class="form-control" mdbInput [(ngModel)]="scheduleCM.title">
-          <label for="title">Tên công việc</label>
-        </div>
+        <form (ngSubmit)="createSchedule()" #createForm="ngForm" class="d-flex flex-wrap w-100">
+          <div class="md-form mt-0 mb-3 col-md-12 px-0">
+            <input 
+            type="text" 
+            id="title" 
+            name="title" 
+            class="form-control" 
+            mdbInput
+            required
+            maxlength="25"
+            #title=ngModel
+            [(ngModel)]="scheduleCM.title"
+            [class.ng-invalid.validate-error]="(title.invalid && (title.dirty || title.touched))"
+            >
+            <label for="title">Tên công việc*</label>
+            
+            <mdb-error *ngIf="scheduleCM.title.length === 25" class="font-weight-normal">Tên công việc nhỏ hơn 25 ký tự</mdb-error>
+            <mdb-error *ngIf="title.invalid && (title.dirty || title.touched)" class="font-weight-normal">
+              <span *ngIf="title?.errors?.required">Vui lòng nhập tên công việc</span>
+            </mdb-error>
 
-        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
-          <mdb-select [label]="'Công ty'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true"
-            [options]="companyList" (selected)="selectCompany($event)"></mdb-select>
-        </div>
-
-        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0" *ngIf="isSelectCompany">
-          <mdb-select [label]="'Khu vực'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="zoneList"
-            (selected)="selectZone($event)"></mdb-select>
-        </div>
-
-        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0" *ngIf="isSelectZone">
-          <mdb-select [label]="'Địa điểm'" [notFoundMsg]="'Không tìm thấy'" [filterEnabled]="true" [options]="placeList"
-            (selected)="selectWorkplace($event)"></mdb-select>
-        </div>
-
-        <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
-          <mdb-select [label]="'Người thực hiện'" [notFoundMsg]="'Không tìm thấy'" [options]="employeeList"
-            [filterEnabled]="true" [(ngModel)]="scheduleCM.assigneeId"></mdb-select>
-        </div>
-
-        <owl-form-field class="col-12 px-0" *ngIf="isSelectWorkplace">
-          <input owlInput [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker" placeholder="Giờ bắt đầu"
-            [(ngModel)]="scheduleCM.startTime">
-          <owl-date-time #datepicker [pickerType]="'timer'"></owl-date-time>
-        </owl-form-field>
-
-        <span *ngIf="isSelectWorkplace">Thời lượng:
-          <span class="font-weight-bold">{{scheduleCM?.duration}} phút</span>
-        </span>
-        <div class="w-100 d-flex justify-content-center align-items-center my-3" *ngIf="isSelectWorkplace">
-          <mdb-range-input id="range" [min]="10" [step]="10" [max]="300" name="range"
-            (rangeValueChange)="isSelectRange = true" [ngModel]="scheduleCM.duration" (ngModelChange)="changeDuration($event)" class="w-100"></mdb-range-input>
-          <span class="ml-2">phút</span>
-        </div>
-
-        <h6 class="font-weight-bold col-12 px-0">Các ngày lặp lại trong tuần</h6>
-        <div class="form-check form-check-inline d-flex flex-wrap w-100">
-          <div class="col-6" *ngFor="let day of week">
-            <input type="checkbox" class="form-check-input" [id]="day.inputId" [(ngModel)]="day.check">
-            <label class="form-check-label" [for]="day.inputId">{{ day.label }} </label>
           </div>
-        </div>
 
-        <hr>
+          <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
+            <mdb-select
+              id="company"
+              name="company"
+              [label]="'Công ty*'"
+              [notFoundMsg]="'Không tìm thấy'"
+              [filterEnabled]="true"
+              ngModel
+              required
+              #companyId=ngModel
+              [options]="companyList"
+              [class.ng-invalid.validate-error]="companyId.invalid && (companyId.dirty || companyId.touched)"
+              (selected)="selectCompany($event)">
+            </mdb-select>
+            <span
+              class="text-danger font-weight-normal"
+              *ngIf="companyId.invalid && (companyId.dirty || companyId.touched)"
+              style="font-size: .8rem">
+              Vui lòng chọn công ty
+            </span>
 
-        <div *ngIf="isSelectWorkplace" class="d-flex flex-wrap w-100 pt-3">
-          <p class="h6 col-12 px-0">Danh sách công việc gợi ý</p>
-          <div *ngFor="let list of taskBasicList; let i of index" class="col-6">
-            <mdb-checkbox name="item-{{i}}" [checked]="list.checked" #checkbox
-              (change)="changeCheckbox(list.id, $event)">{{list.title}}</mdb-checkbox>
           </div>
-        </div>
+  
+          <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0" *ngIf="isSelectCompany">
+            <mdb-select
+              id="zone"
+              name="zone"
+              [label]="'Khu vực*'"
+              ngModel
+              required
+              #zoneId="ngModel"
+              [notFoundMsg]="'Không tìm thấy'"
+              [filterEnabled]="true"
+              [class.ng-invalid.validate-error]="zoneId.invalid && (zoneId.dirty || zoneId.touched)"
+              [options]="zoneList"
+              (selected)="selectZone($event)">
+            </mdb-select>
+            <span
+              class="text-danger font-weight-normal"
+              *ngIf="zoneId.invalid && (zoneId.dirty || zoneId.touched)"
+              style="font-size: .8rem">
+              Vui lòng chọn khu vực
+            </span>
+          </div>
+  
+          <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0" *ngIf="isSelectZone">
+            <mdb-select 
+              id="workplace"
+              name="workplace"
+              [label]="'Nơi làm việc*'" 
+              ngModel
+              required
+              #workplaceId=ngModel
+              [notFoundMsg]="'Không tìm thấy'" 
+              [filterEnabled]="true" 
+              [class.ng-invalid.validate-error]="workplaceId.invalid && (workplaceId.dirty || workplaceId.touched)"
+              [options]="placeList"
+              (selected)="selectWorkplace($event)">
+            </mdb-select>
+            <span
+              class="text-danger font-weight-normal"
+              *ngIf="workplaceId.invalid && (workplaceId.dirty || workplaceId.touched)"
+              style="font-size: .8rem">
+              Vui lòng chọn nơi làm việc
+            </span>
+          </div>
 
-        <div class="col-12 md-form my-3 px-0" *ngIf="isSelectWorkplace">
-          <textarea type="text" id="description" class="md-textarea form-control" mdbInput
-            [(ngModel)]="scheduleCM.description"></textarea>
-          <label>Miêu tả chi tiết</label>
-        </div>
+          <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
+            <mdb-select 
+              id="employee"
+              name="employee"
+              [label]="'Người thực hiện*'" 
+              [notFoundMsg]="'Không tìm thấy'" 
+              [filterEnabled]="true"
+              [(ngModel)]="scheduleCM.assigneeId"
+              required
+              #employeeId=ngModel
+              [options]="employeeList"
+              [class.ng-invalid.validate-error]="employeeId.invalid && (employeeId.dirty || employeeId.touched)"
+            >
+            </mdb-select>
+            <span
+              class="text-danger font-weight-normal"
+              *ngIf="employeeId.invalid && (employeeId.dirty || employeeId.touched)"
+              style="font-size: .8rem">
+              Vui lòng chọn nhân viên
+            </span>
+          </div>
 
-      </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect (click)="createSchedule()">Tạo mới
-          <i class="fa fa-check ml-1"></i>
-        </button>
+          <span *ngIf="isSelectWorkplace">
+            Thời lượng:
+            <span class="font-weight-bold">{{scheduleCM?.duration}} phút</span>
+          </span>
+          <div class="w-100 d-flex justify-content-center align-items-center my-3" *ngIf="isSelectWorkplace">
+            <mdb-range-input
+              id="range"
+              [min]="10"
+              [step]="10"
+              [max]="300"
+              name="range"
+              (rangeValueChange)="isSelectRange = true"
+              [ngModel]="scheduleCM.duration"
+              (ngModelChange)="changeDuration($event)"
+              class="w-100">
+            </mdb-range-input>
+            <span class="ml-2">phút</span>
+          </div>
+  
+          <h6 class="font-weight-bold col-12 px-0">Các ngày lặp lại trong tuần</h6>
+          <div class="form-check form-check-inline d-flex flex-wrap w-100">
+            <div class="col-6" *ngFor="let day of week">
+              <input
+                [id]="day.inputId"
+                [name]="day.inputId"
+                type="checkbox"
+                class="form-check-input"
+                [id]="day.inputId"
+                [(ngModel)]="day.check"
+                [class.ng-invalid.validate-error]="selectAtLeastOneDay"
+                (change)="changeDay()">
+              <label class="form-check-label" [for]="day.inputId">{{ day.label }} </label>
+            </div>
+            <div class="col-6">
+              <small class="text-danger font-weight-normal" *ngIf="selectAtLeastOneDay">
+                Chọn ít nhất 1 thứ trong tuần
+              </small>
+            </div>
+          </div>
+  
+          <hr>
+  
+          <div *ngIf="isSelectWorkplace" class="d-flex flex-wrap w-100 pt-3">
+            <p class="h6 col-12 px-0">Danh sách công việc gợi ý</p>
+            <div *ngFor="let list of taskBasicList; let i of index" class="col-6">
+              <mdb-checkbox
+                id="item-{{i}}"
+                name="item-{{i}}"
+                [checked]="list.checked"
+                #checkbox
+                (change)="changeCheckbox(list.id, $event)">
+                {{list.title}}
+              </mdb-checkbox>
+            </div>
+            <!-- <mdb-error [hidden]="selectedTaskBasic.length === 0" class="font-weight-normal">
+              Chọn ít nhất 1 công việc trong tuần
+            </mdb-error> -->
+          </div>
+  
+          <div class="col-12 md-form my-3 px-0" *ngIf="isSelectWorkplace">
+            <textarea
+              type="text"
+              id="description"
+              name="description"
+              class="md-textarea form-control"
+              mdbInput
+              [(ngModel)]="scheduleCM.description">
+            </textarea>
+            <label>Miêu tả chi tiết</label>
+          </div>
+
+          <div class="col-12 text-center mt-3 border-top pt-3">
+            <button mdbBtn color="success" class="waves-light" mdbWavesEffect [disabled]="!createForm.form.valid">Tạo mới
+              <i class="fa fa-check ml-1"></i>
+            </button>
+          </div>
+        </form>
+
       </div>
     </div>
   </div>

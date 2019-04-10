@@ -130,6 +130,59 @@ export class ZoneComponent implements OnInit {
       );
   }
 
+  createPlace() {
+    this.zoneCM.companyId = this.companyId;
+    this.filesToUpload ? this.createPlaceWithImage() : this.createPlaceWithoutImage();
+  }
+
+  createPlaceWithoutImage() {
+    this.zoneService.create(this.zoneCM)
+      .then(
+        () => {
+          this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.createModal.hide();
+          this.zoneList = [];
+          this.getZone();
+        },
+        (error: any) => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
+  }
+
+  createPlaceWithImage() {
+    const formData: FormData = new FormData();
+    if (!!this.filesToUpload) {
+      for (let index = 0; index < this.filesToUpload.length; index++) {
+        const file: File = this.filesToUpload[index];
+        formData.append('dataFile', file);
+      }
+    }
+    this.globalService.uploadFile(formData, 'image/zone/')
+      .then(
+        (response) => {
+          this.zoneCM.picture = response;
+          this.zoneService.create(this.zoneCM)
+            .then(
+              () => {
+                this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+                this.createModal.hide();
+                this.zoneList = [];
+                this.getZone();
+              },
+              (error: any) => {
+                this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+              }
+            );
+
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+  }
+
+
   checkRemovable(id: number) {
     this.warningMessage = [];
     this.zoneService.checkRemove(id)
@@ -190,9 +243,8 @@ export class ZoneComponent implements OnInit {
   showFiles() {
     let files = '';
     for (let i = 0; i < this.files.length; i ++) {
-      files += this.files[i].name;
-       if (!(this.files.length - 1 === i)) {
-         files += ',';
+      if ((this.files.length - 1 === i)) {
+        files += this.files[i].name;
       }
     }
     return files;

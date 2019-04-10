@@ -5,9 +5,11 @@ export class Zone {
   id: number;
   name: string;
   picture: string;
+  status: number;
 
   constructor() {
     this.companyModel = new Shared();
+    this.status = 1;
     this.id = 0;
     this.name = '';
     this.picture = '';
@@ -19,9 +21,11 @@ export class ZoneModel {
   id: number;
   name: string;
   picture: string;
+  status: number;
 
   constructor() {
     this.companyId = 0;
+    this.status = 1;
     this.id = 0;
     this.name = '';
     this.picture = '';

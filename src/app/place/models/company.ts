@@ -7,6 +7,7 @@ export class Company {
   latitude: number;
   longitude: number;
   phone: string;
+  status: number;
 
   constructor() {
     this.address = '';
@@ -17,5 +18,6 @@ export class Company {
     this.latitude = 0;
     this.longitude = 0;
     this.phone = '';
+    this.status = 1;
   }
 }

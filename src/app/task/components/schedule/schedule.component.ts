@@ -58,6 +58,7 @@ export class ScheduleComponent implements OnInit {
   selectedDay = [];
   assignTask: AssignTask = new AssignTask();
   manageWorkplace: ManageWorkplace = new ManageWorkplace();
+  selectAtLeastOneDay: boolean;
 
   constructor(
     private scheduleService: ScheduleService,
@@ -137,6 +138,15 @@ export class ScheduleComponent implements OnInit {
       this.selectedTaskBasic.push(this.taskBasicList.find(task => task.id === id));
     } else {
       this.selectedTaskBasic = this.selectedTaskBasic.filter(task => task.id !== id);
+    }
+  }
+
+  changeDay() {
+    console.log(this.week);
+    if (this.week.filter(d => d.check === true).length === 0) {
+      this.selectAtLeastOneDay = true;
+    } else {
+      this.selectAtLeastOneDay = false;
     }
   }
 

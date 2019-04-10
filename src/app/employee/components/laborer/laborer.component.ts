@@ -122,7 +122,7 @@ export class LaborerComponent implements OnInit {
     this.optionsSex = this.globalService.optionsSex;
     this.userAccount = this.globalService.getUserAccount();
     this.employeeStatusList = this.globalService.employeeStatus;
-    if (this.userAccount.roleId === 2 && this.employeeStatusList.length > 2) {
+    if (this.userAccount.roleId === 2 && this.employeeStatusList.length === 3) {
       this.employeeStatusList.pop();
     }
     this.getManager();
@@ -394,9 +394,8 @@ export class LaborerComponent implements OnInit {
   showFiles() {
     let files = '';
     for (let i = 0; i < this.files.length; i ++) {
-      files += this.files[i].name;
-       if (!(this.files.length - 1 === i)) {
-         files += ',';
+      if ((this.files.length - 1 === i)) {
+        files += this.files[i].name;
       }
     }
     return files;

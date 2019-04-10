@@ -142,6 +142,28 @@ export class CompanyComponent implements OnInit {
   }
 
   createCompany() {
+    this.companyCM.address = this.location.address_level_1;
+    this.companyCM.latitude = this.location.lat;
+    this.companyCM.longitude = this.location.lng;
+    this.filesToUpload ? this.createCompanyWithImage() : this.createCompanyWithoutImage();
+  }
+
+  createCompanyWithoutImage() {
+    this.companyService.create(this.companyCM)
+      .then(
+        () => {
+          this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.createModal.hide();
+          this.companyList = [];
+          this.getCompany();
+        },
+        (error: any) => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
+  }
+
+  createCompanyWithImage() {
     const formData: FormData = new FormData();
     if (!!this.filesToUpload) {
       for (let index = 0; index < this.filesToUpload.length; index++) {
@@ -149,17 +171,14 @@ export class CompanyComponent implements OnInit {
         formData.append('dataFile', file);
       }
     }
-    this.globalService.uploadFile(formData, 'image/employee/')
+    this.globalService.uploadFile(formData, 'image/company/')
       .then(
         (response) => {
-          this.companyCM.address = this.location.address_level_1;
           this.companyCM.picture = response;
-          this.companyCM.latitude = this.location.lat;
-          this.companyCM.longitude = this.location.lng;
           this.companyService.create(this.companyCM)
             .then(
               () => {
-                this.toastService.success('Tạo công ty thành công', '', { positionClass: 'toast-bottom-right'} );
+                this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
                 this.createModal.hide();
                 this.companyList = [];
                 this.getCompany();
@@ -168,6 +187,10 @@ export class CompanyComponent implements OnInit {
                 this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
               }
             );
+
+        },
+        (error) => {
+          console.error(error);
         }
       );
   }
@@ -229,14 +252,11 @@ export class CompanyComponent implements OnInit {
     this.getCompany();
   }
 
-  // show + update files
-
   showFiles() {
     let files = '';
     for (let i = 0; i < this.files.length; i ++) {
-      files += this.files[i].name;
-       if (!(this.files.length - 1 === i)) {
-         files += ',';
+      if ((this.files.length - 1 === i)) {
+        files += this.files[i].name;
       }
     }
     return files;
