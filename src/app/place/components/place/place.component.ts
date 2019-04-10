@@ -543,6 +543,7 @@ export class PlaceComponent implements OnInit {
       .then(
         (response) => {
           this.toastService.success('Gỡ thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.removeBeaconModal.hide();
           this.getBeacon();
           this.getPlace();
         }
