@@ -120,7 +120,7 @@ export class PlaceUpdateComponent implements OnInit {
   }
 
   getBeacon() {
-    this.beaconService.getAll('', 'id', 0, 99)
+    this.beaconService.getAll('', '', 'id' , 0, 99)
       .then(
         (response: PaginationResponse) => {
           this.optionsSelect = response.content.map((beacon) => {

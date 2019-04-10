@@ -17,12 +17,13 @@ export class BeaconService {
     ).toPromise();
   }
 
-  getAll(sort: string, fieldSort: string, page: number, size: number): Promise<PaginationResponse> {
+  getAll(sort: string, search: string, fieldSort: string, page: number, size: number): Promise<PaginationResponse> {
     return this.httpClient.get<PaginationResponse>(
       `${environment.endPoint}${environment.apiPaths.beacon.getAll}`,
       {
         params: {
           sort: `${sort}`,
+          search: `${search}`,
           fieldSort: `${fieldSort}`,
           page: `${page}`,
           size: `${size}`
@@ -52,15 +53,14 @@ export class BeaconService {
       ).toPromise();
   }
 
-  getByWorkplace(workplaceId: number): Promise<Beacon> {
-    return this.httpClient.get<Beacon>(
-      `${environment.endPoint}${environment.apiPaths.beacon.getByWorkplace}?workplaceId=${workplaceId}`,
-    ).toPromise();
-  }
-
   getAvailableBeacon(): Promise<Beacon[]> {
     return this.httpClient.get<Beacon[]>(
       `${environment.endPoint}${environment.apiPaths.beacon.getAvailable}`,
+    ).toPromise();
+  }
+  checkRemove(beaconId: number): Promise<any> {
+    return this.httpClient.get<Beacon[]>(
+      `${environment.endPoint}${environment.apiPaths.beacon.checkRemove + beaconId}`,
     ).toPromise();
   }
 }

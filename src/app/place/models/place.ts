@@ -68,6 +68,7 @@ export class Place {
   picture: string;
   setToBeacon: boolean;
   status: number;
+  beaconId: number;
   taskList: TaskList[];
   zone: ZoneDTO;
   company: CompanyDTO;
@@ -80,6 +81,7 @@ export class Place {
     this.id = 0;
     this.name = '';
     this.picture = '';
+    this.beaconId = 0;
     this.setToBeacon = false;
     this.description = '';
     this.taskList = new Array<TaskList>();

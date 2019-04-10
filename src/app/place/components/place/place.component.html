@@ -144,7 +144,7 @@
                       *ngIf="userAccount.roleId === 1 && (p.setToBeacon === false)">Thêm
                       beacon</button>
                     <button title="Gỡ beacon khỏi nơi này" mdbBtn type="button" color="warning" rounded="true"
-                      mdbWavesEffect size="sm" (click)="openRemoveBeaconModal(p.id)"
+                      mdbWavesEffect size="sm" (click)="checkRemoveBeacon(p?.beaconId)"
                       *ngIf="userAccount.roleId === 1 && p.setToBeacon">Gỡ
                       beacon</button>
                     <button title="Tạo công việc mới cho nơi này " mdbBtn type="button" color="success" rounded="true"
@@ -441,6 +441,13 @@
       <!--Body-->
       <div class="modal-body">
         <i class="fa fa-warning fa-4x animated rotateIn"></i>
+        <div *ngIf="warningMessage.length !== 0">
+          <div *ngFor="let m of warningMessage">
+            <p class="h6 font-weight-bold">
+              {{m}}
+            </p>
+          </div>
+        </div>
       </div>
 
       <!--Footer-->
@@ -532,10 +539,12 @@
       <!--Body-->
       <div class="modal-body">
         <i class="fa fa-times fa-4x animated rotateIn"></i>
-        <div *ngFor="let m of warningMessage">
-          <p class="h6 font-weight-bold">
-            {{m}}
-          </p>
+        <div *ngIf="warningMessage.length !== 0">
+          <div *ngFor="let m of warningMessage">
+            <p class="h6 font-weight-bold">
+              {{m}}
+            </p>
+          </div>
         </div>
         <p class="h6 font-weight-bold">
           Bạn có muốn tiếp tục xóa?
@@ -649,6 +658,36 @@
           (click)="checkRemovableManager(2)">Đồng ý</a>
         <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect p-dismiss="modal"
           (click)="deleteManager.hide()">Hủy</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+<div mdbModal #warning="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="delete" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-warning" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Cảnh báo</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-warning fa-4x animated rotateIn"></i>
+        <div *ngFor="let m of warningMessage">
+          <p class="h6 font-weight-bold">
+            {{m}}
+          </p>
+        </div>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a type="button" mdbBtn color="warning" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+          (click)="warning.hide()">Đóng</a>
       </div>
     </div>
     <!--/.Content-->

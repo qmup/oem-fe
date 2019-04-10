@@ -39,6 +39,7 @@ export class PlaceComponent implements OnInit {
   optionsSelect = new Array<any>();
   beaconName: string;
   @ViewChild('create') createModal: ModalDirective;
+  @ViewChild('warning') warningModal: ModalDirective;
   @ViewChild('createTaskModal') createTaskModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
   @ViewChild('beacon') beaconModal: ModalDirective;
@@ -117,7 +118,7 @@ export class PlaceComponent implements OnInit {
     this.workplaceStatusList = this.globalService.workplaceStatus;
     this.viewTypes = this.globalService.viewTypes;
     if (this.userAccount.roleId === 2 && this.workplaceStatusList.length > 2) {
-    this.workplaceStatusList.pop();
+      this.workplaceStatusList.pop();
     }
   }
 
@@ -379,7 +380,7 @@ export class PlaceComponent implements OnInit {
         (response: any) => {
           response.removeAble ?
           this.deleteModal.show() :
-          (this.warningMessage = response.message.split(';'), this.deleteModal.show());
+          (this.warningMessage = response.message.split(';'), this.warningModal.show());
         }
       );
   }
@@ -387,8 +388,8 @@ export class PlaceComponent implements OnInit {
   checkRemovableManager(type: number) {
     this.placeService.removeFromManager(this.currentManagerId, this.selectingWorkplaceId)
       .then(
-        (response: boolean) => {
-          if (response) {
+        (response) => {
+          if (response.removeAble) {
             if (type === 1) {
               this.updateManagerForWorkplace();
             } else {
@@ -398,8 +399,9 @@ export class PlaceComponent implements OnInit {
               this.getPlace();
             }
           } else {
-            this.toastService.error('Vẫn còn công việc tại đây chưa được giải quyết xong' , '', { positionClass: 'toast-bottom-right'});
+            this.warningMessage = [];
             this.hideManagerModal();
+            (this.warningMessage = response.message.split(';'), this.warningModal.show());
           }
         }
       );
@@ -513,15 +515,25 @@ export class PlaceComponent implements OnInit {
               }
             } else {
               this.warningMessage = res.message.split(';');
-              let warningString = '';
-              this.warningMessage.forEach((element: string) => {
-                warningString += element;
-                this.toastService.error(warningString, '', {positionClass: 'toast-bottom-right'});
-              });
+              this.warningModal.show();
             }
           }
         );
     }
+  }
+
+  checkRemoveBeacon(e: number) {
+    this.beaconService.checkRemove(e)
+      .then(
+        (res) => {
+          if (res.removeAble) {
+            this.removeBeaconModal.show();
+          } else {
+            this.warningMessage = res.message.split(';');
+            this.removeBeaconModal.show();
+          }
+        }
+      );
   }
 
   openRemoveBeaconModal(e: any) {
@@ -530,11 +542,13 @@ export class PlaceComponent implements OnInit {
   }
 
   removeBeaconOfWorkplace() {
-    // this.beaconService.updateField(this.deletingBeaconId, 'workplaceId', 0)
-    //   .then(
-    //     (response) => {
-    //     }
-    //   );
+    this.beaconService.updateField(this.deletingBeaconId, 'workplaceId', 0)
+      .then(
+        (response) => {
+          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.getPlace();
+        }
+      );
   }
 
   hideManagerModal() {

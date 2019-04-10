@@ -14,11 +14,13 @@
         <!--Author Data-->
         <div class=" col-12 col-sm-10">
           <p><strong>{{info.fullName}}</strong></p>
-          <!-- <p>Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.</p>
-          <p class="hidden-md-down">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint esse nulla quia
-            quam veniam commodi dicta, iusto inventore. Voluptatum pariatur eveniet ea, officiis vitae praesentium
-            beatae quas libero, esse facere.
-          </p> -->
+          <p>Tổng số nhân viên đang quản lý: 
+            <span class="badge badge-info">{{summaryTask?.totalLaborer}}</span>
+          </p>
+          <p>Tổng số nơi làm việc đang quản lý: 
+            <span class="badge badge-info">{{summaryTask?.totalWorkplace}}</span>
+          </p>
+          <button mdbBtn type="button" color="primary" class="waves-light" rounded="true" mdbWavesEffect>Đổi mật khẩu</button>
         </div>
       </div>
     </div>

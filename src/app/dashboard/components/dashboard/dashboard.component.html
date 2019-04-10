@@ -76,37 +76,41 @@
     <div class="row">
       <div class="col-xl-5 col-lg-12 mr-0" style="position: relative">
         <div class="view view-cascade gradient-card-header light-blue lighten-1">
-          <h2 class="h2-responsive mb-0">Công việc</h2>
+          <h2 class="h2-responsive mb-0">Điểm danh</h2>
         </div>
         <div class="card-body card-body-cascade pb-0" class="date-range-form">
           <div class="d-flex flex-wrap w-100 card-body pt-3">
             <owl-form-field class="col-md-12 px-0">
               <input owlInput [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker"
-              [selectMode]="'range'" placeholder="Khoảng thời gian" [(ngModel)]="dateRange" (dateTimeChange)="search()">
+              [selectMode]="'range'" placeholder="Chọn khoảng thời gian để xem dữ liệu" [(ngModel)]="dateRange" (dateTimeChange)="search()">
               <owl-date-time #datepicker [pickerType]="'calendar'"></owl-date-time>
             </owl-form-field>
           </div>
         </div>
       </div>
       <div class="col-xl-7 col-lg-12 my-5">
-        <p class="h5 text-center w-100">Từ {{endTime | date: 'dd-MM-yyyy'}} đến {{startTime | date: 'dd-MM-yyyy'}}</p>
+          <div class="view view-cascade gradient-card-header">
+            <p class="h5 text-center w-100 text-dark">Từ {{endTime | date: 'dd-MM-yyyy'}} đến {{startTime | date: 'dd-MM-yyyy'}}</p>
+            <div style="display: block">
+              <canvas mdbChart
+                  [chartType]="chartType"
+                  [data]="chartData"
+                  [labels]="chartLabels"
+                  [colors]="chartColors"
+                  [options]="chartOptions"
+                  [legend]="true"
+                  (chartHover)="chartHovered()"
+                  (chartClick)="chartClicked()">
+              </canvas>
+              <h5 class="text-center text-muted">Tổng số lần điểm danh: {{summaryTask?.totalTask}}</h5>
+            </div>
+
+          </div>
         <!-- <div style="display: block">
-          <canvas mdbChart
-              [chartType]="'line'"
-              [datasets]="chartDatasets"
-              [labels]="chartLabels"
-              [colors]="chartColors"
-              [options]="chartOptions"
-              [legend]="true"
-              (chartHover)="chartHovered()"
-              (chartClick)="chartClicked()">
-          </canvas>
-        </div> -->
-        <div style="display: block">
           <canvas mdbChart [chartType]="'bar'" [datasets]="chartDatasets" [labels]="chartLabels" [colors]="chartColors"
             [options]="chartOptions" [legend]="true">
           </canvas>
-        </div>
+        </div> -->
       </div>
     </div>
   </section>

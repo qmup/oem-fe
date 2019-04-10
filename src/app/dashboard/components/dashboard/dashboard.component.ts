@@ -1,10 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { NotificationService } from 'src/app/core/services/notification.service';
-import { SummaryTask } from '../../models/summary-task';
-import { DashboardService } from '../../services/dashboard.service';
-import { GlobalService } from 'src/app/core/services/global.service';
-import { Employee } from 'src/app/employee/models/employee';
-import { Router } from '@angular/router';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+import {
+  NotificationService
+} from 'src/app/core/services/notification.service';
+import {
+  SummaryTask
+} from '../../models/summary-task';
+import {
+  DashboardService
+} from '../../services/dashboard.service';
+import {
+  GlobalService
+} from 'src/app/core/services/global.service';
+import {
+  Employee
+} from 'src/app/employee/models/employee';
+import {
+  Router
+} from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,43 +33,26 @@ export class DashboardComponent implements OnInit {
   summaryTask: SummaryTask;
   userAccount: Employee;
 
-  chartDatasets: Array<any> = [
-    { data: [1, 5, 3, 7, 2, 4, 1, 2, 0, 4, 4, 5], label: 'Đã hoàn thành' },
-    { data: [4, 2, 4, 0, 1, 2, 3, 4, 5, 3, 0, 0], label: 'Chưa hoàn thành' },
-    { data: [0, 0, 1, 1, 2, 0, 3, 1, 1, 3, 2, 1], label: 'Quá hạn' },
-  ];
+  chartType = 'pie';
 
-  chartLabels: Array<any> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  chartData: Array < any > = [];
 
-  chartColors: Array<any> = [
-    {
-      backgroundColor: 'rgba(0, 200 ,81 ,0.2)',
-      borderColor: 'rgba(0, 200 ,81 , 1)',
-      borderWidth: 2,
-      pointBackgroundColor: 'rgba(0, 200 ,81 ,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(0, 200 ,81 ,1)'
-    },
-    {
-      backgroundColor: 'rgba(96, 125, 139, 0.2)',
-      borderColor: 'rgba(96, 125, 139, 1)',
-      borderWidth: 2,
-      pointBackgroundColor: 'rgba(96, 125, 139, 1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(96, 125, 139, 1)'
-    },
-    {
-      backgroundColor: 'rgba(255, 82, 82, 0.2)',
-      borderColor: 'rgba(255, 82, 82, 1)',
-      borderWidth: 2,
-      pointBackgroundColor: 'rgba(255, 82, 82, 1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(255, 82, 82, 1)'
-    }
-  ];
+  chartLabels1: Array < any > = ['Red', 'Green', 'Yellow', 'Grey', 'Dark Grey'];
+  chartLabels: Array < any > = ['Đúng giờ', 'Trễ', 'Vắng mặt'];
+
+  chartColors1: Array < any > = [{
+    hoverBorderColor: ['rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.1)'],
+    hoverBorderWidth: 0,
+    backgroundColor: ['#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
+    hoverBackgroundColor: ['#FF5A5E', '#5AD3D1', '#FFC870', '#A8B3C5', '#616774']
+  }];
+
+  chartColors: Array < any > = [{
+    hoverBorderColor: ['rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.1)'],
+    hoverBorderWidth: 0,
+    backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
+    hoverBackgroundColor: ['#28a745', '#ffc107', '#dc3545']
+  }];
 
   chartOptions: any = {
     responsive: true
@@ -70,7 +68,7 @@ export class DashboardComponent implements OnInit {
     private dashboardService: DashboardService,
     private globalService: GlobalService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.userAccount = this.globalService.getUserAccount();
@@ -90,21 +88,25 @@ export class DashboardComponent implements OnInit {
       .then(
         (response: SummaryTask) => {
           this.summaryTask = response;
+          this.chartData = Object.values(response.statuses);
         }
       );
   }
 
   getSummaryTaskLastWeek() {
     this.dashboardService.summaryManagerTask(
-      this.userAccount.id,
-      this.globalService.convertToYearMonthDay(this.startTime),
-      this.globalService.convertToYearMonthDay(this.endTime)
+        this.userAccount.id,
+        this.globalService.convertToYearMonthDay(this.startTime),
+        this.globalService.convertToYearMonthDay(this.endTime)
       )
       .then(
         (response: SummaryTask) => {
           this.summaryTask = response;
+          this.chartData = Object.values(response.statuses);
         }
       );
   }
 
+  public chartClicked(): void {}
+  public chartHovered(): void {}
 }

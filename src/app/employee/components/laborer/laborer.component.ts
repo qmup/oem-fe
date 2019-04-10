@@ -70,6 +70,7 @@ export class LaborerComponent implements OnInit {
   employeeCM: Employee = new Employee();
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
+  @ViewChild('warning') warningModal: ModalDirective;
   formData: FormData;
   files: UploadFile[];
   uploadInput: EventEmitter<UploadInput>;
@@ -90,6 +91,7 @@ export class LaborerComponent implements OnInit {
   timeoutSearch: any;
   timeoutSearchMap: any;
   defaultImage = '../../../../assets/default-image.jpg';
+  warningMessage = [];
 
   constructor(
     private employeeService: EmployeeService,
@@ -359,24 +361,31 @@ export class LaborerComponent implements OnInit {
   }
 
   removeEmployee() {
+    this.employeeService.updateField(this.id, 'status', 0)
+      .then(
+        () => {
+          this.toastService.success('Xóa nhân viên thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.deleteModal.hide();
+          this.employeeList = [];
+          this.getEmployee();
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
+  }
+
+  checkConstraint(id: number) {
+    this.id = id;
+    this.warningMessage = [];
     this.employeeService.checkConstraint(this.id)
       .then(
         (res) => {
-          if (res.removable) {
-            this.employeeService.updateField(this.id, 'status', 0)
-              .then(
-                () => {
-                  this.toastService.success('Xóa nhân viên thành công', '', { positionClass: 'toast-bottom-right'} );
-                  this.deleteModal.hide();
-                  this.employeeList = [];
-                  this.getEmployee();
-                },
-                () => {
-                  this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
-                }
-              );
+          if (res.removeAble) {
+            this.deleteModal.show();
           } else {
-            this.toastService.error(res.message , '', { positionClass: 'toast-bottom-right'});
+            this.warningMessage = res.message.split(';');
+            this.warningModal.show();
           }
         }
       );

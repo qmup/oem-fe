@@ -75,9 +75,9 @@ export class RequestInterceptorService implements HttpInterceptor {
             const now = new Date().getTime();
             if (token.expired_time < now) {
               this.toastService.info('Phiên đăng nhập hết hạn', 'Vui lòng đăng nhập lại', { positionClass: 'toast-bottom-right'});
-              this.authGuardService.clearToken();
-              this.globalService.isLogin = false;
               this.router.navigate(['login']);
+              this.globalService.isLogin = false;
+              this.authGuardService.clearToken();
             }
           }
         }

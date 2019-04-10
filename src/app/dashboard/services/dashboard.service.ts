@@ -16,9 +16,9 @@ export class DashboardService {
     ).toPromise();
   }
 
-  summaryEmployeeTask(id: number, from: string, to: string): Promise<SummaryTask> {
-    return this.httpClient.get<SummaryTask>(
-      `${environment.endPoint}${environment.apiPaths.task.summaryTaskByEmployee}?employeeId=${id}&fromDate=${from}&toDate=${to}`
-    ).toPromise();
-  }
+  // summaryEmployeeTask(id: number, from: string, to: string): Promise<SummaryTask> {
+  //   return this.httpClient.get<SummaryTask>(
+  //     `${environment.endPoint}${environment.apiPaths.task.summaryTaskByEmployee}?employeeId=${id}&fromDate=${from}&toDate=${to}`
+  //   ).toPromise();
+  // }
 }

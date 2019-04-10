@@ -17,32 +17,6 @@ export class TaskService {
       `${environment.endPoint}${environment.apiPaths.task.create}`, taskCM
     ).toPromise();
   }
-  getTaskByManager(
-    managerId: number,
-    search: string,
-    sort: string,
-    fieldSort: string,
-    page: number,
-    size: number): Promise<PaginationResponse> {
-    return this.httpClient.get<PaginationResponse>(
-      `${environment.endPoint}${environment.apiPaths.task.getTaskByManager}`,
-      {
-        params: {
-          managerId: `${managerId}`,
-          search: `${search}`,
-          sort: `${sort}`,
-          fieldSort: `${fieldSort}`,
-          page: `${page}`,
-          size: `${size}`,
-        }
-      }
-    ).toPromise();
-  }
-  getTaskByStatus(): Promise<Task[]> {
-    return this.httpClient.get<Task[]>(
-      `${environment.endPoint}${environment.apiPaths.task.getTaskByStatus}`
-    ).toPromise();
-  }
   getTaskDetail(taskId: number): Promise<TaskDetail> {
     return this.httpClient.get<TaskDetail>(
       `${environment.endPoint}${environment.apiPaths.task.getTaskDetail}`,
@@ -87,11 +61,6 @@ export class TaskService {
   updateWorkplace(taskId: number, workplaceId: number): Promise<any> {
     return this.httpClient.put<any>(
       `${environment.endPoint}${environment.apiPaths.task.updateWorkplace}/${taskId}/${workplaceId}`, {}
-    ).toPromise();
-  }
-  getTodayTaskByManager(assignerId: number): Promise<any> {
-    return this.httpClient.get<Task[]>(
-      `${environment.endPoint}${environment.apiPaths.task.getTodayTask}?assignerId=${assignerId}`
     ).toPromise();
   }
 

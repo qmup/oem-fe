@@ -31,8 +31,7 @@ export class ManagerDetailComponent implements OnInit {
   @ViewChild('createWorkplaceModal') createWorkplaceModal: ModalDirective;
   @ViewChild('removeEmp') removeEmployeeModal: ModalDirective;
   @ViewChild('removeWp') removeWorkplaceModal: ModalDirective;
-  @ViewChild('moreEmp') empToggle: any;
-  @ViewChild('moreWP') workplaceToggle: any;
+  @ViewChild('warning') warningModal: any;
   defaultImage = '../../../../assets/default-image.jpg';
   manager: Employee = new Employee();
   formData: FormData;
@@ -67,6 +66,7 @@ export class ManagerDetailComponent implements OnInit {
   searchWorkplaceText = '';
   searchEmployeeText = '';
   timeoutSearch: any;
+  warningMessage: any[];
 
   constructor(
     private employeeService: EmployeeService,
@@ -239,6 +239,38 @@ export class ManagerDetailComponent implements OnInit {
 
   }
 
+  checkConstraint(id: number) {
+    this.deletingEmpId = id;
+    this.warningMessage = [];
+    this.employeeService.checkConstraint(this.deletingEmpId)
+      .then(
+        (res) => {
+          if (res.removeAble) {
+            this.removeEmployeeModal.show();
+          } else {
+            this.warningMessage = res.message.split(';');
+            this.warningModal.show();
+          }
+        }
+      );
+  }
+
+  checkRemoveWorkplace(id: number) {
+    this.deletingWpId = id;
+    this.warningMessage = [];
+    this.workplaceService.checkRemoveManager(this.id, this.deletingWpId)
+      .then(
+        (res) => {
+          if (res.removeAble) {
+            this.removeWorkplaceModal.show();
+          } else {
+            this.warningMessage = res.message.split(';');
+            this.warningModal.show();
+          }
+        }
+      );
+  }
+
   selectWorkplace(e: any) {
     this.manageWorkplace.workplaceId = e.value;
   }
@@ -249,11 +281,6 @@ export class ManagerDetailComponent implements OnInit {
 
   openCreateWorkplaceModal() {
     this.createWorkplaceModal.show();
-  }
-
-  openRemoveEmployeeModal(id: number) {
-    this.deletingEmpId = id;
-    this.removeEmployeeModal.show();
   }
 
   openRemoveWorkplaceModal(id: number) {
@@ -325,16 +352,6 @@ export class ManagerDetailComponent implements OnInit {
           }
         }
       );
-  }
-
-  toggleEmp() {
-    this.empToggle.toggle();
-    this.isShowMore1 = true;
-  }
-
-  toggleWorkplace() {
-    this.workplaceToggle.toggle();
-    this.isShowMore2 = true;
   }
 
   changePage1(event) {

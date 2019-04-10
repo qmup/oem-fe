@@ -24,7 +24,7 @@ export class BeaconComponent implements OnInit {
   @ViewChild('delete') deleteModal: ModalDirective;
   currentPage = 0;
 
-  searchText: string;
+  searchText = '';
   placeList: Place[];
   beaconResponse: PaginationResponse;
   timeoutSearch: any;
@@ -40,7 +40,7 @@ export class BeaconComponent implements OnInit {
   }
 
   getBeacon() {
-    this.beaconService.getAll('', 'id', this.currentPage, 10)
+    this.beaconService.getAll('', this.searchText, 'id', this.currentPage, 10)
       .then(
         (response: PaginationResponse) => {
           this.beaconList = response.content;

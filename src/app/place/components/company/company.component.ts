@@ -59,6 +59,7 @@ export class CompanyComponent implements OnInit {
   optionsSelect = new Array<any>();
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
+  @ViewChild('warning') warningModal: ModalDirective;
   formData: FormData;
   files: UploadFile[];
   uploadInput: EventEmitter<UploadInput>;
@@ -178,7 +179,7 @@ export class CompanyComponent implements OnInit {
         (response: any) => {
           response.removeAble ?
           this.deleteModal.show() :
-          (this.warningMessage = response.message.split(';'), this.deleteModal.show());
+          (this.warningMessage = response.message.split(';'), this.warningModal.show());
         }
       );
   }
