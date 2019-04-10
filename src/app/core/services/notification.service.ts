@@ -31,7 +31,6 @@ export class NotificationService {
     private router: Router,
     private globalService: GlobalService
   ) {
-    this.countUnread = this.globalService.countUnread;
     this.angularFireMessaging.messaging.subscribe(
       (_messaging) => {
         _messaging.onMessage = _messaging.onMessage.bind(_messaging);
@@ -79,7 +78,7 @@ export class NotificationService {
   receiveMessage() {
     this.angularFireMessaging.messages.subscribe(
       (payload: any) => {
-        this.countUnread++;
+        this.globalService.countUnread++;
         const alertInstance = this.toastService.info(
           `${payload.data.sender + ' ' + payload.data['gcm.notification.message']}`,
           payload.notification.title, { positionClass: 'toast-bottom-right'} );

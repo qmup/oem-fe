@@ -179,14 +179,16 @@ export class ManagerDetailComponent implements OnInit {
       .then(
         (response: PaginationResponse) => {
           this.companyList = response.content;
-          if (this.employeeList.length === 0) {
-            this.employeeList = [
+          console.log(this.companyList);
+          if (this.companyList.length === 0) {
+            this.companyList = [
               {
                 value: '-1',
                 label: 'Không tìm thấy khu vực tại công ty này',
                 disabled: true,
               }
             ];
+            console.log(this.companyList);
           } else {
             this.companyList.map((company) => {
               return {
@@ -196,6 +198,7 @@ export class ManagerDetailComponent implements OnInit {
               };
             });
           }
+          console.log(this.companyList);
         });
   }
 

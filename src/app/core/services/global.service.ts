@@ -56,8 +56,8 @@ export class GlobalService {
     }
   ];
   optionsSex = [
-    { value: 0, label: 'Nam' },
-    { value: 1, label: 'Nữ' },
+    { value: 1, label: 'Nam' },
+    { value: 2, label: 'Nữ' },
   ];
   week = [
     { id: 2, inputId: 'option1', label: 'Thứ 2' , check: false},
