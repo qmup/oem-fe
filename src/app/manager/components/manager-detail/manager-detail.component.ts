@@ -179,18 +179,16 @@ export class ManagerDetailComponent implements OnInit {
       .then(
         (response: PaginationResponse) => {
           this.companyList = response.content;
-          console.log(this.companyList);
           if (this.companyList.length === 0) {
             this.companyList = [
               {
                 value: '-1',
-                label: 'Không tìm thấy khu vực tại công ty này',
+                label: 'Không tìm thấy công ty',
                 disabled: true,
               }
             ];
-            console.log(this.companyList);
           } else {
-            this.companyList.map((company) => {
+            this.companyList = this.companyList.map((company) => {
               return {
                 value: company.id,
                 label: company.name,
@@ -198,7 +196,6 @@ export class ManagerDetailComponent implements OnInit {
               };
             });
           }
-          console.log(this.companyList);
         });
   }
 
@@ -212,15 +209,25 @@ export class ManagerDetailComponent implements OnInit {
     this.zoneService.getByCompany(companyId, 1, '', '', 'id', 0, 99)
       .then(
         (response: ZonePagination) => {
-          this.zoneList = response.listOfZone.content.map((zone) => {
-            return {
-              value: zone.id,
-              label: zone.name,
-              icon: zone.picture
-            };
-          });
+          this.zoneList = response.listOfZone.content;
+          if (this.zoneList.length === 0) {
+            this.zoneList = [
+              {
+                value: '-1',
+                label: 'Không tìm thấy khu vực tại công ty này',
+                disabled: true,
+              }
+            ];
+          } else {
+            this.zoneList = this.zoneList.map((zone) => {
+              return {
+                value: zone.id,
+                label: zone.name,
+                icon: zone.picture
+              };
+            });
         }
-      );
+      });
   }
 
   selectZone(e: any) {

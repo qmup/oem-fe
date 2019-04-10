@@ -45,16 +45,16 @@
             <thead>
               <tr>
                 <th class="text-center">Hình ảnh</th>
+                <th (click)="sort('employeeId')">
+                  Mã số
+                  <mdb-icon icon="sort"></mdb-icon>
+                </th>
                 <th (click)="sort('firstName')">
                   Họ
                   <mdb-icon icon="sort"></mdb-icon>
                 </th>
                 <th (click)="sort('lastName')">
                   Tên
-                  <mdb-icon icon="sort"></mdb-icon>
-                </th>
-                <th (click)="sort('employeeId')">
-                  Mã số
                   <mdb-icon icon="sort"></mdb-icon>
                 </th>
                 <th (click)="sort('roleId')" style="width: 100px; max-width: 100px">
@@ -86,9 +86,9 @@
                 <td scope="row" style="position: relative; width: 120px">
                   <img src="{{data.picture || defaultImage}}" alt="image" class="avatar">
                 </td>
+                <td>{{data.employeeId}}</td>
                 <td>{{data.firstName}}</td>
                 <td>{{data.lastName}}</td>
-                <td>{{data.employeeId}}</td>
                 <td [ngClass]="{'text-danger' : data.roleId === 2}">{{data.roleName}}</td>
                 <td *ngIf="userAccount.roleId === 1 && data.managerName" class="text-danger">{{data.managerName}}</td>
                 <td *ngIf="userAccount.roleId === 1 && !data.managerName">Không có người quản lý</td>

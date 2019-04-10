@@ -62,6 +62,7 @@ export class TaskCalendarComponent implements OnInit {
   }
 
   getCalendarEvent() {
+    this.viewDate.setHours(0, 0, 0, 0);
     this.calendarService.get(
       this.userAccount.id,
       `${this.viewDate.toISOString()};${new Date(this.viewDate.getTime() + (24 * 60 * 60 * 1000 - 1000)).toISOString()}`)
