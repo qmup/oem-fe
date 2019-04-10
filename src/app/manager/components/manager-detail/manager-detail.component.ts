@@ -110,13 +110,24 @@ export class ManagerDetailComponent implements OnInit {
     this.employeeService.getEmployeeByManager(1, 0, '', '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
-          this.employeeList = response.content.map((employee) => {
-            return {
-              value: employee.id,
-              label: employee.fullName,
-              icon: employee.picture
-            };
-          });
+          this.employeeList = response.content.filter((e: Employee) => !(e.id !== this.userAccount.id || e.id !== this.id));
+            if (this.employeeList.length === 0) {
+              this.employeeList = [
+                {
+                  value: '-1',
+                  label: 'Không tìm thấy người quản lý nào',
+                  disabled: true,
+                }
+              ];
+            } else {
+              this.employeeList.map((employee: Employee) => {
+                return {
+                  value: employee.id,
+                  label: employee.fullName,
+                  icon: employee.picture
+                };
+              });
+            }
         }
       );
   }
@@ -167,15 +178,25 @@ export class ManagerDetailComponent implements OnInit {
     this.companyService.getAll('', '', 'id', 1, 0, 99)
       .then(
         (response: PaginationResponse) => {
-          this.companyList = response.content.map((company) => {
-            return {
-              value: company.id,
-              label: company.name,
-              icon: company.picture
-            };
-          });
-        }
-      );
+          this.companyList = response.content;
+          if (this.employeeList.length === 0) {
+            this.employeeList = [
+              {
+                value: '-1',
+                label: 'Không tìm thấy khu vực tại công ty này',
+                disabled: true,
+              }
+            ];
+          } else {
+            this.companyList.map((company) => {
+              return {
+                value: company.id,
+                label: company.name,
+                icon: company.picture
+              };
+            });
+          }
+        });
   }
 
   selectCompany(e: any) {

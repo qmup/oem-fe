@@ -621,7 +621,7 @@
       <!--Footer-->
       <div class="modal-footer flex-center" *ngIf="selectingManagerId">
         <a mdbBtn color="primary" outline="true" class="waves-effect" mdbWavesEffect
-          (click)="checkRemovableManager(1)">Đồng ý</a>
+          (click)="changeManager(1)">Đồng ý</a>
         <a type="button" mdbBtn color="primary" class="waves-effect" mdbWavesEffect p-dismiss="modal"
           (click)="editManager.hide()">Hủy</a>
       </div>
@@ -655,7 +655,7 @@
       <!--Footer-->
       <div class="modal-footer flex-center">
         <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect
-          (click)="checkRemovableManager(2)">Đồng ý</a>
+          (click)="changeManager(2)">Đồng ý</a>
         <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect p-dismiss="modal"
           (click)="deleteManager.hide()">Hủy</a>
       </div>

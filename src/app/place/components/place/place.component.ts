@@ -271,7 +271,6 @@ export class PlaceComponent implements OnInit {
               icon: m.picture
             };
           });
-          console.log(this._managerList);
         }
       );
   }
@@ -375,6 +374,7 @@ export class PlaceComponent implements OnInit {
 
   checkRemovable(id: number) {
     this.warningMessage = [];
+    this.selectingWorkplaceId = id;
     this.placeService.checkRemove(id)
       .then(
         (response: any) => {
@@ -385,11 +385,11 @@ export class PlaceComponent implements OnInit {
       );
   }
 
-  checkRemovableManager(type: number) {
+  changeManager(type: number) {
     this.placeService.removeFromManager(this.currentManagerId, this.selectingWorkplaceId)
       .then(
         (response) => {
-          if (response.removeAble) {
+          if (response) {
             if (type === 1) {
               this.updateManagerForWorkplace();
             } else {
@@ -401,14 +401,17 @@ export class PlaceComponent implements OnInit {
           } else {
             this.warningMessage = [];
             this.hideManagerModal();
-            (this.warningMessage = response.message.split(';'), this.warningModal.show());
+            if (response.message) {
+              this.warningMessage = response.message.split(';');
+              this.warningModal.show();
+            }
           }
         }
       );
   }
 
   removePlace() {
-    this.placeService.remove(this.id)
+    this.placeService.remove(this.selectingWorkplaceId)
       .then(
         (response) => {
           (response) ? (

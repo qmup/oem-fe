@@ -46,11 +46,11 @@
               <h4 class="card-title">{{z.name}}</h4>
               <!--Text-->
 
-              <button *ngIf="userAccount.roleId === 1" title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light"
+              <button *ngIf="userAccount.roleId === 1 && currentStatus !== 0" title="Cập nhật" mdbBtn type="button" rounded="true" color="primary" class="waves-light"
                 mdbWavesEffect (click)="openUpdateModal(z)">
                 <i class="fa fa-pencil"></i>
               </button>
-              <button *ngIf="userAccount.roleId === 1" title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light" mdbWavesEffect
+              <button *ngIf="userAccount.roleId === 1 && currentStatus !== 0" title="Xóa" mdbBtn type="button" rounded="true" color="danger" class="waves-light" mdbWavesEffect
                 (click)="checkRemovable(z.id)">
                 <i class="fa fa-ban"></i>
               </button>
@@ -138,7 +138,9 @@
     <div class="modal-content text-center">
       <!--Header-->
       <div class="modal-header d-flex justify-content-center">
-        Xóa khu vực này?
+        <p class="heading">
+          Xóa khu vực này?
+        </p>
       </div>
 
       <!--Body-->

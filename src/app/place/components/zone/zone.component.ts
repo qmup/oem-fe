@@ -47,6 +47,7 @@ export class ZoneComponent implements OnInit {
   searchText = '';
   timeoutSearch: any;
   zoneStatusList = [];
+  deletingId: number;
 
   constructor(
     private zoneService: ZoneService,
@@ -184,6 +185,7 @@ export class ZoneComponent implements OnInit {
 
 
   checkRemovable(id: number) {
+    this.deletingId = id;
     this.warningMessage = [];
     this.zoneService.checkRemove(id)
       .then(
@@ -196,7 +198,7 @@ export class ZoneComponent implements OnInit {
   }
 
   removeZone() {
-    this.zoneService.remove(this.id)
+    this.zoneService.remove(this.deletingId)
       .then(
         (response) => {
           if (response) {

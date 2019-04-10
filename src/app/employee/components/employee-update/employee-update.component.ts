@@ -140,7 +140,6 @@ export class EmployeeUpdateComponent implements OnInit {
             this.employee.roleId = e.value;
           } else {
             this.canChange = res.removeAble;
-            this.employee.roleId = this.employee.roleId;
             this.warningMessage = [];
             this.warningMessage = res.message.split(';');
           }

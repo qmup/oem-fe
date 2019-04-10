@@ -77,6 +77,7 @@ export class CompanyComponent implements OnInit {
   currentStatus = 1;
   searchText = '';
   timeoutSearch: any;
+  deletingId: any;
 
   constructor(
     private companyService: CompanyService,
@@ -196,6 +197,7 @@ export class CompanyComponent implements OnInit {
   }
 
   checkRemovable(id: number) {
+    this.deletingId = id;
     this.warningMessage = [];
     this.companyService.checkRemove(id)
       .then(
@@ -208,7 +210,7 @@ export class CompanyComponent implements OnInit {
   }
 
   removeCompany() {
-    this.companyService.remove(this.id)
+    this.companyService.remove(this.deletingId)
       .then(
         (response) => {
           if (response) {
