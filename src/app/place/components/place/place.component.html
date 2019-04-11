@@ -127,7 +127,13 @@
                       </button>
                     </p>
                     <p>Công việc đã giao:
-                      <span class="text-danger font-weight-bold h6">{{p.taskList.length}}</span>
+                      <span *ngIf="p.taskList.length < p.numberOfReworks" class="text-weight-bold text-danger">
+                        {{p.taskList.length}}
+                      </span>
+                      <span *ngIf="p.taskList.length >= p.numberOfReworks" class="text-success font-weight-bold">
+                        {{p.taskList.length}} - Đã đủ
+                        <i class="fa fa-check mr-2" color="success"></i>
+                      </span>
                     </p>
 
                   </div>
@@ -149,7 +155,7 @@
                       beacon</button>
                     <button title="Tạo công việc mới cho nơi này " mdbBtn type="button" color="success" rounded="true"
                       mdbWavesEffect (click)="openCreateTaskModal(p.id, i)"
-                      *ngIf="userAccount.roleId === 2 && (p.taskList.length < p.numberOfReworks) && canCreateTask">Tạo
+                      *ngIf="userAccount.roleId === 2 && canCreateTask">Tạo
                       công việc</button>
                     <button *ngIf="userAccount.roleId === 1" title="Cập nhật nơi làm việc" mdbBtn type="button"
                       color="primary" rounded="true" mdbWavesEffect size="sm" (click)="openUpdateModal(p)">
@@ -300,7 +306,7 @@
         </table>
 
         <div *ngIf="placeResponse?.numberOfElements === 0" class="text-left col-11 mx-auto pb-3">
-          <h5 class="text-danger font-weight-normal">Không tìm thấy</h5>
+          <h5 class="text-danger font-weight-normal">Không tìm thấy kết quả phù hợp</h5>
         </div>
 
         <app-pagination *ngIf="placeResponse?.totalPages > 1" [pageSize]="placeResponse.size"

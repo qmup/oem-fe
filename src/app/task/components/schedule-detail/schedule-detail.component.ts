@@ -21,7 +21,7 @@ import { TaskBasicManager } from '../../models/task-basic';
 })
 export class ScheduleDetailComponent implements OnInit {
 
-  taskBasicCM: Task;
+  taskBasicCM: Task = new Task();
   schedule: Schedule = new Schedule();
   scheduleId: number;
   userAccount: Employee;
@@ -34,7 +34,7 @@ export class ScheduleDetailComponent implements OnInit {
   taskBasic = [];
   selectedTaskBasic = [];
   selectedDayIds = [];
-  taskBasicManagerList = [];
+  taskBasicManagerList: Task[] = new Array<Task>();
   selectedModalTaskBasic = [];
 
   timeFrom: any;
@@ -64,7 +64,10 @@ export class ScheduleDetailComponent implements OnInit {
   uploadInput: EventEmitter<UploadInput>;
   humanizeBytes: Function;
   dragOver: boolean;
-  taskBasicManager: TaskBasicManager;
+  taskBasicManager: TaskBasicManager = new TaskBasicManager();
+  selectAtLeastOneTaskBasic: boolean;
+  selectAtLeastOneDay: boolean;
+  assigneeId: number;
 
   constructor(
     public modalRef: BsModalRef,
@@ -87,7 +90,7 @@ export class ScheduleDetailComponent implements OnInit {
     this.getScheduleDetail();
     this.getEmployee();
     this.getWorkplaceByManager();
-    this.getTaskBasicByManager();
+    // this.getTaskBasicByManager();
   }
 
   getScheduleDetail() {
@@ -105,6 +108,7 @@ export class ScheduleDetailComponent implements OnInit {
       .then(
         (response) => {
           this.schedule = response;
+          this.assigneeId = response.assignee.id;
           this.startTime = new Date(this.schedule.startTime);
           if (this.schedule.duration / 60000 > 1) {
             this.schedule.duration /= 60000;
@@ -172,16 +176,9 @@ export class ScheduleDetailComponent implements OnInit {
           this.schedule.taskBasics.forEach(element => {
             this.taskBasicManagerList = this.taskBasicManagerList.filter(task => task.title !== element.title);
           });
+          console.log(this.taskBasicManagerList);
         }
       );
-  }
-
-  openEditModal(template: TemplateRef<any>) {
-    this.modalRef1 = this.modalService.show(template, { class: 'modal-md modal-dialog modal-notify modal-primary' });
-  }
-
-  openCreateModal() {
-    // this.createModal.show();
   }
 
   openDetailModal() {
@@ -213,47 +210,37 @@ export class ScheduleDetailComponent implements OnInit {
     });
 
   }
+
+  selectWorkplace(e: any) {
+    this.schedule.workplaceId = e.value;
+  }
+  selectEmployee(e: any) {
+    this.schedule.assignee.id = e.value;
+  }
   updateTitle() {
-    this.scheduleService.updateField(this.scheduleId, 'title', this.schedule.title)
-      .then(
-        () => {}
-      );
+    this.scheduleService.updateField(this.scheduleId, 'title', this.schedule.title);
   }
   updateWorkplace() {
-    this.scheduleService.updateField(this.scheduleId, 'workplaceId', this.schedule.workplaceId)
-      .then(
-        () => {}
-      );
+    this.scheduleService.updateField(this.scheduleId, 'workplaceId', this.schedule.workplaceId);
   }
   updateAssignee() {
-    this.scheduleService.updateField(this.scheduleId, 'assigneeId', this.schedule.assignee.id)
-      .then(
-        () => {}
-      );
+    this.scheduleService.updateField(this.scheduleId, 'assigneeId', this.schedule.assignee.id);
   }
   updateStartTime() {
-    this.scheduleService.updateField(this.scheduleId, 'startTime', this.schedule.startTime)
-      .then(
-        () => {}
-      );
+    this.scheduleService.updateField(this.scheduleId, 'startTime', this.schedule.startTime);
   }
   updateDuration() {
-    this.scheduleService.updateField(this.scheduleId, 'duration', this.schedule.duration)
-      .then(
-        () => {}
-      );
+    this.scheduleService.updateField(this.scheduleId, 'duration', this.schedule.duration);
   }
   updateDayOfWeek() {
-    this.scheduleService.updateField(this.scheduleId, 'dayOfWeek', this.schedule.daysOfWeek)
-      .then(
-        () => {}
-      );
+    this.scheduleService.updateField(this.scheduleId, 'dayOfWeek', this.schedule.daysOfWeek);
   }
   updateDescription() {
-    this.scheduleService.updateField(this.scheduleId, 'description', this.schedule.description)
-      .then(
-        () => {}
-      );
+    this.scheduleService.updateField(this.scheduleId, 'description', this.schedule.description);
+  }
+
+  changeDuration(e: any) {
+    this.schedule.duration = e;
   }
 
   changeDayCheckbox(id: number, event: any) {
@@ -261,6 +248,11 @@ export class ScheduleDetailComponent implements OnInit {
       this.selectedDayIds.push(+this.schedule.daysOfWeek.split(',').find((el: any) => +el === id));
     } else {
       this.selectedDayIds = this.selectedDayIds.filter(el => +el !== id);
+    }
+    if (this.selectedDayIds.length === 0) {
+      this.selectAtLeastOneDay = true;
+    } else {
+      this.selectAtLeastOneDay = false;
     }
   }
 
@@ -283,6 +275,16 @@ export class ScheduleDetailComponent implements OnInit {
     } else {
       this.selectedModalTaskBasic = this.selectedModalTaskBasic.filter(el => el.id !== id);
     }
+    if (this.selectedTaskBasic.filter(t => t.checked === true).length === 0) {
+      this.selectAtLeastOneTaskBasic = true;
+    } else {
+      this.selectAtLeastOneTaskBasic = false;
+    }
+  }
+
+  back() {
+    this.openDetailModal();
+    this.closeModal1();
   }
 
   addTaskBasicToSchedule() {
@@ -321,7 +323,7 @@ export class ScheduleDetailComponent implements OnInit {
               this.taskBasicCM.id = response1;
                 this.scheduleService.updateTaskBasicList(this.scheduleId, [this.taskBasicCM])
                   .then(
-                    (response2) => {
+                    () => {
                       this.taskBasicManager.employeeId = this.userAccount.id;
                       this.taskBasicManager.editable = true;
                       this.taskBasicManager.taskBasicId = response1;
@@ -329,7 +331,7 @@ export class ScheduleDetailComponent implements OnInit {
                         .then(
                           () => {
                             this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-                            // this.createModal.hide();
+                            this.closeModal1();
                           },
                           () => {
                             this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -355,7 +357,7 @@ export class ScheduleDetailComponent implements OnInit {
             .then(
               () => {
                 this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-                // this.createModal.hide();
+                this.closeModal1();
               },
               () => {
                 this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -367,9 +369,11 @@ export class ScheduleDetailComponent implements OnInit {
 
   openModal(template: TemplateRef<any>, type: number) {
     if (type === 1) {
+      this.getTaskBasicByManager();
       this.modalRef.hide();
       this.modalRef1 = this.modalService.show(template, { class: 'modal-md modal-dialog modal-notify modal-success' });
     } else if (type === 2) {
+      this.getTaskBasicByManager();
       this.modalRef.hide();
       this.modalRef1 = this.modalService.show(template, { class: 'modal-md modal-dialog modal-notify modal-primary' });
     } else {

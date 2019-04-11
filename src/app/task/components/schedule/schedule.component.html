@@ -20,7 +20,15 @@
               <h5 style="color: #8993a4" class="text-left col-xl-8 col-lg-12">
                 Các công việc thường nhật đang phụ trách</h5>
             </div>
-            <table class="table table-hover" cellspacing="0" width="100%">
+            <div class="col-md-12">
+                <!-- Search -->
+              <div class="md-form">
+                <input type="text" [(ngModel)]="searchText" class="form-control" mdbInput (keyup)="searchSchedule()">
+                <label>Tìm kiếm</label>
+              </div>
+
+            </div>
+            <table class="table table-hover" cellspacing="0" width="100%" *ngIf="scheduleResponse?.totalElements !== 0">
               <thead>
                 <tr>
                   <th (click)="sort('title')">
@@ -73,7 +81,7 @@
                       <span *ngIf="i !== item.dayList.length - 1">, </span>
                     </span>
                   </td>
-                  <td class="d-flex flex-wrap w-100 justify-content-center">
+                  <td>
                     <div class="switch rounded blue-white-switch my-auto">
                       <label>
                         Dừng
@@ -91,9 +99,12 @@
               </tbody>
             </table>
             <app-pagination *ngIf="scheduleResponse?.totalPages > 1" [pageSize]="scheduleResponse.size"
-                [totalPage]="scheduleResponse.totalPages" [currentPage]="scheduleResponse.number"
-                (changePage)="changePage1($event)">
-              </app-pagination>
+              [totalPage]="scheduleResponse.totalPages" [currentPage]="scheduleResponse.number"
+              (changePage)="changePage1($event)">
+            </app-pagination>
+            <div *ngIf="scheduleResponse?.totalElements === 0" class="col-12 py-3">
+              <h6 class="text-danger font-weight-normal">Không tìm thấy kết quả phù hợp</h6>
+            </div>
           </div>
         </div>
       </div>
@@ -206,10 +217,11 @@
               [label]="'Người thực hiện*'" 
               [notFoundMsg]="'Không tìm thấy'" 
               [filterEnabled]="true"
-              [(ngModel)]="scheduleCM.assigneeId"
+              ngModel
               required
               #employeeId=ngModel
               [options]="employeeList"
+              (selected)="selectEmployee($event)"
               [class.ng-invalid.validate-error]="employeeId.invalid && (employeeId.dirty || employeeId.touched)"
             >
             </mdb-select>
@@ -220,6 +232,22 @@
               Vui lòng chọn nhân viên
             </span>
           </div>
+
+          <owl-form-field class="col-12 px-0" *ngIf="isSelectWorkplace">
+            <input
+              owlInput
+              name="startTime"
+              [owlDateTimeTrigger]="datepicker"
+              [owlDateTime]="datepicker"
+              [(ngModel)]="scheduleCM.startTime"
+              placeholder="Giờ bắt đầu"
+              required
+              #dateTime="ngModel">
+            <owl-date-time #datepicker [pickerType]="'timer'"></owl-date-time>
+            <owl-error *ngIf="dateTime?.errors?.required">
+                Vui lòng nhập giờ bắt đầu
+            </owl-error>
+          </owl-form-field>
 
           <span *ngIf="isSelectWorkplace">
             Thời lượng:
@@ -232,15 +260,32 @@
               [step]="10"
               [max]="300"
               name="range"
+              #duration=ngModel
+              required
               (rangeValueChange)="isSelectRange = true"
               [ngModel]="scheduleCM.duration"
               (ngModelChange)="changeDuration($event)"
               class="w-100">
             </mdb-range-input>
             <span class="ml-2">phút</span>
+            <mdb-error *ngIf="duration.invalid && (duration.dirty || duration.touched)" class="font-weight-normal">
+              <span *ngIf="duration?.errors?.required">Vui lòng chọn thời lượng công việc</span>
+            </mdb-error>
+          </div>
+
+          <h6 class="font-weight-normal col-12 px-0">Thời gian bắt đầu thực hiện lặp lịch</h6>
+
+          <div class="form-check radio-green col-12 px-0">
+            <input type="radio" class="form-check-input" id="radioGreen1" name="groupOfRadioGreen" mdbInput checked [(ngModel)]="option" [value]="optionThisWeek">
+            <label class="form-check-label" for="radioGreen1">Bắt đầu ngay trong tuần</label>
+          </div>
+          
+          <div class="form-check radio-green col-12 px-0">
+            <input type="radio" class="form-check-input" id="radioGreen2" name="groupOfRadioGreen" mdbInput [(ngModel)]="option" [value]="optionNextWeek">
+            <label class="form-check-label" for="radioGreen2">Bắt đầu vào đầu tuần sau</label>
           </div>
   
-          <h6 class="font-weight-bold col-12 px-0">Các ngày lặp lại trong tuần</h6>
+          <h6 class="font-weight-normal col-12 px-0 pt-3">Các ngày lặp lại trong tuần</h6>
           <div class="form-check form-check-inline d-flex flex-wrap w-100">
             <div class="col-6" *ngFor="let day of week">
               <input
@@ -248,7 +293,6 @@
                 [name]="day.inputId"
                 type="checkbox"
                 class="form-check-input"
-                [id]="day.inputId"
                 [(ngModel)]="day.check"
                 [class.ng-invalid.validate-error]="selectAtLeastOneDay"
                 (change)="changeDay()">
@@ -264,20 +308,27 @@
           <hr>
   
           <div *ngIf="isSelectWorkplace" class="d-flex flex-wrap w-100 pt-3">
-            <p class="h6 col-12 px-0">Danh sách công việc gợi ý</p>
-            <div *ngFor="let list of taskBasicList; let i of index" class="col-6">
-              <mdb-checkbox
+            <p class="h6 col-12 px-0">Danh sách công việc gợi ý
+              <a mdbBtn floating="true" size="sm" color="success" mdbWavesEffect>
+                <i class="fa fa-plus" (click)="openCreateBasicTaskModal(createBT)"></i>
+              </a>
+            </p>
+            <div *ngFor="let list of taskBasicList; let i = index" class="col-6">
+              <input
                 id="item-{{i}}"
                 name="item-{{i}}"
-                [checked]="list.checked"
-                #checkbox
+                type="checkbox"
+                class="form-check-input"
+                [(ngModel)]="list.checked"
+                [class.ng-invalid.validate-error]="selectAtLeastOneTaskBasic"
                 (change)="changeCheckbox(list.id, $event)">
-                {{list.title}}
-              </mdb-checkbox>
+              <label class="form-check-label" for="item-{{i}}">{{ list.title }} </label>
             </div>
-            <!-- <mdb-error [hidden]="selectedTaskBasic.length === 0" class="font-weight-normal">
-              Chọn ít nhất 1 công việc trong tuần
-            </mdb-error> -->
+            <div class="col-6">
+              <small class="text-danger font-weight-normal" *ngIf="selectAtLeastOneTaskBasic">
+                Chọn ít nhất 1 công việc
+              </small>
+            </div>
           </div>
   
           <div class="col-12 md-form my-3 px-0" *ngIf="isSelectWorkplace">
@@ -293,7 +344,7 @@
           </div>
 
           <div class="col-12 text-center mt-3 border-top pt-3">
-            <button mdbBtn color="success" class="waves-light" mdbWavesEffect [disabled]="!createForm.form.valid">Tạo mới
+            <button mdbBtn color="success" class="waves-light" mdbWavesEffect [disabled]="(!createForm.form.valid || selectAtLeastOneDay || selectAtLeastOneTaskBasic)">Tạo mới
               <i class="fa fa-check ml-1"></i>
             </button>
           </div>
@@ -329,3 +380,55 @@
     <!--/.Content-->
   </div>
 </div>
+
+<ng-template #createBT>
+
+    <div class="modal-header d-flex justify-content-center">
+      <p class="heading">Tạo công việc</p>
+    </div>
+    <div class="modal-body mx-3 row">
+      <form (ngSubmit)="createTaskBasic()" #createForm="ngForm" class="d-flex flex-wrap w-100">
+        <div class="md-form mt-0 mb-3 col-md-12">
+          <input 
+          type="text" 
+          id="title" 
+          name="title" 
+          class="form-control" 
+          mdbInput
+          required
+          maxlength="25"
+          #title=ngModel
+          [(ngModel)]="taskBasicCM.title"
+          [class.ng-invalid.validate-error]="(title.invalid && (title.dirty || title.touched))"
+          >
+          <label for="title">Tên*</label>
+          
+          <mdb-error *ngIf="taskBasicCM.title.length === 25" class="font-weight-normal">Tên công việc nhỏ hơn 25 ký tự</mdb-error>
+          <mdb-error *ngIf="title.invalid && (title.dirty || title.touched)" class="font-weight-normal">
+            <span *ngIf="title?.errors?.required">Vui lòng nhập tên công việc</span>
+          </mdb-error>
+  
+        </div>
+  
+        <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
+          <div mdbBtn floating="true" size="md" color="success" mdbWavesEffect>
+            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+            <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
+              (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+          </div>
+          <div class="file-path-wrapper mt-3">
+            <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()" disabled>
+          </div>
+        </div>
+        <div class="col text-center" *ngIf="url">
+          <img [src]="url" height="100">
+        </div>
+        <div class="col-12 text-center mt-3 border-top pt-3">
+          <button mdbBtn color="success" class="waves-light" mdbWavesEffect [disabled]="!createForm.form.valid">Tạo mới
+            <i class="fa fa-check ml-1"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  
+  </ng-template>

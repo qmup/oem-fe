@@ -75,7 +75,7 @@
           <!--/.Card-->
         </div>
         <div *ngIf="companyResponse?.numberOfElements === 0" class="text-left col-11 mx-auto pb-3">
-          <h5 class="text-danger font-weight-normal">Không tìm thấy</h5>
+          <h5 class="text-danger font-weight-normal">Không tìm thấy kết quả phù hợp</h5>
         </div>
   
         <app-pagination *ngIf="companyResponse?.totalPages > 1" [pageSize]="companyResponse.size"

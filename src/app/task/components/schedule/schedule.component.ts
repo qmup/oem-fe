@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter, TemplateRef } from '@angular/core';
 import { ScheduleService } from '../../service/schedule.service';
 import { Schedule, ScheduleModel } from '../../models/schedule';
 import { ModalDirective, ModalOptions, BsModalRef, BsModalService } from 'ngx-bootstrap';
@@ -6,7 +6,7 @@ import { EmployeeService } from 'src/app/employee/services/employee.service';
 import { PlaceService } from 'src/app/place/services/place.service';
 import { Employee } from 'src/app/employee/models/employee';
 import { PlacePagination, ManageWorkplace } from 'src/app/place/models/place';
-import { ToastService } from 'ng-uikit-pro-standard';
+import { ToastService, UploadFile, UploadInput, UploadOutput, humanizeBytes } from 'ng-uikit-pro-standard';
 import { ScheduleDetailComponent } from '../schedule-detail/schedule-detail.component';
 import { PaginationResponse, AssignTask } from 'src/app/core/models/shared';
 import { GlobalService } from 'src/app/core/services/global.service';
@@ -15,6 +15,7 @@ import { CompanyService } from 'src/app/place/services/company.service';
 import { ZoneService } from 'src/app/place/services/zone.service';
 import { ZonePagination } from 'src/app/place/models/zone';
 import { Task } from '../../models/task';
+import { TaskBasicManager } from '../../models/task-basic';
 
 @Component({
   selector: 'app-schedule',
@@ -31,6 +32,7 @@ export class ScheduleComponent implements OnInit {
   scheduleResponse: PaginationResponse = new PaginationResponse();
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
+  @ViewChild('createBT') createBasicTask: TemplateRef<any>;
   scheduleCM: ScheduleModel = new ScheduleModel();
   week = [];
   workplaceList = [];
@@ -40,7 +42,6 @@ export class ScheduleComponent implements OnInit {
   fieldSort = 'id';
   sortBoolean = false;
   sortValue = '';
-  searchValue = '';
   currentCompany: any;
   currentZone: any;
   currentWorkplace: any;
@@ -56,9 +57,25 @@ export class ScheduleComponent implements OnInit {
   currentPage = 0;
   currentSize: number;
   selectedDay = [];
+  searchText = '';
+  timeoutSearch: any;
   assignTask: AssignTask = new AssignTask();
   manageWorkplace: ManageWorkplace = new ManageWorkplace();
   selectAtLeastOneDay: boolean;
+  selectAtLeastOneTaskBasic: boolean;
+  option = 1;
+  optionThisWeek = 1;
+  optionNextWeek = 0;
+  taskBasicCM: Task = new Task();
+  filesToUpload: FileList;
+  url: any;
+  formData: FormData;
+  files: UploadFile[];
+  uploadInput: EventEmitter<UploadInput>;
+  humanizeBytes: Function;
+  dragOver: boolean;
+  taskBasicManager: TaskBasicManager = new TaskBasicManager();
+  modalRef1: BsModalRef | null;
 
   constructor(
     private scheduleService: ScheduleService,
@@ -70,7 +87,11 @@ export class ScheduleComponent implements OnInit {
     private taskBasicService: TaskBasicService,
     private companyService: CompanyService,
     private zoneService: ZoneService,
-  ) { }
+  ) {
+    this.files = [];
+    this.uploadInput = new EventEmitter<UploadInput>();
+    this.humanizeBytes = humanizeBytes;
+  }
 
   ngOnInit() {
     this.week = this.globalService.week;
@@ -93,19 +114,28 @@ export class ScheduleComponent implements OnInit {
   }
 
   getSchedule() {
-    this.scheduleService.getAll(this.searchValue, this.userAccount.id, this.sortValue, this.fieldSort, this.currentPage, 10)
+    this.scheduleService.getAll(this.searchText, this.userAccount.id, this.sortValue, this.fieldSort, this.currentPage, 10)
       .then(
         (response: PaginationResponse) => {
+          this.scheduleResponse = response;
           this.scheduleList = response.content;
           this.scheduleList.forEach((element: any) => {
             element.endTime = new Date(element.startTime).getTime() + element.duration;
           });
-          this.scheduleResponse = response;
           this.scheduleList.forEach(element => {
             element.dayList = element.daysOfWeek.split(',');
           });
         }
       );
+  }
+
+  searchSchedule() {
+    if (this.timeoutSearch) {
+      clearTimeout(this.timeoutSearch);
+    }
+    this.timeoutSearch = setTimeout(() => {
+      this.getSchedule();
+    }, 500);
   }
 
   suggestTaskBasic() {
@@ -133,16 +163,24 @@ export class ScheduleComponent implements OnInit {
       );
   }
 
+  selectEmployee(e) {
+    this.scheduleCM.assigneeId = e.value;
+  }
+
   changeCheckbox(id: number, event: any) {
-    if (event.checked && !this.selectedTaskBasic.includes((task: Task) => task.id === id)) {
+    if (event.target.checked && !this.selectedTaskBasic.includes((task: Task) => task.id === id)) {
       this.selectedTaskBasic.push(this.taskBasicList.find(task => task.id === id));
     } else {
       this.selectedTaskBasic = this.selectedTaskBasic.filter(task => task.id !== id);
     }
+    if (this.selectedTaskBasic.filter(t => t.checked === true).length === 0) {
+      this.selectAtLeastOneTaskBasic = true;
+    } else {
+      this.selectAtLeastOneTaskBasic = false;
+    }
   }
 
   changeDay() {
-    console.log(this.week);
     if (this.week.filter(d => d.check === true).length === 0) {
       this.selectAtLeastOneDay = true;
     } else {
@@ -188,9 +226,9 @@ export class ScheduleComponent implements OnInit {
     this.getZone(e.value);
   }
 
-  selectEmployee(e: any) {
-    this.assignTask.assigneeId = e.value;
-  }
+  // selectEmployee(e: any) {
+  //   this.assignTask.assigneeId = e.value;
+  // }
 
   getZone(companyId: number) {
     this.zoneService.getAll(this.userAccount.id, companyId, '', '', 'id', 0, 99)
@@ -237,11 +275,13 @@ export class ScheduleComponent implements OnInit {
   }
 
   changeDuration(e: any) {
-    console.log(e);
     this.scheduleCM.duration = e;
   }
 
   openCreateModal() {
+    if (this.scheduleCM.duration > 60000) {
+      this.scheduleCM.duration /= 60000;
+    }
     this.createModal.show();
   }
 
@@ -285,25 +325,22 @@ export class ScheduleComponent implements OnInit {
   }
 
   createSchedule() {
-    const option = 1;
     this.scheduleCM.taskBasics = this.selectedTaskBasic;
     this.scheduleCM.duration *= 60000;
     this.scheduleCM.assignerId = this.userAccount.id;
     this.scheduleCM.workplaceId = this.currentWorkplace.value;
     this.scheduleCM.status = 1;
     this.scheduleCM.daysOfWeek = this.week.filter(d => d.check === true).map(d => d.id).join(',');
-    this.scheduleService.create(this.scheduleCM, option)
+    this.createModal.hide();
+    this.scheduleService.create(this.scheduleCM, this.option)
       .then(
         () => {
-          this.scheduleCM.duration /= 60000;
           this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-          this.createModal.hide();
           this.scheduleList = [],
           this.getSchedule();
         },
         () => {
           this.toastService.success('Đã có lỗi xảy ra', '', { positionClass: 'toast-bottom-right'} );
-          this.createModal.hide();
         }
       );
   }
@@ -326,5 +363,149 @@ export class ScheduleComponent implements OnInit {
           this.toastService.error('Đã có lỗi xảy ra' , '', options);
         }
       );
+  }
+
+  openCreateBasicTaskModal(template: TemplateRef<any>) {
+    this.createModal.hide();
+    this.modalRef1 = this.modalService.show(template, { class: 'modal-md modal-dialog modal-notify modal-success' });
+  }
+
+  createTaskBasic() {
+    this.filesToUpload ? this.createTaskBasicWithImage() : this.createTaskBasicWithoutImage();
+  }
+  createTaskBasicWithImage() {
+    const formData: FormData = new FormData();
+    if (!!this.filesToUpload) {
+      for (let index = 0; index < this.filesToUpload.length; index++) {
+        const file: File = this.filesToUpload[index];
+        formData.append('dataFile', file);
+      }
+    }
+    this.globalService.uploadFile(formData, 'image/task/')
+      .then(
+        (response) => {
+          this.taskBasicCM.picture = response;
+          this.taskBasicCM.basic = true;
+          this.taskBasicService.create(this.taskBasicCM)
+          .then(
+            (response1) => {
+              this.taskBasicManager.id = response1;
+              this.taskBasicManager.employeeId = this.userAccount.id;
+              this.taskBasicManager.editable = true;
+              this.taskBasicManager.taskBasicId = response1;
+                this.taskBasicService.setToManager(this.taskBasicManager)
+                  .then(
+                    () => {
+                      this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+                      this.closeModal1();
+                      this.suggestTaskBasic();
+                      this.openCreateModal();
+                    },
+                    () => {
+                      this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+                    }
+                );
+
+              },
+            );
+        }
+      );
+  }
+  createTaskBasicWithoutImage() {
+    this.taskBasicCM.basic = true;
+    this.taskBasicService.create(this.taskBasicCM)
+      .then(
+        (response1) => {
+          this.taskBasicManager.employeeId = this.userAccount.id;
+          this.taskBasicManager.editable = true;
+          this.taskBasicManager.taskBasicId = response1;
+          this.taskBasicService.setToManager(this.taskBasicManager)
+            .then(
+              () => {
+                this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+                this.closeModal1();
+                this.suggestTaskBasic();
+                this.openCreateModal();
+              },
+              () => {
+                this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+              }
+            );
+        }
+      );
+  }
+
+  closeModal1() {
+    if (!this.modalRef1) {
+      return;
+    }
+    this.modalRef1.hide();
+    this.modalRef1 = null;
+
+  }
+
+  onSelectFile(event: any) { // called each time file input changes
+    if (event.target.files && event.target.files[0]) {
+      const reader = new FileReader();
+
+      reader.readAsDataURL(event.target.files[0]); // read file as data url
+
+      reader.onload = (event1: any) => { // called once readAsDataURL is completed
+
+        this.url = event1.target.result;
+
+        this.taskBasicCM.picture ? this.taskBasicCM.picture = event1.target.result : this.url = event1.target.result;
+
+      };
+
+      this.filesToUpload = event.target.files;
+
+    }
+  }
+
+  showFiles() {
+    let files = '';
+    for (let i = 0; i < this.files.length; i ++) {
+      files += this.files[i].name;
+        if (!(this.files.length - 1 === i)) {
+          files += ',';
+      }
+    }
+    return files;
+  }
+
+  startUpload(): void {
+    const event: UploadInput = {
+    type: 'uploadAll',
+    url: 'your-path-to-backend-endpoint',
+    method: 'POST',
+    data: { foo: 'bar' },
+    };
+    this.files = [];
+    this.uploadInput.emit(event);
+  }
+
+  cancelUpload(id: string): void {
+    this.uploadInput.emit({ type: 'cancel', id: id });
+  }
+
+  onUploadOutput(output: UploadOutput | any): void {
+    if (output.type === 'allAddedToQueue') {
+    } else if (output.type === 'addedToQueue') {
+      this.files.push(output.file); // add file to array when added
+    } else if (output.type === 'uploading') {
+      // update current data in files array for uploading file
+      const index = this.files.findIndex(file => file.id === output.file.id);
+      this.files[index] = output.file;
+    } else if (output.type === 'removed') {
+      // remove file from array when removed
+      this.files = this.files.filter((file: UploadFile) => file !== output.file);
+    } else if (output.type === 'dragOver') {
+      this.dragOver = true;
+    } else if (output.type === 'dragOut') {
+    } else if (output.type === 'drop') {
+      this.dragOver = false;
+    }
+    this.showFiles();
   }
 }
