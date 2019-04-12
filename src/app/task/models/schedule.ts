@@ -30,7 +30,7 @@ export class ScheduleModel {
     this.status = 0;
     this.title = '';
     this.workplaceId = 0;
-    this.duration = 0;
+    this.duration = 30;
   }
 }
 
@@ -64,6 +64,6 @@ export class Schedule {
     this.workplaceId = 0;
     this.workplaceName = '';
     this.dayList = [];
-    this.duration = 0;
+    this.duration = 30;
   }
 }

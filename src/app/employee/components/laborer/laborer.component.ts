@@ -96,7 +96,6 @@ export class LaborerComponent implements OnInit {
   constructor(
     private employeeService: EmployeeService,
     private modalService: BsModalService,
-    private managerService: ManagerService,
     private toastService: ToastService,
     private globalService: GlobalService,
     public mapsApiLoader: MapsAPILoader,

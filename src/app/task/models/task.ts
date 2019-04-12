@@ -30,7 +30,7 @@ export class Task {
     this.checkInTime = '';
     this.dateCreate = '';
     this.description = '';
-    this.duration = 0;
+    this.duration = 30;
     this.id = 0;
     this.picture = '';
     this.priority = 0;
@@ -114,7 +114,7 @@ export class TaskModel {
     this.checkInTime = '';
     this.dateCreate = '';
     this.description = '';
-    this.duration = 0;
+    this.duration = 30;
     this.id = 0;
     this.picture = '';
     this.priority = 0;
