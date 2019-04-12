@@ -6,7 +6,7 @@
 </div>
 <div class="modal-body mx-3 row">
   <form (ngSubmit)="updatePlace()" #updateForm="ngForm" class="d-flex flex-wrap w-100">
-    <div class="md-form mt-0 mb-3 col-md-12">
+    <div class="md-form mt-0 mb-3 col-md-12" *ngIf="userAccount.roleId === 1">
       <input 
         type="text" 
         id="name" 
@@ -26,7 +26,7 @@
 
     </div>
 
-    <div class="md-form my-3 col-md-12">
+    <div class="md-form my-3 col-md-12" *ngIf="userAccount.roleId === 1">
       <textarea 
         id="description" 
         name="description" 
@@ -40,7 +40,22 @@
 
     </div>
 
-    <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
+    <span *ngIf="userAccount.roleId === 2">Số lần vệ sinh trong ngày: {{place.numberOfReworks}} lần</span>
+    <div class="w-100 d-flex justify-content-center align-items-center my-3" *ngIf="userAccount.roleId === 2">
+      <mdb-range-input
+        id="range"
+        [min]="1"
+        [value]="1"
+        [step]="1"
+        [max]="5"
+        name="range"
+        [(ngModel)]="place.numberOfReworks"
+        class="w-100">
+      </mdb-range-input>
+      <span class="ml-2">lần</span>
+    </div>
+
+    <div class="file-field md-form col-12 pl-0 mt-0 mb-3" *ngIf="userAccount.roleId === 1">
       <div mdbBtn floating="true" size="md" color="primary" mdbWavesEffect>
         <i class="fa fa-cloud-upload" aria-hidden="true"></i>
         <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
@@ -50,7 +65,7 @@
         <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()" disabled>
       </div>
     </div>
-    <div class="col text-center w-100" *ngIf="place.picture || url">
+    <div class="col text-center w-100" *ngIf="(place.picture || url) && userAccount.roleId === 1">
       <img [src]="place.picture || url" height="150">
     </div>
 

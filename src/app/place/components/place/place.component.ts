@@ -91,6 +91,7 @@ export class PlaceComponent implements OnInit {
   defaultImage: '../../../../assets/default-image.jpg';
   timeoutSearch: any;
   searchText = '';
+  editField: string;
 
   constructor(
     public location: Location,
@@ -279,14 +280,22 @@ export class PlaceComponent implements OnInit {
     this.beaconService.getAvailableBeacon()
       .then(
         (response: Beacon[]) => {
-          this.beaconList = response.map((beacon) => {
-            return {
-              value: beacon.id,
-              label: beacon.name,
-            };
-          });
+          this.beaconList = response;
+          if (this.beaconList.length === 0) {
+            this.beaconList = [{
+              value: '-1',
+              label: 'Không tìm thấy beacon trống',
+              disabled: true,
+            }];
+          } else {
+            this.beaconList = response.map((beacon) => {
+              return {
+                value: beacon.id,
+                label: beacon.name,
+              };
+            });
         }
-      );
+      });
   }
 
   getEmployee() {
@@ -559,6 +568,10 @@ export class PlaceComponent implements OnInit {
     this.deleteManagerModal.hide();
   }
 
+  selectBeacon(e: any) {
+    this.beaconId = e.value;
+  }
+
   switch(e: any, workplaceId: number) {
     e.target.checked ?
       this.placeService.updateField(workplaceId, 'status', WORKPLACE_OPEN_STATUS)
@@ -621,6 +634,23 @@ export class PlaceComponent implements OnInit {
     };
     this.modalRef = this.modalService.show(PlaceTaskBasicComponent, modalOptions);
     this.modalRef.content.refresh.subscribe(() => this.getPlace());
+  }
+
+  updateNumberOfReworks(id: number, property: string, event: any) {
+    const editField = event.target.textContent;
+    const prev = this.placeList.find(p => p.id === id).numberOfReworks;
+    if (+editField !== prev) {
+      this.placeService.updateField(id, property, editField).then(
+        () => {
+          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+          this.getPlace();
+        }
+      );
+    }
+  }
+
+  changeValue(event: any) {
+    this.editField = event.target.textContent;
   }
 
   showFiles() {

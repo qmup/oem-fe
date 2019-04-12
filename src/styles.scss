@@ -6,7 +6,7 @@
 
 html, body, main {
   min-height: 100vh;
-  height: auto;
+  height: auto; 
   // width: 100vw !important;
 }
 nav.navbar.fixed-top.navbar-toggleable-md.navbar-expand-lg.scrolling-navbar.double-nav {
@@ -18,6 +18,9 @@ nav.navbar.fixed-top.navbar-toggleable-md.navbar-expand-lg.scrolling-navbar.doub
 }
 .modal {
   overflow-y: auto !important;
+}
+.close span {
+  color: #fff;
 }
 .card .card-body .card-text {
   font-size: 16px !important;
@@ -65,6 +68,10 @@ input.owl-input-element, mdb-error {
   }
 }
 
+.btn {
+  font-weight: 500 !important;
+}
+
 #place {
   .card-wrapper .face .content p {
     margin-bottom: 15px;
@@ -78,6 +85,13 @@ input.owl-input-element, mdb-error {
     width: 70px;
     border-radius: 50%;
     border: 1px solid white;
+  }
+  .text-number-of-reworks {
+    position: absolute;
+    top: 38%;
+  }
+  img.img-fluid {
+    height: 250px;
   }
 }
 #task-calendar {
@@ -125,9 +139,12 @@ input.owl-input-element, mdb-error {
 
 mdb-select > div > div.sintgle > div.placeholder {
   color: #757575 !important;
-  font-weight: 300 !important;
+  font-weight: 400 !important;
   position: absolute;
   left: -15px;
+}
+table td, p.heading {
+  font-weight: 400 !important;
 }
 .table > tbody > tr > td, .table > tbody > tr > th {
   vertical-align: middle;

@@ -127,7 +127,7 @@
                       </button>
                     </p>
                     <p>Công việc đã giao:
-                      <span *ngIf="p.taskList.length < p.numberOfReworks" class="text-weight-bold text-danger">
+                      <span *ngIf="p.taskList.length < p.numberOfReworks" class="font-weight-bold text-danger">
                         {{p.taskList.length}}
                       </span>
                       <span *ngIf="p.taskList.length >= p.numberOfReworks" class="text-success font-weight-bold">
@@ -221,6 +221,7 @@
           <!--Table head-->
           <thead>
             <tr>
+              <th>Mã nơi làm việc</th>
               <th class="text-center">Hình ảnh</th>
               <th>
                 Tên
@@ -234,11 +235,8 @@
               <th>
                 Beacon
               </th>
-              <th>
-                Công việc
-              </th>
               <th [ngStyle]="userAccount.roleId === 1 && {'width': '300px', 'max-width': '300px'}"
-                *ngIf="!showRemovedEmp">Thao tác</th>
+                *ngIf="!showRemovedEmp">Xem chi tiết</th>
             </tr>
           </thead>
           <!--Table head-->
@@ -246,41 +244,47 @@
           <!--Table body-->
           <tbody>
             <tr *ngFor="let p of placeList; let i of index">
+              <td>{{p.id}}</td>
               <td scope="row" style="position: relative; width: 120px">
                 <img src="{{p.picture || defaultImage}}" alt="image" class="avatar">
               </td>
               <td>{{p.name}}</td>
-              <td>{{p.numberOfReworks}}</td>
-              <td>
-                <span *ngIf="p.taskList.length < p.numberOfReworks" class="text-weight-normal">
-                  {{p.taskList.length}}
-                </span>
-                <span *ngIf="p.taskList.length >= p.numberOfReworks" class="text-success font-weight-normal">
-                  {{p.taskList.length}} - Đã đủ
-                  <i class="fa fa-check mr-2" color="success"></i>
+              <td contenteditable="true"
+              (keyup)="changeValue($event)"
+              (blur)="updateNumberOfReworks(p.id, 'numberOfReworks', $event)">{{p.numberOfReworks}}</td>
+              <td style="position: relative">
+                <div class="text-number-of-reworks">
+                  <span 
+                    *ngIf="p.taskList.length < p.numberOfReworks"
+                    class="text-weight-normal">
+                    {{p.taskList.length}}
+                  </span>
+                  <span *ngIf="p.taskList.length >= p.numberOfReworks" class="text-success font-weight-normal">
+                    {{p.taskList.length}}<span *ngIf="canCreateTask"> - đã đủ</span>
+                    <i class="fa fa-check mr-2" color="success" *ngIf="canCreateTask"></i>
+                  </span>
+                  <span *ngIf="userAccount.roleId === 2 && !canCreateTask" class="text-danger font-weight-normal"> - đã quá thời gian hiện tại
+                  </span>
+                </div>
+                <span *ngIf="userAccount.roleId === 2 && canCreateTask" class="text-danger font-weight-normal">
+                  <span *ngIf="p.taskList.length < p.numberOfReworks" class="float-right pr-4">
+                    <button title="Tạo công việc cho nơi này" mdbBtn type="button" color="success" rounded="true"
+                      mdbWavesEffect size="md" (click)="openCreateTaskModal(p.id, i)"
+                      *ngIf="userAccount.roleId === 2 && (p.taskList.length < p.numberOfReworks) && canCreateTask">
+                    <i class="fa fa-plus"></i>
+                    </button>
+                  </span>
+                  <span *ngIf="!(p.taskList.length < p.numberOfReworks)" class="float-right pr-4">
+                    <button title="Tạo công việc cho nơi này" mdbBtn type="button" color="success" rounded="true"
+                      mdbWavesEffect size="md" (click)="openCreateTaskModal(p.id, i)">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </span>
                 </span>
               </td>
               <td>
                 <span *ngIf="p.setToBeacon" class="text-success font-weight-normal">Đã có</span>
                 <span *ngIf="!p.setToBeacon" class="text-danger font-weight-normal">Chưa có</span>
-              </td>
-              <td>
-                <span *ngIf="userAccount.roleId === 2 && !canCreateTask" class="text-danger font-weight-normal">
-                  Đã quá thời gian hiện tại
-                </span>
-                <div *ngIf="userAccount.roleId === 2 && canCreateTask" class="text-danger font-weight-normal">
-                  <div *ngIf="p.taskList.length < p.numberOfReworks">
-                    <button title="Tạo công việc cho nơi này" mdbBtn type="button" color="success" rounded="true"
-                      mdbWavesEffect size="sm" (click)="openCreateTaskModal(p.id, i)"
-                      *ngIf="userAccount.roleId === 2 && (p.taskList.length < p.numberOfReworks) && canCreateTask">Tạo
-                      công việc</button>
-                  </div>
-                  <div *ngIf="!(p.taskList.length < p.numberOfReworks)">
-                    <button title="Tạo công việc cho nơi này" mdbBtn type="button" color="success" rounded="true"
-                      mdbWavesEffect size="sm" (click)="openCreateTaskModal(p.id, i)">Tạo công việc
-                    </button>
-                  </div>
-                </div>
               </td>
               <td class="d-flex flex-wrap w-100 justify-content-center" id="action-button">
                 <button title="Chi tiết" mdbBtn type="button" rounded="true" color="warning" class="waves-light"
@@ -291,10 +295,10 @@
                   mdbWavesEffect size="sm" (click)="openBeaconModal(p.id)"
                   *ngIf="userAccount.roleId === 1 && (p.setToBeacon === false)">Thêm
                   beacon</button>
-                <button title="Cập nhật số lần làm việc trong ngày" mdbBtn type="button" color="primary" rounded="true"
+                <!-- <button title="Cập nhật số lần làm việc trong ngày" mdbBtn type="button" color="primary" rounded="true"
                   mdbWavesEffect size="sm" (click)="openUpdateModal(p)">
                   <i class="fa fa-pencil"></i>
-                </button>
+                </button> -->
                 <button title="Xóa nơi làm việc" mdbBtn type="button" color="danger" rounded="true" mdbWavesEffect
                   size="sm" (click)="checkRemovable(p.id)" *ngIf="userAccount.roleId === 1">
                   Xóa
@@ -418,7 +422,7 @@
       <div class="modal-body mx-3 row">
 
         <div class="md-form mt-0 mb-3 col-md-12">
-          <mdb-select [label]="'Beacon'" [notFoundMsg]="'Không tìm thấy'" [options]="beaconList" [(ngModel)]="beaconId">
+          <mdb-select [label]="'Beacon'" [notFoundMsg]="'Không tìm thấy'" [options]="beaconList" (selected)="selectBeacon($event)">
           </mdb-select>
         </div>
 
@@ -473,7 +477,7 @@
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-center">
         <p class="heading">Tạo công việc</p>
-        <button type="button" class="close" p-dismiss="modal" aria-label="Close" (click)="create.hide()">
+        <button type="button" class="close" p-dismiss="modal" aria-label="Close" (click)="createTaskModal.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>

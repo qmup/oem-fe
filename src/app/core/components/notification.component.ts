@@ -59,7 +59,7 @@ import { tick } from '@angular/core/testing';
               class="rounded-circle img-responsive list-avatar mr-2">
             </div>
             <div class="col-10">
-              <span class="font-weight-bold mb-0">{{noti.sender}}</span> đã {{noti.title | lowercase}} với ID
+              <span class="font-weight-bold mb-0">{{noti.sender}}</span> đã {{noti.title | lowercase}} với ID {{noti.taskId}}
               <br>
               <small>{{noti.timeStatus}}</small>
             </div>
@@ -80,10 +80,11 @@ import { tick } from '@angular/core/testing';
       font-size: 20px;
     }
     span {
-      font-size: 10px;
+      font-size: 14px;
+      font-weight: 400;
     }
     .counter {
-      margin-left: -35px !important;
+      margin-left: -43px !important;
     }
     .card-notification {
       position: absolute;
@@ -198,6 +199,7 @@ export class NotificationComponent implements OnInit {
         (response) => {
           this.countUnread = response.totalNotSeen;
           this.notificationList = response.notificationModels.content;
+          console.log(this.notificationList);
           for (let i = 0; i < this.notificationList.length; i++) {
             Notification.calculateTimeStatus(this.notificationList[i]);
           }

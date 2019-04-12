@@ -48,13 +48,18 @@ export class PlaceUpdateComponent implements OnInit {
   }
 
   updatePlace() {
+    this.placeUM.id = this.place.id;
+    this.placeUM.description = this.place.description;
+    this.placeUM.name = this.place.name;
+    this.placeUM.numberOfReworks = this.place.numberOfReworks;
+    this.placeUM.zoneId = this.zoneId;
     this.filesToUpload ? this.updatePlaceWithImage() : this.updatePlaceWithoutImage();
   }
 
   updateNoOfRwk() {
     this.placeService.updateField(this.place.id, 'numberOfReworks', this.place.numberOfReworks)
       .then(
-        response => {
+        () => {
           this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
           this.modalRef.hide();
           this.refresh.emit();
@@ -66,11 +71,7 @@ export class PlaceUpdateComponent implements OnInit {
   }
 
   updatePlaceWithoutImage() {
-    this.placeUM.id = this.place.id;
-    this.placeUM.description = this.place.description;
-    this.placeUM.name = this.place.name;
     this.placeUM.picture = this.place.picture;
-    this.placeUM.zoneId = this.zoneId;
     this.placeService.update(this.placeUM)
       .then(
         response => {
@@ -95,12 +96,7 @@ export class PlaceUpdateComponent implements OnInit {
     this.globalService.uploadFile(formData, 'image/workplace/')
       .then(
         (response) => {
-          this.placeUM.id = this.place.id;
-          this.placeUM.description = this.place.description;
-          this.placeUM.name = this.place.name;
-          this.placeUM.numberOfReworks = this.place.numberOfReworks;
           this.placeUM.picture = response;
-          this.placeUM.zoneId = this.zoneId;
           this.placeService.update(this.placeUM)
             .then(
               () => {
