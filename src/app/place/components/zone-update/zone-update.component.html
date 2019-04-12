@@ -4,6 +4,11 @@
 <div class="modal-body mx-3 row">
   <form (ngSubmit)="updateZone()" #updateForm="ngForm" class="d-flex flex-wrap w-100">
     <div class="md-form mt-0 mb-3 col-md-12">
+      
+      <div class="col-md-12 text-left pb-2">
+        <span class="text-danger font-weight-normal">(*) Thông tin bắt buộc</span>
+      </div>
+
       <input 
       type="text" 
       id="title" 

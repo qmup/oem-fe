@@ -37,7 +37,7 @@
     </div>
   </div>
   <div class="col-4">
-    <h6 class="font-weight-bold">Các công việc đã giao trong ngày {{(startTime || minDate) | date: 'dd-MM-yyyy'}}</h6>
+    <h6 class="font-weight-bold">Các công việc đã giao trong ngày tại đây {{(startTime || minDate) | date: 'dd-MM-yyyy'}}</h6>
     <div>
       <div *ngFor="let t of taskList; let i = index" class="col-12">
         {{ i + 1 }}. {{ t.assignee }} - từ {{ t.startTime | date: 'HH:mm' }} đến

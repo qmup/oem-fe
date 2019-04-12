@@ -151,6 +151,10 @@
       <div class="modal-body mx-3 row">
         <form (ngSubmit)="createEmployee()" #createForm="ngForm" class="d-flex flex-wrap w-100">
 
+          <div class="col-md-12 text-left pb-2">
+            <span class="text-danger font-weight-normal">(*) Thông tin bắt buộc</span>
+          </div>
+
           <div class="md-form mt-2 mb-2 col-md-12 ">
 
             <mdb-select
@@ -181,7 +185,7 @@
               (blur)="checkEmailExist()"
               #email=ngModel
               [class.ng-invalid.validate-error]="(email.invalid && (email.dirty || email.touched)) || isExist">
-            <label for="email">Email</label>
+            <label for="email">Email*</label>
 
             <mdb-error *ngIf="(email.invalid && (email.dirty || email.touched)) || isExist">
               <span *ngIf="email?.errors?.required" class="font-weight-normal">Vui lòng nhập email</span>

@@ -59,7 +59,7 @@ import { tick } from '@angular/core/testing';
               class="rounded-circle img-responsive list-avatar mr-2">
             </div>
             <div class="col-10">
-              <span class="font-weight-bold mb-0">{{noti.sender}}</span> đã {{noti.title | lowercase}} với ID {{noti.taskId}}
+              <span class="font-weight-bold mb-0">{{noti.sender}}</span> đã {{noti.title | lowercase}} với ID là {{noti.taskId}}
               <br>
               <small>{{noti.timeStatus}}</small>
             </div>

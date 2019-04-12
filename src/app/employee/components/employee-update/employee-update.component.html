@@ -6,6 +6,10 @@
 
     <div class="md-form mt-2 mb-2" [ngClass]="{'col-md-6' : employee.roleId === 2, 'col-md-12' : employee.roleId === 3}">
 
+      <div class="col-md-12 text-left pb-2">
+        <span class="text-danger font-weight-normal">(*) Thông tin bắt buộc</span>
+      </div>
+
       <mdb-select
         id="role"
         name="role"
@@ -42,7 +46,7 @@
         (blur)="checkEmailExist()"
         #_email=ngModel
         [class.ng-invalid.validate-error]="(_email.invalid && (_email.dirty || _email.touched)) || isExist">
-      <label for="email">Email</label>
+      <label for="email">Email*</label>
 
       <mdb-error *ngIf="(_email.invalid && (_email.dirty || _email.touched)) || isExist">
         <span *ngIf="_email?.errors?.required" class="font-weight-normal">Vui lòng nhập email</span>
