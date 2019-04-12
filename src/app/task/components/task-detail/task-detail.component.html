@@ -59,7 +59,7 @@
 
       <div class="col-md-7 col-12">
 
-        <a mdbBtn floating="true" size="md" color="danger" class="btn-delete" mdbWavesEffect>
+        <a *ngIf="task.status === 0" mdbBtn floating="true" size="md" color="danger" class="btn-delete" mdbWavesEffect>
           <i class="fa fa-close" (click)="openDeleteModal()"></i>
         </a>
 
