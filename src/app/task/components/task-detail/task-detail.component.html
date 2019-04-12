@@ -18,7 +18,7 @@
           <owl-form-field class="w-100 px-3">
             <input owlInput class="text-center" [(ngModel)]="searchDateRange" [selectMode]="'range'"
               [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker" placeholder="Thời gian công việc"
-              (dateTimeChange)="getTaskByDate($event)">
+              (dateTimeChange)="changeSearchDate($event)">
             <owl-date-time #datepicker [pickerType]="'calendar'"></owl-date-time>
           </owl-form-field>
         </div>
@@ -58,6 +58,10 @@
     <div class="p-3 row">
 
       <div class="col-md-7 col-12">
+
+        <a mdbBtn floating="true" size="md" color="danger" class="btn-delete" mdbWavesEffect>
+          <i class="fa fa-close" (click)="openDeleteModal()"></i>
+        </a>
 
         <div class="d-flex flex-wrap w-100">
           <div class="col-12 mt-3">

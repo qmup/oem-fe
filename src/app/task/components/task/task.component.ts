@@ -240,11 +240,19 @@ export class TaskComponent implements OnInit {
             const taskAssigned = place.taskList.length;
             let taskMissing = numberOfReworks - taskAssigned;
             taskMissing = Math.max(0, taskMissing);
-            return {
-              value: place.id,
-              label: `${place.name} | Số việc chưa được giao: ${taskMissing}`,
-              icon: place.picture
-            };
+            if (taskMissing !== 0) {
+              return {
+                value: place.id,
+                label: `${place.name} | Số việc giao hôm nay còn thiếu: ${taskMissing}`,
+                icon: place.picture
+              };
+            } else {
+              return {
+                value: place.id,
+                label: `${place.name} | Số việc đã giao trong hôm nay: ${taskAssigned} - Đã đủ`,
+                icon: place.picture
+              };
+            }
           });
         }
       );

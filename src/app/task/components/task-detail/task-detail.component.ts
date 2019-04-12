@@ -100,6 +100,7 @@ export class TaskDetailComponent implements OnInit {
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
     });
+    this.selectingId = this.id;
     this.getTaskDetail(this.id);
     this.getEmployeeByManager();
     this.getWorkplaceByManager(this.userAccount.id);
@@ -180,11 +181,15 @@ export class TaskDetailComponent implements OnInit {
       );
   }
 
-  getTaskByDate(e) {
+  changeSearchDate(e) {
     if (e) {
       this.dateFrom = this.globalService.convertToYearMonthDay(e.value[0]);
       this.dateTo = this.globalService.convertToYearMonthDay(e.value[1]);
     }
+    this.getTaskByDate();
+  }
+
+  getTaskByDate() {
     this.taskService.getTaskByDate(this.task.assignee.id, this.dateFrom, this.dateTo, this.currentPage, 5)
       .then(
         (response) => {
@@ -307,11 +312,16 @@ export class TaskDetailComponent implements OnInit {
   }
 
   removeTask() {
-    this.taskService.remove(this.selectingId)
+    this.taskService.remove(this.selectingId || this.id)
       .then(
         (response) => {
           this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
-          this.router.navigate(['task']);
+          if (this.taskList.length !== 0) {
+            this.selectingId = this.taskList[0].id;
+            this.loadTask(this.selectingId);
+          } else {
+            !this.searchByDate ? this.getTodayTaskByEmployee() : this.getTaskByDate();
+          }
         },
         (error) => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -590,7 +600,7 @@ export class TaskDetailComponent implements OnInit {
 
   changePage1(event) {
     this.currentPage = event - 1;
-    this.getTaskByDate('');
+    this.getTaskByDate();
   }
 
   approve(report: ReportModel, type: number) {
