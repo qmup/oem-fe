@@ -110,9 +110,17 @@ input.owl-input-element, mdb-error {
     width: 100% !important;
   }
 }
+#zone, #basic-task {
+  .img-fluid {
+    height: 150px;
+  }
+}
 #company {
   .view.view-cascade.overlay.waves-light {
     height: 300px !important;
+  }
+  .img-fluid {
+    height: 300px;
   }
 }
 #zone, #basic-task {
