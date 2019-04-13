@@ -6,7 +6,7 @@ import { ScheduleService } from '../../service/schedule.service';
 import { Schedule, ScheduleModel } from '../../models/schedule';
 import { ToastService, UploadOutput, UploadFile, UploadInput, humanizeBytes } from 'ng-uikit-pro-standard';
 import { Employee } from 'src/app/employee/models/employee';
-import { PlacePagination } from 'src/app/place/models/place';
+import { PlacePagination, Place } from 'src/app/place/models/place';
 import { PaginationResponse } from 'src/app/core/models/shared';
 import { GlobalService } from 'src/app/core/services/global.service';
 import { TaskBasicService } from '../../service/task-basic.service';
@@ -68,6 +68,7 @@ export class ScheduleDetailComponent implements OnInit {
   selectAtLeastOneTaskBasic: boolean;
   selectAtLeastOneDay: boolean;
   assigneeId: number;
+  workplaceId: number;
 
   constructor(
     public modalRef: BsModalRef,
@@ -109,6 +110,7 @@ export class ScheduleDetailComponent implements OnInit {
         (response) => {
           this.schedule = response;
           this.assigneeId = response.assignee.id;
+          this.workplaceId = response.workplaceId;
           this.startTime = new Date(this.schedule.startTime);
           if (this.schedule.duration / 60000 > 1) {
             this.schedule.duration /= 60000;
@@ -131,7 +133,9 @@ export class ScheduleDetailComponent implements OnInit {
     this.employeeService.getAvailableEmployee(this.userAccount.id, '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
-          this.employeeList = response.content.map((employee) => {
+          this.employeeList = response.content
+          .filter((employee: Employee) => employee.id !== this.schedule.id)
+          .map((employee) => {
             return {
               value: employee.id,
               label: employee.fullName,
@@ -146,7 +150,9 @@ export class ScheduleDetailComponent implements OnInit {
     this.workplaceService.getWorkplaceByManager(this.userAccount.id, '', '', 1, '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
-          this.placeList = response.listOfWorkplace.content.map(p => {
+          this.placeList = response.listOfWorkplace.content
+          .filter((place: Place) => place.id !== this.schedule.workplaceId)
+          .map(p => {
             return {
               value: p.id,
               label: p.name,
@@ -166,6 +172,8 @@ export class ScheduleDetailComponent implements OnInit {
     this.updateDayOfWeek();
     this.updateDescription();
     this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+    this.modalRef.hide();
+    this.refresh.emit();
   }
 
   getTaskBasicByManager() {
@@ -227,13 +235,13 @@ export class ScheduleDetailComponent implements OnInit {
     this.scheduleService.updateField(this.scheduleId, 'assigneeId', this.schedule.assignee.id);
   }
   updateStartTime() {
-    this.scheduleService.updateField(this.scheduleId, 'startTime', this.schedule.startTime);
+    this.scheduleService.updateField(this.scheduleId, 'startTime', new Date(this.schedule.startTime).toISOString());
   }
   updateDuration() {
     this.scheduleService.updateField(this.scheduleId, 'duration', this.schedule.duration);
   }
   updateDayOfWeek() {
-    this.scheduleService.updateField(this.scheduleId, 'dayOfWeek', this.schedule.daysOfWeek);
+    this.scheduleService.updateField(this.scheduleId, 'dayOfWeeks', this.schedule.daysOfWeek);
   }
   updateDescription() {
     this.scheduleService.updateField(this.scheduleId, 'description', this.schedule.description);

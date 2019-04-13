@@ -3,10 +3,11 @@
 </div>
 <div class="modal-body mx-3 row">
   <form (ngSubmit)="updateSchedule()" #updateForm="ngForm" class="d-flex flex-wrap w-100">
+    <div class="col-md-12 text-left pb-2 px-0">
+      <span class="text-danger font-weight-normal">(*) Thông tin bắt buộc</span>
+    </div>
+
     <div class="md-form mt-0 mb-3 col-md-12 px-0">
-      <div class="col-md-12 text-left pb-2">
-        <span class="text-danger font-weight-normal">(*) Thông tin bắt buộc</span>
-      </div>
       
       <input 
       type="text" 
@@ -33,46 +34,25 @@
       <mdb-select 
         id="workplace"
         name="workplace"
-        [label]="'Nơi làm việc*'" 
-        ngModel
-        required
-        #_workplaceId=ngModel
+        label="Nơi làm việc hiện tại: {{schedule.workplaceName}}" 
         [notFoundMsg]="'Không tìm thấy'" 
         [filterEnabled]="true"
-        [class.ng-invalid.validate-error]="_workplaceId.invalid && (_workplaceId.dirty || _workplaceId.touched)"
         [options]="placeList"
-        [(ngModel)]="schedule.workplaceId"
         (selected)="selectWorkplace($event)">
       </mdb-select>
-      <span
-        class="text-danger font-weight-normal"
-        *ngIf="_workplaceId.invalid && (_workplaceId.dirty || _workplaceId.touched)"
-        style="font-size: .8rem">
-        Vui lòng chọn nơi làm việc
-      </span>
     </div>
 
     <div class="md-form mt-0 mb-3 col-6 col-md-12 px-0">
       <mdb-select 
         id="employee"
         name="employee"
-        [label]="'Người thực hiện*'" 
+        label="Người thực hiện hiện tại: {{schedule.assignee.name}}" 
         [notFoundMsg]="'Không tìm thấy'" 
         [filterEnabled]="true"
-        required
-        #_employeeId=ngModel
-        [(ngModel)]="assigneeId"
         [options]="employeeList"
         (selected)="selectEmployee($event)"
-        [class.ng-invalid.validate-error]="_employeeId.invalid && (_employeeId.dirty || _employeeId.touched)"
       >
       </mdb-select>
-      <span
-        class="text-danger font-weight-normal"
-        *ngIf="_employeeId.invalid && (_employeeId.dirty || _employeeId.touched)"
-        style="font-size: .8rem">
-        Vui lòng chọn nhân viên
-      </span>
     </div>
 
     <owl-form-field class="col-12 px-0">

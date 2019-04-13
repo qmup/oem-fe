@@ -102,11 +102,7 @@ export class TaskDetailComponent implements OnInit {
       this.id = +params['id'];
     });
     this.selectingId = this.id;
-    this.getTaskDetail(this.id);
-    this.getEmployeeByManager();
-    this.getWorkplaceByManager(this.userAccount.id);
-    this.getTaskReport(this.id);
-    this.getAssignHistory(this.id);
+    this.loadTask(this.id);
     this.iconStatusSelect = this.globalService.iconStatusSelect;
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
   }
@@ -120,6 +116,8 @@ export class TaskDetailComponent implements OnInit {
             new Date(this.task.startTime),
             new Date(this.task.endTime)
           ];
+          this.getEmployeeByManager();
+          this.getWorkplaceByManager();
         }
       ).then(
         () => {
@@ -205,7 +203,9 @@ export class TaskDetailComponent implements OnInit {
     this.employeeService.getAvailableEmployee(this.userAccount.id, '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
-          this.employeeList = response.content.map((e: Employee) => {
+          this.employeeList = response.content
+          .filter((e: Employee) => e.id !== this.task.assignee.id)
+          .map((e: Employee) => {
             return {
               value: e.id,
               label: e.fullName,
@@ -216,12 +216,12 @@ export class TaskDetailComponent implements OnInit {
       );
   }
 
-  getWorkplaceByManager(managerId: number) {
-    this.workplaceService.getWorkplaceByManager(managerId, '', '', 1, '', 'id', 0, 99)
+  getWorkplaceByManager() {
+    this.workplaceService.getWorkplaceByManager(this.userAccount.id, '', '', 1, '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
           this.workplaceListByManager = response.listOfWorkplace.content
-          .filter((wp: Place) => wp.setToBeacon === true)
+          .filter((wp: Place) => (wp.setToBeacon === true && wp.id !== this.task.workplace.id))
           .map((wp) => {
             return {
               value: wp.id,
@@ -252,6 +252,7 @@ export class TaskDetailComponent implements OnInit {
     this.selectingId = id;
     this.getTaskDetail(id);
     this.getTaskReport(id);
+    this.getAssignHistory(id);
   }
 
   updateTitle() {

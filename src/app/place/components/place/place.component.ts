@@ -93,6 +93,7 @@ export class PlaceComponent implements OnInit {
   searchText = '';
   editField: string;
   beaconResponse: any;
+  invalidNumberOfRework: boolean;
 
   constructor(
     public location: Location,
@@ -113,9 +114,11 @@ export class PlaceComponent implements OnInit {
   ngOnInit() {
     this.userAccount = this.globalService.getUserAccount();
     this.getPlace();
-    this.getBeacon();
     this.getEmployee();
-    this.getManager();
+    if (this.userAccount.roleId === 1) {
+      this.getBeacon();
+      this.getManager();
+    }
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
     this.workplaceStatusList = this.globalService.workplaceStatus;
     this.viewTypes = this.globalService.viewTypes;
@@ -639,21 +642,15 @@ export class PlaceComponent implements OnInit {
     this.modalRef.content.refresh.subscribe(() => this.getPlace());
   }
 
-  updateNumberOfReworks(id: number, property: string, event: any) {
-    const editField = event.target.textContent;
-    const prev = this.placeList.find(p => p.id === id).numberOfReworks;
-    if (+editField !== prev) {
-      this.placeService.updateField(id, property, editField).then(
-        () => {
-          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
-          this.getPlace();
-        }
-      );
-    }
-  }
-
-  changeValue(event: any) {
-    this.editField = event.target.textContent;
+  changeValue(event: any, property: string, id: number) {
+    const place = this.placeList.find((p: Place) => p.id === id);
+    place.numberOfReworks = event;
+    this.placeService.updateField(id, property, place.numberOfReworks).then(
+      () => {
+        this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+        this.getPlace();
+      }
+    );
   }
 
   showFiles() {

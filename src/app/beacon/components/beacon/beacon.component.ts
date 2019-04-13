@@ -28,6 +28,7 @@ export class BeaconComponent implements OnInit {
   placeList: Place[];
   beaconResponse: PaginationResponse;
   timeoutSearch: any;
+  editField: any;
 
   constructor(
     private beaconService: BeaconService,
@@ -48,21 +49,6 @@ export class BeaconComponent implements OnInit {
         }
       );
   }
-
-  // getPlace() {
-  //   this.workplaceService.getAll()
-  //     .then(
-  //       (response: Place[]) => {
-  //         this.placeList = response;
-  //         this.optionsSelect = response.map((place) => {
-  //           return {
-  //             value: place.id,
-  //             label: place.name
-  //           };
-  //         });
-  //       }
-  //     );
-  // }
 
   createBeacon() {
     const options = { positionClass: 'toast-bottom-right' };
@@ -141,5 +127,22 @@ export class BeaconComponent implements OnInit {
   changePage(event) {
     this.currentPage = event - 1;
     this.getBeacon();
+  }
+
+  updateName(id: number, property: string, event: any) {
+    const editField = event.target.textContent;
+    const prev = this.beaconList.find(b => b.id === id).name;
+    if (editField !== prev) {
+      this.beaconService.updateField(id, property, editField).then(
+        () => {
+          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+          this.getBeacon();
+        }
+      );
+    }
+  }
+
+  changeValue(event: any) {
+    this.editField = event.target.textContent;
   }
 }

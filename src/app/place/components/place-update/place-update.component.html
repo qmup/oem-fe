@@ -6,7 +6,7 @@
 </div>
 <div class="modal-body mx-3 row">
   <form (ngSubmit)="updatePlace()" #updateForm="ngForm" class="d-flex flex-wrap w-100">
-    <div class="col-md-12 text-left pb-2">
+    <div class="col-md-12 text-left pb-2 px-0">
       <span class="text-danger font-weight-normal">(*) Thông tin bắt buộc</span>
     </div>
     
@@ -51,7 +51,7 @@
         [min]="1"
         [value]="1"
         [step]="1"
-        [max]="5"
+        [max]="10"
         name="range"
         [(ngModel)]="place.numberOfReworks"
         class="w-100">

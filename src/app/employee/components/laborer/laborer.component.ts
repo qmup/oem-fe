@@ -124,13 +124,19 @@ export class LaborerComponent implements OnInit {
     if (this.userAccount.roleId === 2 && this.employeeStatusList.length === 3) {
       this.employeeStatusList.pop();
     }
-    this.getManager();
-    this.getRole();
     this.getEmployee();
+    if (this.userAccount.roleId === 1) {
+      this.getRole();
+      this.getManager();
+    }
   }
 
   getEmployee() {
-    this.userAccount.roleId === 1 ? this.getEmployeeByAdmin() : this.getEmployeeByManager();
+    if (this.userAccount.roleId === 1) {
+      this.getEmployeeByAdmin();
+    } else {
+      this.getEmployeeByManager();
+    }
   }
 
   getEmployeeByAdmin() {

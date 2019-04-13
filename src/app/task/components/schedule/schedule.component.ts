@@ -5,7 +5,7 @@ import { ModalDirective, ModalOptions, BsModalRef, BsModalService } from 'ngx-bo
 import { EmployeeService } from 'src/app/employee/services/employee.service';
 import { PlaceService } from 'src/app/place/services/place.service';
 import { Employee } from 'src/app/employee/models/employee';
-import { PlacePagination, ManageWorkplace } from 'src/app/place/models/place';
+import { PlacePagination, ManageWorkplace, Place } from 'src/app/place/models/place';
 import { ToastService, UploadFile, UploadInput, UploadOutput, humanizeBytes } from 'ng-uikit-pro-standard';
 import { ScheduleDetailComponent } from '../schedule-detail/schedule-detail.component';
 import { PaginationResponse, AssignTask } from 'src/app/core/models/shared';
@@ -256,7 +256,9 @@ export class ScheduleComponent implements OnInit {
     this.workplaceService.getWorkplaceByManager(this.userAccount.id, '', zoneId, 1, '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
-          this.placeList = response.listOfWorkplace.content.map((place) => {
+          this.placeList = response.listOfWorkplace.content
+          .filter((place: Place) => place.setToBeacon === true )
+          .map((place) => {
             return {
               value: place.id,
               label: `${place.name}`,

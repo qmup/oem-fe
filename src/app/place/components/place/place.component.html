@@ -222,7 +222,7 @@
           <!--Table head-->
           <thead>
             <tr>
-              <th>Mã nơi làm việc</th>
+              <th>ID</th>
               <th class="text-center">Hình ảnh</th>
               <th>
                 Tên
@@ -236,7 +236,7 @@
               <th>
                 Beacon
               </th>
-              <th [ngStyle]="userAccount.roleId === 1 && {'width': '300px', 'max-width': '300px'}"
+              <th [ngStyle]="userAccount.roleId === 1 && {'width': '300px', 'max-width': '300px'}" class="text-center"
                 *ngIf="!showRemovedEmp">Xem chi tiết</th>
             </tr>
           </thead>
@@ -250,10 +250,20 @@
                 <img src="{{p.picture || defaultImage}}" alt="image" class="avatar">
               </td>
               <td>{{p.name}}</td>
-              <td
-                contenteditable="true"
-                (keyup)="changeValue($event)"
-                (blur)="updateNumberOfReworks(p.id, 'numberOfReworks', $event)">{{p.numberOfReworks}}
+              <td>
+                <div class="w-100 d-flex justify-content-center align-items-center my-3" *ngIf="userAccount.roleId === 2">
+                  <mdb-range-input
+                    id="range"
+                    [min]="1"
+                    [step]="1"
+                    [max]="10"
+                    name="range"
+                    [ngModel]="p.numberOfReworks"
+                    (ngModelChange)="changeValue($event, 'numberOfReworks', p.id)"
+                    class="w-100">
+                  </mdb-range-input>
+                  <span class="ml-2" class="text-nowrap">{{p.numberOfReworks}} lần</span>
+                </div>
               </td>
               <td style="position: relative" *ngIf="p.setToBeacon">
                 <div class="text-number-of-reworks">
@@ -338,7 +348,7 @@
       </div>
       <div class="modal-body mx-3 row">
         <form (ngSubmit)="createPlace()" #createForm="ngForm" class="d-flex flex-wrap w-100">
-          <div class="col-md-12 text-left pb-2">
+          <div class="col-md-12 text-left pb-2 px-0">
             <span class="text-danger font-weight-normal">(*) Thông tin bắt buộc</span>
           </div>
           <div class="md-form mt-0 mb-3 col-md-12">
@@ -511,8 +521,15 @@
 
         <span>Thời lượng công việc</span>
         <div class="w-100 d-flex justify-content-center align-items-center my-3">
-          <mdb-range-input id="range" [min]="30" [step]="10" [max]="300" name="range" [(ngModel)]="taskCM.duration"
-            class="w-100"></mdb-range-input>
+          <mdb-range-input
+            id="range"
+            [min]="30"
+            [step]="10"
+            [max]="300"
+            name="range"
+            [(ngModel)]="taskCM.duration"
+            class="w-100">
+          </mdb-range-input>
           <span class="ml-2">phút</span>
         </div>
 

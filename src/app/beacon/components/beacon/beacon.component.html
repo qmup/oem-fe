@@ -52,7 +52,10 @@
             <tbody>
               <tr *ngFor="let data of beaconList">
                 <td>{{ data.id }}</td>
-                <td>{{ data.name }}</td>
+                <td 
+                contenteditable="true"
+                (keyup)="changeValue($event)"
+                (blur)="updateName(data.id, 'name', $event)">{{ data.name }}</td>
                 <td>{{ data.uuid }}</td>
                 <td>{{ data.minor }}</td>
                 <td>{{ data.major }}</td>
@@ -98,7 +101,7 @@
       <div class="modal-body mx-3 row">
         <form (ngSubmit)="createBeacon()" #createForm="ngForm" class="d-flex flex-wrap w-100">
 
-          <div class="md-form my-3 col-md-12">
+          <div class="md-form my-3 col-md-12 px-0">
             <input 
             type="text" 
             id="name" 
