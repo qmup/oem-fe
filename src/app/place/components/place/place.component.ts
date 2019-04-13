@@ -92,6 +92,7 @@ export class PlaceComponent implements OnInit {
   timeoutSearch: any;
   searchText = '';
   editField: string;
+  beaconResponse: any;
 
   constructor(
     public location: Location,
@@ -536,14 +537,16 @@ export class PlaceComponent implements OnInit {
   }
 
   checkRemoveBeacon(e: number) {
+    this.warningMessage = [];
     this.deletingBeaconId = e;
     this.beaconService.checkRemove(e)
       .then(
         (res) => {
+          this.beaconResponse = res;
+          this.warningMessage = res.message.split(';');
           if (res.removeAble) {
             this.removeBeaconModal.show();
           } else {
-            this.warningMessage = res.message.split(';');
             this.removeBeaconModal.show();
           }
         }

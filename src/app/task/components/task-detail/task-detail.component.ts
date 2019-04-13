@@ -9,7 +9,7 @@ import { TaskReport, TaskModel as ReportModel } from 'src/app/report/models/repo
 import { Employee } from 'src/app/employee/models/employee';
 import { PaginationResponse, AssignTask, Shared, AssignTaskResponse, NotificationSendingModel } from 'src/app/core/models/shared';
 import { EmployeeService } from 'src/app/employee/services/employee.service';
-import { ManageWorkplace, PlacePagination } from 'src/app/place/models/place';
+import { ManageWorkplace, PlacePagination, Place } from 'src/app/place/models/place';
 import { PlaceService } from 'src/app/place/services/place.service';
 import { ModalOptions, BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
 import { PlaceTaskBasicComponent } from 'src/app/place/components/place-task-basic/place-task-basic.component';
@@ -76,6 +76,7 @@ export class TaskDetailComponent implements OnInit {
   taskListResponse: PaginationResponse;
   currentPage = 0;
   taskBasicList: Task[];
+  selectAtLeastOneTaskBasic: boolean;
 
   constructor(
     private taskService: TaskService,
@@ -162,8 +163,8 @@ export class TaskDetailComponent implements OnInit {
       );
   }
 
-  getAssignHistory(id: number) {
-    this.taskService.getAssignHistory(id, '', 'dateAssign', 0, 5)
+  getAssignHistory(taskId: number) {
+    this.taskService.getAssignHistory(taskId, '', 'dateAssign', 0, 5)
       .then(
         (response) => {
           this.historyAssign = response.content;
@@ -219,10 +220,13 @@ export class TaskDetailComponent implements OnInit {
     this.workplaceService.getWorkplaceByManager(managerId, '', '', 1, '', 'id', 0, 99)
       .then(
         (response: PlacePagination) => {
-          this.workplaceListByManager = response.listOfWorkplace.content.map((wp: Shared) => {
+          this.workplaceListByManager = response.listOfWorkplace.content
+          .filter((wp: Place) => wp.setToBeacon === true)
+          .map((wp) => {
             return {
               value: wp.id,
               label: wp.name,
+              icon: wp.picture
             };
           });
         }
@@ -340,6 +344,7 @@ export class TaskDetailComponent implements OnInit {
           this.toastService.success('Assign thành công', '', { positionClass: 'toast-bottom-right'});
           this.assignModal.hide();
           this.loadTask(this.selectingId || this.id);
+          this.getAssignHistory(this.selectingId || this.id);
         },
         (error) => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -512,6 +517,11 @@ export class TaskDetailComponent implements OnInit {
       this.selectedModalTaskBasic.push(this.taskBasicManagerList.find(el => el.id === id));
     } else {
       this.selectedModalTaskBasic = this.selectedModalTaskBasic.filter(el => el.id !== id);
+    }
+    if (this.selectedModalTaskBasic.length !== 0) {
+      this.selectAtLeastOneTaskBasic = true;
+    } else {
+      this.selectAtLeastOneTaskBasic = false;
     }
   }
 

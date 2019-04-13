@@ -153,10 +153,11 @@
                       mdbWavesEffect size="sm" (click)="checkRemoveBeacon(p?.beaconId)"
                       *ngIf="userAccount.roleId === 1 && p.setToBeacon">Gỡ
                       beacon</button>
-                    <button title="Tạo công việc mới cho nơi này " mdbBtn type="button" color="success" rounded="true"
+                    <button title="Tạo công việc mới cho nơi này" mdbBtn type="button" color="success" rounded="true"
                       mdbWavesEffect (click)="openCreateTaskModal(p.id, i)"
-                      *ngIf="userAccount.roleId === 2 && canCreateTask">Tạo
+                      *ngIf="userAccount.roleId === 2 && canCreateTask && p.setToBeacon">Tạo
                       công việc</button>
+                    <p *ngIf="userAccount.roleId === 2 && !p.setToBeacon" class="text-danger font-weight-normal text-center">Chưa có beacon</p>
                     <button *ngIf="userAccount.roleId === 1" title="Cập nhật nơi làm việc" mdbBtn type="button"
                       color="primary" rounded="true" mdbWavesEffect size="sm" (click)="openUpdateModal(p)">
                       Sửa
@@ -249,10 +250,12 @@
                 <img src="{{p.picture || defaultImage}}" alt="image" class="avatar">
               </td>
               <td>{{p.name}}</td>
-              <td contenteditable="true"
-              (keyup)="changeValue($event)"
-              (blur)="updateNumberOfReworks(p.id, 'numberOfReworks', $event)">{{p.numberOfReworks}}</td>
-              <td style="position: relative">
+              <td
+                contenteditable="true"
+                (keyup)="changeValue($event)"
+                (blur)="updateNumberOfReworks(p.id, 'numberOfReworks', $event)">{{p.numberOfReworks}}
+              </td>
+              <td style="position: relative" *ngIf="p.setToBeacon">
                 <div class="text-number-of-reworks">
                   <span 
                     *ngIf="p.taskList.length < p.numberOfReworks"
@@ -263,23 +266,23 @@
                     {{p.taskList.length}}<span *ngIf="canCreateTask"> - đã đủ</span>
                     <i class="fa fa-check mr-2" color="success" *ngIf="canCreateTask"></i>
                   </span>
-                  <span *ngIf="userAccount.roleId === 2 && !canCreateTask" class="text-danger font-weight-normal"> - đã quá thời gian hiện tại
+                  <span *ngIf="!canCreateTask" class="text-danger font-weight-normal"> - đã quá thời gian hiện tại
                   </span>
                 </div>
-                <span *ngIf="userAccount.roleId === 2 && canCreateTask" class="text-danger font-weight-normal">
-                  <span *ngIf="p.taskList.length < p.numberOfReworks" class="float-right pr-4">
+                <span *ngIf="canCreateTask && p.setToBeacon" class="text-danger font-weight-normal">
+                  <span class="float-right pr-4">
                     <button title="Tạo công việc cho nơi này" mdbBtn type="button" color="success" rounded="true"
                       mdbWavesEffect size="md" (click)="openCreateTaskModal(p.id, i)"
-                      *ngIf="userAccount.roleId === 2 && (p.taskList.length < p.numberOfReworks) && canCreateTask">
+                      *ngIf="canCreateTask">
                     <i class="fa fa-plus"></i>
                     </button>
                   </span>
-                  <span *ngIf="!(p.taskList.length < p.numberOfReworks)" class="float-right pr-4">
-                    <button title="Tạo công việc cho nơi này" mdbBtn type="button" color="success" rounded="true"
-                      mdbWavesEffect size="md" (click)="openCreateTaskModal(p.id, i)">
-                      <i class="fa fa-plus"></i>
-                    </button>
-                  </span>
+                </span>
+              </td>
+              <td *ngIf="!p.setToBeacon">
+                <span *ngIf="canCreateTask" class="text-danger font-weight-normal text-center">Chưa có beacon</span>
+                <span *ngIf="!canCreateTask">{{p.taskList.length}}</span>
+                <span *ngIf="!canCreateTask" class="text-danger font-weight-normal"> - đã quá thời gian hiện tại
                 </span>
               </td>
               <td>
@@ -447,25 +450,23 @@
       <!--Header-->
       <div class="modal-header d-flex justify-content-center">
         <p class="heading">
-          Gỡ bỏ beacon ra khỏi nơi làm việc này?
+          Cảnh báo
         </p>
       </div>
 
       <!--Body-->
       <div class="modal-body">
         <i class="fa fa-warning fa-4x animated rotateIn"></i>
-        <div *ngIf="warningMessage.length !== 0">
-          <div *ngFor="let m of warningMessage">
-            <p class="h6 font-weight-bold">
-              {{m}}
-            </p>
-          </div>
+        <div *ngFor="let m of warningMessage">
+          <p class="h6 font-weight-bold">
+            {{m}}
+          </p>
         </div>
       </div>
 
       <!--Footer-->
       <div class="modal-footer flex-center">
-        <a mdbBtn color="warning" outline="true" class="waves-effect" mdbWavesEffect (click)="removeBeaconOfWorkplace()">Đồng ý</a>
+        <a *ngIf="beaconResponse?.removeAble" mdbBtn color="warning" outline="true" class="waves-effect" mdbWavesEffect (click)="removeBeaconOfWorkplace()">Đồng ý</a>
         <a type="button" mdbBtn color="warning" class="waves-effect" mdbWavesEffect p-dismiss="modal"
           (click)="removeBeacon.hide()">Hủy</a>
       </div>

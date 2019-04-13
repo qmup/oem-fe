@@ -6,10 +6,15 @@
 </div>
 <div class="modal-body mx-3 row">
   <div *ngFor="let list of taskBasicList; let i of index" class="col-6">
-    <div>
-      <mdb-checkbox [checked]="list.checked" name="item-{{i}}"
+    <div *ngIf="task">
+      <mdb-checkbox [checked]="true" name="item-{{i}}"
       #checkbox
      (change)="changeCheckbox(list.id, $event)">{{list.title}}</mdb-checkbox>
+    </div>
+    <div *ngIf="!task">
+      <mdb-checkbox [checked]="list.checked" name="item-{{i}}"
+      #checkbox
+      (change)="changeCheckbox(list.id, $event)">{{list.title}}</mdb-checkbox>
     </div>
   </div>
   <div *ngIf="taskBasicResponse.numberOfElements === 0">

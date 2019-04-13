@@ -387,52 +387,52 @@
 
 <ng-template #createBT>
 
-    <div class="modal-header d-flex justify-content-center">
-      <p class="heading">Tạo công việc</p>
-    </div>
-    <div class="modal-body mx-3 row">
-      <form (ngSubmit)="createTaskBasic()" #createForm="ngForm" class="d-flex flex-wrap w-100">
-        <div class="md-form mt-0 mb-3 col-md-12">
-          <input 
-          type="text" 
-          id="title" 
-          name="title" 
-          class="form-control" 
-          mdbInput
-          required
-          maxlength="25"
-          #title=ngModel
-          [(ngModel)]="taskBasicCM.title"
-          [class.ng-invalid.validate-error]="(title.invalid && (title.dirty || title.touched))"
-          >
-          <label for="title">Tên*</label>
-          
-          <mdb-error *ngIf="taskBasicCM.title.length === 25" class="font-weight-normal">Tên công việc nhỏ hơn 25 ký tự</mdb-error>
-          <mdb-error *ngIf="title.invalid && (title.dirty || title.touched)" class="font-weight-normal">
-            <span *ngIf="title?.errors?.required">Vui lòng nhập tên công việc</span>
-          </mdb-error>
-  
+  <div class="modal-header d-flex justify-content-center">
+    <p class="heading">Tạo công việc</p>
+  </div>
+  <div class="modal-body mx-3 row">
+    <form (ngSubmit)="createTaskBasic()" #createForm="ngForm" class="d-flex flex-wrap w-100">
+      <div class="md-form mt-0 mb-3 col-md-12">
+        <input 
+        type="text" 
+        id="title" 
+        name="title" 
+        class="form-control" 
+        mdbInput
+        required
+        maxlength="25"
+        #title=ngModel
+        [(ngModel)]="taskBasicCM.title"
+        [class.ng-invalid.validate-error]="(title.invalid && (title.dirty || title.touched))"
+        >
+        <label for="title">Tên*</label>
+        
+        <mdb-error *ngIf="taskBasicCM.title.length === 25" class="font-weight-normal">Tên công việc nhỏ hơn 25 ký tự</mdb-error>
+        <mdb-error *ngIf="title.invalid && (title.dirty || title.touched)" class="font-weight-normal">
+          <span *ngIf="title?.errors?.required">Vui lòng nhập tên công việc</span>
+        </mdb-error>
+
+      </div>
+
+      <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
+        <div mdbBtn floating="true" size="md" color="success" mdbWavesEffect>
+          <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+          <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
+            (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
         </div>
-  
-        <div class="file-field md-form col-12 pl-0 mt-0 mb-3">
-          <div mdbBtn floating="true" size="md" color="success" mdbWavesEffect>
-            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-            <input type="file" accept="image/*" (change)="onSelectFile($event)" mdbFileSelect
-              (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
-          </div>
-          <div class="file-path-wrapper mt-3">
-            <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()" disabled>
-          </div>
+        <div class="file-path-wrapper mt-3">
+          <input class="file-path" type="text" placeholder="Chọn ảnh" [value]="showFiles()" disabled>
         </div>
-        <div class="col text-center" *ngIf="url">
-          <img [src]="url" height="100">
-        </div>
-        <div class="col-12 text-center mt-3 border-top pt-3">
-          <button mdbBtn color="success" class="waves-light" mdbWavesEffect [disabled]="!createForm.form.valid">Tạo mới
-            <i class="fa fa-check ml-1"></i>
-          </button>
-        </div>
-      </form>
-    </div>
-  
-  </ng-template>
+      </div>
+      <div class="col text-center" *ngIf="url">
+        <img [src]="url" height="100">
+      </div>
+      <div class="col-12 text-center mt-3 border-top pt-3">
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect [disabled]="!createForm.form.valid">Tạo mới
+          <i class="fa fa-check ml-1"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+
+</ng-template>

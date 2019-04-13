@@ -24,6 +24,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.info = this.globalService.getUserAccount();
+    this.getSummaryTaskLastWeek();
   }
 
   getSummaryTaskLastWeek() {

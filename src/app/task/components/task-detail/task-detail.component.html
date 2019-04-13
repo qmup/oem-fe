@@ -387,7 +387,7 @@
 
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="primary" class="waves-light" mdbWavesEffect (click)="addTaskBasicToTask()">Thêm vào danh
+        <button mdbBtn color="primary" class="waves-light" mdbWavesEffect [disabled]="!selectAtLeastOneTaskBasic" (click)="addTaskBasicToTask()">Thêm vào danh
           sách
           <i class="fa fa-check ml-1"></i>
         </button>

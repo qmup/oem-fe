@@ -88,7 +88,7 @@ export class DashboardComponent implements OnInit {
       .then(
         (response: SummaryTask) => {
           this.summaryTask = response;
-          this.chartData = Object.values(response.statuses);
+          this.chartData = Object.values(response.attendanceStatus);
         }
       );
   }
@@ -102,7 +102,7 @@ export class DashboardComponent implements OnInit {
       .then(
         (response: SummaryTask) => {
           this.summaryTask = response;
-          this.chartData = Object.values(response.statuses);
+          this.chartData = Object.values(response.attendanceStatus);
         }
       );
   }

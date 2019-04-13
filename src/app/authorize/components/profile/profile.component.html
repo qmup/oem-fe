@@ -14,11 +14,17 @@
         <!--Author Data-->
         <div class=" col-12 col-sm-10">
           <p><strong>{{info.fullName}}</strong></p>
-          <p>Tổng số nhân viên đang quản lý: 
-            <span class="badge badge-info">{{summaryTask?.totalLaborer}}</span>
+          <p class="col-md-12 col-6">Tổng số nhân viên đang quản lý: 
+            <span style="font-size: 14px" class="badge badge-success">{{summaryTask?.totalLaborer}}</span>
           </p>
-          <p>Tổng số nơi làm việc đang quản lý: 
-            <span class="badge badge-info">{{summaryTask?.totalWorkplace}}</span>
+          <p class="col-md-12 col-6">Tổng số nơi làm việc đang quản lý: 
+            <span style="font-size: 14px" class="badge badge-info">{{summaryTask?.numberOfWorkplaceIsManaged}}</span>
+          </p>
+          <p class="col-md-12 col-6">Tổng số đã giao trong tuần: 
+            <span style="font-size: 14px" class="badge badge-primary">{{summaryTask?.totalTask}}</span>
+          </p>
+          <p class="col-md-12 col-6">Tổng số công việc đang chờ duyệt: 
+            <span style="font-size: 14px" class="badge badge-warning">{{summaryTask?.numberOfWorkplaceIsManaged}}</span>
           </p>
           <button mdbBtn type="button" color="primary" class="waves-light" rounded="true" mdbWavesEffect>Đổi mật khẩu</button>
         </div>
