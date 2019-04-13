@@ -29,7 +29,7 @@
       </div>
     </div>
     <br />
-    <app-day-view-scheduler [viewDate]="viewDate" [events]="events">
+    <app-day-view-scheduler [viewDate]="viewDate" [events]="events" (eventClicked)="clicked($event)">
     </app-day-view-scheduler>
 
   </mdb-card-body>

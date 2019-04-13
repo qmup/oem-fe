@@ -17,6 +17,7 @@ import {
 import {
   Employee
 } from 'src/app/employee/models/employee';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-task-calendar',
@@ -34,6 +35,7 @@ export class TaskCalendarComponent implements OnInit {
   events: CalendarEvent[] = [];
   constructor(
     private calendarService: TaskCalendarService,
+    private route: Router,
     private globalService: GlobalService,
   ) {}
 
@@ -91,10 +93,15 @@ export class TaskCalendarComponent implements OnInit {
                 beforeStart: false,
                 afterEnd: false
               },
-              draggable: false
+              draggable: false,
+              taskId: e.taskId
             };
           });
         }
       );
+  }
+
+  clicked(e: any) {
+    this.route.navigate(['/task-detail', e.event.taskId]);
   }
 }
