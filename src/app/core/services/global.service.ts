@@ -12,7 +12,6 @@ export class GlobalService {
 
   isLogin: boolean;
   userAccount: Employee;
-  oldPassword: string;
   avatar: string;
   isRequesting: EventEmitter<boolean> = new EventEmitter<boolean>();
   isRequestingGoogleMap: EventEmitter<boolean> = new EventEmitter<boolean>();

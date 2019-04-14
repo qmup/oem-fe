@@ -43,7 +43,6 @@ export class LoginPageComponent implements OnInit {
           this.authService.getInformation(this.email)
           .then(
             (response2: Employee) => {
-              this.globalService.oldPassword = this.password;
               this.globalService.userAccount = response2;
               this.wrongUsernameOrPassword = false;
               this.authGuardService.setUserAccount(this.globalService.userAccount);

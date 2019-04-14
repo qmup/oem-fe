@@ -17,7 +17,7 @@ export class ProfileChangePasswordComponent implements OnInit {
   password = '';
   confirm = '';
   userAccount: Employee;
-  oldPassword: string;
+  oldPass: string;
 
   constructor(
     public modalRef: BsModalRef,
@@ -30,12 +30,10 @@ export class ProfileChangePasswordComponent implements OnInit {
 
   ngOnInit() {
     this.userAccount = this.globalService.getUserAccount();
-    this.oldPassword = this.globalService.oldPassword;
-    console.log(this.globalService.oldPassword);
   }
 
   changePassword() {
-    this.authService.changePassword(this.userAccount.email, this.password, this.oldPassword)
+    this.authService.changePassword(this.userAccount.email, this.password, this.oldPass)
       .then(
         (res) => {
           if (res) {
