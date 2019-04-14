@@ -92,7 +92,7 @@
               <p class="h5">Người quản lý</p>
             </div>
             <div class="col pl-0" *ngIf="employee.managerId !== 0">
-              <a class="btn-floating btn-md btn-primary"><i class="fa fa-pencil" (click)="openUpdateManagerModal()"></i></a>
+              <a class="btn-floating btn-md btn-primary"><i class="fa fa-pencil" (click)="checkConstraint()"></i></a>
             </div>
           </mdb-card-title>
 
@@ -199,6 +199,37 @@
       <div class="modal-footer flex-center">
         <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeTask()">Đồng ý</a>
         <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">Hủy</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+<div mdbModal #warning="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="delete" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-warning" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Cảnh báo</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-warning fa-4x animated rotateIn"></i>
+        <p class="h6 font-weight-bold">Bạn không đổi người quản lý vì: </p>
+        <div *ngFor="let m of warningMessage">
+          <p class="h6 font-weight-bold">
+            {{m}}
+          </p>
+        </div>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a type="button" mdbBtn color="warning" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+          (click)="warning.hide()">Đóng</a>
       </div>
     </div>
     <!--/.Content-->

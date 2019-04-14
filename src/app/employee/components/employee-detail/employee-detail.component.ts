@@ -20,10 +20,9 @@ import { EmployeeUpdateComponent } from '../employee-update/employee-update.comp
 export class EmployeeDetailComponent implements OnInit {
 
   @ViewChild('updateManagerModal') updateModal: ModalDirective;
+  @ViewChild('warning') warningModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
-  @ViewChild('moreTask') placeToggle: any;
   employee: Employee = new Employee();
-  isShowMore = false;
   id: number;
   sub: any;
   managerInfo: Manager = new Manager();
@@ -41,6 +40,7 @@ export class EmployeeDetailComponent implements OnInit {
   deletingId = 0;
   modalRef: BsModalRef;
   defaultImage = '../../../../assets/default-image.jpg';
+  warningMessage = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -61,9 +61,16 @@ export class EmployeeDetailComponent implements OnInit {
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
     });
+    this.getByRole();
     this.getEmployeeDetail(this.id);
-    this.getTodayTaskByEmployee();
-    this.getManager();
+  }
+
+  getByRole() {
+    if (this.userAccount.roleId === 1) {
+      this.getManager();
+    } else {
+      this.getTodayTaskByEmployee();
+    }
   }
 
   getEmployeeDetail(id: number) {
@@ -80,7 +87,9 @@ export class EmployeeDetailComponent implements OnInit {
     this.employeeService.getByRole(2, '', '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
-          this.managerList = response.content.map((manager) => {
+          this.managerList = response.content
+          .filter((manager: Employee) => manager.id !== this.employee.managerId)
+          .map((manager) => {
             return {
               value: manager.id,
               label: manager.fullName,
@@ -89,6 +98,11 @@ export class EmployeeDetailComponent implements OnInit {
           });
           if (this.employee.managerId !== 0) {
             this.managerInfo = response.content.find((manager: Manager) => manager.id === this.employee.managerId);
+          }
+          if (this.managerList.length === 0) {
+            this.managerList = [
+              {value: -1, label: 'Không tìm thấy người quản lý phù hợp', disabled: true}
+            ];
           }
         }
       );
@@ -126,32 +140,28 @@ export class EmployeeDetailComponent implements OnInit {
         () => {
           this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
           this.updateModal.hide();
+          this.getByRole();
           this.getEmployeeDetail(this.id);
         }
       );
+  }
+  checkConstraint() {
+    this.employeeService.checkConstraint(this.id)
+    .then(
+      (res) => {
+        if (res.removeAble) {
+          this.openUpdateManagerModal();
+        } else {
+          this.warningMessage = res.message.split(';');
+          this.warningModal.show();
+        }
+      });
   }
   getTodayTaskByEmployee() {
     this.taskService.getTodayTaskByEmployee(this.id)
       .then(
         (response) => {
           this.taskList = response;
-        }
-      );
-  }
-
-  toggleTask() {
-    this.placeToggle.toggle();
-    this.isShowMore = true;
-  }
-
-  removeTask() {
-    this.taskService.remove(this.deletingId)
-      .then(
-        (response) => {
-          this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
-        },
-        (error) => {
-          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
         }
       );
   }
