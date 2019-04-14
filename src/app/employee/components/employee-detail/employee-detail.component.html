@@ -31,16 +31,16 @@
           <hr>
 
           <mdb-card-text style="text-align: left" class="profile-text">
-            <i class="fa fa-birthday-cake mr-2 mb-3"></i>
+            <i class="fa fa-birthday-cake green-text mr-2 mb-3"></i>
             <span class="mb-3">Ngày sinh: {{ employee.birthDate | date: 'dd-MM-yyyy' }}</span>
             <br>
-            <i class="fa fa-phone mr-2 mb-3"></i>
+            <i class="fa fa-phone amber-text mr-2 mb-3"></i>
             <span class="mb-3">Số điện thoại: {{ employee.phoneNumber }}</span>
             <br>
-            <i class="fa fa-envelope-open-o mr-2 mb-3"></i>
+            <i class="fa fa-envelope-open-o indigo-text mr-2 mb-3"></i>
             <span class="mb-3">Email: {{ employee.email }}</span>
             <br>
-            <i class="fa fa-map-marker mr-2 mb-3"></i>
+            <i class="fa fa-map-marker red-text mr-2 mb-3"></i>
             <span class="mb-3">Địa chỉ: {{ employee.address }}</span>
             <br>
             <i class="fa fa-user mr-2 mb-3"></i>
@@ -129,19 +129,19 @@
           </mdb-card-title>
 
           <mdb-card-text style="text-align: left; font-size: 16px" class="profile-text pl-5 mb-0">
-            <i class="fa fa-venus-mars mr-2 mb-4"></i>
+            <i class="fa fa-venus-mars purple-text mr-2 mb-4"></i>
             <span class="mb-3">Giới tính: {{ employee.sex ? 'Nam' : 'Nữ' }}</span>
             <br>
-            <i class="fa fa-birthday-cake mr-2 mb-4"></i>
+            <i class="fa fa-birthday-cake green-text mr-2 mb-4"></i>
             <span class="mb-3">Ngày sinh: {{ employee.birthDate | date: 'dd-MM-yyyy' }}</span>
             <br>
-            <i class="fa fa-phone mr-2 mb-4"></i>
+            <i class="fa fa-phone amber-text mr-2 mb-4"></i>
             <span class="mb-3">Số điện thoại: {{ employee.phoneNumber }}</span>
             <br>
-            <i class="fa fa-envelope-open-o mr-2 mb-4"></i>
+            <i class="fa fa-envelope-open-o indigo-text mr-2 mb-4"></i>
             <span class="mb-3">Email: {{ employee.email }}</span>
             <br>
-            <i class="fa fa-map-marker mr-2 mb-4"></i>
+            <i class="fa fa-map-marker red-text mr-2 mb-4"></i>
             <span class="mb-3">Địa chỉ: {{ employee.address }}</span>
             <br>
             <i class="fa fa-mobile mr-2 mb-4"></i>
@@ -177,31 +177,6 @@
         </button>
       </div>
     </div>
-  </div>
-</div>
-
-<div mdbModal #delete="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="delete"
-  aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-    <!--Content-->
-    <div class="modal-content text-center">
-      <!--Header-->
-      <div class="modal-header d-flex justify-content-center">
-        Xóa nơi làm việc này?
-      </div>
-
-      <!--Body-->
-      <div class="modal-body">
-        <i class="fa fa-times fa-4x animated rotateIn"></i>
-      </div>
-
-      <!--Footer-->
-      <div class="modal-footer flex-center">
-        <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeTask()">Đồng ý</a>
-        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal" (click)="delete.hide()">Hủy</a>
-      </div>
-    </div>
-    <!--/.Content-->
   </div>
 </div>
 

@@ -253,7 +253,7 @@ export class TaskComponent implements OnInit {
     const y = this.minDate.getFullYear();
     const from = new Date(y, m, d, 0, 0, 0, 0).toISOString();
     const to = new Date(y, m, d, 23, 59, 0, 0).toISOString();
-    this.workplaceService.getAvailableByDate(this.userAccount.id, '', 1, zoneId, `${from};${to}`, '', 'numberOfReworks', 0, 99)
+    this.workplaceService.getAvailableByDate(this.userAccount.id, '', 1, zoneId, `${from};${to}`, 'asc', 'numberOfReworks', 0, 99)
       .then(
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content

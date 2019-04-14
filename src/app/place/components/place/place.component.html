@@ -227,15 +227,15 @@
               <th>
                 Tên
               </th>
-              <th>
+              <th style="width: 250px">
                 Số lần phải dọn tối thiểu
               </th>
-              <th>
+              <th style="width: 170px">
                 Số công việc đã giao
               </th>
-              <th>
+              <!-- <th>
                 Beacon
-              </th>
+              </th> -->
               <th [ngStyle]="userAccount.roleId === 1 && {'width': '300px', 'max-width': '300px'}" class="text-center"
                 *ngIf="!showRemovedEmp">Xem chi tiết</th>
             </tr>
@@ -251,7 +251,8 @@
               </td>
               <td>{{p.name}}</td>
               <td>
-                <div class="w-100 d-flex justify-content-center align-items-center my-3" *ngIf="userAccount.roleId === 2">
+                <div class="w-100 d-flex justify-content-start align-items-center my-3" *ngIf="userAccount.roleId === 2">
+                  <span class="ml-2" class="text-nowrap pr-3">{{p.numberOfReworks}} lần</span>
                   <mdb-range-input
                     id="range"
                     [min]="1"
@@ -260,9 +261,8 @@
                     name="range"
                     [ngModel]="p.numberOfReworks"
                     (ngModelChange)="changeValue($event, 'numberOfReworks', p.id)"
-                    class="w-100">
+                    class="w-75">
                   </mdb-range-input>
-                  <span class="ml-2" class="text-nowrap">{{p.numberOfReworks}} lần</span>
                 </div>
               </td>
               <td style="position: relative" *ngIf="p.setToBeacon">
@@ -280,7 +280,7 @@
                   </span>
                 </div>
                 <span *ngIf="canCreateTask && p.setToBeacon" class="text-danger font-weight-normal">
-                  <span class="float-right pr-4">
+                  <span class="float-right">
                     <button title="Tạo công việc cho nơi này" mdbBtn type="button" color="success" rounded="true"
                       mdbWavesEffect size="md" (click)="openCreateTaskModal(p.id, i)"
                       *ngIf="canCreateTask">
@@ -295,27 +295,29 @@
                 <span *ngIf="!canCreateTask" class="text-danger font-weight-normal"> - đã quá thời gian hiện tại
                 </span>
               </td>
-              <td>
+              <!-- <td>
                 <span *ngIf="p.setToBeacon" class="text-success font-weight-normal">Đã có</span>
                 <span *ngIf="!p.setToBeacon" class="text-danger font-weight-normal">Chưa có</span>
-              </td>
-              <td class="d-flex flex-wrap w-100 justify-content-center" id="action-button">
-                <button title="Chi tiết" mdbBtn type="button" rounded="true" color="warning" class="waves-light"
-                  size="sm" mdbWavesEffect (click)="openDetailModal(p)">
-                  <i class="fa fa-eye"></i>
-                </button>
-                <button title="Thêm beacon cho nơi này" mdbBtn type="button" color="success" rounded="true"
-                  mdbWavesEffect size="sm" (click)="openBeaconModal(p.id)"
-                  *ngIf="userAccount.roleId === 1 && (p.setToBeacon === false)">Thêm
-                  beacon</button>
-                <!-- <button title="Cập nhật số lần làm việc trong ngày" mdbBtn type="button" color="primary" rounded="true"
-                  mdbWavesEffect size="sm" (click)="openUpdateModal(p)">
-                  <i class="fa fa-pencil"></i>
-                </button> -->
-                <button title="Xóa nơi làm việc" mdbBtn type="button" color="danger" rounded="true" mdbWavesEffect
-                  size="sm" (click)="checkRemovable(p.id)" *ngIf="userAccount.roleId === 1">
-                  Xóa
-                </button>
+              </td> -->
+              <td>
+                <div class="d-flex flex-wrap w-100 justify-content-center" id="action-button">
+                  <button title="Chi tiết" mdbBtn type="button" rounded="true" color="warning" class="waves-light"
+                    size="sm" mdbWavesEffect (click)="openDetailModal(p)">
+                    <i class="fa fa-eye"></i>
+                  </button>
+                  <button title="Thêm beacon cho nơi này" mdbBtn type="button" color="success" rounded="true"
+                    mdbWavesEffect size="sm" (click)="openBeaconModal(p.id)"
+                    *ngIf="userAccount.roleId === 1 && (p.setToBeacon === false)">Thêm
+                    beacon</button>
+                  <!-- <button title="Cập nhật số lần làm việc trong ngày" mdbBtn type="button" color="primary" rounded="true"
+                    mdbWavesEffect size="sm" (click)="openUpdateModal(p)">
+                    <i class="fa fa-pencil"></i>
+                  </button> -->
+                  <button title="Xóa nơi làm việc" mdbBtn type="button" color="danger" rounded="true" mdbWavesEffect
+                    size="sm" (click)="checkRemovable(p.id)" *ngIf="userAccount.roleId === 1">
+                    Xóa
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>

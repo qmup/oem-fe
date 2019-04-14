@@ -30,4 +30,15 @@ export class AuthService {
       }
     ).toPromise();
   }
+
+  changePassword(username, password, oldPassword): Promise<any> {
+    return this.httpClient.put<any>(
+      `${environment.endPoint}${environment.apiPaths.authorize.changePassword}`,
+      {
+        newPassword: `${password}`,
+        oldPassword: `${oldPassword}`,
+        username: `${username}`,
+      }
+    ).toPromise();
+  }
 }

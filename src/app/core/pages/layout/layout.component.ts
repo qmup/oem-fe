@@ -10,6 +10,7 @@ import { Employee } from 'src/app/employee/models/employee';
 export class LayoutComponent implements OnChanges {
   @Input() isLogin: boolean;
   userAccount: Employee = new Employee();
+  avatar: string;
 
   constructor(
     public globalService: GlobalService,
@@ -17,6 +18,7 @@ export class LayoutComponent implements OnChanges {
 
   ngOnChanges() {
     this.userAccount = this.globalService.getUserAccount();
+    this.avatar = this.globalService.avatar;
   }
 
 }

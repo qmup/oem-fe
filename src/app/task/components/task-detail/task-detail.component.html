@@ -17,7 +17,7 @@
         <div class="col text-center">
           <owl-form-field class="w-100 px-3">
             <input owlInput class="text-center" [(ngModel)]="searchDateRange" [selectMode]="'range'"
-              [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker" placeholder="Thời gian công việc"
+              [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker" placeholder="Chọn ngày"
               (dateTimeChange)="changeSearchDate($event)">
             <owl-date-time #datepicker [pickerType]="'calendar'"></owl-date-time>
           </owl-form-field>

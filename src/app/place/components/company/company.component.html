@@ -49,9 +49,9 @@
               <!--Text-->
 
               <mdb-card-text>
-                <i class="fa fa-map-marker mr-2"></i>{{c.address}}
+                <i class="fa fa-map-marker red-text mr-2"></i>{{c.address}}
                 <br>
-                <i class="fa fa-phone mr-2"></i>{{c.phone}}
+                <i class="fa fa-phone amber-text mr-2"></i>{{c.phone}}
               </mdb-card-text>
 
               <agm-map [latitude]="c.latitude" [longitude]="c.longitude" [zoom]="location.zoom" style="height: 200px">

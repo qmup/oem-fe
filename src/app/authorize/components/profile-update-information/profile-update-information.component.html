@@ -1,0 +1,132 @@
+<div class="modal-header d-flex justify-content-center">
+    <p class="heading">Cập nhật thông tin</p>
+  </div>
+  <div class="modal-body mx-3 row">
+    <form (ngSubmit)="updateEmployee()" #updateForm="ngForm" class="d-flex flex-wrap w-100">
+  
+      <div class="col-md-12 text-left pb-3">
+        <span class="text-danger font-weight-normal">(*) Thông tin bắt buộc</span>
+      </div>
+
+      <div class="md-form my-3 col-md-6">
+        <input 
+        type="text" 
+        id="firstName" 
+        name="firstName"
+        class="form-control" 
+        mdbInput 
+        required
+        #_firstName=ngModel
+        [(ngModel)]="info.firstName"
+        [class.ng-invalid.validate-error]="(_firstName.invalid && (_firstName.dirty || _firstName.touched))"
+        >
+        <label for="firstName">Họ*</label>
+        
+        <mdb-error *ngIf="(_firstName.invalid && (_firstName.dirty || _firstName.touched))">
+          <span *ngIf="_firstName?.errors?.required" class="font-weight-normal">Vui lòng nhập họ nhân viên</span>
+        </mdb-error>
+  
+      </div>
+  
+      <div class="md-form my-3 col-md-6">
+        <input 
+        type="text" 
+        id="lastName" 
+        name="lastName" 
+        class="form-control" 
+        mdbInput
+        required
+        #_lastName=ngModel
+        [(ngModel)]="info.lastName"
+        [class.ng-invalid.validate-error]="(_lastName.invalid && (_lastName.dirty || _lastName.touched))"
+        >
+        <label for="lastName">Tên*</label>
+        
+        <mdb-error *ngIf="_lastName.invalid && (_lastName.dirty || _lastName.touched)">
+          <span *ngIf="_lastName?.errors?.required" class="font-weight-normal">Vui lòng nhập tên nhân viên</span>
+        </mdb-error>
+  
+      </div>
+  
+      <div class="md-form my-3 col-md-4 ">
+        <mdb-select
+          name="sex"
+          required
+          [label]="'Giới tính*'"
+          [options]="optionsSex"
+          id="gender"
+          [class.ng-invalid.validate-error]="_sex.invalid && (_sex.dirty || _sex.touched)"
+          #_sex="ngModel"
+          [(ngModel)]="gender">
+        </mdb-select>
+        <span class="text-danger font-weight-normal" *ngIf="_sex.invalid && (_sex.dirty || _sex.touched)" style="font-size: .8rem">Vui lòng chọn giới tính</span>
+      </div>
+  
+      <div class="md-form my-3 col-md-4">
+        <input 
+        type="text" 
+        id="phoneNumber" 
+        name="phoneNumber" 
+        class="form-control" 
+        mdbInput
+        required
+        #_phoneNumber=ngModel
+        [(ngModel)]="info.phoneNumber"
+        [class.ng-invalid.validate-error]="(_phoneNumber.invalid && (_phoneNumber.dirty || _phoneNumber.touched))"
+        >
+        <label for="phoneNumber">Số điện thoại*</label>
+        
+        <mdb-error *ngIf="_phoneNumber.invalid && (_phoneNumber.dirty || _phoneNumber.touched)">
+          <span *ngIf="_phoneNumber?.errors?.required" class="font-weight-normal">Vui lòng nhập số điện thoại</span>
+        </mdb-error>
+  
+      </div>
+  
+      <owl-form-field class="col-md-4 mt-3">
+        <input
+          owlInput
+          name="birthday"
+          [owlDateTimeTrigger]="datepicker"
+          [owlDateTime]="datepicker"
+          placeholder="Ngày sinh"
+          [(ngModel)]="info.birthDate"
+          required
+          #_dateTime="ngModel">
+        <owl-date-time #datepicker [pickerType]="'calendar'"></owl-date-time>
+        <owl-error *ngIf="_dateTime?.errors?.required">
+            Vui lòng nhập ngày sinh
+        </owl-error>
+      </owl-form-field>
+  
+      <div class="col-md-12">
+        <div class="md-form my-3 form-inline mr-auto w-100">
+  
+            <input
+              type="text"
+              class="form-control w-100"
+              id="searchField"
+              name="searchField"
+              mdbInput
+              required
+              #_address=ngModel
+              [class.ng-invalid.validate-error]="(_address.invalid && (_address.dirty || _address.touched))"
+              [ngModel]='info.address'
+              (ngModelChange)="changeAddress($event)"
+              >
+          <label for="searchField">Địa chỉ</label>
+  
+          <mdb-error *ngIf="_address.invalid && (_address.dirty || _address.touched)">
+            <span *ngIf="_address?.errors?.required" class="font-weight-normal">Vui lòng nhập địa chỉ</span>
+          </mdb-error>
+  
+        </div>
+      </div>
+      
+      <div class="col-12 text-center mt-3 border-top pt-3">
+        <button mdbBtn color="primary" class="waves-light" mdbWavesEffect [disabled]="!updateForm.form.valid">Cập nhật
+          <i class="fa fa-check ml-1"></i>
+        </button>
+      </div>
+    </form>
+  
+  </div>

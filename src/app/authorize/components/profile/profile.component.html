@@ -4,33 +4,47 @@
     <!--Author box-->
     <div class="author-box">
       <!--Name-->
-      <h3 class="h3-responsive text-center">Thông tin của tôi</h3>
+      <h3 class="h3-responsive text-center font-weight-bold">Thông tin của tôi</h3>
       <hr>
       <div class="row">
         <!--Avatar-->
-        <div class="col-12 col-sm-2">
+        <div class="col-12 col-md-4">
           <img [src]="info.picture || defaultImage" class="img-fluid rounded-circle z-depth-2">
         </div>
         <!--Author Data-->
-        <div class=" col-12 col-sm-10">
+        <div class="col-12 col-md-8">
           <p><strong>{{info.fullName}}</strong></p>
-          <p class="col-md-12 col-6">Tổng số nhân viên đang quản lý: 
-            <span style="font-size: 14px" class="badge badge-success">{{summaryTask?.totalLaborer}}</span>
-          </p>
-          <p class="col-md-12 col-6">Tổng số nơi làm việc đang quản lý: 
-            <span style="font-size: 14px" class="badge badge-info">{{summaryTask?.numberOfWorkplaceIsManaged}}</span>
-          </p>
-          <p class="col-md-12 col-6">Tổng số đã giao trong tuần: 
-            <span style="font-size: 14px" class="badge badge-primary">{{summaryTask?.totalTask}}</span>
-          </p>
-          <p class="col-md-12 col-6">Tổng số công việc đang chờ duyệt: 
-            <span style="font-size: 14px" class="badge badge-warning">{{summaryTask?.numberOfWorkplaceIsManaged}}</span>
-          </p>
-          <button mdbBtn type="button" color="primary" class="waves-light" rounded="true" mdbWavesEffect>Đổi mật khẩu</button>
+          <i class="fa fa-venus-mars purple-text mr-2 mb-4"></i>
+          <span class="mb-3">Giới tính: {{ info.sex ? 'Nam' : 'Nữ' }}</span>
+          <br>
+          <i class="fa fa-birthday-cake green-text mr-2 mb-4"></i>
+          <span class="mb-3">Ngày sinh: {{ info.birthDate | date: 'dd-MM-yyyy' }}</span>
+          <br>
+          <i class="fa fa-phone amber-text mr-2 mb-4"></i>
+          <span class="mb-3">Số điện thoại: {{ info.phoneNumber }}</span>
+          <br>
+          <i class="fa fa-envelope-open-o indigo-text mr-2 mb-4"></i>
+          <span class="mb-3">Email: {{ info.email }}</span>
+          <br>
+          <i class="fa fa-map-marker red-text mr-2 mb-4"></i>
+          <span class="mb-3">Địa chỉ: {{ info.address }}</span>
+          <br>
+        </div>
+        <div class="col-12 px-0 d-flex flex-wrap">
+          <div class="col-md-4 px-0 text-center pt-3">
+            <button mdbBtn size="md" type="button" color="secondary" class="waves-light" outline="true" rounded="true" mdbWavesEffect (click)="changeAvatar()">Đổi ảnh đại diện</button>
+          </div>
+          <div class="col-md-4 px-0 text-center pt-3">
+            <button mdbBtn size="md" type="button" color="primary" class="waves-light" outline="true" rounded="true" mdbWavesEffect (click)="changeInformation()">Đổi thông tin</button>
+          </div>
+          <div class="col-md-4 px-0 text-center pt-3">
+            <button mdbBtn size="md" type="button" color="danger" outline="true" class="waves-light" rounded="true" mdbWavesEffect (click)="changePassword()">Đổi mật khẩu</button>
+          </div>
         </div>
       </div>
     </div>
     <!--/.Author box-->
 
   </div>
+
 </div>

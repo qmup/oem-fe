@@ -43,10 +43,12 @@ export class LoginPageComponent implements OnInit {
           this.authService.getInformation(this.email)
           .then(
             (response2: Employee) => {
+              this.globalService.oldPassword = this.password;
               this.globalService.userAccount = response2;
               this.wrongUsernameOrPassword = false;
               this.authGuardService.setUserAccount(this.globalService.userAccount);
               this.globalService.isLogin = true;
+              this.globalService.avatar = response2.picture;
               this.notificationService.requestPermission(response2.id);
               this.toastService.success('Đăng nhập thành công', '', { positionClass: 'toast-bottom-right'} );
               this.router.navigate(['']);

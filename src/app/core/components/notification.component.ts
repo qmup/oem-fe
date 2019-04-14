@@ -199,7 +199,6 @@ export class NotificationComponent implements OnInit {
         (response) => {
           this.countUnread = response.totalNotSeen;
           this.notificationList = response.notificationModels.content;
-          console.log(this.notificationList);
           for (let i = 0; i < this.notificationList.length; i++) {
             Notification.calculateTimeStatus(this.notificationList[i]);
           }
