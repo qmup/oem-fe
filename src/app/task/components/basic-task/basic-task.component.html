@@ -16,7 +16,7 @@
           <div class="col-md-12 mx-auto text-left my-3">
             <div class="d-flex flex-wrap w-100">
               <div class="col-12 mr-0 text-left pr-0">
-                <h4 class="text-left pt-3">Công việc cơ bản</h4>
+                <h4 class="text-left pt-3">Công việc cơ bản mẫu</h4>
                 <div class="md-form">
                   <input type="text" [(ngModel)]="adminSearchText" class="form-control" mdbInput (keyup)="searchAdmin()">
                   <label>Tìm kiếm</label>
@@ -225,6 +225,36 @@
           ý</a>
         <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
           (click)="delete.hide()">Hủy</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+<div mdbModal #warning="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="delete" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-warning" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Cảnh báo</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-warning fa-4x animated rotateIn"></i>
+        <div *ngFor="let m of warningMessage">
+          <p class="h6 font-weight-bold">
+            {{m}}
+          </p>
+        </div>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a type="button" mdbBtn color="warning" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+          (click)="warning.hide()">Đóng</a>
       </div>
     </div>
     <!--/.Content-->

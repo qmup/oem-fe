@@ -44,13 +44,14 @@ export class TaskBasicService {
   }
 
   getListTaskBasic(
-    managerId: number, search: string, sort: string, fieldSort: string, page: number, size: number
+    managerId: number, search: string, sort: string, fieldSort: string, page: number, size: number, isNotBy?: boolean
   ): Promise<PaginationResponse> {
     return this.httpClient.get<PaginationResponse>(
       `${environment.endPoint}${environment.apiPaths.taskBasic.getListBasic}${managerId}`,
       {
         params: {
           search: `${search}`,
+          isNotBy: isNotBy ? `${true}` : ``,
           sort: `${sort}`,
           fieldSort: `${fieldSort}`,
           page: `${page}`,

@@ -23,7 +23,7 @@
           </owl-form-field>
         </div>
         <!--Text-->
-        <h5 class="text-center mt-3 font-weight-bold" *ngIf="taskList?.length !== 0">Công việc trong ngày</h5>
+        <h5 class="text-center mt-3 font-weight-bold" *ngIf="taskList?.length !== 0">Danh sách công việc</h5>
         <ul class="list-group list-group-flush pt-3">
           <a *ngFor="let task of taskList; let i = index" mdbWavesEffect
             class="list-group-item list-group-item-action waves-light"
@@ -148,14 +148,24 @@
                   <mdb-image-modal [modalImages]="item.pictures" type="margin"></mdb-image-modal>
                 </div>
                 <div class="md-form" *ngIf="item.type !== 1">
-                  <input mdbInput type="text" name="text" [disabled]="item.evaluated" [(ngModel)]="item.evaluation"
-                    id="form5" class="form-control">
-                  <label for="form5" class="">Giải quyết vấn đề</label>
+                    <input
+                    mdbInput
+                    type="text"
+                    name="_evaluation"
+                    [disabled]="item.evaluated"
+                    [(ngModel)]="item.evaluation"
+                    id="_evaluation"
+                    class="form-control"
+                    required
+                    #_evaluation=ngModel
+                  >
+                  <label for="_evaluation">Đánh giá chi tiết</label>
+                <div class="text-danger col-12" *ngIf="_evaluation?.errors?.required">Vui lòng đánh giá chi tiết</div>
                 </div>
                 <hr *ngIf="item.type === 1">
                 <h6 class="pt-3 font-weight-bold" *ngIf="item.type === 1">Đánh giá mức độ công việc</h6>
                 <owl-rating class="justify-content-center w-100" style="font-size: 25px" *ngIf="item.type === 1"
-                  [(ngModel)]="task.rating" [disabled]="item.evaluated">
+                  [(ngModel)]="task.rating" required #rating [readonly]="item.evaluated">
                   <owl-rating-button value="1">
                     1 Star
                   </owl-rating-button>
@@ -172,16 +182,27 @@
                     5 Stars
                   </owl-rating-button>
                 </owl-rating>
+                <div class="text-danger col-12" *ngIf="rating?.errors?.required">Vui lòng đánh giá</div>
                 <div class="md-form" *ngIf="item.type === 1">
-                  <input mdbInput type="text" name="text" [disabled]="item.evaluated" [(ngModel)]="item.evaluation"
-                    id="form5" class="form-control">
-                  <label for="form5" class="">Đánh giá chi tiết</label>
+                  <input
+                    mdbInput
+                    type="text"
+                    name="evaluation"
+                    [disabled]="item.evaluated"
+                    [(ngModel)]="item.evaluation"
+                    id="evaluation"
+                    class="form-control"
+                    required
+                    #evaluation=ngModel
+                  >
+                  <label for="evaluation">Đánh giá chi tiết</label>
+                  <div class="text-danger col-12" *ngIf="evaluation?.errors?.required">Vui lòng đánh giá chi tiết</div>
                 </div>
                 <div class="d-flex flex-wrap w-100 justify-content-center">
                   <button *ngIf="item.type !== 1 && !item.evaluated" mdbBtn rounded="true" type="button" color="primary"
-                    mdbWavesEffect (click)="approve(item, 0)">Giải quyết</button>
+                    mdbWavesEffect [hidden]="rating?.errors?.required || evaluation?.errors?.required" (click)="approve(item, 0)">Giải quyết</button>
                   <button *ngIf="item.type === 1 && !item.evaluated" mdbBtn rounded="true" type="button" color="success"
-                    mdbWavesEffect (click)="approve(item, 1)">Duyệt</button>
+                    mdbWavesEffect [hidden]="rating?.errors?.required || evaluation?.errors?.required" (click)="approve(item, 1)">Duyệt</button>
                 </div>
               </mdb-accordion-item-body>
             </mdb-accordion-item>

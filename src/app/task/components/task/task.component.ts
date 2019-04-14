@@ -146,7 +146,6 @@ export class TaskComponent implements OnInit {
 
   suggestTaskBasic() {
     this.taskBasicService.getListTaskBasic(this.userAccount.id, '', '', 'id', 0, 99)
-    // this.taskBasicService.getListTaskBasic(1, '', '', 'id', 0, 99)
       .then(
         (response: any) => {
           this.taskBasicList = response.content;

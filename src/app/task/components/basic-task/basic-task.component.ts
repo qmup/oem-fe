@@ -26,6 +26,7 @@ export class BasicTaskComponent implements OnInit {
   @ViewChild('rangeCloud') rangeCloud: ElementRef;
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
+  @ViewChild('warning') warningModal: ModalDirective;
   taskBasicResponse: PaginationResponse;
   files: UploadFile[] = [];
   uploadInput: EventEmitter<UploadInput>;
@@ -66,7 +67,7 @@ export class BasicTaskComponent implements OnInit {
   }
 
   getTaskBasicByAdmin() {
-    this.taskBasicService.getListTaskBasic(1, this.adminSearchText, '', 'id', this.currentPage1, 8)
+    this.taskBasicService.getListTaskBasic(1, this.adminSearchText, '', 'id', this.currentPage1, 8, true)
       .then(
         (response: any) => {
           this.taskBasicResponse = response;
@@ -268,19 +269,15 @@ export class BasicTaskComponent implements OnInit {
     if (editable) {
       this.myTask = editable;
     }
-    if (!this.myTask) {
-      this.deleteModal.show();
-    } else {
-      this.warningMessage = [];
-      this.taskService.checkRemoveTaskBasic(id, this.userAccount.id)
-        .then(
-          (response) => {
-            response.removeAble ?
-            this.deleteModal.show() :
-            (this.warningMessage = response.message.split(';'), this.deleteModal.show());
-          }
-        );
-    }
+    this.warningMessage = [];
+    this.taskService.checkRemoveTaskBasic(id, this.userAccount.id)
+      .then(
+        (response) => {
+          response.removeAble ?
+          this.deleteModal.show() :
+          (this.warningMessage = response.message.split(';'), this.warningModal.show());
+        }
+      );
   }
 
   sortBy(by: string | any): void {
