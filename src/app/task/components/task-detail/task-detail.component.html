@@ -41,8 +41,11 @@
             <br>
             <small>Tại {{task.workplaceName}} - {{task.companyDTO.name}}</small>
           </a>
-          <div *ngIf="taskListResponse?.numberOfElements === 0" class="text-center">
+          <div *ngIf="taskListResponse?.totalElements !== 0 && taskList?.length === 0" class="text-center">
             <span class="text-danger font-weight-normal">Không có công việc trong ngày</span>
+          </div>
+          <div *ngIf="taskListResponse?.totalElements === 0 && taskList?.length === 0" class="text-center">
+            <span class="text-danger font-weight-normal">Không có tìm thấy công việc</span>
           </div>
           <app-pagination *ngIf="taskListResponse?.totalPages > 1" [pageSize]="taskListResponse.size"
             [totalPage]="taskListResponse.totalPages" [currentPage]="taskListResponse.number"

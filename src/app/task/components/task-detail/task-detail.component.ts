@@ -321,11 +321,13 @@ export class TaskDetailComponent implements OnInit {
       .then(
         (response) => {
           this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
+          this.deleteModal.hide();
           if (this.taskList.length !== 0) {
             this.selectingId = this.taskList[0].id;
             this.loadTask(this.selectingId);
-          } else {
             !this.searchByDate ? this.getTodayTaskByEmployee() : this.getTaskByDate();
+          } else {
+            this.router.navigate(['task']);
           }
         },
         (error) => {
