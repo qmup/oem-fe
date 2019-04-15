@@ -115,7 +115,7 @@ export class ManagerDetailComponent implements OnInit {
               this.employeeList = [
                 {
                   value: '-1',
-                  label: 'Không tìm thấy người quản lý khác',
+                  label: 'Không tìm thấy người nhân viên chưa có người quản lý',
                   disabled: true,
                 }
               ];
@@ -374,7 +374,10 @@ export class ManagerDetailComponent implements OnInit {
         (response: boolean) => {
           if (response) {
             this.toastService.success('Xóa thành công' , '', { positionClass: 'toast-bottom-right'});
+            this.getWorkplaceByManager();
             this.removeWorkplaceModal.hide();
+            this.workplaceListByManager = [];
+            this.workplaceResponseByManager = new PaginationResponse();
           } else {
             this.toastService.error('Vẫn còn công việc tại đây chưa được giải quyết xong' , '', { positionClass: 'toast-bottom-right'});
             this.removeWorkplaceModal.hide();

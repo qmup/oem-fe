@@ -41,11 +41,11 @@ export class EmployeeDetailComponent implements OnInit {
   modalRef: BsModalRef;
   defaultImage = '../../../../assets/default-image.jpg';
   warningMessage = [];
+  managerResponse: PaginationResponse;
 
   constructor(
     private route: ActivatedRoute,
     private employeeService: EmployeeService,
-    private managerService: ManagerService,
     private toastService: ToastService,
     private globalService: GlobalService,
     private taskService: TaskService,
@@ -78,7 +78,9 @@ export class EmployeeDetailComponent implements OnInit {
       .then(
         (response: Employee) => {
           this.employee = response;
-          // this.getManager();
+          if (this.employee.managerId !== 0 && this.managerResponse) {
+            this.managerInfo = this.managerResponse.content.find((manager: Manager) => manager.id === this.employee.managerId);
+          }
         }
       );
   }
@@ -87,6 +89,7 @@ export class EmployeeDetailComponent implements OnInit {
     this.employeeService.getByRole(2, '', '', 'id', 0, 99)
       .then(
         (response: PaginationResponse) => {
+          this.managerResponse = response;
           this.managerList = response.content
           .filter((manager: Employee) => manager.id !== this.employee.managerId)
           .map((manager) => {

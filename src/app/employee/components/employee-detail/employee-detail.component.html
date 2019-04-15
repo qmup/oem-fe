@@ -98,7 +98,7 @@
 
           <!--Text-->
           <div class="list-group" *ngIf="employee.managerId !== 0">
-            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect [routerLink]="['/manager-detail', managerInfo.id]">
+            <a class="list-group-item list-group-item-action waves-light d-flex" mdbWavesEffect [routerLink]="['/manager-detail', managerInfo?.id]">
               <div class="avatar">
                 <img [src]="managerInfo.picture || defaultImage" alt="" class="rounded-circle img-responsive list-avatar">
               </div>
@@ -193,7 +193,7 @@
       <!--Body-->
       <div class="modal-body">
         <i class="fa fa-warning fa-4x animated rotateIn"></i>
-        <p class="h6 font-weight-bold">Bạn không đổi người quản lý vì: </p>
+        <p class="h6 font-weight-bold">Bạn không thể đổi người quản lý vì: </p>
         <div *ngFor="let m of warningMessage">
           <p class="h6 font-weight-bold">
             {{m}}
