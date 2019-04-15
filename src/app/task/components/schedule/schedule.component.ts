@@ -39,7 +39,7 @@ export class ScheduleComponent implements OnInit {
   employeeList = [];
   modalRef: BsModalRef;
   userAccount: Employee;
-  fieldSort = 'id';
+  fieldSort = 'status';
   sortBoolean = false;
   sortValue = '';
   currentCompany: any;

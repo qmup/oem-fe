@@ -38,6 +38,7 @@ export class Schedule {
   assignee: Shared;
   assigner: Shared;
   daysOfWeek: string;
+  dateCreate: string;
   description: string;
   endTime: string;
   id: number;
