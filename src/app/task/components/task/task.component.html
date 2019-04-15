@@ -245,7 +245,7 @@
                 [label]="'Người thực hiện*'" 
                 [notFoundMsg]="'Không tìm thấy'" 
                 [filterEnabled]="true"
-                ngModel
+                [(ngModel)]="assignTask.assigneeId"
                 required
                 #employeeId=ngModel
                 [options]="employeeList"

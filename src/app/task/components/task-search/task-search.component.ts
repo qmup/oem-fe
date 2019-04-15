@@ -318,7 +318,6 @@ export class TaskSearchComponent implements OnChanges {
           this.searchChanged.emit(response);
         },
         (error) => {
-          console.log(error);
         }
       );
 

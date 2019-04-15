@@ -290,7 +290,7 @@ export class TaskDetailComponent implements OnInit {
             if (this.selectedTaskBasic.length - 1 === i) {
               this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
               this.canRemove = false;
-              this.loadTask(this.selectingId || this.id);
+              this.loadTask(this.selectingId);
             }
           },
           (error) => {
@@ -317,7 +317,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   removeTask() {
-    this.taskService.remove(this.selectingId || this.id)
+    this.taskService.remove(this.selectingId)
       .then(
         (response) => {
           this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
@@ -346,8 +346,8 @@ export class TaskDetailComponent implements OnInit {
         (response) => {
           this.toastService.success('Assign thành công', '', { positionClass: 'toast-bottom-right'});
           this.assignModal.hide();
-          this.loadTask(this.selectingId || this.id);
-          this.getAssignHistory(this.selectingId || this.id);
+          this.loadTask(this.selectingId);
+          this.getAssignHistory(this.selectingId);
         },
         (error) => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -362,7 +362,6 @@ export class TaskDetailComponent implements OnInit {
   changeStartTime(e: any) {
     const from: Date = e.value[0];
     const to: Date = e.value[1];
-    const duration = to.getMilliseconds() - from.getMilliseconds();
     const taskUM: TaskModel = new TaskModel();
     taskUM.attendanceStatus = this.task.attendanceStatus;
     taskUM.basic = false;
@@ -382,6 +381,7 @@ export class TaskDetailComponent implements OnInit {
       .then(
         () => {
           this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+          this.loadTask(this.selectingId);
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -449,7 +449,7 @@ export class TaskDetailComponent implements OnInit {
                         .then(
                           () => {
                             this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-                            this.loadTask(this.selectingId || this.id);
+                            this.loadTask(this.selectingId);
                             this.createModal.hide();
                           },
                           () => {
@@ -476,7 +476,7 @@ export class TaskDetailComponent implements OnInit {
             .then(
               () => {
                 this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-                this.loadTask(this.selectingId || this.id);
+                this.loadTask(this.selectingId);
                 this.createModal.hide();
               },
               () => {
@@ -493,11 +493,14 @@ export class TaskDetailComponent implements OnInit {
     this.managerReport.type = 2;
     this.reportService.submitReport(this.managerReport)
       .then(
-        (response) => {
+        () => {
           this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.reportModal.hide();
+          this.loadTask(this.selectingId);
         },
-        (error) => {
+        () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+          this.loadTask(this.selectingId);
         }
       );
   }
@@ -537,7 +540,7 @@ export class TaskDetailComponent implements OnInit {
         () => {
           this.toastService.success('Thêm thành công', '', { positionClass: 'toast-bottom-right'} );
           this.editTaskBasicModal.hide();
-          this.loadTask(this.selectingId || this.id);
+          this.loadTask(this.selectingId);
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});

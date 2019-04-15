@@ -138,9 +138,7 @@ export class TaskComponent implements OnInit {
     this.workplaceService.getAvailableByDate(
       this.userAccount.id, '', 1, this.manageWorkplace.zoneId, date, '', 'id', 0, 99
     ).then(
-      (response) => {
-        console.log(response);
-      }
+      () => {}
     );
   }
 
@@ -170,7 +168,7 @@ export class TaskComponent implements OnInit {
   }
 
   changeCheckbox(id: number, event: any) {
-    if (event.checked && !this.selectedTaskBasic.includes((task: Task) => task.id === id)) {
+    if (event.target.checked && !this.selectedTaskBasic.includes((task: Task) => task.id === id)) {
       this.selectedTaskBasic.push(this.taskBasicList.find(task => task.id === id));
     } else {
       this.selectedTaskBasic = this.selectedTaskBasic.filter(task => task.id !== id);
@@ -257,6 +255,9 @@ export class TaskComponent implements OnInit {
         (response: PlacePagination) => {
           this.placeList = response.listOfWorkplace.content
             .filter((place: Place) => place.setToBeacon === true)
+            .sort((a, b) => {
+              return (b.numberOfReworks - b.taskList.length) - (a.numberOfReworks - a.taskList.length);
+            })
             .map((place) => {
             const numberOfReworks = place.numberOfReworks;
             const taskAssigned = place.taskList.length;
@@ -318,7 +319,6 @@ export class TaskComponent implements OnInit {
   }
 
   sendNoti(confirm: string) {
-    console.log(this.assignTask);
     this.notification.fromEmployeeId = this.assignTask.assignerId;
     this.notification.toEmployeeId = this.assignTask.assigneeId;
     this.notification.taskId = this.assignTask.taskId;
@@ -395,7 +395,6 @@ export class TaskComponent implements OnInit {
     const year = datePicker.getFullYear();
     const hour = timePicker.split(':', 2)[0];
     const min = timePicker.split(':', 2)[1];
-    console.log(+year, +month, +day);
     return new Date(+year, +month, +day, +hour, +min, 0).toISOString();
   }
 

@@ -115,7 +115,7 @@ export class ManagerDetailComponent implements OnInit {
               this.employeeList = [
                 {
                   value: '-1',
-                  label: 'Không tìm thấy người quản lý nào',
+                  label: 'Không tìm thấy người quản lý khác',
                   disabled: true,
                 }
               ];
@@ -355,7 +355,6 @@ export class ManagerDetailComponent implements OnInit {
     this.employeeService.updateField(this.deletingEmpId, 'managerId', 0)
       .then(
         (response) => {
-          console.log(response);
           this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'} );
           this.getEmployeeByManager();
           this.removeEmployeeModal.hide();
@@ -364,7 +363,6 @@ export class ManagerDetailComponent implements OnInit {
 
         },
         (error) => {
-          console.log(error);
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
         }
       );

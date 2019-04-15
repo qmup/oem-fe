@@ -98,6 +98,7 @@ export class TaskSuggestionComponent implements OnInit {
     const startTime = this.startTime;
     const duration = this.duration;
     this.modalRef.hide();
+    console.log(id);
     this.refresh.emit(
       { id, startTime, duration }
     );

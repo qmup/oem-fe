@@ -63,11 +63,16 @@ export class BasicTaskComponent implements OnInit {
   }
 
   getTaskBasic() {
-    this.userAccount.roleId === 1 ? this.getTaskBasicByAdmin() : (this.getTaskBasicByAdmin(), this.getTaskBasicByManager());
+    if (this.userAccount.roleId === 1) {
+      this.getTaskBasicByAdmin();
+    } else {
+      this.getTaskBasicByAdmin();
+      this.getTaskBasicByManager();
+    }
   }
 
   getTaskBasicByAdmin() {
-    this.taskBasicService.getListTaskBasic(1, this.adminSearchText, '', 'id', this.currentPage1, 8, true)
+    this.taskBasicService.getListTaskBasic(this.userAccount.id, this.adminSearchText, '', 'id', this.currentPage1, 8, true)
       .then(
         (response: any) => {
           this.taskBasicResponse = response;
@@ -265,19 +270,19 @@ export class BasicTaskComponent implements OnInit {
 
   checkRemovable(id: number, editable: boolean) {
     this.deletingId = id;
-    this.myTask = false;
-    if (editable) {
-      this.myTask = editable;
-    }
     this.warningMessage = [];
-    this.taskService.checkRemoveTaskBasic(id, this.userAccount.id)
-      .then(
-        (response) => {
-          response.removeAble ?
-          this.deleteModal.show() :
-          (this.warningMessage = response.message.split(';'), this.warningModal.show());
-        }
-      );
+    if (editable) {
+      this.taskService.checkRemoveTaskBasic(id, this.userAccount.id)
+        .then(
+          (response) => {
+            response.removeAble ?
+            this.deleteModal.show() :
+            (this.warningMessage = response.message.split(';'), this.warningModal.show());
+          }
+        );
+    } else {
+      this.deleteModal.show();
+    }
   }
 
   sortBy(by: string | any): void {

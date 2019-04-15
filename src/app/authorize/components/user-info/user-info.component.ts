@@ -22,7 +22,6 @@ export class UserInfoComponent implements OnChanges {
   ) { }
 
   ngOnChanges() {
-    console.log(this.avatar);
   }
 
   logOut() {
