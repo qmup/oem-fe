@@ -27,7 +27,7 @@ export class ScheduleModel {
     this.id = 0;
     this.startTime = '';
     this.taskBasics = new Array<TaskBasic>();
-    this.status = 0;
+    this.status = 1;
     this.title = '';
     this.workplaceId = 0;
     this.duration = 30;
@@ -59,7 +59,7 @@ export class Schedule {
     this.endTime = '';
     this.id = 0;
     this.startTime = '';
-    this.status = 0;
+    this.status = 1;
     this.taskBasics = new Array<TaskBasic>();
     this.title = '';
     this.workplaceId = 0;

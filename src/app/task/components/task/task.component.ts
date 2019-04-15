@@ -58,7 +58,7 @@ export class TaskComponent implements OnInit {
   taskBasic = [];
   selectedTaskBasic = [];
   currentPage = 0;
-  fieldSort = 'startTime:desc';
+  fieldSort = 'id:desc';
   sortBoolean = false;
   sortValue = '';
   minDate = new Date();
@@ -332,9 +332,9 @@ export class TaskComponent implements OnInit {
   }
 
   createSchedule() {
-    this.taskCM.taskBasics = this.selectedTaskBasic;
-    this.taskCM.duration *= 60000;
-    this.taskCM.dateCreate = new Date().toISOString();
+    this.scheduleCM.taskBasics = this.selectedTaskBasic;
+    this.scheduleCM.duration *= 60000;
+    this.scheduleCM.dateCreate = new Date().toISOString();
     this.scheduleCM.assigneeId = this.assignTask.assigneeId;
     this.scheduleCM.assignerId = this.userAccount.id;
     this.scheduleCM.daysOfWeek = this.week.filter(d => d.check === true).map(d => d.id).join(',');
