@@ -259,11 +259,26 @@ export class TaskDetailComponent implements OnInit {
     if (this.changeTitle) {
       this.taskService.updateField(this.task.id, 'title', this.task.title)
         .then(
-          (response) => {
+          () => {
             this.changeTitle = false;
             this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
           },
-          (error) => {
+          () => {
+            this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+          }
+        );
+    }
+  }
+
+  updateDescription() {
+    if (this.changeDescription) {
+      this.taskService.updateField(this.task.id, 'description', this.task.description)
+        .then(
+          () => {
+            this.changeDescription = false;
+            this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+          },
+          () => {
             this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
           }
         );
@@ -299,21 +314,6 @@ export class TaskDetailComponent implements OnInit {
         );
     });
 
-  }
-
-  updateDescription() {
-    if (this.changeDescription) {
-      this.taskService.updateField(this.task.id, 'description', this.task.description)
-        .then(
-          (response) => {
-            this.changeDescription = false;
-            this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
-          },
-          (error) => {
-            this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
-          }
-        );
-    }
   }
 
   removeTask() {

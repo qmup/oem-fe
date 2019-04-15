@@ -214,7 +214,7 @@ export class LaborerComponent implements OnInit {
   }
 
   sort(field: string) {
-    this.sortBoolean = ! this.sortBoolean;
+    this.sortBoolean = !this.sortBoolean;
     if (this.sortBoolean) {
       this.sortValue = 'desc';
     } else {

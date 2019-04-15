@@ -103,7 +103,7 @@ export class ScheduleComponent implements OnInit {
 
 
   sort(field: string) {
-    this.sortBoolean = ! this.sortBoolean;
+    this.sortBoolean = !this.sortBoolean;
     if (this.sortBoolean) {
       this.sortValue = 'asc';
     } else {
@@ -333,10 +333,10 @@ export class ScheduleComponent implements OnInit {
     this.scheduleCM.workplaceId = this.currentWorkplace.value;
     this.scheduleCM.status = 1;
     this.scheduleCM.daysOfWeek = this.week.filter(d => d.check === true).map(d => d.id).join(',');
-    this.createModal.hide();
     this.scheduleService.create(this.scheduleCM, this.option)
-      .then(
-        () => {
+    .then(
+      () => {
+          this.createModal.hide();
           this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
           this.scheduleList = [],
           this.getSchedule();
