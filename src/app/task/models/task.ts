@@ -36,7 +36,7 @@ export class Task {
     this.priority = 0;
     this.scheduleId = 0;
     this.startTime = '';
-    this.status = 0;
+    this.status = 1;
     this.title = '';
     this.taskBasics = new Array<TaskBasic>();
     this.editable = false;
@@ -120,7 +120,7 @@ export class TaskModel {
     this.priority = 0;
     this.scheduleId = 0;
     this.startTime = '';
-    this.status = 0;
+    this.status = 1;
     this.title = '';
     this.taskBasics = new Array<TaskBasic>();
   }
@@ -168,7 +168,7 @@ export class TaskDetail {
     this.checkInTime = '';
     this.attendanceStatus = 0;
     this.picture = '';
-    this.status = 0;
+    this.status = 1;
     this.description = '';
     this.checkList = new Array<TaskBasic>();
   }

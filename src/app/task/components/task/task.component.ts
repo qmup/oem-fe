@@ -341,7 +341,7 @@ export class TaskComponent implements OnInit {
     this.scheduleCM.description = this.taskCM.description;
     this.scheduleCM.endTime = this.taskCM.endTime;
     this.scheduleCM.startTime = this.taskCM.startTime;
-    this.scheduleCM.status = this.taskCM.status;
+    this.scheduleCM.status = 1;
     this.scheduleCM.title = this.taskCM.title;
     this.scheduleCM.workplaceId = this.manageWorkplace.workplaceId;
     this.scheduleService.create(this.scheduleCM, this.option)

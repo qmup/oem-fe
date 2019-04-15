@@ -37,21 +37,21 @@ export class DashboardComponent implements OnInit {
 
   chartData: Array < any > = [];
 
-  chartLabels1: Array < any > = ['Red', 'Green', 'Yellow', 'Grey', 'Dark Grey'];
-  chartLabels: Array < any > = ['Đúng giờ', 'Trễ', 'Vắng mặt'];
+  // chartLabels1: Array < any > = ['Grey', 'Red', 'Green', 'Yellow', 'Dark Grey'];
+  chartLabels: Array < any > = ['Đúng giờ', 'Trễ', 'Vắng mặt', 'Chưa bắt đầu'];
 
-  chartColors1: Array < any > = [{
-    hoverBorderColor: ['rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.1)'],
-    hoverBorderWidth: 0,
-    backgroundColor: ['#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
-    hoverBackgroundColor: ['#FF5A5E', '#5AD3D1', '#FFC870', '#A8B3C5', '#616774']
-  }];
+  // chartColors1: Array < any > = [{
+  //   hoverBorderColor: ['rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.1)'],
+  //   hoverBorderWidth: 0,
+  //   backgroundColor: ['#949FB1', '#F7464A', '#46BFBD', '#FDB45C', '#4D5360'],
+  //   hoverBackgroundColor: ['#A8B3C5', '#FF5A5E', '#5AD3D1', '#FFC870', '#616774']
+  // }];
 
   chartColors: Array < any > = [{
-    hoverBorderColor: ['rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.1)'],
+    hoverBorderColor: ['rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.1)'],
     hoverBorderWidth: 0,
-    backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
-    hoverBackgroundColor: ['#28a745', '#ffc107', '#dc3545']
+    backgroundColor: ['#28a745', '#ffc107', '#dc3545', '#949FB1'],
+    hoverBackgroundColor: ['#28a745', '#ffc107', '#dc3545', '#A8B3C5' ]
   }];
 
   chartOptions: any = {
@@ -61,8 +61,8 @@ export class DashboardComponent implements OnInit {
 
   message: any;
 
-  startTime = new Date();
-  endTime = new Date(this.startTime.getTime() - (7 * 24 * 60 * 60 * 1000));
+  endTime = new Date();
+  startTime = new Date(this.endTime.getTime() - (7 * 24 * 60 * 60 * 1000));
 
   constructor(
     private dashboardService: DashboardService,
@@ -83,7 +83,6 @@ export class DashboardComponent implements OnInit {
     this.endTime = this.dateRange[0];
     const startTime = this.dateRange ? this.globalService.convertToYearMonthDay(this.dateRange[0]) : '';
     const endTime = this.dateRange ? this.globalService.convertToYearMonthDay(this.dateRange[1]) : '';
-    console.log(this.dateRange);
     this.dashboardService.summaryManagerTask(this.userAccount.id, startTime, endTime)
       .then(
         (response: SummaryTask) => {
