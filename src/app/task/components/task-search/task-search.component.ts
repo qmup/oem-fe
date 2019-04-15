@@ -168,6 +168,7 @@ export class TaskSearchComponent implements OnChanges {
   }
 
   deselectEmployee(e) {
+    console.log(e);
     this.assigneeArrayId = this.assigneeArrayId.filter(id => id !== e.id);
 
   }

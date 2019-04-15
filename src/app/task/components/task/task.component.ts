@@ -117,7 +117,7 @@ export class TaskComponent implements OnInit {
   }
 
   sort(field: string) {
-    this.sortBoolean = ! this.sortBoolean;
+    this.sortBoolean = !this.sortBoolean;
     this.fieldSort = field;
     if (this.sortBoolean) {
       this.fieldSort += ':asc';
@@ -332,15 +332,15 @@ export class TaskComponent implements OnInit {
   }
 
   createSchedule() {
+    this.taskCM.taskBasics = this.selectedTaskBasic;
+    this.taskCM.duration *= 60000;
+    this.taskCM.dateCreate = new Date().toISOString();
     this.scheduleCM.assigneeId = this.assignTask.assigneeId;
     this.scheduleCM.assignerId = this.userAccount.id;
     this.scheduleCM.daysOfWeek = this.week.filter(d => d.check === true).map(d => d.id).join(',');
     this.scheduleCM.description = this.taskCM.description;
-    this.scheduleCM.dateCreate = this.taskCM.dateCreate;
     this.scheduleCM.endTime = this.taskCM.endTime;
-    this.scheduleCM.taskBasics = this.taskCM.taskBasics;
     this.scheduleCM.startTime = this.taskCM.startTime;
-    this.scheduleCM.duration = this.taskCM.duration;
     this.scheduleCM.status = this.taskCM.status;
     this.scheduleCM.title = this.taskCM.title;
     this.scheduleCM.workplaceId = this.manageWorkplace.workplaceId;
