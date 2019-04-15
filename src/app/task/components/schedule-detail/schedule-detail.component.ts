@@ -96,13 +96,13 @@ export class ScheduleDetailComponent implements OnInit {
 
   getScheduleDetail() {
     this.week = [
-      { id: 2, inputId: 'option1', label: 'Thứ 2' , check: false},
-      { id: 3, inputId: 'option2', label: 'Thứ 3' , check: false},
-      { id: 4, inputId: 'option3', label: 'Thứ 4' , check: false},
-      { id: 5, inputId: 'option4', label: 'Thứ 5' , check: false},
-      { id: 6, inputId: 'option5', label: 'Thứ 6' , check: false},
-      { id: 7, inputId: 'option6', label: 'Thứ 7' , check: false},
-      { id: 1, inputId: 'option7', label: 'Chủ nhật' , check: false},
+      { id: 2, inputId: 'day1', label: 'Thứ 2' , check: false},
+      { id: 3, inputId: 'day2', label: 'Thứ 3' , check: false},
+      { id: 4, inputId: 'day3', label: 'Thứ 4' , check: false},
+      { id: 5, inputId: 'day4', label: 'Thứ 5' , check: false},
+      { id: 6, inputId: 'day5', label: 'Thứ 6' , check: false},
+      { id: 7, inputId: 'day6', label: 'Thứ 7' , check: false},
+      { id: 1, inputId: 'day7', label: 'Chủ nhật' , check: false},
     ];
     this.selectedDayIds = [];
     this.scheduleService.getDetail(this.scheduleId)
@@ -164,16 +164,32 @@ export class ScheduleDetailComponent implements OnInit {
   }
 
   updateSchedule() {
-    this.updateTitle();
-    this.updateWorkplace();
-    this.updateAssignee();
-    this.updateStartTime();
-    this.updateDuration();
-    this.updateDayOfWeek();
-    this.updateDescription();
-    this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
-    this.modalRef.hide();
-    this.refresh.emit();
+    const scheduleUM: ScheduleModel = new ScheduleModel();
+    scheduleUM.assigneeId = this.schedule.assignee.id;
+    scheduleUM.assignerId = this.schedule.assigner.id;
+    scheduleUM.daysOfWeek = this.schedule.daysOfWeek;
+    scheduleUM.description = this.schedule.description;
+    scheduleUM.dateCreate = this.schedule.dateCreate;
+    scheduleUM.endTime = this.schedule.endTime;
+    scheduleUM.id = this.schedule.id;
+    scheduleUM.taskBasics = this.schedule.taskBasics;
+    scheduleUM.startTime = this.schedule.startTime;
+    scheduleUM.duration = this.schedule.duration * 60000;
+    scheduleUM.status = this.schedule.status;
+    scheduleUM.title = this.schedule.title;
+    scheduleUM.workplaceId = this.schedule.workplaceId;
+    scheduleUM.workplaceName = this.schedule.workplaceName;
+    this.scheduleService.update(scheduleUM)
+      .then(
+        () => {
+          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+          this.refresh.emit();
+          this.modalRef.hide();
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
   }
 
   getTaskBasicByManager() {
@@ -225,27 +241,6 @@ export class ScheduleDetailComponent implements OnInit {
   selectEmployee(e: any) {
     this.schedule.assignee.id = e.value;
   }
-  updateTitle() {
-    this.scheduleService.updateField(this.scheduleId, 'title', this.schedule.title);
-  }
-  updateWorkplace() {
-    this.scheduleService.updateField(this.scheduleId, 'workplaceId', this.schedule.workplaceId);
-  }
-  updateAssignee() {
-    this.scheduleService.updateField(this.scheduleId, 'assigneeId', this.schedule.assignee.id);
-  }
-  updateStartTime() {
-    this.scheduleService.updateField(this.scheduleId, 'startTime', new Date(this.schedule.startTime).toISOString());
-  }
-  updateDuration() {
-    this.scheduleService.updateField(this.scheduleId, 'duration', this.schedule.duration);
-  }
-  updateDayOfWeek() {
-    this.scheduleService.updateField(this.scheduleId, 'dayOfWeeks', this.schedule.daysOfWeek);
-  }
-  updateDescription() {
-    this.scheduleService.updateField(this.scheduleId, 'description', this.schedule.description);
-  }
 
   changeDuration(e: any) {
     this.schedule.duration = e;
@@ -265,7 +260,7 @@ export class ScheduleDetailComponent implements OnInit {
   }
 
   changeTaskCheckbox(id: number, event: any) {
-    if (event.checked && !this.selectedTaskBasic.includes(el => el.id === id)) {
+    if (event.target.checked && !this.selectedTaskBasic.includes(el => el.id === id)) {
       this.selectedTaskBasic.push(this.schedule.taskBasics.find(el => el.id === id));
     } else {
       this.selectedTaskBasic = this.selectedTaskBasic.filter(el => el.id !== id);
