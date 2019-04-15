@@ -83,6 +83,10 @@ export class TaskComponent implements OnInit {
   humanizeBytes: Function;
   dragOver: boolean;
   taskBasicManager: TaskBasicManager = new TaskBasicManager();
+  optionThisWeek = 1;
+  optionNextWeek = 0;
+  option = 1;
+  selectAtLeastOneDay = true;
 
   constructor(
     private taskService: TaskService,
@@ -328,7 +332,6 @@ export class TaskComponent implements OnInit {
   }
 
   createSchedule() {
-    const option = 1;
     this.scheduleCM.assigneeId = this.assignTask.assigneeId;
     this.scheduleCM.assignerId = this.userAccount.id;
     this.scheduleCM.daysOfWeek = this.week.filter(d => d.check === true).map(d => d.id).join(',');
@@ -341,7 +344,7 @@ export class TaskComponent implements OnInit {
     this.scheduleCM.status = this.taskCM.status;
     this.scheduleCM.title = this.taskCM.title;
     this.scheduleCM.workplaceId = this.manageWorkplace.workplaceId;
-    this.scheduleService.create(this.scheduleCM, option)
+    this.scheduleService.create(this.scheduleCM, this.option)
       .then(
         () => {
           this.toastService.success('Tạo công việc thường nhật thành công', '', { positionClass: 'toast-bottom-right'} );
@@ -380,8 +383,10 @@ export class TaskComponent implements OnInit {
 
 
   openCreateModal() {
+    if (this.scheduleCM.duration > 60000) {
+      this.scheduleCM.duration /= 60000;
+    }
     this.createModal.show();
-    this.taskCM.duration = 10;
   }
 
   openDeleteModal(id: number) {
@@ -434,6 +439,13 @@ export class TaskComponent implements OnInit {
 
   changeDuration(event) {
     this.taskCM.duration = event;
+  }
+  changeDay() {
+    if (this.week.filter(d => d.check === true).length === 0) {
+      this.selectAtLeastOneDay = true;
+    } else {
+      this.selectAtLeastOneDay = false;
+    }
   }
 
   openCreateBasicTaskModal(template: TemplateRef<any>) {

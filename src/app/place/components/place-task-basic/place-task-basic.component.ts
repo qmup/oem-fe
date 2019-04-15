@@ -118,7 +118,7 @@ export class PlaceTaskBasicComponent implements OnInit {
     this.workplaceService.addTask(this.taskBasicData)
       .then(
         () => {
-          this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'} );
           this.modalRef.hide();
           this.refresh.emit();
         },

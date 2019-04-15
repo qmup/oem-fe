@@ -385,6 +385,14 @@ export class PlaceComponent implements OnInit {
       );
   }
 
+  selectEmployee(e: any) {
+    this.assignTask.assigneeId = e.value;
+  }
+
+  changeDuration(event) {
+    this.taskCM.duration = event;
+  }
+
   checkRemovable(id: number) {
     this.warningMessage = [];
     this.selectingWorkplaceId = id;
@@ -453,18 +461,15 @@ export class PlaceComponent implements OnInit {
           this.taskService.create(this.taskCM)
             .then(
               (response2) => {
+                this.taskCM.duration /= 60000;
                 this.assignTask.assigneeId = this.assigneeId;
-                this.assignTask.assigneeId = this.userAccount.id;
+                this.assignTask.assignerId = this.userAccount.id;
                 this.assignTask.dateAssign = new Date().toISOString();
                 this.assignTask.taskId = response2;
                 this.globalService.assignTask(this.assignTask)
                   .then(
                     () => {
-                      const taskBasicData = {
-                        listTaskID: [response2],
-                        workplaceID: this.currentWorkplaceId
-                      };
-                      this.placeService.addTask(taskBasicData)
+                      this.placeService.addTaskToWorkplace(response2, this. currentWorkplaceId)
                         .then(
                           () => {
                             this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
@@ -607,6 +612,9 @@ export class PlaceComponent implements OnInit {
     this.createTaskModal.show();
   }
   openCreateModal() {
+    if (this.taskCM.duration > 60000) {
+      this.taskCM.duration /= 60000;
+    }
     this.createModal.show();
   }
 

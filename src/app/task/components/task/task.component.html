@@ -392,15 +392,42 @@
       <!--Body-->
       <div class="modal-body">
         <i class="fa fa-question fa-4x animated rotateIn"></i>
-        <div class="form-check form-check-inline col" *ngFor="let day of week">
-          <input type="checkbox" class="form-check-input" [id]="day.inputId" [(ngModel)]="day.check">
-          <label class="form-check-label" [for]="day.inputId">{{ day.label }}</label>
+        <div class="form-check form-check-inline d-flex flex-wrap w-100 text-left">
+          <div class="col-12" *ngFor="let day of week">
+            <input
+              [id]="day.inputId"
+              [name]="day.inputId"
+              type="checkbox"
+              class="form-check-input"
+              [(ngModel)]="day.check"
+              [class.ng-invalid.validate-error]="selectAtLeastOneDay"
+              (change)="changeDay()">
+            <label class="form-check-label" [for]="day.inputId">{{ day.label }} </label>
+          </div>
+          <div class="col-12 text-left">
+            <small class="text-danger font-weight-normal" *ngIf="selectAtLeastOneDay">
+              Chọn ít nhất 1 thứ trong tuần
+            </small>
+          </div>
         </div>
+
+        <h6 class="font-weight-normal col-12 px-0 text-left">Thời gian bắt đầu thực hiện lặp lịch</h6>
+
+        <div class="form-check radio-green col-12 px-0 text-left">
+          <input type="radio" class="form-check-input" id="radioGreen1" name="groupOfRadioGreen" mdbInput checked [(ngModel)]="option" [value]="optionThisWeek">
+          <label class="form-check-label" for="radioGreen1">Bắt đầu ngay trong tuần</label>
+        </div>
+        
+        <div class="form-check radio-green col-12 px-0 text-left">
+          <input type="radio" class="form-check-input" id="radioGreen2" name="groupOfRadioGreen" mdbInput [(ngModel)]="option" [value]="optionNextWeek">
+          <label class="form-check-label" for="radioGreen2">Bắt đầu vào đầu tuần sau</label>
+        </div>
+
       </div>
 
       <!--Footer-->
       <div class="modal-footer d-flex flex-wrap w-100">
-        <a mdbBtn color="info" outline="true" class="waves-effect col-12" mdbWavesEffect (click)="createSchedule()">Tạo
+        <a mdbBtn color="info" outline="true" class="waves-effect col-12" mdbWavesEffect [hidden]="selectAtLeastOneDay" (click)="createSchedule()">Tạo
           schedule</a>
         <a type="button" mdbBtn color="info" class="waves-effect col-12" mdbWavesEffect (click)="createTask()">Tạo task
           thông thường</a>
