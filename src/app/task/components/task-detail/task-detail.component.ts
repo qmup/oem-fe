@@ -77,6 +77,8 @@ export class TaskDetailComponent implements OnInit {
   currentPage = 0;
   taskBasicList: Task[];
   selectAtLeastOneTaskBasic: boolean;
+  attendanceStatus = [];
+  currentAttendanceStatus: number;
 
   constructor(
     private taskService: TaskService,
@@ -105,6 +107,10 @@ export class TaskDetailComponent implements OnInit {
     this.loadTask(this.id);
     this.iconStatusSelect = this.globalService.iconStatusSelect;
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
+    this.attendanceStatus = [
+      { value: 0, label: 'Chưa điểm danh' },
+      { value: 3, label: 'Vắng mặt' },
+    ];
   }
 
   getTaskDetail(id: number) {
@@ -112,6 +118,7 @@ export class TaskDetailComponent implements OnInit {
       .then(
         (response: TaskDetail) => {
           this.task = response;
+          this.currentAttendanceStatus = response.attendanceStatus;
           this.dateRange = [
             new Date(this.task.startTime),
             new Date(this.task.endTime)
@@ -188,6 +195,21 @@ export class TaskDetailComponent implements OnInit {
     this.getTaskByDate();
   }
 
+  changeAttendanceStatus(e) {
+    if (e.value !== this.currentAttendanceStatus) {
+      this.taskService.updateField(this.selectingId, 'attendanceStatus', e.value)
+        .then(
+          () => {
+            this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+            this.loadTask(this.selectingId);
+          },
+          () => {
+            this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+          }
+        );
+    }
+  }
+
   getTaskByDate() {
     this.taskService.getTaskByDate(this.task.assignee.id, this.dateFrom, this.dateTo, this.currentPage, 5)
       .then(
@@ -247,6 +269,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   loadTask(id: number) {
+    this.canRemove = false;
     this.selectedModalTaskBasic = [];
     this.selectedTaskBasic = [];
     this.selectingId = id;

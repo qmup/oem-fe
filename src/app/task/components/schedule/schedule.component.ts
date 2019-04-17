@@ -333,18 +333,19 @@ export class ScheduleComponent implements OnInit {
     this.scheduleCM.workplaceId = this.currentWorkplace.value;
     this.scheduleCM.status = 1;
     this.scheduleCM.daysOfWeek = this.week.filter(d => d.check === true).map(d => d.id).join(',');
-    this.scheduleService.create(this.scheduleCM, this.option)
-    .then(
-      () => {
-          this.createModal.hide();
-          this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-          this.scheduleList = [],
-          this.getSchedule();
-        },
-        () => {
-          this.toastService.success('Đã có lỗi xảy ra', '', { positionClass: 'toast-bottom-right'} );
-        }
-      );
+    console.log(this.scheduleCM);
+    // this.scheduleService.create(this.scheduleCM, this.option)
+    // .then(
+    //   () => {
+    //       this.createModal.hide();
+    //       this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+    //       this.scheduleList = [],
+    //       this.getSchedule();
+    //     },
+    //     () => {
+    //       this.toastService.success('Đã có lỗi xảy ra', '', { positionClass: 'toast-bottom-right'} );
+    //     }
+    //   );
   }
 
   changePage1(event) {

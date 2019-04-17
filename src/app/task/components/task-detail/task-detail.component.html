@@ -248,9 +248,6 @@
           <span *ngIf="task.status === 2" style="font-size: 15px" class="badge badge-success">Hoàn thành</span>
           <span *ngIf="task.status === 3" style="font-size: 15px" class="badge badge-danger">Quá hạn</span>
           <span *ngIf="task.status === 4" style="font-size: 15px" class="badge badge-warning">Đang chờ duyệt</span>
-          <!-- <mdb-select *ngIf="task.status === 4" [options]="iconStatusSelect" [(ngModel)]="task.status"
-            placeholder="Duyệt" (selected)="changeStatus()" class="select-wrapper mdb-select md-form">
-          </mdb-select> -->
         </div>
 
         <div class="md-form">
@@ -264,6 +261,14 @@
           <span *ngIf="task.attendanceStatus === 2" style="font-size: 15px" class="badge badge-warning">Trễ</span>
           <span *ngIf="task.attendanceStatus === 3" style="font-size: 15px" class="badge badge-danger">Vắng
             mặt</span>
+          <mdb-select
+            *ngIf="task.status === 0"
+            [options]="attendanceStatus"
+            [(ngModel)]="task.attendanceStatus"
+            (selected)="changeAttendanceStatus($event)"
+            [label]="'Đổi trạng thái điểm danh'"
+            class="select-wrapper mdb-select md-form">
+          </mdb-select>
         </div>
 
         <div class="md-form ">
@@ -419,6 +424,9 @@
           <div *ngFor="let t of taskBasicManagerList; let i of index" class="col-6">
             <mdb-checkbox name="item-{{i}}" #checkbox (change)="changeCheckboxCreateModal(t.id, $event)">{{t.title}}
             </mdb-checkbox>
+          </div>
+          <div *ngIf="taskBasicManagerList?.length === 0">
+            <span class="text-danger font-weight-normal">Không còn công việc nào để thêm, vui lòng tạo mới!</span>
           </div>
         </div>
 

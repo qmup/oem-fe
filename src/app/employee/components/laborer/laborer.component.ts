@@ -92,6 +92,8 @@ export class LaborerComponent implements OnInit {
   timeoutSearchMap: any;
   defaultImage = '../../../../assets/default-image.jpg';
   warningMessage = [];
+  isExistMac: any;
+  isExistPhone: any;
 
   constructor(
     private employeeService: EmployeeService,
@@ -305,6 +307,28 @@ export class LaborerComponent implements OnInit {
         .then(
           (response) => {
             this.isExist = response;
+          }
+        );
+    }
+  }
+
+  checkPhoneExist() {
+    if (this.employeeCM.phoneNumber) {
+      this.employeeService.checkExist(this.employeeCM.phoneNumber)
+        .then(
+          (response) => {
+            this.isExistPhone = response;
+          }
+        );
+    }
+  }
+
+  checkPhoneMacAddress() {
+    if (this.employeeCM.phoneMacAddress) {
+      this.employeeService.checkMac(this.employeeCM.phoneMacAddress)
+        .then(
+          (res) => {
+            this.isExistMac = res;
           }
         );
     }

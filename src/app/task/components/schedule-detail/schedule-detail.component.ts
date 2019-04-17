@@ -247,7 +247,7 @@ export class ScheduleDetailComponent implements OnInit {
   }
 
   changeDayCheckbox(id: number, event: any) {
-    if (event.checked && !this.selectedDayIds.includes(el => +el === id)) {
+    if (event.target.checked && !this.selectedDayIds.includes(el => +el === id)) {
       this.selectedDayIds.push(+this.schedule.daysOfWeek.split(',').find((el: any) => +el === id));
     } else {
       this.selectedDayIds = this.selectedDayIds.filter(el => +el !== id);

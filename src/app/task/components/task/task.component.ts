@@ -333,7 +333,7 @@ export class TaskComponent implements OnInit {
 
   createSchedule() {
     this.scheduleCM.taskBasics = this.selectedTaskBasic;
-    this.scheduleCM.duration *= 60000;
+    this.scheduleCM.duration = this.taskCM.duration * 60000;
     this.scheduleCM.dateCreate = new Date().toISOString();
     this.scheduleCM.assigneeId = this.assignTask.assigneeId;
     this.scheduleCM.assignerId = this.userAccount.id;
@@ -355,31 +355,6 @@ export class TaskComponent implements OnInit {
         }
       );
   }
-
-  // createSchedule {
-  //   const option = 1;
-  //   this.scheduleCM.title = this.taskCM.title;
-  //   this.scheduleCM.description = this.taskCM.description;
-  //   this.scheduleCM.taskBasics = this.selectedTaskBasic;
-  //   this.scheduleCM.duration *= 60000;
-  //   this.scheduleCM.assignerId = this.userAccount.id;
-  //   this.scheduleCM.workplaceId = this.currentWorkplace.value;
-  //   this.scheduleCM.status = 1;
-  //   this.scheduleCM.daysOfWeek = this.week.filter(d => d.check === true).map(d => d.id).join(',');
-  //   this.createModal.hide();
-  //   this.scheduleService.create(this.scheduleCM, this.option)
-  //     .then(
-  //       () => {
-  //         this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-  //         this.scheduleList = [],
-  //         this.getSchedule();
-  //       },
-  //       () => {
-  //         this.toastService.success('Đã có lỗi xảy ra', '', { positionClass: 'toast-bottom-right'} );
-  //       }
-  //     );
-  //   }
-  // }
 
 
   openCreateModal() {

@@ -63,6 +63,7 @@ export const environment = {
       checkEmployeeConstraint: 'employee/check-employee-constraint',
       getRemovedEmployee: 'employee/get-removed-employee',
       suggestion: 'suggestion/employee',
+      checkMac: 'employee/check-phone-mac-address'
     },
     manager: {
       create: 'employee/create',

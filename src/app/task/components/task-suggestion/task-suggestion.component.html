@@ -134,10 +134,10 @@
             </div>
           </td>
           <td>
-            <div *ngIf="item.typeCase !== 0">
+            <div *ngIf="item.typeCase !== 0 && item?.cpbName">
               <span class="font-weight-bold">Điểm đến: {{ item.cpbName ? item?.cpbName : 'Nhà' }}</span>
               <br>
-              <div *ngIf="!item.cpbName">
+              <div>
                 Quãng đường dự kiến <br><span
                   class="font-weight-normal text-danger">{{ item?.dataTravelFromCpCtoCpB?.distance / 1000 | number: '1.0-1' }}
                   Km</span>

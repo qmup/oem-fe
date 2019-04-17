@@ -176,6 +176,17 @@ export class EmployeeService {
     ).toPromise();
   }
 
+  checkMac(phoneMacAddress: string): Promise<boolean> {
+    return this.httpClient.get<any>(
+      `${environment.endPoint}${environment.apiPaths.employee.checkMac}`,
+      {
+        params: {
+          macAddress: `${phoneMacAddress}`
+        }
+      }
+    ).toPromise();
+  }
+
   suggest(managerId: number, workplaceId: number, date: string, startTime: string, duration: number) {
     return this.httpClient.get<any>(
       `${environment.endPoint}${environment.apiPaths.employee.suggestion}`,

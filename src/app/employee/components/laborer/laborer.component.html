@@ -310,12 +310,14 @@
             mdbInput
             required
             #phoneNumber=ngModel
+            (blur)="checkPhoneExist()"
             [(ngModel)]="employeeCM.phoneNumber"
-            [class.ng-invalid.validate-error]="(phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched))"
+            [class.ng-invalid.validate-error]="(phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched) || isExistPhone)"
             >
             <label for="phoneNumber">Số điện thoại*</label>
             
-            <mdb-error *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)">
+            <mdb-error *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched) || isExistPhone">
+              <span *ngIf="isExistPhone && !phoneNumber?.errors?.required" class="font-weight-normal">Số điện thoại đã tồn tại</span>
               <span *ngIf="phoneNumber?.errors?.required" class="font-weight-normal">Vui lòng nhập số điện thoại</span>
             </mdb-error>
 
@@ -347,12 +349,14 @@
             mdbInput
             required
             #macAddress=ngModel
+            (blur)="checkPhoneMacAddress()"
             [(ngModel)]="employeeCM.phoneMacAddress"
-            [class.ng-invalid.validate-error]="macAddress.invalid && (macAddress.dirty || macAddress.touched)"
+            [class.ng-invalid.validate-error]="(macAddress.invalid && (macAddress.dirty || macAddress.touched) || isExistMac)"
             >
             <label for="macAddress">Địa chỉ MAC*</label>
 
-            <mdb-error *ngIf="macAddress.invalid && (macAddress.dirty || macAddress.touched)">
+            <mdb-error *ngIf="(macAddress.invalid && (macAddress.dirty || macAddress.touched) || isExistMac)">
+              <span *ngIf="isExistMac && !macAddress?.errors?.required" class="font-weight-normal">Địa chỉ MAC đã tồn tại</span>
               <span *ngIf="macAddress?.errors?.required" class="font-weight-normal">Vui lòng nhập địa chỉ MAC điện thoại</span>
             </mdb-error>
 
