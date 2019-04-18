@@ -355,6 +355,7 @@ export class ScheduleComponent implements OnInit {
 
   changePage1(event) {
     this.currentPage = event - 1;
+    this.getSchedule();
   }
 
   removeSchedule() {
