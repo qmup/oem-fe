@@ -92,6 +92,7 @@ export class TaskDetailComponent implements OnInit {
   taskStatus = [];
   currentStatus: number;
   newStartTime: Date;
+  currentWorkplace: number;
 
   constructor(
     private taskService: TaskService,
@@ -464,6 +465,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   changeWorkplace(event: any) {
+    this.manageWorkplace.workplaceId = event.value;
     this.openTaskBasicModal(event.value, this.task);
   }
 
@@ -551,7 +553,10 @@ export class TaskDetailComponent implements OnInit {
       initialState: { workplaceId, task }
     };
     this.modalRef = this.modalService.show(PlaceTaskBasicComponent, modalOptions);
-    this.modalRef.content.refresh.subscribe(() => this.getTaskDetail(this.selectingId));
+    this.modalRef.content.refresh.subscribe(() => {
+      this.getTaskDetail(this.selectingId);
+      this.currentWorkplace = -1;
+    });
   }
 
   openEditModal() {

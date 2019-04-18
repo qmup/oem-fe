@@ -90,6 +90,9 @@ export class PlaceTaskBasicComponent implements OnInit {
       .then(
         (response) => {
           this.taskBasicList = response;
+          this.taskBasicList.forEach(element => {
+            this.selectedTaskBasic.push(element);
+          });
         }
       );
   }
