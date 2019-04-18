@@ -79,9 +79,10 @@ export class NotificationService {
       (payload: any) => {
         this.globalService.countUnread++;
         const alertInstance = this.toastService.info(
-          `${payload.data.sender + ' ' + payload.data['gcm.notification.message']}`,
+          `${payload.data['gcm.notification.message']}`,
           payload.notification.title, { positionClass: 'toast-bottom-right'} );
           alertInstance.onTap.subscribe(() => {
+            this.toggleSeen(payload.data.notify_id, 'seen', 'true');
             this.router.navigate([`task-detail/${payload.data.task_id}`]);
           });
           this.currentMessage.next(payload);

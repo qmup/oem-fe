@@ -123,9 +123,9 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12 mt-3" *ngIf="task.status === 1 || task.status === 2">
+        <div class="col-md-12 mt-3" *ngIf="task.status === 1 || task.status === 2 || task.status === 4">
           <h5 class="text-center font-weight-bold">Báo cáo công việc
-            <a *ngIf="task.status !== 0 && report.length === 0" mdbBtn floating="true" size="sm" color="success"
+            <a *ngIf="task.status === 1 && report.length === 0" mdbBtn floating="true" size="sm" color="success"
               mdbWavesEffect>
               <i class="fa fa-plus" (click)="openReportModal()"></i>
             </a>
