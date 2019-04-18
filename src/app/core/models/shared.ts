@@ -54,4 +54,20 @@ export class NotificationSendingModel {
     this.taskId = 0;
     this.type = 0;
   }
+
+}
+export class TaskCheckingModel {
+  employeeId: number;
+  employeeName: string;
+  picture: string;
+  timeOverlap: string;
+  realizable: boolean;
+
+  constructor() {
+    this.employeeId = 0;
+    this.employeeName = '';
+    this.picture = '';
+    this.timeOverlap = '';
+    this.realizable = false;
+  }
 }

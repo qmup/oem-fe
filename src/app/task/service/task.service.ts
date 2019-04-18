@@ -27,16 +27,26 @@ export class TaskService {
       }
     ).toPromise();
   }
-  getTaskByDate(employeeId: number, fromDate: string, toDate: string, page: number, size: number): Promise<TaskResponse> {
+  getTaskByDate(
+    employeeId: number,
+    managerId: number,
+    fromTo: string,
+    sort: string,
+    fieldSort: string,
+    page: number,
+    size: number
+  ): Promise<TaskResponse> {
     return this.httpClient.get<TaskResponse>(
       `${environment.endPoint}${environment.apiPaths.task.getTaskByDate}`,
       {
         params: {
-          id: `${employeeId}`,
-          fromDate: `${fromDate}`,
-          toDate: `${toDate}`,
-          page: `${page}`,
-          size: `${size}`,
+          assigneeId : `${employeeId}`,
+          assignerId : `${managerId}`,
+          fromTo : `${fromTo}`,
+          sort : `${sort}`,
+          fieldSort : `${fieldSort}`,
+          page : `${page}`,
+          size : `${size}`,
         }
       }
     ).toPromise();

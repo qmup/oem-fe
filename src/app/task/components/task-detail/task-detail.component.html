@@ -37,7 +37,8 @@
               hiện</span>
             <span *ngIf="task.status === 2" style="font-size: 13px" class="ml-2 badge badge-success">Hoàn thành</span>
             <span *ngIf="task.status === 3" style="font-size: 13px" class="ml-2 badge badge-danger">Quá hạn</span>
-            <span *ngIf="task.status === 4" style="font-size: 13px" class="ml-2 badge badge-warning">Đang chờ duyệt</span>
+            <span *ngIf="task.status === 4" style="font-size: 13px" class="ml-2 badge badge-warning">Đang chờ
+              duyệt</span>
             <br>
             <small>Tại {{task.workplaceName}} - {{task.companyDTO.name}}</small>
           </a>
@@ -78,14 +79,8 @@
             </p>
 
             <div class="md-form my-0" *ngIf="task.status === 0">
-              <input
-                mdbInput
-                type="text"
-                class="form-control"
-                [(ngModel)]="task.title"
-                (blur)="updateTitle()"
-                (ngModelChange)="changeTitle = true"
-                >
+              <input mdbInput type="text" class="form-control" [(ngModel)]="task.title" (blur)="updateTitle()"
+                (ngModelChange)="changeTitle = true">
               <label>Tên công việc</label>
             </div>
 
@@ -97,14 +92,8 @@
 
 
             <div class="md-form my-0" *ngIf="task.status === 0">
-              <input
-                mdbInput
-                type="text"
-                class="form-control"
-                [(ngModel)]="task.description"
-                (blur)="updateDescription()"
-                (ngModelChange)="changeDescription = true"
-                >
+              <input mdbInput type="text" class="form-control" [(ngModel)]="task.description"
+                (blur)="updateDescription()" (ngModelChange)="changeDescription = true">
               <label>Miêu tả công việc</label>
             </div>
 
@@ -134,7 +123,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12 mt-3" *ngIf="task.status !== 0">
+        <div class="col-md-12 mt-3" *ngIf="task.status === 1 || task.status === 2">
           <h5 class="text-center font-weight-bold">Báo cáo công việc
             <a *ngIf="task.status !== 0 && report.length === 0" mdbBtn floating="true" size="sm" color="success"
               mdbWavesEffect>
@@ -161,19 +150,10 @@
                   <mdb-image-modal [modalImages]="item.pictures" type="margin"></mdb-image-modal>
                 </div>
                 <div class="md-form" *ngIf="item.type !== 1">
-                    <input
-                    mdbInput
-                    type="text"
-                    name="_evaluation"
-                    [disabled]="item.evaluated"
-                    [(ngModel)]="item.evaluation"
-                    id="_evaluation"
-                    class="form-control"
-                    required
-                    #_evaluation=ngModel
-                  >
+                  <input mdbInput type="text" name="_evaluation" [disabled]="item.evaluated"
+                    [(ngModel)]="item.evaluation" id="_evaluation" class="form-control" required #_evaluation=ngModel>
                   <label for="_evaluation">Đánh giá chi tiết</label>
-                <div class="text-danger col-12" *ngIf="_evaluation?.errors?.required">Vui lòng đánh giá chi tiết</div>
+                  <div class="text-danger col-12" *ngIf="_evaluation?.errors?.required">Vui lòng đánh giá chi tiết</div>
                 </div>
                 <hr *ngIf="item.type === 1">
                 <h6 class="pt-3 font-weight-bold" *ngIf="item.type === 1">Đánh giá mức độ công việc</h6>
@@ -197,25 +177,18 @@
                 </owl-rating>
                 <div class="text-danger col-12" *ngIf="rating?.errors?.required">Vui lòng đánh giá</div>
                 <div class="md-form" *ngIf="item.type === 1">
-                  <input
-                    mdbInput
-                    type="text"
-                    name="evaluation"
-                    [disabled]="item.evaluated"
-                    [(ngModel)]="item.evaluation"
-                    id="evaluation"
-                    class="form-control"
-                    required
-                    #evaluation=ngModel
-                  >
+                  <input mdbInput type="text" name="evaluation" [disabled]="item.evaluated"
+                    [(ngModel)]="item.evaluation" id="evaluation" class="form-control" required #evaluation=ngModel>
                   <label for="evaluation">Đánh giá chi tiết</label>
                   <div class="text-danger col-12" *ngIf="evaluation?.errors?.required">Vui lòng đánh giá chi tiết</div>
                 </div>
                 <div class="d-flex flex-wrap w-100 justify-content-center">
                   <button *ngIf="item.type !== 1 && !item.evaluated" mdbBtn rounded="true" type="button" color="primary"
-                    mdbWavesEffect [hidden]="rating?.errors?.required || evaluation?.errors?.required" (click)="approve(item, 0)">Giải quyết</button>
+                    mdbWavesEffect [hidden]="rating?.errors?.required || evaluation?.errors?.required"
+                    (click)="approve(item, 0)">Giải quyết</button>
                   <button *ngIf="item.type === 1 && !item.evaluated" mdbBtn rounded="true" type="button" color="success"
-                    mdbWavesEffect [hidden]="rating?.errors?.required || evaluation?.errors?.required" (click)="approve(item, 1)">Duyệt</button>
+                    mdbWavesEffect [hidden]="rating?.errors?.required || evaluation?.errors?.required"
+                    (click)="approve(item, 1)">Duyệt</button>
                 </div>
               </mdb-accordion-item-body>
             </mdb-accordion-item>
@@ -233,46 +206,46 @@
       </div>
 
       <div class="col-md-5 col-12">
-        <div class="md-form ">
+        <div class="md-form mt-3 mb-0">
           <h6 class="font-weight-bold d-flex flex-wrap w-100">
-            <span class="col-6 px-0 mr-auto mt-auto">Trạng thái</span>
-            <div class="col-6 px-0 ml-auto text-right">
+            <span class="col-8 px-0 mr-auto mt-auto ">Trạng thái:
+              <span *ngIf="task.status === 0" style="font-size: 15px" class="badge ml-3 badge-light">Chưa bắt đầu</span>
+              <span *ngIf="task.status === 1" style="font-size: 15px" class="badge ml-3 badge-primary">Đang thực
+                hiện</span>
+              <span *ngIf="task.status === 2" style="font-size: 15px" class="badge ml-3 badge-success">Hoàn thành</span>
+              <span *ngIf="task.status === 3" style="font-size: 15px" class="badge ml-3 badge-danger">Quá hạn</span>
+              <span *ngIf="task.status === 4" style="font-size: 15px" class="badge ml-3 badge-warning">Đang chờ duyệt</span>
+            </span>
+            <div class="col-4 px-0 ml-auto text-right">
               <a mdbBtn floating="true" size="md" color="primary" class="btn-list" mdbWavesEffect>
                 <i class="fa fa-list-alt" (click)="history.show()"></i>
               </a>
             </div>
           </h6>
-          <span *ngIf="task.status === 0" style="font-size: 15px" class="badge badge-light">Chưa bắt đầu</span>
-          <span *ngIf="task.status === 1" style="font-size: 15px" class="badge badge-primary">Đang thực
-            hiện</span>
-          <span *ngIf="task.status === 2" style="font-size: 15px" class="badge badge-success">Hoàn thành</span>
-          <span *ngIf="task.status === 3" style="font-size: 15px" class="badge badge-danger">Quá hạn</span>
-          <span *ngIf="task.status === 4" style="font-size: 15px" class="badge badge-warning">Đang chờ duyệt</span>
+          
+          <mdb-select *ngIf="task.status === 0" [options]="taskStatus"
+            (selected)="changeStatus($event)" [label]="'Đổi trạng thái công việc'"
+            class="select-wrapper mdb-select md-form my-3">
+          </mdb-select>
         </div>
 
-        <div class="md-form">
-          <h6 class="font-weight-bold">Điểm danh 
-            <span *ngIf="task.checkInTime">lúc {{task.checkInTime | date: 'HH:mm'}} ngày {{task.checkInTime | date: 'dd-MM-yyyy'}}</span>
+        <div class="md-form my-3 mt-0">
+          <h6 class="font-weight-bold">Điểm danh:
+            <span *ngIf="task.checkInTime">
+              lúc {{task.checkInTime | date: 'HH:mm'}} ngày {{task.checkInTime | date: 'dd-MM-yyyy'}}
+            </span>
+            <span *ngIf="task.attendanceStatus === 3" style="font-size: 15px" class="badge ml-3 badge-danger">Vắng
+              mặt</span>
           </h6>
           <span *ngIf="task.attendanceStatus === 0" style="font-size: 15px" class="badge badge-light">Chưa điểm
             danh</span>
           <span *ngIf="task.attendanceStatus === 1" style="font-size: 15px" class="badge badge-success">Đúng
             giờ</span>
           <span *ngIf="task.attendanceStatus === 2" style="font-size: 15px" class="badge badge-warning">Trễ</span>
-          <span *ngIf="task.attendanceStatus === 3" style="font-size: 15px" class="badge badge-danger">Vắng
-            mặt</span>
-          <mdb-select
-            *ngIf="task.status === 0"
-            [options]="attendanceStatus"
-            [(ngModel)]="task.attendanceStatus"
-            (selected)="changeAttendanceStatus($event)"
-            [label]="'Đổi trạng thái điểm danh'"
-            class="select-wrapper mdb-select md-form">
-          </mdb-select>
         </div>
 
-        <div class="md-form ">
-          <p class="h6 my-3">Người thực hiện: {{task.assignee.name}}</p>
+        <div class="md-form my-0">
+          <p class="h6 mb-3">Người thực hiện: {{task.assignee.name}}</p>
           <!-- <span *ngIf="task.status !== 0" class="mx-3">{{task.assignee.name}}</span> -->
           <mdb-select [label]="'Người thực hiện khác'" *ngIf="task.status === 0" [options]="employeeList"
             [filterEnabled]="true" [(ngModel)]="assignTask.assigneeId" (selected)="openAssignModal()">
@@ -288,19 +261,33 @@
         </div>
 
         <div class="md-form ">
-          <p class="h6 mt-3 mb-4">Thời gian</p>
+          <p class="h6 mt-3 mb-4">Thời gian công việc: {{task.startTime | date: 'HH:mm'}} ~
+            {{task.endTime | date: 'HH:mm'}} ngày {{task.startTime | date: 'dd-MM-yyyy'}}</p>
           <div class="col-12 mx-0" *ngIf="task.status !== 0">Từ:
-            <span>{{task.startTime | date: 'HH:mm dd-MM-yyyy'}}</span></div>
+            <span>{{task.startTime | date: 'HH:mm dd-MM-yyyy'}}</span>
+          </div>
           <div class="col-12 mx-0" *ngIf="task.status !== 0">Đến:
-            <span>{{task.endTime | date: 'HH:mm dd-MM-yyyy'}}</span></div>
-          <div class="row" *ngIf="task.status === 0">
-            <!-- <app-date-picker ngDefaultControl [mode]="'range'" [(ngModel)]="dateRange"></app-date-picker> -->
-            <owl-form-field class="w-100 px-3 text-center">
-              <input owlInput [min]="minDate" [(ngModel)]="dateRange" [selectMode]="'range'"
-                [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker" (dateTimeChange)="changeStartTime($event)">
-              <owl-date-time #datepicker></owl-date-time>
+            <span>{{task.endTime | date: 'HH:mm dd-MM-yyyy'}}</span>
+          </div>
+        </div>
+        <div class="row" *ngIf="task.status === 0">
+          <div class="col-6 px-0">
+            <owl-form-field class="w-100 px-3">
+              <input owlInput [min]="minDate" [(ngModel)]="newStartTime" [selectMode]="'single'"
+                placeholder="Ngày thực hiện" [owlDateTimeTrigger]="datepicker1" [owlDateTime]="datepicker1"
+                (dateTimeChange)="changeStartTime1($event)">
+              <owl-date-time #datepicker1 [pickerType]="'calendar'"></owl-date-time>
             </owl-form-field>
           </div>
+          <div class="col-6 px-0">
+            <owl-form-field class="w-100 px-3">
+              <input owlInput [min]="minDate" [(ngModel)]="dateRange" [selectMode]="'range'"
+                placeholder="Thời gian thực hiện" [owlDateTimeTrigger]="datepicker2" [owlDateTime]="datepicker2"
+                (dateTimeChange)="changeStartTime2($event)">
+              <owl-date-time #datepicker2 [pickerType]="'timer'"></owl-date-time>
+            </owl-form-field>
+          </div>
+            <!-- <app-date-picker ngDefaultControl [mode]="'range'" [(ngModel)]="dateRange"></app-date-picker> -->
         </div>
 
       </div>
@@ -332,6 +319,34 @@
         <a mdbBtn color="danger" outline="true" class="waves-effect" mdbWavesEffect (click)="removeTask()">Đồng ý</a>
         <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
           (click)="delete.hide()">Hủy</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+<div mdbModal #confirm="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="confirm" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-warning" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Đổi trạng thái công việc?</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-question fa-4x animated rotateIn"></i>
+        <p class="h6 font-weight-bold">Việc này không thể hoàn tác</p>
+        <p class="h6 font-weight-bold">Bạn có muốn tiếp tục?</p>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a mdbBtn color="warning" outline="true" class="waves-effect" mdbWavesEffect (click)="acceptChangeStatus()">Đồng ý</a>
+        <a type="button" mdbBtn color="warning" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+          (click)="confirm.hide()">Hủy</a>
       </div>
     </div>
     <!--/.Content-->
@@ -432,7 +447,8 @@
 
       </div>
       <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="primary" class="waves-light" mdbWavesEffect [disabled]="!selectAtLeastOneTaskBasic" (click)="addTaskBasicToTask()">Thêm vào danh
+        <button mdbBtn color="primary" class="waves-light" mdbWavesEffect [disabled]="!selectAtLeastOneTaskBasic"
+          (click)="addTaskBasicToTask()">Thêm vào danh
           sách
           <i class="fa fa-check ml-1"></i>
         </button>

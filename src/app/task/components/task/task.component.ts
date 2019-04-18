@@ -157,7 +157,12 @@ export class TaskComponent implements OnInit {
                 this.taskBasic = response2;
                 this.taskBasicList.forEach((element1, i) => {
                   this.taskBasic.forEach((element2, j) => {
-                    if (element1.id === element2.id) {
+                    if (this.selectedTaskBasic.length !== 0) {
+                      this.selectedTaskBasic.forEach(element3 => {
+                        this.taskBasicList.find(element4 => element4.id === element3.id).checked = true;
+                      });
+                    }
+                    if ((element1.id === element2.id)) {
                       element1.checked = true;
                       this.selectedTaskBasic.push(element1);
                       i++;

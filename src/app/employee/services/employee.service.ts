@@ -201,4 +201,30 @@ export class EmployeeService {
       }
     ).toPromise();
   }
+  checkAvailableForTask(
+    managerId: number,
+    fromTo: string,
+    startTimeTask: string,
+    endTimeTask: string,
+    sort: string,
+    fieldSort: string,
+    page: number,
+    size: number
+  ) {
+    return this.httpClient.get<any>(
+      `${environment.endPoint}${environment.apiPaths.employee.checkAvailableForTask}`,
+      {
+        params: {
+          managerId: `${managerId}`,
+          fromTo: `${fromTo}`,
+          startTimeTask: `${startTimeTask}`,
+          endTimeTask: `${endTimeTask}`,
+          sort: `${sort}`,
+          fieldSort: `${fieldSort}`,
+          page: `${page}`,
+          size: `${size}`,
+        }
+      }
+    ).toPromise();
+  }
 }

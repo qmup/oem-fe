@@ -7,7 +7,13 @@ import { TaskDetail, Task, TaskModel } from '../../models/task';
 import { ReportService } from 'src/app/report/services/report.service';
 import { TaskReport, TaskModel as ReportModel } from 'src/app/report/models/report';
 import { Employee } from 'src/app/employee/models/employee';
-import { PaginationResponse, AssignTask, Shared, AssignTaskResponse, NotificationSendingModel } from 'src/app/core/models/shared';
+import {
+  PaginationResponse,
+  AssignTask,
+  AssignTaskResponse,
+  NotificationSendingModel,
+  TaskCheckingModel
+} from 'src/app/core/models/shared';
 import { EmployeeService } from 'src/app/employee/services/employee.service';
 import { ManageWorkplace, PlacePagination, Place } from 'src/app/place/models/place';
 import { PlaceService } from 'src/app/place/services/place.service';
@@ -15,6 +21,9 @@ import { ModalOptions, BsModalRef, BsModalService, ModalDirective } from 'ngx-bo
 import { PlaceTaskBasicComponent } from 'src/app/place/components/place-task-basic/place-task-basic.component';
 import { TaskBasicService } from '../../service/task-basic.service';
 import { TaskBasicManager } from '../../models/task-basic';
+
+const TASK_OVERDUE_STATUS = 3;
+const ATTENDANCE_ABSENT_STATUS = 3;
 
 @Component({
   selector: 'app-task-detail',
@@ -28,6 +37,7 @@ export class TaskDetailComponent implements OnInit {
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('edit') editTaskBasicModal: ModalDirective;
   @ViewChild('reportModal') reportModal: ModalDirective;
+  @ViewChild('confirm') confirmModal: ModalDirective;
   iconPrioritySelect: Array<any>;
   iconStatusSelect: Array<any>;
   formData: FormData;
@@ -56,7 +66,9 @@ export class TaskDetailComponent implements OnInit {
   taskBasicManager: TaskBasicManager = new TaskBasicManager();
   url: any;
   dateFrom: string;
+  dateFromISO: string;
   dateTo: string;
+  dateToISO: string;
   changeTitle = false;
   changeDescription = false;
   canUpdate = false;
@@ -77,8 +89,9 @@ export class TaskDetailComponent implements OnInit {
   currentPage = 0;
   taskBasicList: Task[];
   selectAtLeastOneTaskBasic: boolean;
-  attendanceStatus = [];
-  currentAttendanceStatus: number;
+  taskStatus = [];
+  currentStatus: number;
+  newStartTime: Date;
 
   constructor(
     private taskService: TaskService,
@@ -99,6 +112,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.minDate.setHours(0, 0, 0, 0);
     this.userAccount = this.globalService.getUserAccount();
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
@@ -107,10 +121,6 @@ export class TaskDetailComponent implements OnInit {
     this.loadTask(this.id);
     this.iconStatusSelect = this.globalService.iconStatusSelect;
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
-    this.attendanceStatus = [
-      { value: 0, label: 'Chưa điểm danh' },
-      { value: 3, label: 'Vắng mặt' },
-    ];
   }
 
   getTaskDetail(id: number) {
@@ -118,12 +128,34 @@ export class TaskDetailComponent implements OnInit {
       .then(
         (response: TaskDetail) => {
           this.task = response;
-          this.currentAttendanceStatus = response.attendanceStatus;
+          this.currentStatus = response.status;
+          this.newStartTime = new Date(this.task.startTime);
           this.dateRange = [
             new Date(this.task.startTime),
             new Date(this.task.endTime)
           ];
-          this.getEmployeeByManager();
+          this.taskStatus = [
+            { value: 0, label: 'Chưa bắt đầu' },
+            { value: 3, label: 'Quá hạn' },
+          ];
+          if (this.searchByDate) {
+            this.checkTaskAvailable(
+              new Date(this.task.startTime).toISOString(),
+              new Date(this.task.endTime).toISOString(),
+              new Date(this.dateFrom).toISOString(),
+              new Date(this.dateTo).toISOString()
+            );
+          } else {
+            const today = new Date();
+            const from: any = today.setHours(0, 0, 0, 0);
+            const to: any = today.setHours(23, 59, 59, 999);
+            this.checkTaskAvailable(
+              new Date(this.task.startTime).toISOString(),
+              new Date(this.task.endTime).toISOString(),
+              new Date(from).toISOString(),
+              new Date(to).toISOString()
+            );
+          }
           this.getWorkplaceByManager();
         }
       ).then(
@@ -179,16 +211,66 @@ export class TaskDetailComponent implements OnInit {
   }
 
   getTodayTaskByEmployee() {
-    this.taskService.getTodayTaskByEmployee(this.task.assignee.id)
-      .then(
+    const today = new Date();
+    const from: any = today.setHours(0, 0, 0, 0);
+    const to: any = today.setHours(23, 59, 59, 999);
+    this.taskService.getTaskByDate(
+      this.task.assignee.id,
+      this.userAccount.id,
+      `${new Date(from).toISOString()};${new Date(to).toISOString()}`,
+      '',
+      'id',
+      this.currentPage,
+    5).then(
         (response) => {
-          this.taskList = response;
+          this.searchByDate = false;
+          this.taskListResponse = response;
+          this.taskList = response.content;
         }
       );
   }
 
+  checkTaskAvailable(startTime, endTime, from: string, to: string) {
+    this.employeeService.checkAvailableForTask(
+      this.userAccount.id,
+      `${from};${to}`,
+      new Date(startTime).toISOString(),
+      new Date(endTime).toISOString(),
+      '',
+      'id',
+      0,
+      99
+    ).then(
+      (res: PaginationResponse) => {
+        this.employeeList = res.content
+          .filter((el: TaskCheckingModel) => el.employeeId !== this.task.assignee.id)
+          .map(
+            (e: TaskCheckingModel) => {
+              if (e.realizable) {
+                return {
+                  value: e.employeeId,
+                  label: e.employeeName,
+                  icon: e.picture
+                };
+              } else {
+                return {
+                  value: e.employeeId,
+                  label: `${e.employeeName} - có công việc lúc ${e.timeOverlap}`,
+                  icon: e.picture,
+                  disabled: true
+                };
+              }
+            }
+          )
+          .sort((a, b) => (a.disabled === b.disabled) ? 0 : b.disabled ? -1 : 1);
+      }
+    );
+  }
+
   changeSearchDate(e) {
     if (e) {
+      this.dateFromISO = e.value[0];
+      this.dateToISO = e.value[1];
       this.dateFrom = this.globalService.convertToYearMonthDay(e.value[0]);
       this.dateTo = this.globalService.convertToYearMonthDay(e.value[1]);
     }
@@ -196,7 +278,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   changeAttendanceStatus(e) {
-    if (e.value !== this.currentAttendanceStatus) {
+    if (e.value !== this.currentStatus) {
       this.taskService.updateField(this.selectingId, 'attendanceStatus', e.value)
         .then(
           () => {
@@ -211,29 +293,19 @@ export class TaskDetailComponent implements OnInit {
   }
 
   getTaskByDate() {
-    this.taskService.getTaskByDate(this.task.assignee.id, this.dateFrom, this.dateTo, this.currentPage, 5)
+    this.taskService.getTaskByDate(
+      this.task.assignee.id,
+      this.userAccount.id,
+      `${new Date(this.dateFromISO).toISOString()};${new Date(this.dateToISO).toISOString()}`,
+      '',
+      'id',
+      this.currentPage,
+      5)
       .then(
         (response) => {
           this.searchByDate = true;
           this.taskListResponse = response;
           this.taskList = response.content;
-        }
-      );
-  }
-
-  getEmployeeByManager() {
-    this.employeeService.getAvailableEmployee(this.userAccount.id, '', 'id', 0, 99)
-      .then(
-        (response: PaginationResponse) => {
-          this.employeeList = response.content
-          .filter((e: Employee) => e.id !== this.task.assignee.id)
-          .map((e: Employee) => {
-            return {
-              value: e.id,
-              label: e.fullName,
-              icon: e.picture,
-            };
-          });
         }
       );
   }
@@ -309,10 +381,23 @@ export class TaskDetailComponent implements OnInit {
   }
 
   changeStatus(e) {
-    this.taskService.updateField(this.task.id, 'status', this.task.status)
+    if (e.value === TASK_OVERDUE_STATUS) {
+      this.confirmModal.show();
+    }
+  }
+
+  acceptChangeStatus() {
+    this.taskService.updateField(this.task.id, 'status', TASK_OVERDUE_STATUS)
       .then(
         (response) => {
-          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+          this.taskService.updateField(this.task.id, 'attendanceStatus', ATTENDANCE_ABSENT_STATUS)
+          .then(
+            () => {
+              this.confirmModal.hide();
+              this.loadTask(this.task.id);
+              this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+              }
+            );
         },
         (error) => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -382,7 +467,54 @@ export class TaskDetailComponent implements OnInit {
     this.openTaskBasicModal(event.value, this.task);
   }
 
-  changeStartTime(e: any) {
+  changeStartTime1(e: any) {
+    this.newStartTime = e.value;
+    const from: Date = this.dateRange[0];
+    const to: Date = this.dateRange[1];
+    const startTime: Date = new Date(
+      this.newStartTime.getFullYear(),
+      this.newStartTime.getMonth(),
+      this.newStartTime.getDate(),
+      from.getHours(),
+      from.getMinutes(),
+      0
+    );
+    const endTime: Date = new Date(
+      this.newStartTime.getFullYear(),
+      this.newStartTime.getMonth(),
+      this.newStartTime.getDate(),
+      to.getHours(),
+      to.getMinutes(),
+      0
+    );
+    const taskUM: TaskModel = new TaskModel();
+    taskUM.attendanceStatus = this.task.attendanceStatus;
+    taskUM.basic = false;
+    taskUM.checkInTime = this.task.checkInTime;
+    taskUM.dateCreate = this.task.dateCreate;
+    taskUM.description = this.task.description;
+    taskUM.duration = to.getTime() - from.getTime();
+    taskUM.id = this.task.id;
+    taskUM.endTime = endTime.toISOString();
+    taskUM.picture = this.task.picture;
+    taskUM.priority = this.task.priority;
+    taskUM.scheduleId = this.task.scheduleId;
+    taskUM.startTime = startTime.toISOString();
+    taskUM.status = this.task.status;
+    taskUM.title = this.task.title;
+    this.taskService.update(taskUM)
+      .then(
+        () => {
+          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+          this.loadTask(this.selectingId);
+        },
+        () => {
+          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+        }
+      );
+  }
+
+  changeStartTime2(e: any) {
     const from: Date = e.value[0];
     const to: Date = e.value[1];
     const taskUM: TaskModel = new TaskModel();
