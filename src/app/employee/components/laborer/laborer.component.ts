@@ -122,7 +122,11 @@ export class LaborerComponent implements OnInit {
   ngOnInit() {
     this.optionsSex = this.globalService.optionsSex;
     this.userAccount = this.globalService.getUserAccount();
-    this.employeeStatusList = this.globalService.employeeStatus;
+    this.employeeStatusList = [
+      { value: 1, label: 'Đang làm việc'},
+      { value: 2, label: 'Tạm nghỉ việc'},
+      { value: 0, label: 'Đã xóa'},
+    ];
     if (this.userAccount.roleId === 2 && this.employeeStatusList.length === 3) {
       this.employeeStatusList.pop();
     }
