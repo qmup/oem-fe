@@ -17,6 +17,7 @@ export class TaskReport {
     this.evaluated = false;
     this.taskId = 0;
     this.description = '';
+    this.evaluation = 'Tốt';
     this.photo = '';
     this.dateReport = '';
     this.employeeId = 0;
@@ -36,7 +37,7 @@ export class TaskModel {
   type: number;
 
   constructor() {
-    this.evaluation = '';
+    this.evaluation = 'Tốt';
     this.dateReport = '';
     this.description = '';
     this.employeeId = 0;

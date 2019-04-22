@@ -197,16 +197,13 @@
             <mdb-select
               id="manager"
               name="manager"
-              required
-              [label]="'Người quản lý*'"
+              [label]="'Người quản lý'"
               [options]="managerList"
-              [class.ng-invalid.validate-error]="managerId.invalid && (managerId.dirty || managerId.touched)"
               #managerId="ngModel"
               (selected)="selectManager($event)"
               ngModel
               >
             </mdb-select>
-            <span class="text-danger font-weight-normal" *ngIf="managerId.invalid && (managerId.dirty || managerId.touched)" style="font-size: .8rem">Vui lòng chọn người quản lý</span>
           </div>
 
           <div class="md-form my-3 col-md-6">
