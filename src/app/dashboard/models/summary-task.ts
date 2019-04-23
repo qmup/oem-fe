@@ -33,6 +33,22 @@ export class SummaryTask {
   }
 }
 
+export class ChartColor {
+  backgroundColor: string[];
+  borderColor: string[];
+  borderWidth: number;
+  pointBackgroundColor: string[];
+  pointBorderColor: string;
+  pointHoverBackgroundColor: string;
+  pointHoverBorderColor: string[];
 
-
-
+  constructor() {
+    this.backgroundColor = [];
+    this.borderColor = [];
+    this.borderWidth = 0;
+    this.pointBackgroundColor = [];
+    this.pointBorderColor = '';
+    this.pointHoverBackgroundColor = '';
+    this.pointHoverBorderColor = [];
+  }
+}

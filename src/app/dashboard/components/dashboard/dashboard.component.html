@@ -1,19 +1,30 @@
 <div class="row">
   <div class="col-md-6">
-    <p class="px-4 py-3 white-text z-depth-1-half light-blue lighten-1 h-100">
+    <p class="p-4 white-text z-depth-1-half light-blue lighten-1 h-100">
       <span class="middle">THỐNG KÊ CÔNG VIỆC VÀ ĐIỂM DANH</span>
     </p>
   </div>
-  <div class="col-md-6">
+</div>
+<div class="row pt-4">
+  <div class="col-6">
+    <div class="card">
+      <div class="card-body pb-4">
+        <div class="d-flex flex-wrap w-100 card-body pt-3">
+          <mdb-select [options]="employeeList" [label]="'Chọn nhân viên'"></mdb-select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
     <div class="card">
       <div class="card-body pb-1">
-          <div class="d-flex flex-wrap w-100 card-body pt-3">
-            <owl-form-field class="col-md-12 px-0">
-              <input owlInput [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker"
-              [selectMode]="'range'" placeholder="Chọn khoảng thời gian để xem dữ liệu" [(ngModel)]="dateRange" (dateTimeChange)="search()">
-              <owl-date-time #datepicker [pickerType]="'calendar'"></owl-date-time>
-            </owl-form-field>
-          </div>
+        <div class="d-flex flex-wrap w-100 card-body pt-3">
+          <owl-form-field class="col-md-12 px-0">
+            <input owlInput [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker"
+            [selectMode]="'range'" placeholder="Chọn khoảng thời gian để xem dữ liệu" [(ngModel)]="dateRange" (dateTimeChange)="search()">
+            <owl-date-time #datepicker [pickerType]="'calendar'"></owl-date-time>
+          </owl-form-field>
+        </div>
       </div>
     </div>
   </div>
@@ -67,30 +78,45 @@
 <div class="card card-cascade narrower mb-5">
   <section>
     <div class="row">
-      <div class="col-xl-12 col-lg-12 my-5">
-          <div class="view view-cascade gradient-card-header">
-            <p class="h5 text-center w-100 text-dark">Từ {{dateFrom | date: 'dd-MM-yyyy'}} đến {{dateTo | date: 'dd-MM-yyyy'}}</p>
-            <div style="display: block">
-              <canvas mdbChart
-                  [chartType]="chartType"
-                  [data]="chartData"
-                  [labels]="chartLabels"
-                  [colors]="chartColors"
-                  [options]="chartOptions"
-                  [legend]="true"
-                  (chartHover)="chartHovered()"
-                  (chartClick)="chartClicked()">
-              </canvas>
-              <h5 class="text-center text-muted">Tổng số lần điểm danh: {{summaryTask?.totalTask}}</h5>
-            </div>
 
-          </div>
-        <!-- <div style="display: block">
-          <canvas mdbChart [chartType]="'bar'" [datasets]="chartDatasets" [labels]="chartLabels" [colors]="chartColors"
-            [options]="chartOptions" [legend]="true">
-          </canvas>
-        </div> -->
+      <div class="col-xl-12 col-lg-12 mt-4">
+        <p class="h4 text-center w-100 text-dark">Từ {{dateFrom | date: 'dd-MM-yyyy'}} đến {{dateTo | date: 'dd-MM-yyyy'}}</p>
       </div>
+
+      <div class="col-xl-12 col-lg-12 my-5">
+        <div class="view view-cascade gradient-card-header">
+          <canvas mdbChart
+              [chartType]="chartType"
+              [data]="chartData"
+              [labels]="chartLabels"
+              [colors]="chartColors"
+              [options]="chartOptions"
+              [legend]="true"
+              (chartHover)="chartHovered()"
+              (chartClick)="chartClicked()">
+          </canvas>
+          <h5 class="text-center text-muted">Tổng số lần điểm danh: {{summaryTask?.totalTask}}</h5>
+        </div>
+
+      </div>
+
+      <div class="col-xl-12 col-lg-12 my-5">
+        <div class="view view-cascade gradient-card-header">
+            <canvas
+              mdbChart
+              [chartType]="chartType2"
+              [datasets]="chartDatasets"
+              [labels]="chartLabels2"
+              [colors]="chartColors2"
+              [options]="chartOptions"
+              [legend]="true"
+              (chartHover)="chartHovered()"
+              (chartClick)="chartClicked()">
+            </canvas>
+          </div>
+
+        </div>
+
     </div>
   </section>
 </div>
