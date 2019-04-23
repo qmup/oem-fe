@@ -31,6 +31,10 @@
             <table class="table table-hover" cellspacing="0" width="100%" *ngIf="scheduleResponse?.totalElements !== 0">
               <thead>
                 <tr>
+                  <th (click)="sort('id')">
+                    Mã công việc
+                    <mdb-icon icon="sort"></mdb-icon>
+                  </th>
                   <th (click)="sort('title')">
                     Công việc
                     <mdb-icon icon="sort"></mdb-icon>
@@ -47,7 +51,7 @@
                     Thời gian
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
-                  <th (click)="sort('daysOfWeek')" style="width: 165px">
+                  <th (click)="sort('daysOfWeek')">
                     Các ngày trong tuần
                     <mdb-icon icon="sort"></mdb-icon>
                   </th>
@@ -62,6 +66,9 @@
               <tbody>
                 <tr *ngFor="let item of scheduleList" style="cursor: pointer"
                 [ngStyle]="{'opacity': item.status === 0 ? '.5' : '1'}">
+                  <td (click)="openDetailModal(item.id)">
+                    {{ item.id }}
+                  </td>
                   <td (click)="openDetailModal(item.id)">
                     {{ item.title }}
                   </td>

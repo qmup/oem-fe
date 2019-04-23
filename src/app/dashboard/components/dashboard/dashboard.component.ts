@@ -61,8 +61,8 @@ export class DashboardComponent implements OnInit {
 
   message: any;
 
-  endTime = new Date();
-  startTime = new Date(this.endTime.getTime() - (7 * 24 * 60 * 60 * 1000));
+  dateTo = new Date();
+  dateFrom = new Date(this.dateTo.getTime() - (7 * 24 * 60 * 60 * 1000));
 
   constructor(
     private dashboardService: DashboardService,
@@ -79,11 +79,11 @@ export class DashboardComponent implements OnInit {
   }
 
   search() {
-    this.startTime = this.dateRange[1];
-    this.endTime = this.dateRange[0];
-    const startTime = this.dateRange ? this.globalService.convertToYearMonthDay(this.dateRange[0]) : '';
-    const endTime = this.dateRange ? this.globalService.convertToYearMonthDay(this.dateRange[1]) : '';
-    this.dashboardService.summaryManagerTask(this.userAccount.id, startTime, endTime)
+    this.dateFrom = this.dateRange[0];
+    this.dateTo = this.dateRange[1];
+    const from = this.dateRange ? this.globalService.convertToYearMonthDay(this.dateRange[0]) : '';
+    const to = this.dateRange ? this.globalService.convertToYearMonthDay(this.dateRange[1]) : '';
+    this.dashboardService.summaryManagerTask(this.userAccount.id, from, to)
       .then(
         (response: SummaryTask) => {
           this.summaryTask = response;
@@ -95,8 +95,8 @@ export class DashboardComponent implements OnInit {
   getSummaryTaskLastWeek() {
     this.dashboardService.summaryManagerTask(
         this.userAccount.id,
-        this.globalService.convertToYearMonthDay(this.startTime),
-        this.globalService.convertToYearMonthDay(this.endTime)
+        this.globalService.convertToYearMonthDay(this.dateFrom),
+        this.globalService.convertToYearMonthDay(this.dateTo)
       )
       .then(
         (response: SummaryTask) => {

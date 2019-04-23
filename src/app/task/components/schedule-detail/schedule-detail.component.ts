@@ -167,7 +167,7 @@ export class ScheduleDetailComponent implements OnInit {
     const scheduleUM: ScheduleModel = new ScheduleModel();
     scheduleUM.assigneeId = this.schedule.assignee.id;
     scheduleUM.assignerId = this.schedule.assigner.id;
-    scheduleUM.daysOfWeek = this.schedule.daysOfWeek;
+    scheduleUM.daysOfWeek = this.selectedDayIds.join(',');
     scheduleUM.description = this.schedule.description;
     scheduleUM.dateCreate = this.schedule.dateCreate;
     scheduleUM.endTime = this.schedule.endTime;
@@ -247,8 +247,8 @@ export class ScheduleDetailComponent implements OnInit {
   }
 
   changeDayCheckbox(id: number, event: any) {
-    if (event.target.checked && !this.selectedDayIds.includes(el => +el === id)) {
-      this.selectedDayIds.push(+this.schedule.daysOfWeek.split(',').find((el: any) => +el === id));
+    if (event.target.checked && !this.selectedDayIds.includes(id)) {
+      this.selectedDayIds.push(id);
     } else {
       this.selectedDayIds = this.selectedDayIds.filter(el => +el !== id);
     }

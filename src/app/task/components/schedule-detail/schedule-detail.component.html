@@ -106,7 +106,7 @@
           class="form-check-input"
           [(ngModel)]="day.check"
           [class.ng-invalid.validate-error]="selectAtLeastOneDay"
-          (change)="changeDayCheckbox($event)">
+          (change)="changeDayCheckbox(day.id, $event)">
         <label class="form-check-label" [for]="day.inputId">{{ day.label }} </label>
       </div>
       <div class="col-6">

@@ -29,7 +29,7 @@
             class="list-group-item list-group-item-action waves-light"
             [ngClass]="{'list-group-item-action': task.id !== selectingId, 'active': task.id === selectingId}"
             (click)="loadTask(task.id)">
-            {{task.title}} lúc {{task.startTime | date: 'HH:mm'}} ngày {{task.startTime | date: 'dd-MM-yyyy'}}
+            [{{task.id}}] - {{task.title}} lúc {{task.startTime | date: 'HH:mm'}} ngày {{task.startTime | date: 'dd-MM-yyyy'}}
             <br>
             <span style="font-size: 14px">Trạng thái:</span>
             <span *ngIf="task.status === 0" style="font-size: 13px" class="ml-2 badge badge-light">Chưa bắt đầu</span>
@@ -42,11 +42,11 @@
             <br>
             <small>Tại {{task.workplaceName}} - {{task.companyDTO.name}}</small>
           </a>
-          <div *ngIf="taskListResponse?.totalElements !== 0 && taskList?.length === 0" class="text-center">
+          <div *ngIf="taskList?.length === 0 && !searchByDate" class="text-center">
             <span class="text-danger font-weight-normal">Không có công việc trong ngày</span>
           </div>
-          <div *ngIf="taskListResponse?.totalElements === 0 && taskList?.length === 0" class="text-center">
-            <span class="text-danger font-weight-normal">Không có tìm thấy công việc</span>
+          <div *ngIf="taskListResponse?.totalElements === 0 && searchByDate" class="text-center">
+            <span class="text-danger font-weight-normal">Không có tìm thấy công việc vào thời gian này</span>
           </div>
           <app-pagination *ngIf="taskListResponse?.totalPages > 1" [pageSize]="taskListResponse.size"
             [totalPage]="taskListResponse.totalPages" [currentPage]="taskListResponse.number"
