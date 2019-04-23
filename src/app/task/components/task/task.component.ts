@@ -111,9 +111,13 @@ export class TaskComponent implements OnInit {
     this.assignTask.assignerId = this.userAccount.id;
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
     this.week = this.globalService.week;
-    this.getTask();
     this.getEmployee();
     this.getCompany();
+    this.fieldSort = localStorage.getItem('sortRequest');
+    if (this.fieldSort === null) {
+      this.fieldSort = 'id:desc';
+      localStorage.setItem('sortRequest', this.fieldSort);
+    }
   }
 
   sort(field: string) {
@@ -124,6 +128,7 @@ export class TaskComponent implements OnInit {
     } else {
       this.fieldSort += ':desc';
     }
+    localStorage.setItem('sortRequest', this.fieldSort);
   }
 
   getTask() {
@@ -141,8 +146,6 @@ export class TaskComponent implements OnInit {
     const date = this.globalService.convertToYearMonthDay(this.taskCM.startTime);
     this.workplaceService.getAvailableByDate(
       this.userAccount.id, '', 1, this.manageWorkplace.zoneId, date, '', 'id', 0, 99
-    ).then(
-      () => {}
     );
   }
 

@@ -140,22 +140,26 @@ export class TaskDetailComponent implements OnInit {
             { value: 3, label: 'Quá hạn' },
           ];
           if (this.searchByDate) {
-            this.checkTaskAvailable(
-              new Date(this.task.startTime).toISOString(),
-              new Date(this.task.endTime).toISOString(),
-              new Date(this.dateFrom).toISOString(),
-              new Date(this.dateTo).toISOString()
-            );
+            if (this.task.status === 0) {
+              this.checkTaskAvailable(
+                new Date(this.task.startTime).toISOString(),
+                new Date(this.task.endTime).toISOString(),
+                new Date(this.dateFrom).toISOString(),
+                new Date(this.dateTo).toISOString()
+              );
+            }
           } else {
-            const today = new Date();
-            const from: any = today.setHours(0, 0, 0, 0);
-            const to: any = today.setHours(23, 59, 59, 999);
-            this.checkTaskAvailable(
-              new Date(this.task.startTime).toISOString(),
-              new Date(this.task.endTime).toISOString(),
-              new Date(from).toISOString(),
-              new Date(to).toISOString()
-            );
+            if (this.task.status === 0) {
+              const today = new Date();
+              const from: any = today.setHours(0, 0, 0, 0);
+              const to: any = today.setHours(23, 59, 59, 999);
+              this.checkTaskAvailable(
+                new Date(this.task.startTime).toISOString(),
+                new Date(this.task.endTime).toISOString(),
+                new Date(from).toISOString(),
+                new Date(to).toISOString()
+              );
+            }
           }
           this.getWorkplaceByManager();
         }
@@ -238,7 +242,7 @@ export class TaskDetailComponent implements OnInit {
       new Date(startTime).toISOString(),
       new Date(endTime).toISOString(),
       '',
-      'id',
+      '',
       0,
       99
     ).then(
@@ -347,6 +351,9 @@ export class TaskDetailComponent implements OnInit {
     this.selectedTaskBasic = [];
     this.selectingId = id;
     this.getTaskDetail(id);
+    if (this.task.status === 0) {
+
+    }
     this.getTaskReport(id);
     this.getAssignHistory(id);
   }
@@ -431,8 +438,12 @@ export class TaskDetailComponent implements OnInit {
         (response) => {
           this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
           this.deleteModal.hide();
-          if (this.taskList.length !== 0) {
-            this.selectingId = this.taskList[0].id;
+          if (this.taskList.length > 1) {
+            if (this.taskList.map(el => el.id).indexOf(this.selectingId) === 0) {
+              this.selectingId = this.taskList[1].id;
+            } else {
+              this.selectingId = this.taskList[0].id;
+            }
             this.loadTask(this.selectingId);
             !this.searchByDate ? this.getTodayTaskByEmployee() : this.getTaskByDate();
           } else {
@@ -453,6 +464,17 @@ export class TaskDetailComponent implements OnInit {
     this.globalService.assignTask(this.assignTask)
       .then(
         (response) => {
+          const notification: NotificationSendingModel = new NotificationSendingModel();
+          notification.fromEmployeeId = this.assignTask.assignerId;
+          notification.toEmployeeId = this.assignTask.assigneeId;
+          notification.taskId = this.assignTask.taskId;
+          notification.type = 4;
+          const notification2: NotificationSendingModel = new NotificationSendingModel();
+          notification2.fromEmployeeId = this.assignTask.assignerId;
+          notification2.toEmployeeId = this.task.assignee.id;
+          notification2.taskId = this.assignTask.taskId;
+          notification2.type = 5;
+          this.globalService.sendNotification(notification2);
           this.toastService.success('Assign thành công', '', { positionClass: 'toast-bottom-right'});
           this.assignModal.hide();
           this.loadTask(this.selectingId);

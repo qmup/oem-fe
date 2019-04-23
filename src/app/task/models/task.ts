@@ -159,6 +159,7 @@ export class TaskDetail {
 
   constructor() {
     this.id = 0;
+    this.rating = 5;
     this.assignee = new Shared();
     this.title = '';
     this.workplace = new Shared();
@@ -245,5 +246,33 @@ export class TaskSuggestion {
     this.timeAllowedCpcToCpB = 0;
     this.totalPoint = 0;
     this.typeCase = 0;
+  }
+}
+
+export class AdvancedSearchRequest {
+  taskId: number;
+  status: number[];
+  attendance: number[];
+  assigneeId: number[];
+  workplaceId: number[];
+  moreList: number[];
+  duration: number;
+  name: string;
+  dateCreate: string[];
+  dateUpdate: string[];
+  startTime: string[];
+
+  constructor() {
+    this.taskId = 0;
+    this.status = [];
+    this.attendance = [];
+    this.assigneeId = [];
+    this.workplaceId = [];
+    this.moreList = [];
+    this.duration = 0;
+    this.name = '';
+    this.dateCreate = [];
+    this.dateUpdate = [];
+    this.startTime = [];
   }
 }

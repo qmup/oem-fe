@@ -6,6 +6,7 @@ import { PaginationResponse } from 'src/app/core/models/shared';
 import { PlacePagination } from 'src/app/place/models/place';
 import { PlaceService } from 'src/app/place/services/place.service';
 import { TaskService } from '../../service/task.service';
+import { AdvancedSearchRequest } from '../../models/task';
 
 @Component({
   selector: 'app-task-search',
@@ -19,7 +20,6 @@ export class TaskSearchComponent implements OnChanges {
   @Input() size: number;
   @Output() searchChanged: EventEmitter<any> = new EventEmitter();
 
-  typeList = [];
   statusList = [];
   attendanceStatusList = [];
   employeeList = [];
@@ -65,6 +65,8 @@ export class TaskSearchComponent implements OnChanges {
   taskId: number;
   startTime = [];
 
+  advancedSearchRequest: AdvancedSearchRequest;
+
   constructor(
     private globalService: GlobalService,
     private employeeService: EmployeeService,
@@ -73,8 +75,14 @@ export class TaskSearchComponent implements OnChanges {
   ) { }
 
   ngOnChanges() {
+    this.advancedSearchRequest = JSON.parse(localStorage.getItem('search'));
+    if (this.advancedSearchRequest === null) {
+      this.advancedSearchRequest = new AdvancedSearchRequest();
+    }
+
+    this.parseSearchRequestFromLocalStorage(this.advancedSearchRequest);
+
     this.userAccount = this.globalService.getUserAccount();
-    this.typeList = this.globalService.typeList;
     this.statusList = this.globalService.statusList;
     this.attendanceStatusList = this.globalService.attendanceStatusList;
     this.moreList = this.globalService.moreList;
@@ -168,7 +176,6 @@ export class TaskSearchComponent implements OnChanges {
   }
 
   deselectEmployee(e) {
-    console.log(e);
     this.assigneeArrayId = this.assigneeArrayId.filter(id => id !== e.id);
 
   }
@@ -214,8 +221,6 @@ export class TaskSearchComponent implements OnChanges {
     this.searchRequest = '';
     this.searchRequestArray = [];
 
-    this.sortRequest = 'startTime:desc';
-
     this.assigneeString = `"ASSIGNEE":`;
     this.statusString = `"status":`;
     this.workplaceString = `"WORKPLACE":`;
@@ -231,6 +236,7 @@ export class TaskSearchComponent implements OnChanges {
   }
 
   search() {
+
     if (this.statusArrayId.length > 0) {
       this.convertArrayToString(this.statusArrayId, this.statusString);
     }
@@ -243,7 +249,18 @@ export class TaskSearchComponent implements OnChanges {
     if (this.attendanceArrayId.length > 0) {
       this.convertArrayToString(this.attendanceArrayId, this.attendanceString);
     }
-    if (this.selectDuration && this.duration !== 0) {
+    if (this.filterRequestArray.length > 0) {
+      this.filterRequest = '{';
+      this.filterRequestArray.forEach((element, i) => {
+        this.filterRequest += element;
+        if (i !== this.filterRequestArray.length - 1) {
+          this.filterRequest += ',';
+        }
+      });
+      this.filterRequest += '}';
+    }
+
+    if (this.selectDuration && this.duration) {
       this.durationString += '"' + this.duration;
       this.durationString += '"';
       this.searchRequestArray.push(this.durationString);
@@ -285,16 +302,6 @@ export class TaskSearchComponent implements OnChanges {
       this.dateUpdateString += '"';
       this.searchRequestArray.push(this.dateUpdateString);
     }
-    if (this.filterRequestArray.length > 0) {
-      this.filterRequest = '{';
-      this.filterRequestArray.forEach((element, i) => {
-        this.filterRequest += element;
-        if (i !== this.filterRequestArray.length - 1) {
-          this.filterRequest += ',';
-        }
-      });
-      this.filterRequest += '}';
-    }
     if (this.searchRequestArray.length > 0) {
       this.searchRequest = '{';
       this.searchRequestArray.forEach((element, i) => {
@@ -306,6 +313,8 @@ export class TaskSearchComponent implements OnChanges {
       this.searchRequest += '}';
     }
 
+    this.setSearchRequestToLocalStorage();
+
     this.taskService.search(
         this.searchRequest,
         this.sortRequest,
@@ -316,14 +325,175 @@ export class TaskSearchComponent implements OnChanges {
       )
       .then(
         (response) => {
+
           this.searchChanged.emit(response);
-        },
-        (error) => {
         }
       );
 
       this.resetData();
 
   }
+
+  setSearchRequestToLocalStorage() {
+    this.advancedSearchRequest.moreList =  [];
+    if (this.selectDateUpdate) {
+      this.advancedSearchRequest.moreList.push(1);
+    }
+    if (this.selectDuration) {
+      this.advancedSearchRequest.moreList.push(2);
+    }
+    if (this.selectDateCreate) {
+      this.advancedSearchRequest.moreList.push(3);
+    }
+    if (this.selectTitle) {
+      this.advancedSearchRequest.moreList.push(4);
+    }
+    if (this.selectDateStart) {
+      this.advancedSearchRequest.moreList.push(5);
+    }
+    if (this.taskId) {
+      this.advancedSearchRequest.taskId = this.taskId;
+    }
+    if (this.statusArrayId.length > 0) {
+      this.advancedSearchRequest.status = this.statusArrayId;
+    }
+    if (this.assigneeArrayId.length > 0) {
+      this.advancedSearchRequest.assigneeId = this.assigneeArrayId;
+    }
+    if (this.workplaceArrayId.length > 0) {
+      this.advancedSearchRequest.workplaceId = this.workplaceArrayId;
+    }
+    if (this.attendanceArrayId.length > 0) {
+      this.advancedSearchRequest.attendance = this.attendanceArrayId;
+    }
+    if (this.selectDuration && this.duration !== 0) {
+      this.advancedSearchRequest.duration = this.duration;
+    }
+    if (this.title.length !== 0) {
+      this.advancedSearchRequest.name = this.title;
+    }
+    if (this.selectDateCreate && this.dateCreate.length > 0) {
+      this.dateCreate.forEach(element => {
+        this.advancedSearchRequest.dateCreate.push(element);
+      });
+    }
+    if (this.selectDateStart && this.startTime.length > 0) {
+      this.startTime.forEach(element => {
+        this.advancedSearchRequest.startTime.push(element);
+      });
+    }
+    if (this.selectDateUpdate && this.dateUpdate.length > 0) {
+      this.dateUpdate.forEach(element => {
+        this.advancedSearchRequest.dateUpdate.push(element);
+      });
+    }
+    localStorage.setItem('search', JSON.stringify(this.advancedSearchRequest));
+  }
+
+  parseSearchRequestFromLocalStorage(search: AdvancedSearchRequest) {
+    this.resetData();
+    search.moreList.forEach(element => {
+      if (element === 1) {
+        this.selectDateUpdate = true;
+      } else if (element === 2) {
+        this.selectDuration = true;
+      } else if (element === 3) {
+        this.selectDateCreate = true;
+
+      } else if (element === 4) {
+        this.selectTitle = true;
+      } else {
+        this.selectDateStart = true;
+      }
+    });
+    if (search.status.length > 0) {
+      this.convertArrayToString(search.status, this.statusString);
+    }
+    if (search.assigneeId.length > 0) {
+      this.convertArrayToString(search.assigneeId, this.assigneeString);
+    }
+    if (search.workplaceId.length > 0) {
+      this.convertArrayToString(search.workplaceId, this.workplaceString);
+    }
+    if (search.attendance.length > 0) {
+      this.convertArrayToString(search.attendance, this.attendanceString);
+    }
+    if (this.filterRequestArray.length > 0) {
+      this.filterRequest = '{';
+      this.filterRequestArray.forEach((element, i) => {
+        this.filterRequest += element;
+        if (i !== this.filterRequestArray.length - 1) {
+          this.filterRequest += ',';
+        }
+      });
+      this.filterRequest += '}';
+    }
+
+    if (this.selectDuration && search.duration) {
+      this.duration = search.duration;
+      this.durationString += '"' + this.duration;
+      this.durationString += '"';
+      this.searchRequestArray.push(this.durationString);
+    }
+    if (search.name.length !== 0) {
+      this.title = search.name;
+      this.titleString += '"' + this.title;
+      this.titleString += '"';
+      this.searchRequestArray.push(this.titleString);
+    }
+    if (search.taskId) {
+      this.taskId = search.taskId;
+      this.idString += '"' + this.taskId;
+      this.idString += '"';
+      this.searchRequestArray.push(this.idString);
+    }
+    if (this.selectDateCreate && search.dateCreate.length > 0) {
+      if (search.dateCreate.length === 1) {
+        this.dateCreateString += '"' + (search.dateCreate[0]);
+        this.dateCreate.push(search.dateCreate[0]);
+      } else {
+        this.dateCreateString += '"' + (search.dateCreate[0] + ';' + search.dateCreate[1]);
+        this.dateCreate.push(search.dateCreate[0]);
+        this.dateCreate.push(search.dateCreate[1]);
+      }
+      this.dateCreateString += '"';
+      this.searchRequestArray.push(this.dateCreateString);
+    }
+    if (this.selectDateStart && search.startTime.length > 0) {
+      if (search.startTime.length === 1) {
+        this.startTimeString += '"' + (search.startTime[0]);
+        this.startTime.push(search.startTime[0]);
+      } else {
+        this.startTimeString += '"' + (search.startTime[0] + ';' + search.startTime[1]);
+        this.startTime.push(search.startTime[0]);
+        this.startTime.push(search.startTime[1]);
+      }
+      this.startTimeString += '"';
+      this.searchRequestArray.push(this.startTimeString);
+    }
+    if (this.selectDateUpdate && search.dateUpdate.length > 0) {
+      if (search.dateUpdate.length === 1) {
+        this.dateUpdateString += '"' + (search.dateUpdate[0]);
+        this.dateUpdate.push(search.dateUpdate[0]);
+      } else {
+        this.dateUpdateString += '"' + (search.dateUpdate[0] + ';' + search.dateUpdate[1]);
+        this.dateUpdate.push(search.dateUpdate[0]);
+        this.dateUpdate.push(search.dateUpdate[1]);
+      }
+      this.dateUpdateString += '"';
+      this.searchRequestArray.push(this.dateUpdateString);
+    }
+    if (this.searchRequestArray.length > 0) {
+      this.searchRequest = '{';
+      this.searchRequestArray.forEach((element, i) => {
+        this.searchRequest += element;
+        if (i !== this.searchRequestArray.length - 1) {
+          this.searchRequest += ',';
+        }
+      });
+      this.searchRequest += '}';
+    }
+  }
+
 
 }
