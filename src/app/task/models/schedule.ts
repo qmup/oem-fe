@@ -68,3 +68,23 @@ export class Schedule {
     this.duration = 30;
   }
 }
+
+export class CheckScheduleOverlap {
+  dayOfWeekOverLaps: number[];
+  scheduleId: number;
+  scheduleName: string;
+  timeOverlap: string;
+  assigneeId: number;
+  assigneeName: string;
+  assigneePicture: string;
+
+  constructor() {
+    this.dayOfWeekOverLaps = [];
+    this.scheduleId = 0;
+    this.scheduleName = '';
+    this.timeOverlap = '';
+    this.assigneeId = 0;
+    this.assigneeName = '';
+    this.assigneePicture = '';
+  }
+}

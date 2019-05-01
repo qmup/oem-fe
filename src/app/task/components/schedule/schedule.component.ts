@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, EventEmitter, TemplateRef } from '@angular/core';
 import { ScheduleService } from '../../service/schedule.service';
-import { Schedule, ScheduleModel } from '../../models/schedule';
+import { Schedule, ScheduleModel, CheckScheduleOverlap } from '../../models/schedule';
 import { ModalDirective, ModalOptions, BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { EmployeeService } from 'src/app/employee/services/employee.service';
 import { PlaceService } from 'src/app/place/services/place.service';
@@ -33,6 +33,8 @@ export class ScheduleComponent implements OnInit {
   @ViewChild('create') createModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
   @ViewChild('createBT') createBasicTask: TemplateRef<any>;
+  @ViewChild('warning') warning: TemplateRef<any>;
+  @ViewChild('danger') danger: TemplateRef<any>;
   scheduleCM: ScheduleModel = new ScheduleModel();
   week = [];
   workplaceList = [];
@@ -76,6 +78,11 @@ export class ScheduleComponent implements OnInit {
   dragOver: boolean;
   taskBasicManager: TaskBasicManager = new TaskBasicManager();
   modalRef1: BsModalRef | null;
+  isSelectEmployee: boolean;
+  checkScheduleOverlapModel: CheckScheduleOverlap[] = [];
+  duplicateAssignee: CheckScheduleOverlap = new CheckScheduleOverlap();
+  selectingDay: any[];
+  scheduleCMEndTime: Date;
 
   constructor(
     private scheduleService: ScheduleService,
@@ -169,6 +176,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   selectEmployee(e) {
+    this.isSelectEmployee = true;
     this.scheduleCM.assigneeId = e.value;
   }
 
@@ -191,6 +199,34 @@ export class ScheduleComponent implements OnInit {
     } else {
       this.selectAtLeastOneDay = false;
     }
+  }
+
+  openCheckingModal() {
+    this.scheduleCM.assignerId = this.userAccount.id;
+    this.scheduleCM.workplaceId = this.currentWorkplace.value;
+    this.scheduleCM.daysOfWeek = this.week.filter(d => d.check === true).map(d => d.id).join(',');
+    this.selectingDay = this.week.filter(d => d.check === true).map(d => d.id);
+    this.scheduleCMEndTime = new Date(new Date(this.scheduleCM.startTime).getTime() + this.scheduleCM.duration * 60000);
+    this.scheduleService.checkOverlap(
+      this.scheduleCM.workplaceId, this.scheduleCM.assigneeId, this.scheduleCM.assignerId,
+      this.scheduleCM.daysOfWeek, new Date(this.scheduleCM.startTime).toISOString(), this.scheduleCM.duration * 60000
+    ).then(
+      (res: CheckScheduleOverlap[]) => {
+        this.checkScheduleOverlapModel = res;
+        if (this.checkScheduleOverlapModel.length > 0) {
+          this.createModal.hide();
+          if (this.checkScheduleOverlapModel.filter(e => e.assigneeId === this.scheduleCM.assigneeId).length === 0) {
+            this.modalRef1 = this.modalService.show(this.warning, { class: 'modal-md modal-dialog modal-notify modal-warning' });
+          } else {
+            this.duplicateAssignee = new CheckScheduleOverlap();
+            this.duplicateAssignee = this.checkScheduleOverlapModel.find(e => e.assigneeId === this.scheduleCM.assigneeId);
+            this.modalRef1 = this.modalService.show(this.danger, { class: 'modal-md modal-dialog modal-notify modal-danger' });
+          }
+        } else {
+          this.createSchedule();
+        }
+      }
+    );
   }
 
   getEmployee() {
@@ -289,6 +325,9 @@ export class ScheduleComponent implements OnInit {
     if (this.scheduleCM.duration > 60000) {
       this.scheduleCM.duration /= 60000;
     }
+    if (this.scheduleCM.startTime) {
+      this.scheduleCM.assigneeId = 0;
+    }
     this.createModal.show();
   }
 
@@ -338,19 +377,18 @@ export class ScheduleComponent implements OnInit {
     this.scheduleCM.workplaceId = this.currentWorkplace.value;
     this.scheduleCM.status = 1;
     this.scheduleCM.daysOfWeek = this.week.filter(d => d.check === true).map(d => d.id).join(',');
-    console.log(this.scheduleCM);
-    // this.scheduleService.create(this.scheduleCM, this.option)
-    // .then(
-    //   () => {
-    //       this.createModal.hide();
-    //       this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
-    //       this.scheduleList = [],
-    //       this.getSchedule();
-    //     },
-    //     () => {
-    //       this.toastService.success('Đã có lỗi xảy ra', '', { positionClass: 'toast-bottom-right'} );
-    //     }
-    //   );
+    this.createModal.hide();
+    this.scheduleService.create(this.scheduleCM, this.option)
+    .then(
+      () => {
+          this.toastService.success('Tạo thành công', '', { positionClass: 'toast-bottom-right'} );
+          this.scheduleList = [],
+          this.getSchedule();
+        },
+        () => {
+          this.toastService.success('Đã có lỗi xảy ra', '', { positionClass: 'toast-bottom-right'} );
+        }
+      );
   }
 
   changePage1(event) {

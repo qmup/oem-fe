@@ -1,5 +1,5 @@
 import { TaskBasic } from 'src/app/task/models/task-basic';
-import { Shared, PaginationResponse } from 'src/app/core/models/shared';
+import { Shared, PaginationResponse, TaskCheckingModel } from 'src/app/core/models/shared';
 
 export class PlaceModel {
   description: string;
@@ -115,4 +115,14 @@ export class PlacePagination {
   company: Shared;
   zone: Shared;
   listOfWorkplace: PaginationResponse;
+}
+
+export class CheckWorkplaceOverlap {
+  employeeTaskModels: TaskCheckingModel[];
+  overlap: boolean;
+
+  constructor() {
+    this.employeeTaskModels = new Array<TaskCheckingModel>();
+    this.overlap = false;
+  }
 }

@@ -143,7 +143,6 @@
 
         <form (ngSubmit)="schedule.show(); create.hide()" #createForm="ngForm" class="d-flex flex-wrap w-100">
               
-
           <div class="col-md-12 text-left pb-3 px-0">
             <span class="text-danger font-weight-normal">(*) Thông tin bắt buộc</span>
           </div>
@@ -170,7 +169,51 @@
   
           </div>
   
-          <div class="md-form mt-0 mb-3 col-md-12 px-0">
+          <div class="d-flex flex-wrap w-100 justify-content-center">
+            <owl-form-field class="col-md-12 px-0">
+              <input
+                owlInput
+                name="startTime"
+                [min]="minDate"
+                [owlDateTimeTrigger]="datepicker"
+                [owlDateTime]="datepicker"
+                placeholder="Thời gian bắt đầu"
+                [(ngModel)]="taskCM.startTime"
+                (dateTimeChange)="changeStartTime()"
+                required
+                #dateTime="ngModel">
+              <owl-date-time #datepicker></owl-date-time>
+              <owl-error *ngIf="dateTime?.errors?.required">
+                Vui lòng nhập thời gian bắt đầu
+              </owl-error>
+            </owl-form-field>
+          </div>
+
+          <span *ngIf="isSelectStartTime">
+            Thời lượng công việc:
+            <span class="font-weight-bold">{{taskCM?.duration}} phút</span>
+          </span>
+          <div class="w-100 d-flex justify-content-center align-items-center" *ngIf="isSelectStartTime">
+            <mdb-range-input
+              id="range"
+              [min]="30"
+              [step]="10"
+              [max]="300"
+              name="range"
+              #duration=ngModel
+              required
+              (rangeValueChange)="isSelectRange = true"
+              [ngModel]="taskCM.duration"
+              (ngModelChange)="changeDuration($event)"
+              class="w-100">
+            </mdb-range-input>
+            <span class="ml-2">phút</span>
+            <mdb-error *ngIf="duration.invalid && (duration.dirty || duration.touched)" class="font-weight-normal">
+              <span *ngIf="duration?.errors?.required">Vui lòng chọn thời lượng công việc</span>
+            </mdb-error>
+          </div>
+  
+          <div class="md-form mb-3 mt-2 col-md-12 px-0" *ngIf="isSelectStartTime">
             <mdb-select
               id="company"
               name="company"
@@ -220,7 +263,7 @@
               id="workplace"
               name="workplace"
               [label]="'Nơi làm việc*'" 
-              ngModel
+              [ngModel]="manageWorkplace.workplaceId"
               required
               #workplaceId=ngModel
               [notFoundMsg]="'Không tìm thấy'" 
@@ -237,15 +280,15 @@
             </span>
           </div>
   
-          <div class="d-flex flex-wrap w-100 justify-content-center" *ngIf="isSelectWorkplace">
-            <div class="md-form mt-2 mb-3 col-md-7 px-0"> 
+          <div class="md-form mt-2 mb-3 col-md-12 px-0 d-flex flex-wrap w-100" *ngIf="isSelectWorkplace && isSelectStartTime"> 
+            <div class="col-md-8 px-0">
               <mdb-select 
                 id="employee"
                 name="employee"
                 [label]="'Người thực hiện*'" 
                 [notFoundMsg]="'Không tìm thấy'" 
                 [filterEnabled]="true"
-                [(ngModel)]="assignTask.assigneeId"
+                [ngModel]="assignTask.assigneeId"
                 required
                 #employeeId=ngModel
                 [options]="employeeList"
@@ -253,64 +296,23 @@
                 [class.ng-invalid.validate-error]="employeeId.invalid && (employeeId.dirty || employeeId.touched)"
               >
               </mdb-select>
-              <span
-                class="text-danger font-weight-normal"
-                *ngIf="employeeId.invalid && (employeeId.dirty || employeeId.touched)"
-                style="font-size: .8rem">
-                Vui lòng chọn nhân viên
-              </span>
             </div>
-            <div class="col-md-5 px-0 text-center">
-              <button rounded="true" type="button" mdbBtn color="primary" class="waves-light"
+            <div class="col-md-4 px-0 text-right">
+              <button rounded="true" type="button" mdbBtn size="sm" color="primary" class="waves-light"
                 (click)="openSuggestionModal()" mdbWavesEffect>Nhận gợi ý
               </button>
             </div>
-          </div>
-  
-          <owl-form-field class="col-12 px-0" *ngIf="isSelectWorkplace">
-            <input
-              owlInput
-              name="startTime"
-              [min]="minDate"
-              [owlDateTimeTrigger]="datepicker"
-              [owlDateTime]="datepicker"
-              placeholder="Thời gian bắt đầu"
-              [(ngModel)]="taskCM.startTime"
-              required
-              #dateTime="ngModel">
-            <owl-date-time #datepicker></owl-date-time>
-            <owl-error *ngIf="dateTime?.errors?.required">
-              Vui lòng nhập thời gian bắt đầu
-            </owl-error>
-          </owl-form-field>
-  
-          <span *ngIf="isSelectWorkplace">
-            Thời lượng công việc:
-            <span class="font-weight-bold">{{taskCM?.duration}} phút</span>
-          </span>
-          <div class="w-100 d-flex justify-content-center align-items-center my-3" *ngIf="isSelectWorkplace">
-            <mdb-range-input
-              id="range"
-              [min]="30"
-              [step]="10"
-              [max]="300"
-              name="range"
-              #duration=ngModel
-              required
-              (rangeValueChange)="isSelectRange = true"
-              [ngModel]="taskCM.duration"
-              (ngModelChange)="changeDuration($event)"
-              class="w-100">
-            </mdb-range-input>
-            <span class="ml-2">phút</span>
-            <mdb-error *ngIf="duration.invalid && (duration.dirty || duration.touched)" class="font-weight-normal">
-              <span *ngIf="duration?.errors?.required">Vui lòng chọn thời lượng công việc</span>
-            </mdb-error>
+            <span
+              class="text-danger font-weight-normal"
+              *ngIf="employeeId.invalid && (employeeId.dirty || employeeId.touched)"
+              style="font-size: .8rem">
+              Vui lòng chọn nhân viên
+            </span>
           </div>
   
           <hr>
   
-          <div *ngIf="isSelectWorkplace" class="d-flex flex-wrap w-100 pt-3">
+          <div *ngIf="isSelectWorkplace" class="d-flex flex-wrap w-100">
             <p class="h6 col-12 px-0">Danh sách công việc gợi ý
               <a mdbBtn floating="true" size="sm" color="success" mdbWavesEffect>
                 <i class="fa fa-plus" (click)="openCreateBasicTaskModal(createBT)"></i>
@@ -368,7 +370,12 @@
             <label>Miêu tả chi tiết</label>
           </div>
           <div class="col-12 text-center mt-3 border-top pt-3">
-            <button mdbBtn color="success" class="waves-light" mdbWavesEffect [disabled]="(!createForm.form.valid || selectAtLeastOneTaskBasic)">Tạo mới
+            <button
+              mdbBtn
+              color="success"
+              class="waves-light"
+              mdbWavesEffect
+              [disabled]="(!createForm.form.valid || selectAtLeastOneTaskBasic || assignTask.assigneeId === 0 || manageWorkplace.workplaceId === 0)">Tạo mới
               <i class="fa fa-check ml-1"></i>
             </button>
           </div>
@@ -427,9 +434,9 @@
 
       <!--Footer-->
       <div class="modal-footer d-flex flex-wrap w-100">
-        <a mdbBtn color="info" outline="true" class="waves-effect col-12" mdbWavesEffect [hidden]="selectAtLeastOneDay" (click)="createSchedule()">Tạo
+        <a mdbBtn color="info" outline="true" class="waves-effect col-12" mdbWavesEffect [hidden]="selectAtLeastOneDay" (click)="openCheckingModal(); schedule.hide()">Tạo
           thường nhật</a>
-        <a type="button" mdbBtn color="info" class="waves-effect col-12" mdbWavesEffect (click)="createTask()">Tạo công việc</a>
+        <a type="button" mdbBtn color="info" class="waves-effect col-12" mdbWavesEffect (click)="createTask();">Tạo công việc</a>
         <a type="button" mdbBtn color="light" class="waves-effect col-12" mdbWavesEffect data-dismiss="modal"
           (click)="schedule.hide(); create.show()">Đóng</a>
       </div>
@@ -470,7 +477,7 @@
     <p class="heading">Tạo công việc</p>
   </div>
   <div class="modal-body mx-3 row">
-    <form (ngSubmit)="createTaskBasic()" #createForm="ngForm" class="d-flex flex-wrap w-100">
+    <form (ngSubmit)="createTaskBasic()" #createBTForm="ngForm" class="d-flex flex-wrap w-100">
       <div class="md-form mt-0 mb-3 col-md-12">
         <input 
         type="text" 
@@ -507,7 +514,7 @@
         <img [src]="url" height="100">
       </div>
       <div class="col-12 text-center mt-3 border-top pt-3">
-        <button mdbBtn color="success" class="waves-light" mdbWavesEffect [disabled]="!createForm.form.valid">Tạo mới
+        <button mdbBtn color="success" class="waves-light" mdbWavesEffect [disabled]="!createBTForm.form.valid">Tạo mới
           <i class="fa fa-check ml-1"></i>
         </button>
       </div>
@@ -515,3 +522,89 @@
   </div>
 
 </ng-template>
+
+<ng-template #warning>
+
+    <div class="modal-header d-flex justify-content-center">
+      <p class="heading">Tiếp tục tạo mới?</p>
+    </div>
+    
+    <div class="modal-body mx-3 row">
+      <div class="md-form mt-0 mb-3 col-md-12">
+        <span class="font-weight-normal">
+          Lặp lịch đang tạo lúc <span class="text-primary">{{taskCM.startTime | date: 'hh:mm'}} - {{scheduleCMEndTime | date: 'hh:mm'}} </span> <br> 
+          Ngày lặp lịch: 
+          <span class="text-primary" *ngFor="let day of selectingDay; let i = index">
+          <span *ngIf="day == 1">chủ nhật</span>
+            <span *ngIf="day != 1">thứ {{day}}</span>
+            <span *ngIf="i !== selectingDay.length - 1">, </span>
+          </span>
+        </span>
+        <hr>
+        <span class="font-weight-normal" *ngIf="checkScheduleOverlapModel.length > 0">
+          Nơi làm việc này sẽ có <span class="font-weight-bold">{{checkScheduleOverlapModel.length}}</span> người cùng làm việc
+          <p class="font-weight-normal" *ngFor="let el of checkScheduleOverlapModel; let i = index">
+            {{i+1}}. Tên công việc: <span class="text-primary">{{el.scheduleName}}</span>
+            <br>
+            Người thực hiện: <span class="text-primary">{{el.assigneeName}}</span>
+            <br>
+            Ngày cùng làm việc:
+            <span class="text-primary" *ngFor="let day of el.dayOfWeekOverLaps; let i = index">
+              <span *ngIf="day == 1">Chủ nhật</span>
+              <span *ngIf="day != 1">Thứ {{day}}</span>
+              <span *ngIf="i !== el.dayOfWeekOverLaps.length - 1">, </span>
+            </span>
+            <br>
+          </p>
+          <p class="text-danger font-weight-bold">Tiếp tục tạo mới?</p>
+        </span>
+      </div>
+      <div class="col-12 text-center mt-3 border-top pt-3">
+        <button mdbBtn color="warning" outline="true" class="waves-light" mdbWavesEffect (click)="createSchedule(); modalRef1.hide()">Tiếp tục
+        </button>
+        <button mdbBtn color="warning" class="waves-light" mdbWavesEffect (click)="modalRef1.hide(); createModal.show()">Hủy
+        </button>
+      </div>
+    </div>
+  
+  </ng-template>
+  
+  <ng-template #danger>
+  
+    <div class="modal-header d-flex justify-content-center">
+      <p class="heading">Không thể tạo mới</p>
+    </div>
+  
+    <!--Body-->
+    <div class="modal-body text-center">
+      <i class="fa fa-close fa-4x animated rotateIn"></i>
+      <p class="h6 font-weight-bold">
+        <span class="font-weight-bold">
+          Lặp lịch đang tạo lúc <span class="text-primary">{{taskCM.startTime | date: 'hh:mm'}} - {{scheduleCMEndTime | date: 'hh:mm'}} </span> <br> 
+          Ngày lặp lịch: 
+          <span class="text-primary" *ngFor="let day of selectingDay; let i = index">
+          <span *ngIf="day == 1">chủ nhật</span>
+            <span *ngIf="day != 1">thứ {{day}}</span>
+            <span *ngIf="i !== selectingDay.length - 1">, </span>
+          </span>
+        </span>
+        
+        <span>
+          <hr>
+        </span>
+        Nhân viên này đang có công việc lúc <span class="text-danger">{{duplicateAssignee.timeOverlap}} </span>vào 
+        <span *ngFor="let day of duplicateAssignee.dayOfWeekOverLaps; let i = index">
+          <span *ngIf="day == 1">chủ nhật</span>
+          <span *ngIf="day != 1">thứ {{day}}</span>
+          <span *ngIf="i !== duplicateAssignee.dayOfWeekOverLaps.length - 1">, </span>
+        </span> nên không thể tạo mới lặp lịch
+      </p>
+    </div>
+  
+    <!--Footer-->
+    <div class="modal-footer flex-center">
+      <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+        (click)="modalRef1.hide(); createModal.show()">Hủy</a>
+    </div>
+  
+  </ng-template>

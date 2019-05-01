@@ -10,9 +10,17 @@ export class DashboardService {
 
   constructor(private httpClient: HttpClient) { }
 
-  summaryManagerTask(id: number, from: string, to: string): Promise<SummaryTask> {
+  summary(managerId: number, from: string, to: string, employeeId?: number): Promise<SummaryTask> {
     return this.httpClient.get<SummaryTask>(
-      `${environment.endPoint}${environment.apiPaths.task.summaryTaskAllEmployeeByManager}?managerId=${id}&fromDate=${from}&toDate=${to}`
+      `${environment.endPoint}${environment.apiPaths.task.summary}`,
+      {
+        params: {
+          managerId: `${managerId}`,
+          employeeId: employeeId ? `${employeeId}` : `0`,
+          fromDate: `${from}`,
+          toDate: `${to}`
+        }
+      }
     ).toPromise();
   }
 

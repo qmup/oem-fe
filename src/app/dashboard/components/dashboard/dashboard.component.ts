@@ -94,7 +94,7 @@ export class DashboardComponent implements OnInit {
     this.dateTo = this.dateRange[1];
     const from = this.dateRange ? this.globalService.convertToYearMonthDay(this.dateRange[0]) : '';
     const to = this.dateRange ? this.globalService.convertToYearMonthDay(this.dateRange[1]) : '';
-    this.dashboardService.summaryManagerTask(this.userAccount.id, from, to)
+    this.dashboardService.summary(this.userAccount.id, from, to)
       .then(
         (response: SummaryTask) => {
           this.summaryTask = response;
@@ -104,7 +104,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getSummaryTaskLastWeek() {
-    this.dashboardService.summaryManagerTask(
+    this.dashboardService.summary(
         this.userAccount.id,
         this.globalService.convertToYearMonthDay(this.dateFrom),
         this.globalService.convertToYearMonthDay(this.dateTo)

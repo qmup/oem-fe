@@ -12,12 +12,14 @@
         placeholder="Thời gian bắt đầu" [(ngModel)]="startTime" (dateTimeChange)="changeStartTime()">
       <owl-date-time #datepicker></owl-date-time>
     </owl-form-field>
-    <span *ngIf="startTime">Thời gian hoàn thành</span>
+    <span>Thời lượng công việc: 
+      <span class="font-weight-bold" *ngIf="duration < 60000">{{duration}} phút</span>
+      <span class="font-weight-bold" *ngIf="duration >= 60000">{{duration / 60000}} phút</span>
+    </span>
     <div class="d-flex justify-content-center align-items-center my-3 w-100">
       <div *ngIf="startTime" class="w-75">
         <mdb-range-input id="range" [min]="30" [step]="10" [max]="300" name="range"
           (rangeValueChange)="changeRange($event)" [(ngModel)]="duration" class="w-100"></mdb-range-input>
-        <span class="ml-2">phút</span>
       </div>
       <div class="w-25 text-right">
         <a *ngIf="startTime && duration" class="btn-floating btn-md btn-primary" (click)="suggest()"><i

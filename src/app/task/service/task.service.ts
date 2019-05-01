@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Task, TaskModel, TaskResponse, TaskDetail } from '../models/task';
+import { Task, TaskModel, TaskResponse, TaskDetail, CheckTaskOverlap } from '../models/task';
 import { environment } from 'src/environments/environment';
 import { PaginationResponse, AssignTask, AssignTaskResponse } from 'src/app/core/models/shared';
 import { TaskBasic } from '../models/task-basic';
@@ -147,4 +147,21 @@ export class TaskService {
       `${environment.endPoint}${environment.apiPaths.task.checkRemoveTaskBasic + taskId}/${assignerId}`,
     ).toPromise();
   }
+
+  checkOverlap(workplaceId: number, managerId: number, fromTo: string, startTime: string, endTime: string, assigneeId: number)
+    : Promise<CheckTaskOverlap> {
+      return this.httpClient.get<CheckTaskOverlap>(
+        `${environment.endPoint}${environment.apiPaths.task.checkOverlap}`,
+        {
+          params: {
+            workplaceId: `${workplaceId}`,
+            managerId: `${managerId}`,
+            fromTo: `${fromTo}`,
+            startTimeTask: `${startTime}`,
+            endTimeTask: `${endTime}`,
+            assigneeId: `${assigneeId}`,
+          }
+        }
+      ).toPromise();
+    }
 }

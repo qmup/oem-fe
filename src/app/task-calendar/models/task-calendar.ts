@@ -4,6 +4,7 @@ export class TaskCalendar {
   taskId: number;
   title: string;
   start: string;
+  status: number;
   end: string;
   meta: Shared;
   resizable: {

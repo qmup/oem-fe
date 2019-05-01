@@ -3,7 +3,7 @@ import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bo
 import { EmployeeService } from 'src/app/employee/services/employee.service';
 import { PlaceService } from 'src/app/place/services/place.service';
 import { ScheduleService } from '../../service/schedule.service';
-import { Schedule, ScheduleModel } from '../../models/schedule';
+import { Schedule, ScheduleModel, CheckScheduleOverlap } from '../../models/schedule';
 import { ToastService, UploadOutput, UploadFile, UploadInput, humanizeBytes } from 'ng-uikit-pro-standard';
 import { Employee } from 'src/app/employee/models/employee';
 import { PlacePagination, Place } from 'src/app/place/models/place';
@@ -48,6 +48,8 @@ export class ScheduleDetailComponent implements OnInit {
   @ViewChild('edit') public editTaskBasicModal: TemplateRef<any>;
   @ViewChild('main') public mainModal: TemplateRef<any>;
   @ViewChild('delete') public deleteModal: TemplateRef<any>;
+  @ViewChild('warning') warning: TemplateRef<any>;
+  @ViewChild('danger') danger: TemplateRef<any>;
 
   refresh: EventEmitter<any> = new EventEmitter<any>();
 
@@ -69,6 +71,10 @@ export class ScheduleDetailComponent implements OnInit {
   selectAtLeastOneDay: boolean;
   assigneeId: number;
   workplaceId: number;
+  checkScheduleOverlapModel: CheckScheduleOverlap[];
+  duplicateAssignee: CheckScheduleOverlap;
+  scheduleEndTime: Date;
+  selectingDay: any[];
 
   constructor(
     public modalRef: BsModalRef,
@@ -173,7 +179,7 @@ export class ScheduleDetailComponent implements OnInit {
     scheduleUM.endTime = this.schedule.endTime;
     scheduleUM.id = this.schedule.id;
     scheduleUM.taskBasics = this.schedule.taskBasics;
-    scheduleUM.startTime = this.schedule.startTime;
+    scheduleUM.startTime = this.startTime;
     scheduleUM.duration = this.schedule.duration * 60000;
     scheduleUM.status = this.schedule.status;
     scheduleUM.title = this.schedule.title;
@@ -213,6 +219,34 @@ export class ScheduleDetailComponent implements OnInit {
     };
     this.modalRef = this.modalService.show( ScheduleDetailComponent , modalOptions);
     this.modalRef.content.refresh.subscribe(() => {});
+  }
+
+  openCheckingModal() {
+    this.schedule.assigner.id = this.userAccount.id;
+    this.schedule.workplaceId = this.schedule.workplaceId;
+    this.schedule.daysOfWeek = this.week.filter(d => d.check === true).map(d => d.id).join(',');
+    this.selectingDay = this.week.filter(d => d.check === true).map(d => d.id);
+    this.scheduleEndTime = new Date(new Date(this.schedule.startTime).getTime() + this.schedule.duration * 60000);
+    this.scheduleService.checkOverlap(
+      this.schedule.workplaceId, this.schedule.assignee.id, this.userAccount.id,
+      this.schedule.daysOfWeek, new Date(this.startTime).toISOString(), this.schedule.duration * 60000
+    ).then(
+      (res: CheckScheduleOverlap[]) => {
+        this.checkScheduleOverlapModel = res;
+        if (this.checkScheduleOverlapModel.length > 0) {
+          this.modalRef.hide();
+          if (this.checkScheduleOverlapModel.filter(e => e.assigneeId === this.schedule.assignee.id).length === 0) {
+            this.modalRef1 = this.modalService.show(this.warning, { class: 'modal-md modal-dialog modal-notify modal-warning' });
+          } else {
+            this.duplicateAssignee = new CheckScheduleOverlap();
+            this.duplicateAssignee = this.checkScheduleOverlapModel.find(e => e.assigneeId === this.schedule.assignee.id);
+            this.modalRef1 = this.modalService.show(this.danger, { class: 'modal-md modal-dialog modal-notify modal-danger' });
+          }
+        } else {
+          this.updateSchedule();
+        }
+      }
+    );
   }
 
   removeTaskBasic() {

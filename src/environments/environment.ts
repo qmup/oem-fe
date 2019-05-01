@@ -7,8 +7,8 @@ export const environment = {
   production: false,
   token: 'OEM_TOKEN',
   account: 'OEM_ACCOUNT',
-  // endPoint: 'http://localhost:8080/',
-  endPoint: 'http://113.161.84.125/',
+  endPoint: 'http://localhost:8080/',
+  // endPoint: 'http://113.161.84.125/',
   apiPaths: {
     firebase: {
       apiKey: 'AIzaSyCv23Kx9Xfh4okq30jtY_QJi2CudhO_7f4',
@@ -87,6 +87,7 @@ export const environment = {
       removeFromManager: 'workplace/remove-workplace-from-manager',
       addTaskToWorkplace: 'workplace/add-task-to-workplace',
       getAvailableByDate: 'workplace/get-available-workplace-and-task-by-date/',
+      checkOverlap: 'workplace/check-overlap-for-task'
     },
     task: {
       create: 'task/create',
@@ -94,7 +95,7 @@ export const environment = {
       getTaskByDate: 'task/get-task-from-date-to-date',
       getTodayTask: 'task/get-today-task',
       remove: 'task/remove-task',
-      summaryTaskAllEmployeeByManager: 'task/summary-task-all-employee-by-manager',
+      summary: 'task/summary-task',
       update: 'task/update-task',
       updateWorkplace: 'task/update-workplace',
       updateField: 'task/update-task-by-field/',
@@ -102,7 +103,8 @@ export const environment = {
       updateTaskBasicList: 'task/update-task-basic-list',
       getAssignHistory: 'assign-task/get-assign-history',
       checkRemove: 'task/check-task-basic',
-      checkRemoveTaskBasic: 'task/check-remove-task-basic/'
+      checkRemoveTaskBasic: 'task/check-remove-task-basic/',
+      checkOverlap: 'task/check-overlap'
     },
     coordinate: {
       create: 'coordinate/create',
@@ -128,6 +130,7 @@ export const environment = {
       update: 'schedule/update-dto/',
       updateTaskBasic: 'schedule/update-task-basic/',
       deleteTaskBasic: 'schedule/remove-task-basic/',
+      checkOverlap: 'schedule/check-overlap/',
 
     },
     upload: {

@@ -1,4 +1,4 @@
-import { Place, PlaceModel, ManageWorkplace, PlacePagination } from '../models/place';
+import { Place, PlaceModel, ManageWorkplace, PlacePagination, CheckWorkplaceOverlap } from '../models/place';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -152,6 +152,21 @@ export class PlaceService {
   checkRemoveManager(assigner: number, workplaceId: number): Promise<any> {
     return this.httpClient.get<any>(
       `${environment.endPoint}${environment.apiPaths.workplace.checkRemoveManager + assigner}/${workplaceId}`,
+    ).toPromise();
+  }
+
+  checkOverlap(workplaceId: number, managerId: number, fromTo: string, startTime, endTime): Promise<CheckWorkplaceOverlap> {
+    return this.httpClient.get<any>(
+      `${environment.endPoint}${environment.apiPaths.workplace.checkOverlap}`,
+      {
+        params: {
+          workplaceId: `${workplaceId}`,
+          managerId: `${managerId}`,
+          fromTo: `${fromTo}`,
+          startTimeTask: `${startTime}`,
+          endTimeTask: `${endTime}`,
+        }
+      }
     ).toPromise();
   }
 }

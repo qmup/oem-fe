@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { ScheduleModel, Schedule } from '../models/schedule';
+import { ScheduleModel, Schedule, CheckScheduleOverlap } from '../models/schedule';
 import { PaginationResponse } from 'src/app/core/models/shared';
 import { TaskBasic } from '../models/task-basic';
 
@@ -64,6 +64,23 @@ export class ScheduleService {
   deleteTaskBasicList(taskBasicId: number, scheduleId: number): Promise<boolean> {
     return this.httpClient.delete<boolean>(
       `${environment.endPoint}${environment.apiPaths.schedule.deleteTaskBasic + taskBasicId}/${scheduleId}`,
+    ).toPromise();
+  }
+  checkOverlap(
+    workplaceId: number, assigneeId: number, managerId: number, dayOfWeeks: string, startTimeSchedule: string, duration: number
+  ): Promise<CheckScheduleOverlap[]> {
+    return this.httpClient.get<CheckScheduleOverlap[]>(
+      `${environment.endPoint}${environment.apiPaths.schedule.checkOverlap}`,
+      {
+        params: {
+          workplaceId: `${workplaceId}`,
+          assigneeId: `${assigneeId}`,
+          managerId: `${managerId}`,
+          startTimeSchedule: `${startTimeSchedule}`,
+          duration: `${duration}`,
+          dayOfWeeks: `${dayOfWeeks}`,
+        }
+      }
     ).toPromise();
   }
 }

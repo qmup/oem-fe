@@ -1,8 +1,8 @@
-import { Shared } from 'src/app/core/models/shared';
+import { Shared, TaskCheckingModel } from 'src/app/core/models/shared';
 import { TaskBasic } from './task-basic';
 import { BeaconModel, Beacon } from 'src/app/beacon/models/beacon';
 import { TaskReport } from 'src/app/report/models/report';
-import { ZoneDTO, CompanyDTO, PlaceModel } from 'src/app/place/models/place';
+import { ZoneDTO, CompanyDTO, PlaceModel, CheckWorkplaceOverlap } from 'src/app/place/models/place';
 
 export class Task {
   attendanceStatus: number;
@@ -274,5 +274,17 @@ export class AdvancedSearchRequest {
     this.dateCreate = [];
     this.dateUpdate = [];
     this.startTime = [];
+  }
+}
+
+export class CheckTaskOverlap {
+  workplaceTaskModel: CheckWorkplaceOverlap;
+  timeOverlap: string;
+  realizable: boolean;
+
+  constructor() {
+    this.workplaceTaskModel = new CheckWorkplaceOverlap();
+    this.timeOverlap = '';
+    this.realizable = false;
   }
 }

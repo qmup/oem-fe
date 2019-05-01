@@ -38,6 +38,7 @@ export class TaskSuggestionComponent implements OnInit {
 
   ngOnInit() {
     this.userAccount = this.globalService.getUserAccount();
+    this.endTime = this.startTime.getTime() + (this.duration * 60000);
     this.getTaskOfWorkplaceByDate();
   }
 
@@ -70,7 +71,6 @@ export class TaskSuggestionComponent implements OnInit {
   }
 
   changeStartTime() {
-    this.duration = 0;
     this.getTaskOfWorkplaceByDate();
   }
 
@@ -98,7 +98,6 @@ export class TaskSuggestionComponent implements OnInit {
     const startTime = this.startTime;
     const duration = this.duration;
     this.modalRef.hide();
-    console.log(id);
     this.refresh.emit(
       { id, startTime, duration }
     );

@@ -535,3 +535,91 @@
     </div>
   </div>
 </div>
+
+<div mdbModal #warning="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="warning" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-warning" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Bạn có muốn tiếp tục?</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-question fa-4x animated rotateIn"></i>
+        <p class="h6 font-weight-bold">Nơi này đang có các công việc của:</p>
+        <p *ngFor="let el of checkTimeOverlapModel.workplaceTaskModel.employeeTaskModels; let i = index" class="h6 font-weight-bold">
+          {{i+1}}. {{el.employeeName}} lúc {{el.timeOverlap}}
+        </p>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a mdbBtn color="warning" outline="true" class="waves-effect" mdbWavesEffect (click)="acceptChangeStartTime()">Đồng ý</a>
+        <a type="button" mdbBtn color="warning" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+          (click)="warning.hide()">Hủy</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+<div mdbModal #warningWorkplace="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="warning" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-warning" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Bạn có muốn tiếp tục?</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-question fa-4x animated rotateIn"></i>
+        <p class="h6 font-weight-bold">Nơi này đang có các công việc của:</p>
+        <p *ngFor="let el of checkWorkplaceOverlapModel.employeeTaskModels; let i = index" class="h6 font-weight-bold">
+          {{i+1}}. {{el.employeeName}} lúc {{el.timeOverlap}}
+        </p>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a mdbBtn color="warning" outline="true" class="waves-effect" mdbWavesEffect (click)="acceptChangeWorkplace()">Đồng ý</a>
+        <a type="button" mdbBtn color="warning" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+          (click)="warningWorkplace.hide()">Hủy</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+<div mdbModal #danger="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+  aria-labelledby="danger" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Đã có lỗi xảy ra</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-close fa-4x animated rotateIn"></i>
+        <p class="h6 font-weight-bold">
+          Nhân viên này đang có công việc lúc {{checkTimeOverlapModel.timeOverlap}} nên không thể thay đổi thời gian công việc
+        </p>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+          (click)="danger.hide()">Hủy</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>

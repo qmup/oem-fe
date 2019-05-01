@@ -3,7 +3,7 @@ import { UploadFile, UploadInput, humanizeBytes, UploadOutput, IMyOptions, Toast
 import { TaskService } from '../../service/task.service';
 import { GlobalService } from 'src/app/core/services/global.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TaskDetail, Task, TaskModel } from '../../models/task';
+import { TaskDetail, Task, TaskModel, CheckTaskOverlap } from '../../models/task';
 import { ReportService } from 'src/app/report/services/report.service';
 import { TaskReport, TaskModel as ReportModel } from 'src/app/report/models/report';
 import { Employee } from 'src/app/employee/models/employee';
@@ -15,7 +15,7 @@ import {
   TaskCheckingModel
 } from 'src/app/core/models/shared';
 import { EmployeeService } from 'src/app/employee/services/employee.service';
-import { ManageWorkplace, PlacePagination, Place } from 'src/app/place/models/place';
+import { ManageWorkplace, PlacePagination, Place, CheckWorkplaceOverlap } from 'src/app/place/models/place';
 import { PlaceService } from 'src/app/place/services/place.service';
 import { ModalOptions, BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
 import { PlaceTaskBasicComponent } from 'src/app/place/components/place-task-basic/place-task-basic.component';
@@ -38,6 +38,9 @@ export class TaskDetailComponent implements OnInit {
   @ViewChild('edit') editTaskBasicModal: ModalDirective;
   @ViewChild('reportModal') reportModal: ModalDirective;
   @ViewChild('confirm') confirmModal: ModalDirective;
+  @ViewChild('warning') warningModal: ModalDirective;
+  @ViewChild('warningWorkplace') warningWorkplaceModal: ModalDirective;
+  @ViewChild('danger') dangerModal: ModalDirective;
   iconPrioritySelect: Array<any>;
   iconStatusSelect: Array<any>;
   formData: FormData;
@@ -93,6 +96,8 @@ export class TaskDetailComponent implements OnInit {
   currentStatus: number;
   newStartTime: Date;
   currentWorkplace: number;
+  checkTimeOverlapModel: CheckTaskOverlap = new CheckTaskOverlap();
+  checkWorkplaceOverlapModel: CheckWorkplaceOverlap = new CheckWorkplaceOverlap();
 
   constructor(
     private taskService: TaskService,
@@ -139,27 +144,15 @@ export class TaskDetailComponent implements OnInit {
             { value: 0, label: 'Chưa bắt đầu' },
             { value: 3, label: 'Quá hạn' },
           ];
-          if (this.searchByDate) {
-            if (this.task.status === 0) {
-              this.checkTaskAvailable(
-                new Date(this.task.startTime).toISOString(),
-                new Date(this.task.endTime).toISOString(),
-                new Date(this.dateFrom).toISOString(),
-                new Date(this.dateTo).toISOString()
-              );
-            }
-          } else {
-            if (this.task.status === 0) {
-              const today = new Date();
-              const from: any = today.setHours(0, 0, 0, 0);
-              const to: any = today.setHours(23, 59, 59, 999);
-              this.checkTaskAvailable(
-                new Date(this.task.startTime).toISOString(),
-                new Date(this.task.endTime).toISOString(),
-                new Date(from).toISOString(),
-                new Date(to).toISOString()
-              );
-            }
+          if (this.task.status === 0) {
+            const from: any = new Date(this.task.startTime).setHours(0, 0, 0, 0);
+            const to: any = new Date(this.task.startTime).setHours(23, 59, 59, 999);
+            this.checkTaskAvailable(
+              new Date(this.task.startTime).toISOString(),
+              new Date(this.task.endTime).toISOString(),
+              new Date(from).toISOString(),
+              new Date(to).toISOString()
+            );
           }
           this.getWorkplaceByManager();
         }
@@ -488,11 +481,94 @@ export class TaskDetailComponent implements OnInit {
 
   changeWorkplace(event: any) {
     this.manageWorkplace.workplaceId = event.value;
-    this.openTaskBasicModal(event.value, this.task);
+    const firstHourOfDate = new Date(
+      new Date(this.task.startTime).getFullYear(),
+      new Date(this.task.startTime).getMonth(),
+      new Date(this.task.startTime).getDate(),
+      0, 0, 0, 0
+    ).toISOString();
+    const lastHourOfDate = new Date(
+      new Date(this.task.startTime).getFullYear(),
+      new Date(this.task.startTime).getMonth(),
+      new Date(this.task.startTime).getDate(),
+      23, 59, 59, 999
+      ).toISOString();
+    this.workplaceService.checkOverlap(
+      this.task.workplace.id,
+      this.userAccount.id,
+      `${firstHourOfDate};${lastHourOfDate}`,
+      new Date(this.task.startTime).toISOString(),
+      new Date(this.task.endTime).toISOString()
+    ).then(
+      (res) => {
+        this.checkWorkplaceOverlapModel = res;
+        if (this.checkWorkplaceOverlapModel.employeeTaskModels.length === 0) {
+          this.openTaskBasicModal(this.manageWorkplace.workplaceId, this.task);
+        } else {
+          this.warningWorkplaceModal.show();
+        }
+      }
+    );
   }
 
   changeStartTime1(e: any) {
     this.newStartTime = e.value;
+    const from: Date = this.dateRange[0];
+    const to: Date = this.dateRange[1];
+    const firstHourOfDate = new Date(
+      this.newStartTime.getFullYear(),
+      this.newStartTime.getMonth(),
+      this.newStartTime.getDate(),
+      0, 0, 0, 0
+    ).toISOString();
+    const lastHourOfDate = new Date(
+      this.newStartTime.getFullYear(),
+      this.newStartTime.getMonth(),
+      this.newStartTime.getDate(),
+      23, 59, 59, 999
+      ).toISOString();
+    const startTime: Date = new Date(
+      this.newStartTime.getFullYear(),
+      this.newStartTime.getMonth(),
+      this.newStartTime.getDate(),
+      from.getHours(),
+      from.getMinutes(),
+      0
+    );
+    const endTime: Date = new Date(
+      this.newStartTime.getFullYear(),
+      this.newStartTime.getMonth(),
+      this.newStartTime.getDate(),
+      to.getHours(),
+      to.getMinutes(),
+      0
+    );
+    this.taskService.checkOverlap(
+    this.task.workplace.id,
+      this.userAccount.id,
+      `${firstHourOfDate};${lastHourOfDate}`,
+      startTime.toISOString(),
+      endTime.toISOString(),
+    this.task.assignee.id)
+    .then(
+      (res: CheckTaskOverlap) => {
+        this.checkTimeOverlapModel = res;
+        console.log(this.checkTimeOverlapModel);
+        if (this.checkTimeOverlapModel.workplaceTaskModel.overlap) {
+          this.warningModal.show();
+        } else {
+          if (this.checkTimeOverlapModel.workplaceTaskModel.employeeTaskModels.length === 0) {
+            this.acceptChangeStartTime();
+          } else {
+            this.dangerModal.show();
+          }
+        }
+      }
+    );
+
+  }
+
+  acceptChangeStartTime() {
     const from: Date = this.dateRange[0];
     const to: Date = this.dateRange[1];
     const startTime: Date = new Date(
@@ -541,31 +617,60 @@ export class TaskDetailComponent implements OnInit {
   changeStartTime2(e: any) {
     const from: Date = e.value[0];
     const to: Date = e.value[1];
-    const taskUM: TaskModel = new TaskModel();
-    taskUM.attendanceStatus = this.task.attendanceStatus;
-    taskUM.basic = false;
-    taskUM.checkInTime = this.task.checkInTime;
-    taskUM.dateCreate = this.task.dateCreate;
-    taskUM.description = this.task.description;
-    taskUM.duration = to.getTime() - from.getTime();
-    taskUM.id = this.task.id;
-    taskUM.endTime = to.toISOString();
-    taskUM.picture = this.task.picture;
-    taskUM.priority = this.task.priority;
-    taskUM.scheduleId = this.task.scheduleId;
-    taskUM.startTime = from.toISOString();
-    taskUM.status = this.task.status;
-    taskUM.title = this.task.title;
-    this.taskService.update(taskUM)
-      .then(
-        () => {
-          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
-          this.loadTask(this.selectingId);
-        },
-        () => {
-          this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
+    const firstHourOfDate = new Date(
+      this.newStartTime.getFullYear(),
+      this.newStartTime.getMonth(),
+      this.newStartTime.getDate(),
+      0, 0, 0, 0
+    ).toISOString();
+    const lastHourOfDate = new Date(
+      this.newStartTime.getFullYear(),
+      this.newStartTime.getMonth(),
+      this.newStartTime.getDate(),
+      23, 59, 59, 999
+      ).toISOString();
+    const startTime: Date = new Date(
+      this.newStartTime.getFullYear(),
+      this.newStartTime.getMonth(),
+      this.newStartTime.getDate(),
+      from.getHours(),
+      from.getMinutes(),
+      0
+    );
+    const endTime: Date = new Date(
+      this.newStartTime.getFullYear(),
+      this.newStartTime.getMonth(),
+      this.newStartTime.getDate(),
+      to.getHours(),
+      to.getMinutes(),
+      0
+    );
+    this.taskService.checkOverlap(
+      this.task.workplace.id,
+      this.userAccount.id,
+      `${firstHourOfDate};${lastHourOfDate}`,
+      startTime.toISOString(),
+      endTime.toISOString(),
+      this.task.assignee.id)
+    .then(
+      (res: CheckTaskOverlap) => {
+        this.checkTimeOverlapModel = res;
+        if (this.checkTimeOverlapModel.workplaceTaskModel.overlap) {
+          this.warningModal.show();
+        } else {
+          if (this.checkTimeOverlapModel.workplaceTaskModel.employeeTaskModels.length === 0) {
+            this.acceptChangeStartTime();
+          } else {
+            this.dangerModal.show();
+          }
         }
-      );
+      }
+    );
+  }
+
+  acceptChangeWorkplace() {
+    this.warningWorkplaceModal.hide();
+    this.openTaskBasicModal(this.manageWorkplace.workplaceId, this.task);
   }
 
   openTaskBasicModal(workplaceId: number, task: TaskDetail) {

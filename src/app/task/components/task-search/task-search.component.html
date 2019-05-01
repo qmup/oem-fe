@@ -1,37 +1,49 @@
 <div class="d-flex flex-wrap w-100 pt-3" id="task-search">
-  
+
   <div class="col-xl-2 col-md-4 col-xs-6 col-12 md-form my-0">
     <input mdbInput type="number" min="1" id="id" class="form-control" [(ngModel)]="taskId">
     <label for="id" class="">Mã số</label>
   </div>
 
-  <!-- <div class="col-xl-2 col-md-4 col-xs-6 col-12">
-    <mdb-select [filterEnabled]="true" [options]="typeList" placeholder="Loại công việc"></mdb-select>
-  </div> -->
-
   <div class="col-xl-2 col-md-4 col-xs-6 col-12">
-    <mdb-select [label]="'Trạng thái'" [filterEnabled]="true" [multiple]="true" [options]="statusList" (selected)="selectStatus($event)" (deselected)="deselectStatus($event)" [(ngModel)]="advancedSearchRequest.status"></mdb-select>
+    <mdb-select [label]="'Trạng thái'" [filterEnabled]="true" [multiple]="true" [options]="statusList"
+      (selected)="selectStatus($event)" (deselected)="deselectStatus($event)"></mdb-select>
   </div>
 
-  <div class="col-xl-2 col-md-4 col-xs-6 col-12">
-    <mdb-select [label]="'Điểm danh'" [filterEnabled]="true" [multiple]="true" [options]="attendanceStatusList" (selected)="selectAttendance($event)" (deselected)="deselectAttendance($event)" [(ngModel)]="advancedSearchRequest.attendance"></mdb-select>
-  </div>
 
   <div class="col-xl-2 col-md-4 col-xs-6 col-12">
-    <mdb-select [label]="'Nhân viên'" [filterEnabled]="true" [multiple]="true" [options]="employeeList" (selected)="selectEmployee($event)" (deselected)="deselectEmployee($event)" [(ngModel)]="advancedSearchRequest.assigneeId"></mdb-select>
+    <mdb-select [label]="'Điểm danh'" [filterEnabled]="true" [multiple]="true" [options]="attendanceStatusList"
+      (selected)="selectAttendance($event)" (deselected)="deselectAttendance($event)"></mdb-select>
   </div>
 
-  <div class="col-xl-2 col-md-4 col-xs-6 col-12">
-    <mdb-select [label]="'Nơi làm việc'" [filterEnabled]="true" [multiple]="true" [options]="placeList" (selected)="selectWorkplace($event)" (deselected)="deselectWorkplace($event)" [(ngModel)]="advancedSearchRequest.workplaceId"></mdb-select>
-  </div>
 
   <div class="col-xl-2 col-md-4 col-xs-6 col-12">
-    <mdb-select [label]="'Khác'" [filterEnabled]="true" [multiple]="true"[options]="moreList" (selected)="selectMore($event)" (deselected)="deselectMore($event)" [(ngModel)]="advancedSearchRequest.moreList"></mdb-select>
+    <mdb-select [label]="'Nhân viên'" [filterEnabled]="true" [multiple]="true" [options]="employeeList"
+      (selected)="selectEmployee($event)" (deselected)="deselectEmployee($event)"></mdb-select>
+  </div>
+
+
+  <div class="col-xl-2 col-md-4 col-xs-6 col-12">
+    <mdb-select [label]="'Nơi làm việc'" [filterEnabled]="true" [multiple]="true" [options]="placeList"
+      (selected)="selectWorkplace($event)" (deselected)="deselectWorkplace($event)"></mdb-select>
+  </div>
+
+
+  <div class="col-xl-2 col-md-4 col-xs-6 col-12">
+    <mdb-select [label]="'Khác'" [filterEnabled]="true" [multiple]="true" [options]="moreList"
+      (selected)="selectMore($event)" (deselected)="deselectMore($event)"></mdb-select>
   </div>
 
   <div class="col-xl-2 col-md-4 col-xs-6 col-12 mb-0 md-form mt-3" *ngIf="selectDuration">
-    <input mdbInput type="number" id="duration" class="form-control" [(ngModel)]="duration">
-    <label for="duration" class="">Thời lượng (phút)</label>
+    <div class="row">
+      <div class="col-4">
+        <mdb-select [options]="compareList" [(ngModel)]="comparation"></mdb-select>
+      </div>
+      <div class="col-8">
+        <input mdbInput type="number" id="duration" class="form-control" [(ngModel)]="duration">
+        <label for="duration" class="">Thời lượng (phút)</label>
+      </div>
+    </div>
   </div>
 
   <div class="col-xl-2 col-md-4 col-xs-6 col-12 mb-0 md-form mt-3" *ngIf="selectTitle">
@@ -40,17 +52,20 @@
   </div>
 
   <owl-form-field class="col-xl-2 col-md-4 col-xs-6 col-12 mt-3" *ngIf="selectDateCreate">
-    <input owlInput [selectMode]="'range'" [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker" placeholder="Ngày tạo" [(ngModel)]="dateCreate">
+    <input owlInput [selectMode]="'range'" [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker"
+      placeholder="Ngày tạo" [(ngModel)]="dateCreate">
     <owl-date-time [pickerType]="'calendar'" #datepicker></owl-date-time>
   </owl-form-field>
 
   <owl-form-field class="col-xl-2 col-md-4 col-xs-6 col-12 mt-3" *ngIf="selectDateUpdate">
-    <input owlInput [selectMode]="'range'" [owlDateTimeTrigger]="datepicker1" [owlDateTime]="datepicker1" placeholder="Ngày cập nhật" [(ngModel)]="dateUpdate">
+    <input owlInput [selectMode]="'range'" [owlDateTimeTrigger]="datepicker1" [owlDateTime]="datepicker1"
+      placeholder="Ngày cập nhật" [(ngModel)]="dateUpdate">
     <owl-date-time #datepicker1 [pickerType]="'calendar'"></owl-date-time>
   </owl-form-field>
 
   <owl-form-field class="col-xl-4 col-md-4 col-xs-6 col-12 mt-3" *ngIf="selectDateStart">
-    <input owlInput [selectMode]="'range'" [owlDateTimeTrigger]="datepicker2" [owlDateTime]="datepicker2" placeholder="Thời gian công việc" [(ngModel)]="startTime">
+    <input owlInput [selectMode]="'range'" [owlDateTimeTrigger]="datepicker2" [owlDateTime]="datepicker2"
+      placeholder="Thời gian công việc" [(ngModel)]="startTime">
     <owl-date-time #datepicker2></owl-date-time>
   </owl-form-field>
 

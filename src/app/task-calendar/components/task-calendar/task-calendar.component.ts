@@ -18,6 +18,31 @@ import {
   Employee
 } from 'src/app/employee/models/employee';
 import { Router } from '@angular/router';
+import { colors } from '../../models/colors';
+
+const taskColor = [
+  {
+    color: colors.grey,
+    name: 'grey',
+  },
+  {
+    color: colors.blue,
+    name: 'blue',
+  },
+  {
+    color: colors.green,
+    name: 'green',
+  },
+  {
+    color: colors.red,
+    name: 'red',
+  },
+  {
+    color: colors.yellow,
+    name: 'yellow',
+  }
+];
+
 
 @Component({
   selector: 'app-task-calendar',
@@ -82,8 +107,16 @@ export class TaskCalendarComponent implements OnInit {
 
           this.events = response.map(e => {
             const user = this.users.find(u => u.id === e.meta.id);
+            const start = new Date(e.start);
+            const end = new Date(e.end);
+            const startHour = this.addZero(start.getHours());
+            const startMin = this.addZero(start.getMinutes());
+            const endHour = this.addZero(end.getHours());
+            const endMin = this.addZero(end.getMinutes());
+            console.log(e.status);
+            console.log(taskColor[e.status].color);
             return {
-              title: e.title,
+              title: `${startHour}:${startMin}-${endHour}:${endMin} - ${e.title} `,
               start: new Date(e.start),
               end: new Date(e.end),
               meta: {
@@ -93,6 +126,7 @@ export class TaskCalendarComponent implements OnInit {
                 beforeStart: false,
                 afterEnd: false
               },
+              color: taskColor[e.status].color,
               draggable: false,
               taskId: e.taskId
             };
@@ -103,5 +137,12 @@ export class TaskCalendarComponent implements OnInit {
 
   clicked(e: any) {
     this.route.navigate(['/task-detail', e.event.taskId]);
+  }
+
+  addZero(i) {
+    if (i < 10) {
+      i = '0' + i;
+    }
+    return i;
   }
 }

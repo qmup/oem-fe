@@ -6,9 +6,9 @@ import { ModalDirective, ModalOptions, BsModalService, BsModalRef } from 'ngx-bo
 import { EmployeeService } from 'src/app/employee/services/employee.service';
 import { PlaceService } from 'src/app/place/services/place.service';
 import { ScheduleService } from '../../service/schedule.service';
-import { ScheduleModel } from '../../models/schedule';
+import { ScheduleModel, CheckScheduleOverlap } from '../../models/schedule';
 import { GlobalService } from 'src/app/core/services/global.service';
-import { PaginationResponse, AssignTask, NotificationSendingModel } from 'src/app/core/models/shared';
+import { PaginationResponse, AssignTask, NotificationSendingModel, TaskCheckingModel } from 'src/app/core/models/shared';
 import { ManageWorkplace, PlacePagination, Place } from 'src/app/place/models/place';
 import { ZonePagination } from 'src/app/place/models/zone';
 import { ZoneService } from 'src/app/place/services/zone.service';
@@ -35,6 +35,8 @@ export class TaskComponent implements OnInit {
   @ViewChild('schedule') scheduleModal: ModalDirective;
   @ViewChild('delete') deleteModal: ModalDirective;
   @ViewChild('send') sendNotiModal: ModalDirective;
+  @ViewChild('warning') warning: TemplateRef<any>;
+  @ViewChild('danger') danger: TemplateRef<any>;
   employeeList = [];
   workplaceList = [];
   dateFrom: any;
@@ -87,6 +89,12 @@ export class TaskComponent implements OnInit {
   optionNextWeek = 0;
   option = 1;
   selectAtLeastOneDay = true;
+  assigneeId = 0;
+  isSelectStartTime: boolean;
+  checkScheduleOverlapModel: CheckScheduleOverlap[];
+  scheduleCMEndTime: Date;
+  selectingDay: any[];
+  duplicateAssignee: CheckScheduleOverlap;
 
   constructor(
     private taskService: TaskService,
@@ -111,13 +119,7 @@ export class TaskComponent implements OnInit {
     this.assignTask.assignerId = this.userAccount.id;
     this.iconPrioritySelect = this.globalService.iconPrioritySelect;
     this.week = this.globalService.week;
-    this.getEmployee();
     this.getCompany();
-    this.fieldSort = localStorage.getItem('sortRequest');
-    if (this.fieldSort === null) {
-      this.fieldSort = 'id:desc';
-      localStorage.setItem('sortRequest', this.fieldSort);
-    }
   }
 
   sort(field: string) {
@@ -128,7 +130,6 @@ export class TaskComponent implements OnInit {
     } else {
       this.fieldSort += ':desc';
     }
-    localStorage.setItem('sortRequest', this.fieldSort);
   }
 
   getTask() {
@@ -146,6 +147,62 @@ export class TaskComponent implements OnInit {
     const date = this.globalService.convertToYearMonthDay(this.taskCM.startTime);
     this.workplaceService.getAvailableByDate(
       this.userAccount.id, '', 1, this.manageWorkplace.zoneId, date, '', 'id', 0, 99
+    );
+  }
+
+  changeStartTime() {
+    this.isSelectStartTime = true;
+    this.assignTask.assigneeId = 0;
+    if (this.taskCM.duration) {
+      this.checkTask();
+    }
+    if (this.manageWorkplace.zoneId) {
+      this.getWorkplace(this.manageWorkplace.zoneId);
+    }
+  }
+
+  checkTask() {
+    const startTime = new Date(this.taskCM.startTime).getTime();
+    const endTime = new Date(this.taskCM.startTime).getTime() + this.taskCM.duration * 60000;
+    const firstHourOfDay: any = new Date(this.taskCM.startTime).setHours(0, 0, 0, 0);
+    const lastHourOfDay: any = new Date(this.taskCM.startTime).setHours(23, 59, 59, 999);
+    this.checkTaskAvailable(startTime, endTime, new Date(firstHourOfDay).toISOString(), new Date(lastHourOfDay).toISOString());
+  }
+
+  checkTaskAvailable(startTime, endTime, from: string, to: string) {
+    this.employeeService.checkAvailableForTask(
+      this.userAccount.id,
+      `${from};${to}`,
+      new Date(startTime).toISOString(),
+      new Date(endTime).toISOString(),
+      '',
+      '',
+      0,
+      99
+    ).then(
+      (res: PaginationResponse) => {
+        this.employeeList = res.content
+          .filter((el: TaskCheckingModel) => el.employeeId !== this.assignTask.assigneeId)
+          .map(
+            (e: TaskCheckingModel) => {
+              if (e.realizable) {
+                return {
+                  value: e.employeeId,
+                  label: e.employeeName,
+                  icon: e.picture
+                };
+              } else {
+                return {
+                  value: e.employeeId,
+                  label: `${e.employeeName} - có công việc lúc ${e.timeOverlap}`,
+                  icon: e.picture,
+                  disabled: true
+                };
+              }
+            }
+          )
+          .sort((a, b) => (a.disabled === b.disabled) ? 0 : b.disabled ? -1 : 1);
+      }
     );
   }
 
@@ -190,21 +247,6 @@ export class TaskComponent implements OnInit {
     } else {
       this.selectAtLeastOneTaskBasic = false;
     }
-  }
-
-  getEmployee() {
-    this.employeeService.getAvailableEmployee(this.userAccount.id, '', 'id', 0, 99)
-      .then(
-        (response: PaginationResponse) => {
-          this.employeeList = response.content.map((employee) => {
-            return {
-              value: employee.id,
-              label: employee.fullName,
-              icon: employee.picture
-            };
-          });
-        }
-      );
   }
 
   getCompany() {
@@ -257,9 +299,9 @@ export class TaskComponent implements OnInit {
   }
 
   getWorkplace(zoneId: number) {
-    const d = this.minDate.getDate();
-    const m = this.minDate.getMonth();
-    const y = this.minDate.getFullYear();
+    const d = new Date(this.taskCM.startTime).getDate();
+    const m = new Date(this.taskCM.startTime).getMonth();
+    const y = new Date(this.taskCM.startTime).getFullYear();
     const from = new Date(y, m, d, 0, 0, 0, 0).toISOString();
     const to = new Date(y, m, d, 23, 59, 0, 0).toISOString();
     this.workplaceService.getAvailableByDate(this.userAccount.id, '', 1, zoneId, `${from};${to}`, 'asc', 'numberOfReworks', 0, 99)
@@ -278,13 +320,13 @@ export class TaskComponent implements OnInit {
             if (taskMissing !== 0) {
               return {
                 value: place.id,
-                label: `${place.name} | Số việc giao hôm nay còn thiếu: ${taskMissing}`,
+                label: `${place.name} | Số việc giao còn thiếu: ${taskMissing}`,
                 icon: place.picture
               };
             } else {
               return {
                 value: place.id,
-                label: `${place.name} | Số việc đã giao trong hôm nay: ${taskAssigned} - Đã đủ`,
+                label: `${place.name} | Số việc đã giao: ${taskAssigned} - Đã đủ`,
                 icon: place.picture
               };
             }
@@ -370,8 +412,17 @@ export class TaskComponent implements OnInit {
 
 
   openCreateModal() {
+    if (this.taskCM.duration > 60000) {
+      this.taskCM.duration /= 60000;
+    }
     if (this.scheduleCM.duration > 60000) {
       this.scheduleCM.duration /= 60000;
+    }
+    if (this.taskCM.startTime) {
+      this.getWorkplace(this.manageWorkplace.zoneId);
+      this.manageWorkplace.workplaceId = 0;
+      this.assignTask.assigneeId = 0;
+      this.checkTask();
     }
     this.createModal.show();
   }
@@ -398,7 +449,7 @@ export class TaskComponent implements OnInit {
     const modalOptions: ModalOptions = {
       animated: true,
       class: 'modal-notify modal-primary modal-xl',
-      initialState: { workplace, company, zone }
+      initialState: { workplace, company, zone, startTime: this.taskCM.startTime, duration: this.taskCM.duration }
     };
     this.modalRef = this.modalService.show(TaskSuggestionComponent, modalOptions);
     this.modalRef.content.refresh.subscribe((result) => {
@@ -426,6 +477,12 @@ export class TaskComponent implements OnInit {
 
   changeDuration(event) {
     this.taskCM.duration = event;
+    if (this.taskCM.startTime) {
+      this.checkTask();
+    }
+    if (this.manageWorkplace.zoneId) {
+      this.getWorkplace(this.manageWorkplace.zoneId);
+    }
   }
   changeDay() {
     if (this.week.filter(d => d.check === true).length === 0) {
@@ -433,6 +490,32 @@ export class TaskComponent implements OnInit {
     } else {
       this.selectAtLeastOneDay = false;
     }
+  }
+
+  openCheckingModal() {
+    this.selectingDay = this.week.filter(d => d.check === true).map(d => d.id);
+    this.scheduleCMEndTime = new Date(new Date(this.taskCM.startTime).getTime() + this.scheduleCM.duration * 60000);
+    const daysOfWeek = this.week.filter(d => d.check === true).map(d => d.id).join(',');
+    this.scheduleService.checkOverlap(
+      this.manageWorkplace.workplaceId, this.assignTask.assigneeId, this.userAccount.id,
+      daysOfWeek, new Date(this.taskCM.startTime).toISOString(), this.taskCM.duration * 60000
+    ).then(
+      (res: CheckScheduleOverlap[]) => {
+        this.checkScheduleOverlapModel = res;
+        if (this.checkScheduleOverlapModel.length > 0) {
+          this.scheduleModal.hide();
+          if (this.checkScheduleOverlapModel.filter(e => e.assigneeId === this.assignTask.assigneeId).length === 0) {
+            this.modalRef1 = this.modalService.show(this.warning, { class: 'modal-md modal-dialog modal-notify modal-warning' });
+          } else {
+            this.duplicateAssignee = new CheckScheduleOverlap();
+            this.duplicateAssignee = this.checkScheduleOverlapModel.find(e => e.assigneeId === this.assignTask.assigneeId);
+            this.modalRef1 = this.modalService.show(this.danger, { class: 'modal-md modal-dialog modal-notify modal-danger' });
+          }
+        } else {
+          this.createSchedule();
+        }
+      }
+    );
   }
 
   openCreateBasicTaskModal(template: TemplateRef<any>) {
@@ -578,5 +661,6 @@ export class TaskComponent implements OnInit {
     }
     this.showFiles();
   }
+
 
 }

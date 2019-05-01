@@ -2,7 +2,7 @@
   <p class="heading">Chi tiết công việc</p>
 </div>
 <div class="modal-body mx-3 row">
-  <form (ngSubmit)="updateSchedule()" #updateForm="ngForm" class="d-flex flex-wrap w-100">
+  <form (ngSubmit)="openCheckingModal()" #updateForm="ngForm" class="d-flex flex-wrap w-100">
     <div class="col-md-12 text-left pb-3 px-0">
       <span class="text-danger font-weight-normal">(*) Thông tin bắt buộc</span>
     </div>
@@ -250,6 +250,92 @@
         </button>
       </div>
     </form>
+  </div>
+
+</ng-template>
+
+<ng-template #warning>
+
+  <div class="modal-header d-flex justify-content-center">
+    <p class="heading">Tiếp tục cập nhật?</p>
+  </div>
+  
+  <div class="modal-body mx-3 row">
+    <div class="md-form mt-0 mb-3 col-md-12">
+      <span class="font-weight-normal">
+        Lặp lịch đang tạo lúc <span class="text-primary">{{schedule.startTime | date: 'hh:mm'}} - {{scheduleEndTime | date: 'hh:mm'}} </span> <br> 
+        Ngày lặp lịch: 
+        <span class="text-primary" *ngFor="let day of selectingDay; let i = index">
+        <span *ngIf="day == 1">chủ nhật</span>
+          <span *ngIf="day != 1">thứ {{day}}</span>
+          <span *ngIf="i !== selectingDay.length - 1">, </span>
+        </span>
+      </span>
+      <hr>
+      <span class="font-weight-normal" *ngIf="checkScheduleOverlapModel.length > 0">
+        Nơi làm việc này sẽ có <span class="font-weight-bold">{{checkScheduleOverlapModel.length}}</span> người cùng làm việc
+        <p class="font-weight-normal" *ngFor="let el of checkScheduleOverlapModel; let i = index">
+          {{i+1}}. Tên công việc: <span class="text-primary">{{el.scheduleName}}</span>
+          <br>
+          Người thực hiện: <span class="text-primary">{{el.assigneeName}}</span>
+          <br>
+          Ngày cùng làm việc:
+          <span class="text-primary" *ngFor="let day of el.dayOfWeekOverLaps; let i = index">
+            <span *ngIf="day == 1">Chủ nhật</span>
+            <span *ngIf="day != 1">Thứ {{day}}</span>
+            <span *ngIf="i !== el.dayOfWeekOverLaps.length - 1">, </span>
+          </span>
+          <br>
+        </p>
+        <p class="text-danger font-weight-bold">Tiếp tục tạo mới?</p>
+      </span>
+    </div>
+    <div class="col-12 text-center mt-3 border-top pt-3">
+      <button mdbBtn color="warning" outline="true" class="waves-light" mdbWavesEffect (click)="updateSchedule(); modalRef1.hide()">Tiếp tục
+      </button>
+      <button mdbBtn color="warning" class="waves-light" mdbWavesEffect (click)="modalRef1.hide()">Hủy
+      </button>
+    </div>
+  </div>
+
+</ng-template>
+
+<ng-template #danger>
+
+  <div class="modal-header d-flex justify-content-center">
+    <p class="heading">Không thể cập nhật</p>
+  </div>
+
+  <!--Body-->
+  <div class="modal-body text-center">
+    <i class="fa fa-close fa-4x animated rotateIn"></i>
+    <p class="h6 font-weight-bold">
+      <span class="font-weight-bold">
+        Lặp lịch đang cập nhật lúc <span class="text-primary">{{schedule.startTime | date: 'hh:mm'}} - {{scheduleEndTime | date: 'hh:mm'}} </span> <br> 
+        Ngày lặp lịch: 
+        <span class="text-primary" *ngFor="let day of selectingDay; let i = index">
+        <span *ngIf="day == 1">chủ nhật</span>
+          <span *ngIf="day != 1">thứ {{day}}</span>
+          <span *ngIf="i !== selectingDay.length - 1">, </span>
+        </span>
+      </span>
+      
+      <span>
+        <hr>
+      </span>
+      Nhân viên này đang có công việc lúc <span class="text-danger">{{duplicateAssignee.timeOverlap}} </span>vào 
+      <span *ngFor="let day of duplicateAssignee.dayOfWeekOverLaps; let i = index">
+        <span *ngIf="day == 1">chủ nhật</span>
+        <span *ngIf="day != 1">thứ {{day}}</span>
+        <span *ngIf="i !== duplicateAssignee.dayOfWeekOverLaps.length - 1">, </span>
+      </span> nên không thể cập nhật lặp lịch
+    </p>
+  </div>
+
+  <!--Footer-->
+  <div class="modal-footer flex-center">
+    <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+      (click)="modalRef1.hide()">Hủy</a>
   </div>
 
 </ng-template>
