@@ -498,7 +498,7 @@ export class TaskComponent implements OnInit {
     const daysOfWeek = this.week.filter(d => d.check === true).map(d => d.id).join(',');
     this.scheduleService.checkOverlap(
       this.manageWorkplace.workplaceId, this.assignTask.assigneeId, this.userAccount.id,
-      daysOfWeek, new Date(this.taskCM.startTime).toISOString(), this.taskCM.duration * 60000
+      daysOfWeek, new Date(this.taskCM.startTime).toISOString(), this.taskCM.duration * 60000, 0
     ).then(
       (res: CheckScheduleOverlap[]) => {
         this.checkScheduleOverlapModel = res;

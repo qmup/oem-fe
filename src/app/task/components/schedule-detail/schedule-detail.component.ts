@@ -229,7 +229,7 @@ export class ScheduleDetailComponent implements OnInit {
     this.scheduleEndTime = new Date(new Date(this.schedule.startTime).getTime() + this.schedule.duration * 60000);
     this.scheduleService.checkOverlap(
       this.schedule.workplaceId, this.schedule.assignee.id, this.userAccount.id,
-      this.schedule.daysOfWeek, new Date(this.startTime).toISOString(), this.schedule.duration * 60000
+      this.schedule.daysOfWeek, new Date(this.startTime).toISOString(), this.schedule.duration * 60000, this.schedule.id
     ).then(
       (res: CheckScheduleOverlap[]) => {
         this.checkScheduleOverlapModel = res;

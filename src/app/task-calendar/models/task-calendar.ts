@@ -12,4 +12,5 @@ export class TaskCalendar {
     afterEnd: true
   };
   draggable: true;
+  workplace: string;
 }

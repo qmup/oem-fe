@@ -67,7 +67,13 @@ export class ScheduleService {
     ).toPromise();
   }
   checkOverlap(
-    workplaceId: number, assigneeId: number, managerId: number, dayOfWeeks: string, startTimeSchedule: string, duration: number
+    workplaceId: number,
+    assigneeId: number,
+    managerId: number,
+    dayOfWeeks: string,
+    startTimeSchedule: string,
+    duration: number,
+    scheduleId: number
   ): Promise<CheckScheduleOverlap[]> {
     return this.httpClient.get<CheckScheduleOverlap[]>(
       `${environment.endPoint}${environment.apiPaths.schedule.checkOverlap}`,
@@ -79,6 +85,7 @@ export class ScheduleService {
           startTimeSchedule: `${startTimeSchedule}`,
           duration: `${duration}`,
           dayOfWeeks: `${dayOfWeeks}`,
+          scheduleId: `${scheduleId}`
         }
       }
     ).toPromise();

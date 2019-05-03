@@ -113,10 +113,12 @@ export class TaskCalendarComponent implements OnInit {
             const startMin = this.addZero(start.getMinutes());
             const endHour = this.addZero(end.getHours());
             const endMin = this.addZero(end.getMinutes());
-            console.log(e.status);
-            console.log(taskColor[e.status].color);
+            const title = `${e.title}<br>
+            Lúc ${startHour}:${startMin}-${endHour}:${endMin}<br>
+            Tại ${e.workplace} `;
+            console.log(title);
             return {
-              title: `${startHour}:${startMin}-${endHour}:${endMin} - ${e.title} `,
+              title: title,
               start: new Date(e.start),
               end: new Date(e.end),
               meta: {
