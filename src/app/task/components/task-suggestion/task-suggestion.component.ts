@@ -90,6 +90,14 @@ export class TaskSuggestionComponent implements OnInit {
     ).then(
       (response) => {
         this.taskSuggestion = response;
+        this.taskSuggestion.forEach(element1 => {
+          element1.totalTime = 0;
+          element1.taskSuggestionModels.forEach(element2 => {
+            element1.totalTime += new Date(element2.endTime).getTime() - new Date(element2.startTime).getTime();
+            console.log(new Date(element2.endTime).getTime() - new Date(element2.startTime).getTime());
+            console.log(element1.totalTime);
+          });
+        });
       }
     );
   }

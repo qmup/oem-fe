@@ -42,6 +42,8 @@ export class EmployeeDetailComponent implements OnInit {
   defaultImage = '../../../../assets/default-image.jpg';
   warningMessage = [];
   managerResponse: PaginationResponse;
+  currentPage = 0;
+  taskListResponse: PaginationResponse;
 
   constructor(
     private route: ActivatedRoute,
@@ -161,10 +163,20 @@ export class EmployeeDetailComponent implements OnInit {
       });
   }
   getTodayTaskByEmployee() {
-    this.taskService.getTodayTaskByEmployee(this.id)
-      .then(
+    const today = new Date();
+    const from: any = today.setHours(0, 0, 0, 0);
+    const to: any = today.setHours(23, 59, 59, 999);
+    this.taskService.getTaskByDate(
+      this.id,
+      this.userAccount.id,
+      `${new Date(from).toISOString()};${new Date(to).toISOString()}`,
+      '',
+      'id',
+      this.currentPage,
+    5).then(
         (response) => {
-          this.taskList = response;
+          this.taskListResponse = response;
+          this.taskList = response.content;
         }
       );
   }
@@ -232,5 +244,10 @@ export class EmployeeDetailComponent implements OnInit {
       this.filesToUpload = event.target.files;
 
     }
+  }
+
+  changePage(event) {
+    this.currentPage = event - 1;
+    this.getTodayTaskByEmployee();
   }
 }

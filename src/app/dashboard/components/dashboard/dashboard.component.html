@@ -1,83 +1,91 @@
-<div class="row">
-  <div class="col-md-6">
-    <p class="p-4 white-text z-depth-1-half light-blue lighten-1 h-100">
-      <span class="middle">THỐNG KÊ CÔNG VIỆC VÀ ĐIỂM DANH</span>
-    </p>
-  </div>
-</div>
-<div class="row pt-4">
-  <div class="col-6">
-    <div class="card">
-      <div class="card-body pb-4">
-        <div class="d-flex flex-wrap w-100 card-body pt-3">
-          <mdb-select [options]="employeeList" [label]="'Chọn nhân viên'"></mdb-select>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-6">
-    <div class="card">
-      <div class="card-body pb-1">
-        <div class="d-flex flex-wrap w-100 card-body pt-3">
-          <owl-form-field class="col-md-12 px-0">
-            <input owlInput [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker"
-            [selectMode]="'range'" placeholder="Chọn khoảng thời gian để xem dữ liệu" [(ngModel)]="dateRange" (dateTimeChange)="search()">
-            <owl-date-time #datepicker [pickerType]="'calendar'"></owl-date-time>
-          </owl-form-field>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="row d-flex mb-4">
-  <div class="col-xl-3 col-md-6 my-5">
-    <div class="card card-cascade cascading-dashboard-card">
-      <div class="dashboard-up"><i class="fa fa-tasks primary-color"></i>
-        <div class="data">
-          <p>TỔNG SỐ CÔNG VIỆC</p>
-          <h4><strong>{{summaryTask?.totalTask}}</strong></h4>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-xl-3 col-md-6 my-5">
-    <div class="card card-cascade cascading-dashboard-card">
-      <div class="dashboard-up"><i class="fa fa-check success-color"></i>
-        <div class="data">
-          <p>ĐÃ HOÀN THÀNH</p>
-          <h4><strong>{{summaryTask?.numberOfTaskDone}}</strong></h4>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-xl-3 col-md-6 my-5">
-    <div class="card card-cascade cascading-dashboard-card">
-      <div class="dashboard-up"><i class="fa fa-minus warning-color"></i>
-        <div class="data">
-          <p>ĐANG THỰC HIỆN</p>
-          <h4><strong>{{summaryTask?.numberOfTaskInProgress}}</strong></h4>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-xl-3 col-md-6 my-5">
-    <div class="card card-cascade cascading-dashboard-card">
-      <div class="dashboard-up"><i class="fa fa-close red accent-2"></i>
-        <div class="data">
-          <p>QUÁ HẠN</p>
-          <h4><strong>{{summaryTask?.numberOfTaskDoneAfterDeadline}}</strong></h4>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="card card-cascade narrower mb-5">
+<div class="card card-cascade narrower">
   <section>
-    <div class="row">
+    <div class="d-flex flex-wrap w-100">
+      <div class="col-xl-8 col-lg-12 mr-0">
+        <div class="view view-cascade gradient-card-header light-blue lighten-1">
+          <h2 class="h2-responsive mb-0">THỐNG KÊ CÔNG VIỆC VÀ ĐIỂM DANH</h2>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex flex-wrap w-100 pt-4">
+      <div class="col-6">
+        <div class="card">
+          <div class="card-body pb-4">
+            <div class="d-flex flex-wrap w-100 card-body pt-3">
+              <mdb-select
+                [multiple]="true"
+                [highlightFirst]="true"
+                [options]="employeeList"
+                [label]="'Chọn nhân viên'"
+                [(ngModel)]="selectingEmployeeId"
+                (selected)="changeEmployee()"
+                (deselected)="changeEmployee()">
+              </mdb-select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="card">
+          <div class="card-body pb-1">
+            <div class="d-flex flex-wrap w-100 card-body pt-3">
+              <owl-form-field class="col-md-12 px-0">
+                <input owlInput [owlDateTimeTrigger]="datepicker" [owlDateTime]="datepicker"
+                [selectMode]="'range'" placeholder="Chọn khoảng thời gian để xem dữ liệu" [(ngModel)]="dateRange" (dateTimeChange)="search()">
+                <owl-date-time #datepicker [pickerType]="'calendar'"></owl-date-time>
+              </owl-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex flex-wrap w-100">
+      <div class="col-xl-3 col-md-6 my-5">
+        <div class="card card-cascade cascading-dashboard-card">
+          <div class="dashboard-up"><i class="fa fa-tasks primary-color"></i>
+            <div class="data">
+              <p>TỔNG SỐ CÔNG VIỆC</p>
+              <h4><strong>{{summaryTask?.totalTask}}</strong></h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-md-6 my-5">
+        <div class="card card-cascade cascading-dashboard-card">
+          <div class="dashboard-up"><i class="fa fa-check success-color"></i>
+            <div class="data">
+              <p>ĐÃ HOÀN THÀNH</p>
+              <h4><strong>{{summaryTask?.numberOfTaskDone}}</strong></h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-md-6 my-5">
+        <div class="card card-cascade cascading-dashboard-card">
+          <div class="dashboard-up"><i class="fa fa-minus warning-color"></i>
+            <div class="data">
+              <p>ĐANG THỰC HIỆN</p>
+              <h4><strong>{{summaryTask?.numberOfTaskInProgress}}</strong></h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-md-6 my-5">
+        <div class="card card-cascade cascading-dashboard-card">
+          <div class="dashboard-up"><i class="fa fa-close red accent-2"></i>
+            <div class="data">
+              <p>QUÁ HẠN</p>
+              <h4><strong>{{summaryTask?.numberOfTaskDoneAfterDeadline}}</strong></h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex flex-wrap w-100">
 
       <div class="col-xl-12 col-lg-12 mt-4">
         <p class="h4 text-center w-100 text-dark">Từ {{dateFrom | date: 'dd-MM-yyyy'}} đến {{dateTo | date: 'dd-MM-yyyy'}}</p>

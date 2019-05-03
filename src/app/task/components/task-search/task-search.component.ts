@@ -258,10 +258,11 @@ export class TaskSearchComponent implements OnChanges {
     }
 
     if (this.selectDuration && this.duration) {
+      const duration = this.duration * 60000;
       if (this.comparation === 1) {
-        this.durationString += '">=' + this.duration;
+        this.durationString += '">=' + duration;
       } else {
-        this.durationString += '"<=' + this.duration;
+        this.durationString += '"<=' + duration;
       }
       this.durationString += '"';
       this.searchRequestArray.push(this.durationString);

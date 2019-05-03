@@ -79,6 +79,10 @@
             <div *ngIf="taskList.length === 0">
               <span class="text-danger col-12">Không có công việc hôm nay!</span>
             </div>
+            <app-pagination *ngIf="taskListResponse?.totalPages > 1" [pageSize]="taskListResponse.size"
+              [totalPage]="taskListResponse.totalPages" [currentPage]="taskListResponse.number"
+              (changePage)="changePage($event)">
+            </app-pagination>
           </div>
         </mdb-card-body>
       </mdb-card>

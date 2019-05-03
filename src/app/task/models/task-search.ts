@@ -40,7 +40,7 @@ export class TaskSearchModel {
     this.status = 0;
     this.dateCreate = '';
     this.dateUpdate = '';
-    this.priority = 0;
+    this.priority = 3;
     this.assigneeName = '';
     this.assigneePicture = '';
     this.workplaceName = '';

@@ -17,6 +17,7 @@ export class SummaryTask {
   numberOfTaskNotStart: number;
   numberOfWorkplaceIsManaged: number;
   attendanceStatus: AttendanceStatuses;
+  ratingOfEmployeeList: RatingModel[];
 
   constructor() {
     this.totalTask = 0;
@@ -30,7 +31,13 @@ export class SummaryTask {
     this.numberOfTaskNotStart = 0;
     this.numberOfWorkplaceIsManaged = 0;
     this.attendanceStatus = new AttendanceStatuses();
+    this.ratingOfEmployeeList = new Array<RatingModel>();
   }
+}
+
+class RatingModel {
+  employeeName: string;
+  rating: number;
 }
 
 export class ChartColor {

@@ -429,6 +429,12 @@ export class TaskDetailComponent implements OnInit {
     this.taskService.remove(this.selectingId)
       .then(
         (response) => {
+          const notification: NotificationSendingModel = new NotificationSendingModel();
+          notification.fromEmployeeId = this.userAccount.id;
+          notification.toEmployeeId = this.task.assignee.id;
+          notification.taskId = this.task.id;
+          notification.type = 6;
+          this.globalService.sendNotification(notification);
           this.toastService.success('Xóa thành công', '', { positionClass: 'toast-bottom-right'});
           this.deleteModal.hide();
           if (this.taskList.length > 1) {
@@ -462,13 +468,14 @@ export class TaskDetailComponent implements OnInit {
           notification.toEmployeeId = this.assignTask.assigneeId;
           notification.taskId = this.assignTask.taskId;
           notification.type = 4;
+          this.globalService.sendNotification(notification);
           const notification2: NotificationSendingModel = new NotificationSendingModel();
           notification2.fromEmployeeId = this.assignTask.assignerId;
           notification2.toEmployeeId = this.task.assignee.id;
           notification2.taskId = this.assignTask.taskId;
           notification2.type = 5;
           this.globalService.sendNotification(notification2);
-          this.toastService.success('Assign thành công', '', { positionClass: 'toast-bottom-right'});
+          this.toastService.success('Bàn giao thành công', '', { positionClass: 'toast-bottom-right'});
           this.assignModal.hide();
           this.loadTask(this.selectingId);
           this.getAssignHistory(this.selectingId);
@@ -494,7 +501,7 @@ export class TaskDetailComponent implements OnInit {
       23, 59, 59, 999
       ).toISOString();
     this.workplaceService.checkOverlap(
-      this.task.workplace.id,
+      this.manageWorkplace.workplaceId,
       this.userAccount.id,
       `${firstHourOfDate};${lastHourOfDate}`,
       new Date(this.task.startTime).toISOString(),
@@ -549,7 +556,8 @@ export class TaskDetailComponent implements OnInit {
       `${firstHourOfDate};${lastHourOfDate}`,
       startTime.toISOString(),
       endTime.toISOString(),
-    this.task.assignee.id)
+    this.task.assignee.id,
+    this.selectingId)
     .then(
       (res: CheckTaskOverlap) => {
         this.checkTimeOverlapModel = res;
@@ -605,8 +613,18 @@ export class TaskDetailComponent implements OnInit {
     this.taskService.update(taskUM)
       .then(
         () => {
-          this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
-          this.loadTask(this.selectingId);
+          const notification: NotificationSendingModel = new NotificationSendingModel();
+          notification.fromEmployeeId = this.userAccount.id;
+          notification.toEmployeeId = this.task.assignee.id;
+          notification.type = 3;
+          notification.taskId = this.task.id;
+          this.globalService.sendNotification(notification)
+            .then(
+              () => {
+                this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+                this.loadTask(this.selectingId);
+              }
+            );
         },
         () => {
           this.toastService.error('Đã có lỗi xảy ra' , '', { positionClass: 'toast-bottom-right'});
@@ -651,7 +669,8 @@ export class TaskDetailComponent implements OnInit {
       `${firstHourOfDate};${lastHourOfDate}`,
       startTime.toISOString(),
       endTime.toISOString(),
-      this.task.assignee.id)
+      this.task.assignee.id,
+      this.selectingId)
     .then(
       (res: CheckTaskOverlap) => {
         this.checkTimeOverlapModel = res;
@@ -681,6 +700,18 @@ export class TaskDetailComponent implements OnInit {
     };
     this.modalRef = this.modalService.show(PlaceTaskBasicComponent, modalOptions);
     this.modalRef.content.refresh.subscribe(() => {
+      const notification: NotificationSendingModel = new NotificationSendingModel();
+        notification.fromEmployeeId = this.userAccount.id;
+        notification.toEmployeeId = this.task.assignee.id;
+        notification.type = 2;
+        notification.taskId = this.task.id;
+        this.globalService.sendNotification(notification)
+          .then(
+            () => {
+              this.toastService.success('Cập nhật thành công', '', { positionClass: 'toast-bottom-right'});
+              this.loadTask(this.selectingId);
+            }
+          );
       this.getTaskDetail(this.selectingId);
       this.currentWorkplace = -1;
     });

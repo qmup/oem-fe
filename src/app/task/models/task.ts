@@ -33,7 +33,7 @@ export class Task {
     this.duration = 30;
     this.id = 0;
     this.picture = '';
-    this.priority = 0;
+    this.priority = 3;
     this.scheduleId = 0;
     this.startTime = '';
     this.status = 1;
@@ -117,7 +117,7 @@ export class TaskModel {
     this.duration = 30;
     this.id = 0;
     this.picture = '';
-    this.priority = 0;
+    this.priority = 3;
     this.scheduleId = 0;
     this.startTime = '';
     this.status = 1;
@@ -225,6 +225,7 @@ export class TaskSuggestion {
   timeAllowedCpcToCpB: number;
   totalPoint: number;
   typeCase: number;
+  totalTime: number;
 
   constructor() {
     this.caseCpaToCpcAvailable = false;
@@ -246,6 +247,7 @@ export class TaskSuggestion {
     this.timeAllowedCpcToCpB = 0;
     this.totalPoint = 0;
     this.typeCase = 0;
+    this.totalTime = 0;
   }
 }
 

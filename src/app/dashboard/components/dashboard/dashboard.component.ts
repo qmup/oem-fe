@@ -30,6 +30,7 @@ export class DashboardComponent implements OnInit {
   dateRange: Date[];
   summaryTask: SummaryTask;
   userAccount: Employee;
+  selectingEmployeeId: any = 0;
 
   // pie
 
@@ -51,11 +52,10 @@ export class DashboardComponent implements OnInit {
   chartType2 = 'bar';
 
   chartDatasets: Array<any> = [
-    { data: [4.5, 4.1, 3.7, 5, 4, 4.2], label: 'Đánh giá chất lượng công việc' },
+    { data: [], label: 'Đánh giá chất lượng công việc' },
   ];
 
-  chartLabels2: Array<any> = ['Nguyễn Minh Quân', 'Bùi Hoàng Thông', 'Tống Văn Giang', 'Lê Ngô Minh',
-    'Phạm Tuấn Kiệt', 'Vũ Thị Ánh Hồng'];
+  chartLabels2: Array<any> = [];
 
   chartColors2: Array<ChartColor> = new Array<ChartColor>();
 
@@ -92,27 +92,55 @@ export class DashboardComponent implements OnInit {
   search() {
     this.dateFrom = this.dateRange[0];
     this.dateTo = this.dateRange[1];
-    const from = this.dateRange ? this.globalService.convertToYearMonthDay(this.dateRange[0]) : '';
-    const to = this.dateRange ? this.globalService.convertToYearMonthDay(this.dateRange[1]) : '';
-    this.dashboardService.summary(this.userAccount.id, from, to)
+    const from = new Date(
+      new Date(this.dateFrom).getFullYear(),
+      new Date(this.dateFrom).getMonth(),
+      new Date(this.dateFrom).getDate(),
+      0, 0, 0, 0
+    ).toISOString();
+    const to = new Date(
+      new Date(this.dateTo).getFullYear(),
+      new Date(this.dateTo).getMonth(),
+      new Date(this.dateTo).getDate(),
+      23, 59, 59, 999
+      ).toISOString();
+    this.dashboardService.summary(this.userAccount.id, `${from};${to}`, (this.selectingEmployeeId.join(',') || '0'))
       .then(
         (response: SummaryTask) => {
           this.summaryTask = response;
           this.chartData = Object.values(response.attendanceStatus);
+          this.chartLabels2 = this.summaryTask.ratingOfEmployeeList.map(el => el.employeeName);
+          this.chartDatasets[0].data = this.summaryTask.ratingOfEmployeeList.map(el => el.rating);
+          this.chartColors2 = this.setRandomColor();
         }
       );
   }
 
   getSummaryTaskLastWeek() {
+    const from = new Date(
+      new Date(this.dateFrom).getFullYear(),
+      new Date(this.dateFrom).getMonth(),
+      new Date(this.dateFrom).getDate(),
+      0, 0, 0, 0
+    ).toISOString();
+    const to = new Date(
+      new Date(this.dateTo).getFullYear(),
+      new Date(this.dateTo).getMonth(),
+      new Date(this.dateTo).getDate(),
+      23, 59, 59, 999
+      ).toISOString();
     this.dashboardService.summary(
         this.userAccount.id,
-        this.globalService.convertToYearMonthDay(this.dateFrom),
-        this.globalService.convertToYearMonthDay(this.dateTo)
+        `${from};${to}`,
+        '0'
       )
       .then(
         (response: SummaryTask) => {
           this.summaryTask = response;
           this.chartData = Object.values(response.attendanceStatus);
+          this.chartLabels2 = this.summaryTask.ratingOfEmployeeList.map(el => el.employeeName);
+          this.chartDatasets[0].data = this.summaryTask.ratingOfEmployeeList.map(el => el.rating);
+          this.chartColors2 = this.setRandomColor();
         }
       );
   }
@@ -165,10 +193,41 @@ export class DashboardComponent implements OnInit {
       this.chartColors2[0].pointHoverBackgroundColor = '#FFF';
       this.chartColors2[0].pointHoverBorderColor.push(color2);
     });
-    console.log(this.chartColors2);
     return this.chartColors2;
+  }
+
+  changeEmployee() {
+    setTimeout(() => {
+      if (this.dateRange) {
+        this.dateFrom = this.dateRange[0];
+        this.dateTo = this.dateRange[1];
+      }
+      const from = new Date(
+        new Date(this.dateFrom).getFullYear(),
+        new Date(this.dateFrom).getMonth(),
+        new Date(this.dateFrom).getDate(),
+        0, 0, 0, 0
+      ).toISOString();
+      const to = new Date(
+        new Date(this.dateTo).getFullYear(),
+        new Date(this.dateTo).getMonth(),
+        new Date(this.dateTo).getDate(),
+        23, 59, 59, 999
+        ).toISOString();
+      this.dashboardService.summary(this.userAccount.id, `${from};${to}`, this.selectingEmployeeId.join(','))
+        .then(
+          (response: SummaryTask) => {
+            this.summaryTask = response;
+            this.chartData = Object.values(response.attendanceStatus);
+            this.chartLabels2 = this.summaryTask.ratingOfEmployeeList.map(el => el.employeeName);
+            this.chartDatasets[0].data = this.summaryTask.ratingOfEmployeeList.map(el => el.rating);
+            this.chartColors2 = this.setRandomColor();
+          }
+        );
+    }, 100);
   }
 
   public chartClicked(): void {}
   public chartHovered(): void {}
+
 }

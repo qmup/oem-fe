@@ -148,20 +148,22 @@ export class TaskService {
     ).toPromise();
   }
 
-  checkOverlap(workplaceId: number, managerId: number, fromTo: string, startTime: string, endTime: string, assigneeId: number)
-    : Promise<CheckTaskOverlap> {
-      return this.httpClient.get<CheckTaskOverlap>(
-        `${environment.endPoint}${environment.apiPaths.task.checkOverlap}`,
-        {
-          params: {
-            workplaceId: `${workplaceId}`,
-            managerId: `${managerId}`,
-            fromTo: `${fromTo}`,
-            startTimeTask: `${startTime}`,
-            endTimeTask: `${endTime}`,
-            assigneeId: `${assigneeId}`,
-          }
+  checkOverlap(
+    workplaceId: number, managerId: number, fromTo: string, startTime: string, endTime: string, assigneeId: number, taskId?: number
+  ): Promise<CheckTaskOverlap> {
+    return this.httpClient.get<CheckTaskOverlap>(
+      `${environment.endPoint}${environment.apiPaths.task.checkOverlap}`,
+      {
+        params: {
+          workplaceId: `${workplaceId}`,
+          managerId: `${managerId}`,
+          fromTo: `${fromTo}`,
+          startTimeTask: `${startTime}`,
+          endTimeTask: `${endTime}`,
+          assigneeId: `${assigneeId}`,
+          taskId: `${taskId ? taskId : '0'}`,
         }
-      ).toPromise();
-    }
+      }
+    ).toPromise();
+  }
 }
