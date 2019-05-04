@@ -65,7 +65,7 @@
           <h5 class="text-danger font-weight-normal">Không tìm thấy kết quả phù hợp</h5>
         </div>
   
-        <app-pagination *ngIf="zoneResponse?.totalPages > 1" [pageSize]="zoneResponse.size"
+        <app-pagination class="col-12 text-center" *ngIf="zoneResponse?.totalPages > 1" [pageSize]="zoneResponse.size"
           [totalPage]="zoneResponse.totalPages" [currentPage]="zoneResponse.number" (changePage)="changePage($event)">
         </app-pagination>
       </div>
