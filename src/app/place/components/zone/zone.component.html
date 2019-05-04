@@ -87,7 +87,7 @@
       <div class="modal-body mx-3 row">
         <form (ngSubmit)="createZone()" #createForm="ngForm" class="d-flex flex-wrap w-100">
 
-          <div class="col-md-12 text-left pb-3 px-0">
+          <div class="col-md-12 text-left pb-3">
             <span class="text-danger font-weight-normal">(*) Thông tin bắt buộc</span>
           </div>
 
@@ -124,6 +124,7 @@
           <div class="col text-center" *ngIf="url">
             <img [src]="url" height="100">
           </div>
+
           <div class="col-12 text-center mt-3 border-top pt-3">
             <button mdbBtn color="success" class="waves-light" mdbWavesEffect [disabled]="!createForm.form.valid">Tạo mới
               <i class="fa fa-check ml-1"></i>
