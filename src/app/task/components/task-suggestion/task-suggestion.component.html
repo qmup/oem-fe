@@ -77,9 +77,10 @@
                 {{ task?.endTime | date:'HH:mm' }}</span>
               <br>
             </p>
-            <span *ngIf="item.totalTime && item.typeCase !== 0" class="font-weight-normal">Tổng thời gian làm việc trong ngày: 
-              <span class="text-danger" *ngIf="item.totalTime/60000 < 60">{{item.totalTime/60000 | number: '1.0-0'}} phút</span>
-              <span class="text-danger" *ngIf="item.totalTime/60000 >= 60">{{item.hour}} giờ {{item.minute}} phút</span>
+            <span *ngIf="item.totalTime && item.typeCase !== 0" class="font-weight-normal">Tổng thời gian làm việc: 
+              <br>
+              <span class="text-success" *ngIf="item.totalTime/60000 < 60">{{item.totalTime/60000 | number: '1.0-0'}} phút</span>
+              <span class="text-success" *ngIf="item.totalTime/60000 >= 60">{{item.hour}} giờ {{item.minute}} phút</span>
             </span>
             <span *ngIf="item.typeCase === 0" class="text-danger font-weight-normal">Không có thời gian phù hợp</span>
           </td>
