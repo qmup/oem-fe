@@ -226,6 +226,8 @@ export class TaskSuggestion {
   totalPoint: number;
   typeCase: number;
   totalTime: number;
+  hour: number;
+  minute: number;
 
   constructor() {
     this.caseCpaToCpcAvailable = false;
@@ -248,6 +250,8 @@ export class TaskSuggestion {
     this.totalPoint = 0;
     this.typeCase = 0;
     this.totalTime = 0;
+    this.hour = 0;
+    this.minute = 0;
   }
 }
 

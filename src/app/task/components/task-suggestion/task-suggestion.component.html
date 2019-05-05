@@ -78,7 +78,8 @@
               <br>
             </p>
             <span *ngIf="item.totalTime && item.typeCase !== 0" class="font-weight-normal">Tổng thời gian làm việc trong ngày: 
-              <span class="text-danger">{{item.totalTime/60000 | number: '1.0-0'}} phút</span>
+              <span class="text-danger" *ngIf="item.totalTime/60000 < 60">{{item.totalTime/60000 | number: '1.0-0'}} phút</span>
+              <span class="text-danger" *ngIf="item.totalTime/60000 >= 60">{{item.hour}} giờ {{item.minute}} phút</span>
             </span>
             <span *ngIf="item.typeCase === 0" class="text-danger font-weight-normal">Không có thời gian phù hợp</span>
           </td>
@@ -161,7 +162,7 @@
             </div>
           </td>
           <td>
-            <div *ngIf="item.typeCase !== 0">
+            <div *ngIf="item.totalPoint !== 0">
               <button mdbBtn type="button" color="success" rounded="true" mdbWavesEffect
                 (click)="selectEmployee(item.employeeId)">
                 <i class="fa fa-check"></i>

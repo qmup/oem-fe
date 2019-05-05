@@ -94,8 +94,10 @@ export class TaskSuggestionComponent implements OnInit {
           element1.totalTime = 0;
           element1.taskSuggestionModels.forEach(element2 => {
             element1.totalTime += new Date(element2.endTime).getTime() - new Date(element2.startTime).getTime();
-            console.log(new Date(element2.endTime).getTime() - new Date(element2.startTime).getTime());
-            console.log(element1.totalTime);
+            if (element1.totalTime / 60000 > 60) {
+              element1.hour = Math.floor(element1.totalTime / 60000 / 60);
+              element1.minute = (element1.totalTime / 60000) % 60;
+            }
           });
         });
       }
