@@ -8,8 +8,8 @@ export const environment = {
   token: 'OEM_TOKEN',
   account: 'OEM_ACCOUNT',
   // endPoint: 'http://localhost:8080/',
-  endPoint: 'http://192.168.1.9:8080/',
-  // endPoint: 'http://113.161.84.125/',
+  // endPoint: 'http://192.168.1.9:8080/',
+  endPoint: 'http://113.161.84.125/',
   apiPaths: {
     firebase: {
       apiKey: 'AIzaSyCv23Kx9Xfh4okq30jtY_QJi2CudhO_7f4',
