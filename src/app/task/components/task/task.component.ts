@@ -214,6 +214,7 @@ export class TaskComponent implements OnInit {
           this.workplaceService.getTaskBasic(this.manageWorkplace.workplaceId)
             .then(
               (response2) => {
+                this.selectedTaskBasic = [];
                 this.taskBasic = response2;
                 this.taskBasicList.forEach((element1, i) => {
                   this.taskBasic.forEach((element2, j) => {

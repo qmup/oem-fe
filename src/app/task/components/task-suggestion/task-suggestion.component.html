@@ -87,7 +87,7 @@
           <td class="text-center">
             <div *ngIf="item.typeCase !== 0">
               <span *ngIf="item.cpaName">
-                <span class="font-weight-bold">{{item?.cpaName}}</span>
+                <span class="font-weight-normal text-success">{{item?.cpaName}}</span>
                 <br>
                 Lúc <span class="text-danger font-weight-normal">{{ item?.endTimePreviousTask | date: 'HH:mm' }}</span>
                 <br>
@@ -105,7 +105,7 @@
           </td>
           <td>
             <p *ngIf="item.typeCase !== 0">
-              <span class="font-weight-bold">Điểm xuất phát: <br><span class="text-danger">{{item.moveFromHome ? 'Nhà' : item?.cpaName}}</span></span>
+              <span class="font-weight-normal">Điểm xuất phát: <br><span class="text-success">{{item.moveFromHome ? 'Nhà' : item?.cpaName}}</span></span>
               <br>
               Quãng đường dự kiến <br><span
                 class="font-weight-normal text-danger">{{ item?.dataTravelFromCpAtoCpc?.distance / 1000 | number: '1.0-1' }}
@@ -126,7 +126,7 @@
           <td class="text-center">
             <div *ngIf="item.typeCase !== 0">
               <span *ngIf="item.cpbName">
-                <span class="font-weight-bold">{{item?.cpbName}}</span>
+                <span class="font-weight-normal text-success">{{item?.cpbName}}</span>
                 <br>
                 Lúc <span class="text-danger font-weight-normal">{{ item?.startTimeNextTask | date: 'HH:mm' }}</span>
                 <br>
@@ -142,7 +142,7 @@
           </td>
           <td>
             <div *ngIf="item.typeCase !== 0 && item?.cpbName">
-              <span class="font-weight-bold">Điểm đến: <br><span class="deep-orange-text">{{ item.cpbName ? item?.cpbName : 'Nhà' }}</span></span>
+              <span class="font-weight-normal">Điểm đến: <br><span class="text-success">{{ item.cpbName ? item?.cpbName : 'Nhà' }}</span></span>
               <br>
               <div>
                 Quãng đường dự kiến <br><span
