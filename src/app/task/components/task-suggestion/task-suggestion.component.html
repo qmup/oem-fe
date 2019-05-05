@@ -29,7 +29,7 @@
   </div>
   <div class="col-4">
     <h6 class="font-weight-bold">Công việc sắp tạo tại <span
-        class="text-danger font-weight-bold">{{company.label}}</span>
+        class="text-primary font-weight-bold">{{company.label}}</span>
     </h6>
     <div class="col-12 font-weight-normal" style="font-size: 17px">
       <span class="pt-3">Ngày: {{startTime | date: 'dd-MM-yyyy'}}</span>
@@ -58,9 +58,9 @@
           <th>Nhân viên</th>
           <th>Danh sách công việc đã giao hôm nay</th>
           <th>Kết thúc công việc gần nhất tại</th>
-          <th>Quãng đường - thời gian đến {{ company.label }}</th>
+          <th>Quãng đường - thời gian đến <br><span class="text-primary font-weight-bold">{{ company.label }}</span></th>
           <th>Bắt đầu công việc tiếp theo tại</th>
-          <th>Quãng đường - thời gian từ {{company.label}}</th>
+          <th>Quãng đường - thời gian từ <br><span class="text-primary font-weight-bold">{{company.label}}</span></th>
           <th>Chọn</th>
         </tr>
       </thead>
@@ -105,7 +105,7 @@
           </td>
           <td>
             <p *ngIf="item.typeCase !== 0">
-              <span class="font-weight-bold">Điểm xuất phát: {{item.moveFromHome ? 'Nhà' : item?.cpaName}}</span>
+              <span class="font-weight-bold">Điểm xuất phát: <br><span class="text-danger">{{item.moveFromHome ? 'Nhà' : item?.cpaName}}</span></span>
               <br>
               Quãng đường dự kiến <br><span
                 class="font-weight-normal text-danger">{{ item?.dataTravelFromCpAtoCpc?.distance / 1000 | number: '1.0-1' }}
@@ -142,7 +142,7 @@
           </td>
           <td>
             <div *ngIf="item.typeCase !== 0 && item?.cpbName">
-              <span class="font-weight-bold">Điểm đến: {{ item.cpbName ? item?.cpbName : 'Nhà' }}</span>
+              <span class="font-weight-bold">Điểm đến: <br><span class="deep-orange-text">{{ item.cpbName ? item?.cpbName : 'Nhà' }}</span></span>
               <br>
               <div>
                 Quãng đường dự kiến <br><span
