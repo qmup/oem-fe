@@ -105,7 +105,7 @@
           </td>
           <td>
             <p *ngIf="item.typeCase !== 0">
-              <span class="font-weight-normal">Điểm xuất phát: <br><span class="text-success font-weight-bold">{{item.moveFromHome ? 'Nhà' : item?.cpaName}}</span></span>
+              <span class="font-weight-normal" *ngIf="item.moveFromHome">Điểm xuất phát: <br><span class="text-success font-weight-bold">Nhà</span></span>
               <br>
               Quãng đường dự kiến <br><span
                 class="font-weight-normal text-danger">{{ item?.dataTravelFromCpAtoCpc?.distance / 1000 | number: '1.0-1' }}
